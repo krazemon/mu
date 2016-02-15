@@ -134,6 +134,7 @@ gxy
 9991 transform: --- convert 'new' to 'allocate' for recipe scenario_editor-can-scroll-up-past-empty-lines
 9991 transform: --- type-check merge instructions in recipe scenario_editor-can-scroll-up-past-empty-lines
 9991 transform: --- check types of reply instructions in recipe scenario_editor-can-scroll-up-past-empty-lines
+9991 transform: --- checking reply instructions against header for scenario_editor-can-scroll-up-past-empty-lines
 9991 transform: --- parsing any uninitialized reagents as integers
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
@@ -12617,6 +12618,7 @@ gxy
 9991 transform: --- convert 'new' to 'allocate' for recipe run_1001
 9991 transform: --- type-check merge instructions in recipe run_1001
 9991 transform: --- check types of reply instructions in recipe run_1001
+9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
  103 run: editor-event-loop screen:address:shared:screen, console:address:shared:console, 2:address:shared:editor-data
@@ -20802,6 +20804,7 @@ gxy
 9991 transform: --- convert 'new' to 'allocate' for recipe run_1002
 9991 transform: --- type-check merge instructions in recipe run_1002
 9991 transform: --- check types of reply instructions in recipe run_1002
+9991 transform: --- checking reply instructions against header for run_1002
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
  103 run: editor-event-loop screen:address:shared:screen, console:address:shared:console, 2:address:shared:editor-data
@@ -29477,6 +29480,7 @@ gxy
 9991 transform: --- convert 'new' to 'allocate' for recipe run_1003
 9991 transform: --- type-check merge instructions in recipe run_1003
 9991 transform: --- check types of reply instructions in recipe run_1003
+9991 transform: --- checking reply instructions against header for run_1003
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
  103 run: editor-event-loop screen:address:shared:screen, console:address:shared:console, 2:address:shared:editor-data
@@ -30070,18 +30074,22 @@ gxy
 9999 mem: location 1185 is 1156
 9999 trace: incrementing callstack depth to 6
  107 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9999 mem: array size is 13
-9999 mem: allocating size 15
+9999 mem: array size is 14
+9999 mem: allocating size 16
 9999 mem: new alloc: 1585
-9999 mem: storing 13 in location 1586
- 107 run: curr:address:shared:duplex-list:character <- next-ingredient-without-typechecking 
+9999 mem: storing 14 in location 1586
+ 107 run: in:address:shared:duplex-list:character <- next-ingredient-without-typechecking 
 9999 mem: storing 1245 in location 1588
 9999 mem: incrementing refcount of 1245: 22 -> 23
  107 run: editor:address:shared:editor-data <- next-ingredient-without-typechecking 
 9999 mem: storing 1156 in location 1589
 9999 mem: incrementing refcount of 1156: 21 -> 22
- 107 run: c:character <- get *curr, value:offset
+ 107 run: curr:address:shared:duplex-list:character <- copy in
 9999 mem: location 1588 is 1245
+9999 mem: storing 1245 in location 1590
+9999 mem: incrementing refcount of 1245: 23 -> 24
+ 107 run: c:character <- get *curr, value:offset
+9999 mem: location 1590 is 1245
 9999 mem: skipping refcount at 1245
 9999 type: checking size of type ingredient
 
@@ -30089,12 +30097,12 @@ gxy
 9999 mem: location 1246 is 10
 9999 mem: location 1247 is 1249
 9999 mem: location 1248 is 1241
-9999 mem: location 1588 is 1245
+9999 mem: location 1590 is 1245
 9999 mem: skipping refcount at 1245
 9998 run: address to copy is 1246
 9998 run: its type is character
 9999 mem: location 1246 is 10
-9999 mem: storing 10 in location 1590
+9999 mem: storing 10 in location 1591
  107 run: left:number <- get *editor, left:offset
 9999 mem: location 1589 is 1156
 9999 mem: skipping refcount at 1156
@@ -30115,7 +30123,7 @@ gxy
 9998 run: address to copy is 1161
 9998 run: its type is number
 9999 mem: location 1161 is 0
-9999 mem: storing 0 in location 1591
+9999 mem: storing 0 in location 1592
  107 run: right:number <- get *editor, right:offset
 9999 mem: location 1589 is 1156
 9999 mem: skipping refcount at 1156
@@ -30136,11 +30144,11 @@ gxy
 9998 run: address to copy is 1162
 9998 run: its type is number
 9999 mem: location 1162 is 3
-9999 mem: storing 3 in location 1592
- 107 run: max-line-length:number <- subtract right, left, -1/exclusive-right, 1/wrap-icon
-9999 mem: location 1592 is 3
-9999 mem: location 1591 is 0
 9999 mem: storing 3 in location 1593
+ 107 run: max-line-length:number <- subtract right, left, -1/exclusive-right, 1/wrap-icon
+9999 mem: location 1593 is 3
+9999 mem: location 1592 is 0
+9999 mem: storing 3 in location 1594
  107 run: sentinel:address:shared:duplex-list:character <- get *editor, data:offset
 9999 mem: location 1589 is 1156
 9999 mem: skipping refcount at 1156
@@ -30161,11 +30169,11 @@ gxy
 9998 run: address to copy is 1157
 9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
 9999 mem: location 1157 is 1178
-9999 mem: storing 1178 in location 1594
+9999 mem: storing 1178 in location 1595
 9999 mem: incrementing refcount of 1178: 11 -> 12
  107 run: len:number <- previous-line-length curr, sentinel
-9999 mem: location 1588 is 1245
-9999 mem: location 1594 is 1178
+9999 mem: location 1590 is 1245
+9999 mem: location 1595 is 1178
 9999 trace: incrementing callstack depth to 7
  108 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9999 mem: array size is 7
@@ -30173,16 +30181,16 @@ gxy
 9999 abandon: picking up space from free-list of size 9
  108 run: curr:address:shared:duplex-list:character <- next-ingredient-without-typechecking 
 9999 mem: storing 1245 in location 1172
-9999 mem: incrementing refcount of 1245: 23 -> 24
+9999 mem: incrementing refcount of 1245: 24 -> 25
  108 run: start:address:shared:duplex-list:character <- next-ingredient-without-typechecking 
 9999 mem: storing 1178 in location 1173
 9999 mem: incrementing refcount of 1178: 12 -> 13
  108 run: result:number <- copy 0
 9999 mem: storing 0 in location 1174
+9990 schedule: previous-line-length/before-previous-line/page-up/handle-keyboard-event/editor-event-loop/run_1003/scenario_editor-can-scroll-up-past-empty-lines
  108 run: jump-if curr, 1:offset
 9999 mem: location 1172 is 1245
 9998 run: jumping to instruction 6
-9990 schedule: previous-line-length/before-previous-line/page-up/handle-keyboard-event/editor-event-loop/run_1003/scenario_editor-can-scroll-up-past-empty-lines
  108 run: at-start?:boolean <- equal curr, start
 9999 mem: location 1172 is 1245
 9999 mem: location 1173 is 1178
@@ -30199,7 +30207,7 @@ gxy
 9999 abandon: picking up space from free-list of size 5
  109 run: in:address:shared:duplex-list:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1245 in location 1583
-9999 mem: incrementing refcount of 1245: 24 -> 25
+9999 mem: incrementing refcount of 1245: 25 -> 26
  109 run: jump-if in, 1:offset
 9999 mem: location 1583 is 1245
 9998 run: jumping to instruction 4
@@ -30225,7 +30233,7 @@ gxy
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 8
 9998 run: result 0 is 1241
-9999 mem: decrementing refcount of 1245: 25 -> 24
+9999 mem: decrementing refcount of 1245: 26 -> 25
 9999 mem: storing 1241 in location 1172
 9999 mem: incrementing refcount of 1241: 17 -> 18
  108 run: jump-unless curr, 
@@ -30264,12 +30272,12 @@ gxy
 9999 abandon: saving in free-list of size 9
 9999 trace: reply: decrementing callstack depth from 7
 9998 run: result 0 is 0
-9999 mem: storing 0 in location 1595
+9999 mem: storing 0 in location 1596
  107 run: jump-if len, 
-9999 mem: location 1595 is 0
+9999 mem: location 1596 is 0
 9998 run: jump-if fell through
  107 run: prev:address:shared:duplex-list:character <- prev_2 curr
-9999 mem: location 1588 is 1245
+9999 mem: location 1590 is 1245
 9999 trace: incrementing callstack depth to 7
  108 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9999 mem: array size is 3
@@ -30277,7 +30285,7 @@ gxy
 9999 abandon: picking up space from free-list of size 5
  108 run: in:address:shared:duplex-list:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1245 in location 1583
-9999 mem: incrementing refcount of 1245: 24 -> 25
+9999 mem: incrementing refcount of 1245: 25 -> 26
  108 run: jump-if in, 1:offset
 9999 mem: location 1583 is 1245
 9998 run: jumping to instruction 4
@@ -30303,14 +30311,14 @@ gxy
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 7
 9998 run: result 0 is 1241
-9999 mem: storing 1241 in location 1596
+9999 mem: storing 1241 in location 1597
 9999 mem: incrementing refcount of 1241: 19 -> 20
  107 run: jump-if prev, 1:offset
-9999 mem: location 1596 is 1241
-9998 run: jumping to instruction 14
+9999 mem: location 1597 is 1241
+9998 run: jumping to instruction 15
  107 run: reply prev
-9999 mem: location 1596 is 1241
-9999 abandon: saving in free-list of size 15
+9999 mem: location 1597 is 1241
+9999 abandon: saving in free-list of size 16
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1241
 9999 mem: storing 1241 in location 1191
@@ -30321,7 +30329,7 @@ gxy
  106 run: *top-of-screen <- copy prev
 9999 mem: location 1191 is 1241
 9999 mem: location 1189 is 1158
-9999 mem: decrementing refcount of 1245: 25 -> 24
+9999 mem: decrementing refcount of 1245: 26 -> 25
 9999 mem: storing 1241 in location 1158
 9999 mem: incrementing refcount of 1241: 21 -> 22
  106 run: count <- add count, 1
@@ -30342,17 +30350,21 @@ gxy
 9999 mem: location 1185 is 1156
 9999 trace: incrementing callstack depth to 6
  107 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9999 mem: array size is 13
-9999 mem: allocating size 15
-9999 abandon: picking up space from free-list of size 15
- 107 run: curr:address:shared:duplex-list:character <- next-ingredient-without-typechecking 
+9999 mem: array size is 14
+9999 mem: allocating size 16
+9999 abandon: picking up space from free-list of size 16
+ 107 run: in:address:shared:duplex-list:character <- next-ingredient-without-typechecking 
 9999 mem: storing 1241 in location 1588
 9999 mem: incrementing refcount of 1241: 22 -> 23
  107 run: editor:address:shared:editor-data <- next-ingredient-without-typechecking 
 9999 mem: storing 1156 in location 1589
 9999 mem: incrementing refcount of 1156: 22 -> 23
- 107 run: c:character <- get *curr, value:offset
+ 107 run: curr:address:shared:duplex-list:character <- copy in
 9999 mem: location 1588 is 1241
+9999 mem: storing 1241 in location 1590
+9999 mem: incrementing refcount of 1241: 23 -> 24
+ 107 run: c:character <- get *curr, value:offset
+9999 mem: location 1590 is 1241
 9999 mem: skipping refcount at 1241
 9999 type: checking size of type ingredient
 
@@ -30360,12 +30372,12 @@ gxy
 9999 mem: location 1242 is 10
 9999 mem: location 1243 is 1245
 9999 mem: location 1244 is 1237
-9999 mem: location 1588 is 1241
+9999 mem: location 1590 is 1241
 9999 mem: skipping refcount at 1241
 9998 run: address to copy is 1242
 9998 run: its type is character
 9999 mem: location 1242 is 10
-9999 mem: storing 10 in location 1590
+9999 mem: storing 10 in location 1591
  107 run: left:number <- get *editor, left:offset
 9999 mem: location 1589 is 1156
 9999 mem: skipping refcount at 1156
@@ -30386,7 +30398,7 @@ gxy
 9998 run: address to copy is 1161
 9998 run: its type is number
 9999 mem: location 1161 is 0
-9999 mem: storing 0 in location 1591
+9999 mem: storing 0 in location 1592
  107 run: right:number <- get *editor, right:offset
 9999 mem: location 1589 is 1156
 9999 mem: skipping refcount at 1156
@@ -30407,11 +30419,11 @@ gxy
 9998 run: address to copy is 1162
 9998 run: its type is number
 9999 mem: location 1162 is 3
-9999 mem: storing 3 in location 1592
- 107 run: max-line-length:number <- subtract right, left, -1/exclusive-right, 1/wrap-icon
-9999 mem: location 1592 is 3
-9999 mem: location 1591 is 0
 9999 mem: storing 3 in location 1593
+ 107 run: max-line-length:number <- subtract right, left, -1/exclusive-right, 1/wrap-icon
+9999 mem: location 1593 is 3
+9999 mem: location 1592 is 0
+9999 mem: storing 3 in location 1594
  107 run: sentinel:address:shared:duplex-list:character <- get *editor, data:offset
 9999 mem: location 1589 is 1156
 9999 mem: skipping refcount at 1156
@@ -30432,11 +30444,11 @@ gxy
 9998 run: address to copy is 1157
 9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
 9999 mem: location 1157 is 1178
-9999 mem: storing 1178 in location 1594
+9999 mem: storing 1178 in location 1595
 9999 mem: incrementing refcount of 1178: 13 -> 14
  107 run: len:number <- previous-line-length curr, sentinel
-9999 mem: location 1588 is 1241
-9999 mem: location 1594 is 1178
+9999 mem: location 1590 is 1241
+9999 mem: location 1595 is 1178
 9999 trace: incrementing callstack depth to 7
  108 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9999 mem: array size is 7
@@ -30444,7 +30456,7 @@ gxy
 9999 abandon: picking up space from free-list of size 9
  108 run: curr:address:shared:duplex-list:character <- next-ingredient-without-typechecking 
 9999 mem: storing 1241 in location 1172
-9999 mem: incrementing refcount of 1241: 23 -> 24
+9999 mem: incrementing refcount of 1241: 24 -> 25
  108 run: start:address:shared:duplex-list:character <- next-ingredient-without-typechecking 
 9999 mem: storing 1178 in location 1173
 9999 mem: incrementing refcount of 1178: 14 -> 15
@@ -30469,7 +30481,7 @@ gxy
 9999 abandon: picking up space from free-list of size 5
  109 run: in:address:shared:duplex-list:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1241 in location 1583
-9999 mem: incrementing refcount of 1241: 24 -> 25
+9999 mem: incrementing refcount of 1241: 25 -> 26
  109 run: jump-if in, 1:offset
 9999 mem: location 1583 is 1241
 9998 run: jumping to instruction 4
@@ -30495,7 +30507,7 @@ gxy
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 8
 9998 run: result 0 is 1237
-9999 mem: decrementing refcount of 1241: 25 -> 24
+9999 mem: decrementing refcount of 1241: 26 -> 25
 9999 mem: storing 1237 in location 1172
 9999 mem: incrementing refcount of 1237: 17 -> 18
  108 run: jump-unless curr, 
@@ -30756,34 +30768,34 @@ gxy
 9999 abandon: saving in free-list of size 9
 9999 trace: reply: decrementing callstack depth from 7
 9998 run: result 0 is 3
-9999 mem: storing 3 in location 1595
+9999 mem: storing 3 in location 1596
  107 run: jump-if len, 
-9999 mem: location 1595 is 3
-9998 run: jumping to instruction 15
+9999 mem: location 1596 is 3
+9998 run: jumping to instruction 16
  107 run: _, max:number <- divide-with-remainder len, max-line-length
-9999 mem: location 1595 is 3
-9999 mem: location 1593 is 3
-9999 mem: storing 0 in location 1597
+9999 mem: location 1596 is 3
+9999 mem: location 1594 is 3
+9999 mem: storing 0 in location 1598
  107 run: jump-if max, 
-9999 mem: location 1597 is 0
+9999 mem: location 1598 is 0
 9998 run: jump-if fell through
  107 run: max <- copy max-line-length
-9999 mem: location 1593 is 3
-9999 mem: storing 3 in location 1597
+9999 mem: location 1594 is 3
+9999 mem: storing 3 in location 1598
  107 run: max <- add max, 1
-9999 mem: location 1597 is 3
-9999 mem: storing 4 in location 1597
+9999 mem: location 1598 is 3
+9999 mem: storing 4 in location 1598
  107 run: count:number <- copy 0
-9999 mem: storing 0 in location 1598
- 107 run: done?:boolean <- greater-or-equal count, max
-9999 mem: location 1598 is 0
-9999 mem: location 1597 is 4
 9999 mem: storing 0 in location 1599
- 107 run: jump-if done?, 
+ 107 run: done?:boolean <- greater-or-equal count, max
 9999 mem: location 1599 is 0
+9999 mem: location 1598 is 4
+9999 mem: storing 0 in location 1600
+ 107 run: jump-if done?, 
+9999 mem: location 1600 is 0
 9998 run: jump-if fell through
  107 run: prev:address:shared:duplex-list:character <- prev_2 curr
-9999 mem: location 1588 is 1241
+9999 mem: location 1590 is 1241
 9999 trace: incrementing callstack depth to 7
  108 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9999 mem: array size is 3
@@ -30791,7 +30803,7 @@ gxy
 9999 abandon: picking up space from free-list of size 5
  108 run: in:address:shared:duplex-list:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1241 in location 1583
-9999 mem: incrementing refcount of 1241: 24 -> 25
+9999 mem: incrementing refcount of 1241: 25 -> 26
  108 run: jump-if in, 1:offset
 9999 mem: location 1583 is 1241
 9998 run: jumping to instruction 4
@@ -30817,30 +30829,30 @@ gxy
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 7
 9998 run: result 0 is 1237
-9999 mem: storing 1237 in location 1596
+9999 mem: storing 1237 in location 1597
 9999 mem: incrementing refcount of 1237: 19 -> 20
  107 run: jump-unless prev, 
-9999 mem: location 1596 is 1237
+9999 mem: location 1597 is 1237
 9998 run: jump-unless fell through
  107 run: curr <- copy prev
-9999 mem: location 1596 is 1237
-9999 mem: decrementing refcount of 1241: 25 -> 24
-9999 mem: storing 1237 in location 1588
+9999 mem: location 1597 is 1237
+9999 mem: decrementing refcount of 1241: 26 -> 25
+9999 mem: storing 1237 in location 1590
 9999 mem: incrementing refcount of 1237: 20 -> 21
  107 run: count <- add count, 1
-9999 mem: location 1598 is 0
-9999 mem: storing 1 in location 1598
- 107 run: jump 
-9998 run: jumping to instruction 24
- 107 run: done?:boolean <- greater-or-equal count, max
-9999 mem: location 1598 is 1
-9999 mem: location 1597 is 4
-9999 mem: storing 0 in location 1599
- 107 run: jump-if done?, 
 9999 mem: location 1599 is 0
+9999 mem: storing 1 in location 1599
+ 107 run: jump 
+9998 run: jumping to instruction 25
+ 107 run: done?:boolean <- greater-or-equal count, max
+9999 mem: location 1599 is 1
+9999 mem: location 1598 is 4
+9999 mem: storing 0 in location 1600
+ 107 run: jump-if done?, 
+9999 mem: location 1600 is 0
 9998 run: jump-if fell through
  107 run: prev:address:shared:duplex-list:character <- prev_2 curr
-9999 mem: location 1588 is 1237
+9999 mem: location 1590 is 1237
 9999 trace: incrementing callstack depth to 7
  108 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9999 mem: array size is 3
@@ -30875,30 +30887,30 @@ gxy
 9999 trace: reply: decrementing callstack depth from 7
 9998 run: result 0 is 1233
 9999 mem: decrementing refcount of 1237: 22 -> 21
-9999 mem: storing 1233 in location 1596
+9999 mem: storing 1233 in location 1597
 9999 mem: incrementing refcount of 1233: 19 -> 20
  107 run: jump-unless prev, 
-9999 mem: location 1596 is 1233
+9999 mem: location 1597 is 1233
 9998 run: jump-unless fell through
  107 run: curr <- copy prev
-9999 mem: location 1596 is 1233
+9999 mem: location 1597 is 1233
 9999 mem: decrementing refcount of 1237: 21 -> 20
-9999 mem: storing 1233 in location 1588
+9999 mem: storing 1233 in location 1590
 9999 mem: incrementing refcount of 1233: 20 -> 21
  107 run: count <- add count, 1
-9999 mem: location 1598 is 1
-9999 mem: storing 2 in location 1598
+9999 mem: location 1599 is 1
+9999 mem: storing 2 in location 1599
  107 run: jump 
-9998 run: jumping to instruction 24
+9998 run: jumping to instruction 25
  107 run: done?:boolean <- greater-or-equal count, max
-9999 mem: location 1598 is 2
-9999 mem: location 1597 is 4
-9999 mem: storing 0 in location 1599
+9999 mem: location 1599 is 2
+9999 mem: location 1598 is 4
+9999 mem: storing 0 in location 1600
  107 run: jump-if done?, 
-9999 mem: location 1599 is 0
+9999 mem: location 1600 is 0
 9998 run: jump-if fell through
  107 run: prev:address:shared:duplex-list:character <- prev_2 curr
-9999 mem: location 1588 is 1233
+9999 mem: location 1590 is 1233
 9999 trace: incrementing callstack depth to 7
  108 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9999 mem: array size is 3
@@ -30933,30 +30945,30 @@ gxy
 9999 trace: reply: decrementing callstack depth from 7
 9998 run: result 0 is 1229
 9999 mem: decrementing refcount of 1233: 22 -> 21
-9999 mem: storing 1229 in location 1596
+9999 mem: storing 1229 in location 1597
 9999 mem: incrementing refcount of 1229: 19 -> 20
  107 run: jump-unless prev, 
-9999 mem: location 1596 is 1229
+9999 mem: location 1597 is 1229
 9998 run: jump-unless fell through
  107 run: curr <- copy prev
-9999 mem: location 1596 is 1229
+9999 mem: location 1597 is 1229
 9999 mem: decrementing refcount of 1233: 21 -> 20
-9999 mem: storing 1229 in location 1588
+9999 mem: storing 1229 in location 1590
 9999 mem: incrementing refcount of 1229: 20 -> 21
  107 run: count <- add count, 1
-9999 mem: location 1598 is 2
-9999 mem: storing 3 in location 1598
+9999 mem: location 1599 is 2
+9999 mem: storing 3 in location 1599
  107 run: jump 
-9998 run: jumping to instruction 24
+9998 run: jumping to instruction 25
  107 run: done?:boolean <- greater-or-equal count, max
-9999 mem: location 1598 is 3
-9999 mem: location 1597 is 4
-9999 mem: storing 0 in location 1599
+9999 mem: location 1599 is 3
+9999 mem: location 1598 is 4
+9999 mem: storing 0 in location 1600
  107 run: jump-if done?, 
-9999 mem: location 1599 is 0
+9999 mem: location 1600 is 0
 9998 run: jump-if fell through
  107 run: prev:address:shared:duplex-list:character <- prev_2 curr
-9999 mem: location 1588 is 1229
+9999 mem: location 1590 is 1229
 9999 trace: incrementing callstack depth to 7
  108 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9999 mem: array size is 3
@@ -30991,34 +31003,34 @@ gxy
 9999 trace: reply: decrementing callstack depth from 7
 9998 run: result 0 is 1225
 9999 mem: decrementing refcount of 1229: 22 -> 21
-9999 mem: storing 1225 in location 1596
+9999 mem: storing 1225 in location 1597
 9999 mem: incrementing refcount of 1225: 19 -> 20
  107 run: jump-unless prev, 
-9999 mem: location 1596 is 1225
+9999 mem: location 1597 is 1225
 9998 run: jump-unless fell through
  107 run: curr <- copy prev
-9999 mem: location 1596 is 1225
+9999 mem: location 1597 is 1225
 9999 mem: decrementing refcount of 1229: 21 -> 20
-9999 mem: storing 1225 in location 1588
+9999 mem: storing 1225 in location 1590
 9999 mem: incrementing refcount of 1225: 20 -> 21
  107 run: count <- add count, 1
-9999 mem: location 1598 is 3
-9999 mem: storing 4 in location 1598
+9999 mem: location 1599 is 3
+9999 mem: storing 4 in location 1599
  107 run: jump 
-9998 run: jumping to instruction 24
+9998 run: jumping to instruction 25
  107 run: done?:boolean <- greater-or-equal count, max
+9999 mem: location 1599 is 4
 9999 mem: location 1598 is 4
-9999 mem: location 1597 is 4
-9999 mem: storing 1 in location 1599
+9999 mem: storing 1 in location 1600
  107 run: jump-if done?, 
-9999 mem: location 1599 is 1
-9998 run: jumping to instruction 31
+9999 mem: location 1600 is 1
+9998 run: jumping to instruction 32
  107 run: reply curr
-9999 mem: location 1588 is 1225
-9999 abandon: saving in free-list of size 15
+9999 mem: location 1590 is 1225
+9999 abandon: saving in free-list of size 16
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1225
-9999 mem: decrementing refcount of 1241: 24 -> 23
+9999 mem: decrementing refcount of 1241: 25 -> 24
 9999 mem: storing 1225 in location 1191
 9999 mem: incrementing refcount of 1225: 21 -> 22
  106 run: jump-unless prev, 
@@ -31027,7 +31039,7 @@ gxy
  106 run: *top-of-screen <- copy prev
 9999 mem: location 1191 is 1225
 9999 mem: location 1189 is 1158
-9999 mem: decrementing refcount of 1241: 23 -> 22
+9999 mem: decrementing refcount of 1241: 24 -> 23
 9999 mem: storing 1225 in location 1158
 9999 mem: incrementing refcount of 1225: 22 -> 23
  106 run: count <- add count, 1
@@ -31194,53 +31206,53 @@ gxy
 9999 mem: incrementing refcount of 1556: 2 -> 3
  107 run: result:address:shared:list:_elem <- new {(list _elem): type}
 9999 mem: allocating size 3
-9999 mem: new alloc: 1600
-9999 mem: storing 1600 in location 1348
-9999 mem: incrementing refcount of 1600: 0 -> 1
+9999 mem: new alloc: 1601
+9999 mem: storing 1601 in location 1348
+9999 mem: incrementing refcount of 1601: 0 -> 1
  107 run: val:address:_elem <- get-address *result, value:offset
-9999 mem: location 1348 is 1600
-9999 mem: skipping refcount at 1600
+9999 mem: location 1348 is 1601
+9999 mem: skipping refcount at 1601
 9999 type: checking size of type ingredient
 
 9999 type: type deduced to be address$
-9999 mem: location 1601 is 0
 9999 mem: location 1602 is 0
-9999 mem: location 1348 is 1600
-9999 mem: skipping refcount at 1600
-9998 run: address to copy is 1601
-9999 mem: storing 1601 in location 1349
+9999 mem: location 1603 is 0
+9999 mem: location 1348 is 1601
+9999 mem: skipping refcount at 1601
+9998 run: address to copy is 1602
+9999 mem: storing 1602 in location 1349
  107 run: *val <- copy x
 9999 mem: location 1346 is 1559
-9999 mem: location 1349 is 1601
-9999 mem: storing 1559 in location 1601
+9999 mem: location 1349 is 1602
+9999 mem: storing 1559 in location 1602
 9999 mem: incrementing refcount of 1559: 3 -> 4
  107 run: next:address:address:shared:list:_elem <- get-address *result, next:offset
-9999 mem: location 1348 is 1600
-9999 mem: skipping refcount at 1600
+9999 mem: location 1348 is 1601
+9999 mem: skipping refcount at 1601
 9999 type: checking size of type ingredient
 
 9999 type: type deduced to be address$
-9999 mem: location 1601 is 1559
-9999 mem: location 1602 is 0
-9999 mem: location 1348 is 1600
-9999 mem: skipping refcount at 1600
+9999 mem: location 1602 is 1559
+9999 mem: location 1603 is 0
+9999 mem: location 1348 is 1601
+9999 mem: skipping refcount at 1601
 9999 type: type deduced to be address$
-9998 run: address to copy is 1602
-9999 mem: storing 1602 in location 1350
+9998 run: address to copy is 1603
+9999 mem: storing 1603 in location 1350
  107 run: *next <- copy in
 9999 mem: location 1347 is 1556
-9999 mem: location 1350 is 1602
-9999 mem: storing 1556 in location 1602
+9999 mem: location 1350 is 1603
+9999 mem: storing 1556 in location 1603
 9999 mem: incrementing refcount of 1556: 3 -> 4
  107 run: reply result
-9999 mem: location 1348 is 1600
+9999 mem: location 1348 is 1601
 9999 abandon: saving in free-list of size 8
 9999 trace: reply: decrementing callstack depth from 6
-9998 run: result 0 is 1600
+9998 run: result 0 is 1601
 9999 mem: location 1520 is 1167
 9999 mem: decrementing refcount of 1556: 4 -> 3
-9999 mem: storing 1600 in location 1167
-9999 mem: incrementing refcount of 1600: 1 -> 2
+9999 mem: storing 1601 in location 1167
+9999 mem: incrementing refcount of 1601: 1 -> 2
  106 run: redo:address:address:shared:list:address:shared:operation <- get-address *editor, redo:offset
 9999 mem: location 1518 is 1156
 9999 mem: skipping refcount at 1156
@@ -31254,7 +31266,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1518 is 1156
 9999 mem: skipping refcount at 1156
@@ -31325,7 +31337,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1173 is 1156
 9999 mem: skipping refcount at 1156
@@ -31346,7 +31358,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1173 is 1156
 9999 mem: skipping refcount at 1156
@@ -31384,7 +31396,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1317 is 1156
 9999 mem: skipping refcount at 1156
@@ -31438,7 +31450,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1317 is 1156
 9999 mem: skipping refcount at 1156
@@ -31459,7 +31471,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1317 is 1156
 9999 mem: skipping refcount at 1156
@@ -31530,7 +31542,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1317 is 1156
 9999 mem: skipping refcount at 1156
@@ -31549,7 +31561,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1317 is 1156
 9999 mem: skipping refcount at 1156
@@ -31568,7 +31580,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1317 is 1156
 9999 mem: skipping refcount at 1156
@@ -31662,7 +31674,7 @@ gxy
  106 run: *before-cursor <- copy prev
 9999 mem: location 1322 is 1225
 9999 mem: location 1328 is 1160
-9999 mem: decrementing refcount of 1245: 24 -> 23
+9999 mem: decrementing refcount of 1245: 25 -> 24
 9999 mem: storing 1225 in location 1160
 9999 mem: incrementing refcount of 1225: 26 -> 27
  106 run: c:character <- get *curr, value:offset
@@ -31687,47 +31699,47 @@ gxy
  107 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9999 mem: array size is 10
 9999 mem: allocating size 12
-9999 mem: new alloc: 1603
-9999 mem: storing 10 in location 1604
+9999 mem: new alloc: 1604
+9999 mem: storing 10 in location 1605
  107 run: color:number <- next-ingredient-without-typechecking 
-9999 mem: storing 7 in location 1606
+9999 mem: storing 7 in location 1607
  107 run: c:character <- next-ingredient-without-typechecking 
-9999 mem: storing 99 in location 1607
+9999 mem: storing 99 in location 1608
  107 run: color-is-white?:boolean <- equal color, 7/white
-9999 mem: location 1606 is 7
-9999 mem: storing 1 in location 1608
+9999 mem: location 1607 is 7
+9999 mem: storing 1 in location 1609
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-comment?:boolean <- equal c, 35/#
-9999 mem: location 1607 is 99
-9999 mem: storing 0 in location 1609
+9999 mem: location 1608 is 99
+9999 mem: storing 0 in location 1610
  107 run: jump-unless starting-comment?, 
-9999 mem: location 1609 is 0
+9999 mem: location 1610 is 0
 9998 run: jumping to instruction 11
  107 run: color-is-blue?:boolean <- equal color, 12/lightblue
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1610
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1611
  107 run: jump-unless color-is-blue?, 
-9999 mem: location 1610 is 0
+9999 mem: location 1611 is 0
 9998 run: jumping to instruction 20
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-assignment?:boolean <- equal c, 60/<
-9999 mem: location 1607 is 99
-9999 mem: storing 0 in location 1612
+9999 mem: location 1608 is 99
+9999 mem: storing 0 in location 1613
  107 run: jump-unless starting-assignment?, 
-9999 mem: location 1612 is 0
+9999 mem: location 1613 is 0
 9998 run: jumping to instruction 27
  107 run: color-is-red?:boolean <- equal color, 1/red
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1613
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1614
  107 run: jump-unless color-is-red?, 
-9999 mem: location 1613 is 0
+9999 mem: location 1614 is 0
 9998 run: jumping to instruction 35
  107 run: reply color
-9999 mem: location 1606 is 7
+9999 mem: location 1607 is 7
 9999 abandon: saving in free-list of size 12
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 7
@@ -32080,44 +32092,44 @@ gxy
 9999 mem: allocating size 12
 9999 abandon: picking up space from free-list of size 12
  107 run: color:number <- next-ingredient-without-typechecking 
-9999 mem: storing 7 in location 1606
+9999 mem: storing 7 in location 1607
  107 run: c:character <- next-ingredient-without-typechecking 
-9999 mem: storing 120 in location 1607
+9999 mem: storing 120 in location 1608
  107 run: color-is-white?:boolean <- equal color, 7/white
-9999 mem: location 1606 is 7
-9999 mem: storing 1 in location 1608
+9999 mem: location 1607 is 7
+9999 mem: storing 1 in location 1609
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-comment?:boolean <- equal c, 35/#
-9999 mem: location 1607 is 120
-9999 mem: storing 0 in location 1609
+9999 mem: location 1608 is 120
+9999 mem: storing 0 in location 1610
  107 run: jump-unless starting-comment?, 
-9999 mem: location 1609 is 0
+9999 mem: location 1610 is 0
 9998 run: jumping to instruction 11
  107 run: color-is-blue?:boolean <- equal color, 12/lightblue
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1610
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1611
  107 run: jump-unless color-is-blue?, 
-9999 mem: location 1610 is 0
+9999 mem: location 1611 is 0
 9998 run: jumping to instruction 20
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-assignment?:boolean <- equal c, 60/<
-9999 mem: location 1607 is 120
-9999 mem: storing 0 in location 1612
+9999 mem: location 1608 is 120
+9999 mem: storing 0 in location 1613
  107 run: jump-unless starting-assignment?, 
-9999 mem: location 1612 is 0
+9999 mem: location 1613 is 0
 9998 run: jumping to instruction 27
  107 run: color-is-red?:boolean <- equal color, 1/red
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1613
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1614
  107 run: jump-unless color-is-red?, 
-9999 mem: location 1613 is 0
+9999 mem: location 1614 is 0
 9998 run: jumping to instruction 35
  107 run: reply color
-9999 mem: location 1606 is 7
+9999 mem: location 1607 is 7
 9999 abandon: saving in free-list of size 12
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 7
@@ -32470,45 +32482,45 @@ gxy
 9999 mem: allocating size 12
 9999 abandon: picking up space from free-list of size 12
  107 run: color:number <- next-ingredient-without-typechecking 
-9999 mem: storing 7 in location 1606
- 107 run: c:character <- next-ingredient-without-typechecking 
-9999 mem: storing 121 in location 1607
- 107 run: color-is-white?:boolean <- equal color, 7/white
-9999 mem: location 1606 is 7
-9999 mem: storing 1 in location 1608
+9999 mem: storing 7 in location 1607
 9990 schedule: get-color/render/editor-render/editor-event-loop/run_1003/scenario_editor-can-scroll-up-past-empty-lines
+ 107 run: c:character <- next-ingredient-without-typechecking 
+9999 mem: storing 121 in location 1608
+ 107 run: color-is-white?:boolean <- equal color, 7/white
+9999 mem: location 1607 is 7
+9999 mem: storing 1 in location 1609
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-comment?:boolean <- equal c, 35/#
-9999 mem: location 1607 is 121
-9999 mem: storing 0 in location 1609
+9999 mem: location 1608 is 121
+9999 mem: storing 0 in location 1610
  107 run: jump-unless starting-comment?, 
-9999 mem: location 1609 is 0
+9999 mem: location 1610 is 0
 9998 run: jumping to instruction 11
  107 run: color-is-blue?:boolean <- equal color, 12/lightblue
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1610
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1611
  107 run: jump-unless color-is-blue?, 
-9999 mem: location 1610 is 0
+9999 mem: location 1611 is 0
 9998 run: jumping to instruction 20
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-assignment?:boolean <- equal c, 60/<
-9999 mem: location 1607 is 121
-9999 mem: storing 0 in location 1612
+9999 mem: location 1608 is 121
+9999 mem: storing 0 in location 1613
  107 run: jump-unless starting-assignment?, 
-9999 mem: location 1612 is 0
+9999 mem: location 1613 is 0
 9998 run: jumping to instruction 27
  107 run: color-is-red?:boolean <- equal color, 1/red
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1613
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1614
  107 run: jump-unless color-is-red?, 
-9999 mem: location 1613 is 0
+9999 mem: location 1614 is 0
 9998 run: jumping to instruction 35
  107 run: reply color
-9999 mem: location 1606 is 7
+9999 mem: location 1607 is 7
 9999 abandon: saving in free-list of size 12
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 7
@@ -32759,7 +32771,7 @@ gxy
 9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
 9999 mem: location 1239 is 1241
 9999 mem: storing 1241 in location 1584
-9999 mem: incrementing refcount of 1241: 22 -> 23
+9999 mem: incrementing refcount of 1241: 23 -> 24
  107 run: reply result:address:shared:duplex-list:_elem/contained-in:in
 9999 mem: location 1584 is 1241
 9999 abandon: saving in free-list of size 5
@@ -32767,7 +32779,7 @@ gxy
 9998 run: result 0 is 1241
 9999 mem: decrementing refcount of 1237: 23 -> 22
 9999 mem: storing 1241 in location 1321
-9999 mem: incrementing refcount of 1241: 23 -> 24
+9999 mem: incrementing refcount of 1241: 24 -> 25
  106 run: prev <- next_2 prev
 9999 mem: location 1322 is 1233
 9999 trace: incrementing callstack depth to 6
@@ -32861,44 +32873,44 @@ gxy
 9999 mem: allocating size 12
 9999 abandon: picking up space from free-list of size 12
  107 run: color:number <- next-ingredient-without-typechecking 
-9999 mem: storing 7 in location 1606
+9999 mem: storing 7 in location 1607
  107 run: c:character <- next-ingredient-without-typechecking 
-9999 mem: storing 10 in location 1607
+9999 mem: storing 10 in location 1608
  107 run: color-is-white?:boolean <- equal color, 7/white
-9999 mem: location 1606 is 7
-9999 mem: storing 1 in location 1608
+9999 mem: location 1607 is 7
+9999 mem: storing 1 in location 1609
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-comment?:boolean <- equal c, 35/#
-9999 mem: location 1607 is 10
-9999 mem: storing 0 in location 1609
+9999 mem: location 1608 is 10
+9999 mem: storing 0 in location 1610
  107 run: jump-unless starting-comment?, 
-9999 mem: location 1609 is 0
+9999 mem: location 1610 is 0
 9998 run: jumping to instruction 11
  107 run: color-is-blue?:boolean <- equal color, 12/lightblue
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1610
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1611
  107 run: jump-unless color-is-blue?, 
-9999 mem: location 1610 is 0
+9999 mem: location 1611 is 0
 9998 run: jumping to instruction 20
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-assignment?:boolean <- equal c, 60/<
-9999 mem: location 1607 is 10
-9999 mem: storing 0 in location 1612
+9999 mem: location 1608 is 10
+9999 mem: storing 0 in location 1613
  107 run: jump-unless starting-assignment?, 
-9999 mem: location 1612 is 0
+9999 mem: location 1613 is 0
 9998 run: jumping to instruction 27
  107 run: color-is-red?:boolean <- equal color, 1/red
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1613
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1614
  107 run: jump-unless color-is-red?, 
-9999 mem: location 1613 is 0
+9999 mem: location 1614 is 0
 9998 run: jumping to instruction 35
  107 run: reply color
-9999 mem: location 1606 is 7
+9999 mem: location 1607 is 7
 9999 abandon: saving in free-list of size 12
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 7
@@ -33254,7 +33266,7 @@ gxy
 9999 abandon: picking up space from free-list of size 5
  107 run: in:address:shared:duplex-list:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1241 in location 1583
-9999 mem: incrementing refcount of 1241: 24 -> 25
+9999 mem: incrementing refcount of 1241: 25 -> 26
  107 run: jump-if in, 1:offset
 9999 mem: location 1583 is 1241
 9998 run: jumping to instruction 4
@@ -33274,15 +33286,15 @@ gxy
 9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
 9999 mem: location 1243 is 1245
 9999 mem: storing 1245 in location 1584
-9999 mem: incrementing refcount of 1245: 23 -> 24
+9999 mem: incrementing refcount of 1245: 24 -> 25
  107 run: reply result:address:shared:duplex-list:_elem/contained-in:in
 9999 mem: location 1584 is 1245
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1245
-9999 mem: decrementing refcount of 1241: 25 -> 24
+9999 mem: decrementing refcount of 1241: 26 -> 25
 9999 mem: storing 1245 in location 1321
-9999 mem: incrementing refcount of 1245: 24 -> 25
+9999 mem: incrementing refcount of 1245: 25 -> 26
  106 run: prev <- next_2 prev
 9999 mem: location 1322 is 1237
 9999 trace: incrementing callstack depth to 6
@@ -33312,7 +33324,7 @@ gxy
 9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
 9999 mem: location 1239 is 1241
 9999 mem: storing 1241 in location 1584
-9999 mem: incrementing refcount of 1241: 24 -> 25
+9999 mem: incrementing refcount of 1241: 25 -> 26
  107 run: reply result:address:shared:duplex-list:_elem/contained-in:in
 9999 mem: location 1584 is 1241
 9999 abandon: saving in free-list of size 5
@@ -33320,7 +33332,7 @@ gxy
 9998 run: result 0 is 1241
 9999 mem: decrementing refcount of 1237: 25 -> 24
 9999 mem: storing 1241 in location 1322
-9999 mem: incrementing refcount of 1241: 25 -> 26
+9999 mem: incrementing refcount of 1241: 26 -> 27
  106 run: jump +next-character:label
 9998 run: jumping to instruction 21
  106 run: jump-unless curr, 
@@ -33365,44 +33377,44 @@ gxy
 9999 mem: allocating size 12
 9999 abandon: picking up space from free-list of size 12
  107 run: color:number <- next-ingredient-without-typechecking 
-9999 mem: storing 7 in location 1606
+9999 mem: storing 7 in location 1607
  107 run: c:character <- next-ingredient-without-typechecking 
-9999 mem: storing 10 in location 1607
+9999 mem: storing 10 in location 1608
  107 run: color-is-white?:boolean <- equal color, 7/white
-9999 mem: location 1606 is 7
-9999 mem: storing 1 in location 1608
+9999 mem: location 1607 is 7
+9999 mem: storing 1 in location 1609
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-comment?:boolean <- equal c, 35/#
-9999 mem: location 1607 is 10
-9999 mem: storing 0 in location 1609
+9999 mem: location 1608 is 10
+9999 mem: storing 0 in location 1610
  107 run: jump-unless starting-comment?, 
-9999 mem: location 1609 is 0
+9999 mem: location 1610 is 0
 9998 run: jumping to instruction 11
  107 run: color-is-blue?:boolean <- equal color, 12/lightblue
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1610
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1611
  107 run: jump-unless color-is-blue?, 
-9999 mem: location 1610 is 0
+9999 mem: location 1611 is 0
 9998 run: jumping to instruction 20
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-assignment?:boolean <- equal c, 60/<
-9999 mem: location 1607 is 10
-9999 mem: storing 0 in location 1612
+9999 mem: location 1608 is 10
+9999 mem: storing 0 in location 1613
  107 run: jump-unless starting-assignment?, 
-9999 mem: location 1612 is 0
+9999 mem: location 1613 is 0
 9998 run: jumping to instruction 27
  107 run: color-is-red?:boolean <- equal color, 1/red
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1613
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1614
  107 run: jump-unless color-is-red?, 
-9999 mem: location 1613 is 0
+9999 mem: location 1614 is 0
 9998 run: jumping to instruction 35
  107 run: reply color
-9999 mem: location 1606 is 7
+9999 mem: location 1607 is 7
 9999 abandon: saving in free-list of size 12
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 7
@@ -34268,6 +34280,7 @@ gxy
 9999 mem: skipping refcount at 1018
 9999 mem: location 1368 is 23
 9999 mem: storing 1066 in location 1373
+9990 schedule: print/clear-line-delimited/render/editor-render/editor-event-loop/run_1003/scenario_editor-can-scroll-up-past-empty-lines
  108 run: cursor-contents:address:character <- get-address *cursor, contents:offset
 9999 mem: location 1373 is 1066
 9999 mem: location 1066 is 32
@@ -34279,7 +34292,6 @@ gxy
 9999 mem: location 1355 is 32
 9999 mem: location 1374 is 1066
 9999 mem: storing 32 in location 1066
-9990 schedule: print/clear-line-delimited/render/editor-render/editor-event-loop/run_1003/scenario_editor-can-scroll-up-past-empty-lines
  108 run: cursor-color:address:number <- get-address *cursor, color:offset
 9999 mem: location 1373 is 1066
 9999 mem: location 1066 is 32
@@ -34405,7 +34417,7 @@ gxy
 9999 abandon: picking up space from free-list of size 5
  107 run: in:address:shared:duplex-list:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1245 in location 1583
-9999 mem: incrementing refcount of 1245: 25 -> 26
+9999 mem: incrementing refcount of 1245: 26 -> 27
  107 run: jump-if in, 1:offset
 9999 mem: location 1583 is 1245
 9998 run: jumping to instruction 4
@@ -34431,7 +34443,7 @@ gxy
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1249
-9999 mem: decrementing refcount of 1245: 26 -> 25
+9999 mem: decrementing refcount of 1245: 27 -> 26
 9999 mem: storing 1249 in location 1321
 9999 mem: incrementing refcount of 1249: 17 -> 18
  106 run: prev <- next_2 prev
@@ -34443,7 +34455,7 @@ gxy
 9999 abandon: picking up space from free-list of size 5
  107 run: in:address:shared:duplex-list:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1241 in location 1583
-9999 mem: incrementing refcount of 1241: 26 -> 27
+9999 mem: incrementing refcount of 1241: 27 -> 28
  107 run: jump-if in, 1:offset
 9999 mem: location 1583 is 1241
 9998 run: jumping to instruction 4
@@ -34463,15 +34475,15 @@ gxy
 9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
 9999 mem: location 1243 is 1245
 9999 mem: storing 1245 in location 1584
-9999 mem: incrementing refcount of 1245: 25 -> 26
+9999 mem: incrementing refcount of 1245: 26 -> 27
  107 run: reply result:address:shared:duplex-list:_elem/contained-in:in
 9999 mem: location 1584 is 1245
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1245
-9999 mem: decrementing refcount of 1241: 27 -> 26
+9999 mem: decrementing refcount of 1241: 28 -> 27
 9999 mem: storing 1245 in location 1322
-9999 mem: incrementing refcount of 1245: 26 -> 27
+9999 mem: incrementing refcount of 1245: 27 -> 28
  106 run: jump +next-character:label
 9998 run: jumping to instruction 21
  106 run: jump-unless curr, 
@@ -34516,44 +34528,44 @@ gxy
 9999 mem: allocating size 12
 9999 abandon: picking up space from free-list of size 12
  107 run: color:number <- next-ingredient-without-typechecking 
-9999 mem: storing 7 in location 1606
+9999 mem: storing 7 in location 1607
  107 run: c:character <- next-ingredient-without-typechecking 
-9999 mem: storing 100 in location 1607
+9999 mem: storing 100 in location 1608
  107 run: color-is-white?:boolean <- equal color, 7/white
-9999 mem: location 1606 is 7
-9999 mem: storing 1 in location 1608
+9999 mem: location 1607 is 7
+9999 mem: storing 1 in location 1609
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-comment?:boolean <- equal c, 35/#
-9999 mem: location 1607 is 100
-9999 mem: storing 0 in location 1609
+9999 mem: location 1608 is 100
+9999 mem: storing 0 in location 1610
  107 run: jump-unless starting-comment?, 
-9999 mem: location 1609 is 0
+9999 mem: location 1610 is 0
 9998 run: jumping to instruction 11
  107 run: color-is-blue?:boolean <- equal color, 12/lightblue
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1610
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1611
  107 run: jump-unless color-is-blue?, 
-9999 mem: location 1610 is 0
+9999 mem: location 1611 is 0
 9998 run: jumping to instruction 20
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-assignment?:boolean <- equal c, 60/<
-9999 mem: location 1607 is 100
-9999 mem: storing 0 in location 1612
+9999 mem: location 1608 is 100
+9999 mem: storing 0 in location 1613
  107 run: jump-unless starting-assignment?, 
-9999 mem: location 1612 is 0
+9999 mem: location 1613 is 0
 9998 run: jumping to instruction 27
  107 run: color-is-red?:boolean <- equal color, 1/red
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1613
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1614
  107 run: jump-unless color-is-red?, 
-9999 mem: location 1613 is 0
+9999 mem: location 1614 is 0
 9998 run: jumping to instruction 35
  107 run: reply color
-9999 mem: location 1606 is 7
+9999 mem: location 1607 is 7
 9999 abandon: saving in free-list of size 12
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 7
@@ -34822,7 +34834,7 @@ gxy
 9999 abandon: picking up space from free-list of size 5
  107 run: in:address:shared:duplex-list:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1245 in location 1583
-9999 mem: incrementing refcount of 1245: 27 -> 28
+9999 mem: incrementing refcount of 1245: 28 -> 29
  107 run: jump-if in, 1:offset
 9999 mem: location 1583 is 1245
 9998 run: jumping to instruction 4
@@ -34848,7 +34860,7 @@ gxy
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1249
-9999 mem: decrementing refcount of 1245: 28 -> 27
+9999 mem: decrementing refcount of 1245: 29 -> 28
 9999 mem: storing 1249 in location 1322
 9999 mem: incrementing refcount of 1249: 19 -> 20
  106 run: column <- add column, 1
@@ -34898,44 +34910,44 @@ gxy
 9999 mem: allocating size 12
 9999 abandon: picking up space from free-list of size 12
  107 run: color:number <- next-ingredient-without-typechecking 
-9999 mem: storing 7 in location 1606
+9999 mem: storing 7 in location 1607
  107 run: c:character <- next-ingredient-without-typechecking 
-9999 mem: storing 120 in location 1607
+9999 mem: storing 120 in location 1608
  107 run: color-is-white?:boolean <- equal color, 7/white
-9999 mem: location 1606 is 7
-9999 mem: storing 1 in location 1608
+9999 mem: location 1607 is 7
+9999 mem: storing 1 in location 1609
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-comment?:boolean <- equal c, 35/#
-9999 mem: location 1607 is 120
-9999 mem: storing 0 in location 1609
+9999 mem: location 1608 is 120
+9999 mem: storing 0 in location 1610
  107 run: jump-unless starting-comment?, 
-9999 mem: location 1609 is 0
+9999 mem: location 1610 is 0
 9998 run: jumping to instruction 11
  107 run: color-is-blue?:boolean <- equal color, 12/lightblue
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1610
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1611
  107 run: jump-unless color-is-blue?, 
-9999 mem: location 1610 is 0
+9999 mem: location 1611 is 0
 9998 run: jumping to instruction 20
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-assignment?:boolean <- equal c, 60/<
-9999 mem: location 1607 is 120
-9999 mem: storing 0 in location 1612
+9999 mem: location 1608 is 120
+9999 mem: storing 0 in location 1613
  107 run: jump-unless starting-assignment?, 
-9999 mem: location 1612 is 0
+9999 mem: location 1613 is 0
 9998 run: jumping to instruction 27
  107 run: color-is-red?:boolean <- equal color, 1/red
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1613
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1614
  107 run: jump-unless color-is-red?, 
-9999 mem: location 1613 is 0
+9999 mem: location 1614 is 0
 9998 run: jumping to instruction 35
  107 run: reply color
-9999 mem: location 1606 is 7
+9999 mem: location 1607 is 7
 9999 abandon: saving in free-list of size 12
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 7
@@ -35280,44 +35292,44 @@ gxy
 9999 mem: allocating size 12
 9999 abandon: picking up space from free-list of size 12
  107 run: color:number <- next-ingredient-without-typechecking 
-9999 mem: storing 7 in location 1606
+9999 mem: storing 7 in location 1607
  107 run: c:character <- next-ingredient-without-typechecking 
-9999 mem: storing 121 in location 1607
+9999 mem: storing 121 in location 1608
  107 run: color-is-white?:boolean <- equal color, 7/white
-9999 mem: location 1606 is 7
-9999 mem: storing 1 in location 1608
+9999 mem: location 1607 is 7
+9999 mem: storing 1 in location 1609
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-comment?:boolean <- equal c, 35/#
-9999 mem: location 1607 is 121
-9999 mem: storing 0 in location 1609
+9999 mem: location 1608 is 121
+9999 mem: storing 0 in location 1610
  107 run: jump-unless starting-comment?, 
-9999 mem: location 1609 is 0
+9999 mem: location 1610 is 0
 9998 run: jumping to instruction 11
  107 run: color-is-blue?:boolean <- equal color, 12/lightblue
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1610
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1611
  107 run: jump-unless color-is-blue?, 
-9999 mem: location 1610 is 0
+9999 mem: location 1611 is 0
 9998 run: jumping to instruction 20
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-assignment?:boolean <- equal c, 60/<
-9999 mem: location 1607 is 121
-9999 mem: storing 0 in location 1612
+9999 mem: location 1608 is 121
+9999 mem: storing 0 in location 1613
  107 run: jump-unless starting-assignment?, 
-9999 mem: location 1612 is 0
+9999 mem: location 1613 is 0
 9998 run: jumping to instruction 27
  107 run: color-is-red?:boolean <- equal color, 1/red
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1613
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1614
  107 run: jump-unless color-is-red?, 
-9999 mem: location 1613 is 0
+9999 mem: location 1614 is 0
 9998 run: jumping to instruction 35
  107 run: reply color
-9999 mem: location 1606 is 7
+9999 mem: location 1607 is 7
 9999 abandon: saving in free-list of size 12
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 7
@@ -35662,44 +35674,44 @@ gxy
 9999 mem: allocating size 12
 9999 abandon: picking up space from free-list of size 12
  107 run: color:number <- next-ingredient-without-typechecking 
-9999 mem: storing 7 in location 1606
+9999 mem: storing 7 in location 1607
  107 run: c:character <- next-ingredient-without-typechecking 
-9999 mem: storing 10 in location 1607
+9999 mem: storing 10 in location 1608
  107 run: color-is-white?:boolean <- equal color, 7/white
-9999 mem: location 1606 is 7
-9999 mem: storing 1 in location 1608
+9999 mem: location 1607 is 7
+9999 mem: storing 1 in location 1609
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-comment?:boolean <- equal c, 35/#
-9999 mem: location 1607 is 10
-9999 mem: storing 0 in location 1609
+9999 mem: location 1608 is 10
+9999 mem: storing 0 in location 1610
  107 run: jump-unless starting-comment?, 
-9999 mem: location 1609 is 0
+9999 mem: location 1610 is 0
 9998 run: jumping to instruction 11
  107 run: color-is-blue?:boolean <- equal color, 12/lightblue
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1610
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1611
  107 run: jump-unless color-is-blue?, 
-9999 mem: location 1610 is 0
+9999 mem: location 1611 is 0
 9998 run: jumping to instruction 20
  107 run: jump-unless color-is-white?, 
-9999 mem: location 1608 is 1
+9999 mem: location 1609 is 1
 9998 run: jump-unless fell through
  107 run: starting-assignment?:boolean <- equal c, 60/<
-9999 mem: location 1607 is 10
-9999 mem: storing 0 in location 1612
+9999 mem: location 1608 is 10
+9999 mem: storing 0 in location 1613
  107 run: jump-unless starting-assignment?, 
-9999 mem: location 1612 is 0
+9999 mem: location 1613 is 0
 9998 run: jumping to instruction 27
  107 run: color-is-red?:boolean <- equal color, 1/red
-9999 mem: location 1606 is 7
-9999 mem: storing 0 in location 1613
+9999 mem: location 1607 is 7
+9999 mem: storing 0 in location 1614
  107 run: jump-unless color-is-red?, 
-9999 mem: location 1613 is 0
+9999 mem: location 1614 is 0
 9998 run: jumping to instruction 35
  107 run: reply color
-9999 mem: location 1606 is 7
+9999 mem: location 1607 is 7
 9999 abandon: saving in free-list of size 12
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 7
@@ -36048,6 +36060,7 @@ gxy
  107 run: in:address:shared:duplex-list:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1261 in location 1583
 9999 mem: incrementing refcount of 1261: 18 -> 19
+9990 schedule: next_2/render/editor-render/editor-event-loop/run_1003/scenario_editor-can-scroll-up-past-empty-lines
  107 run: jump-if in, 1:offset
 9999 mem: location 1583 is 1261
 9998 run: jumping to instruction 4
@@ -36068,7 +36081,6 @@ gxy
 9999 mem: location 1263 is 1265
 9999 mem: storing 1265 in location 1584
 9999 mem: incrementing refcount of 1265: 14 -> 15
-9990 schedule: next_2/render/editor-render/editor-event-loop/run_1003/scenario_editor-can-scroll-up-past-empty-lines
  107 run: reply result:address:shared:duplex-list:_elem/contained-in:in
 9999 mem: location 1584 is 1265
 9999 abandon: saving in free-list of size 5
@@ -36140,7 +36152,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1317 is 1156
 9999 mem: skipping refcount at 1156
@@ -36191,7 +36203,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1317 is 1156
 9999 mem: skipping refcount at 1156
@@ -37912,7 +37924,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1392 is 1156
 9999 mem: skipping refcount at 1156
@@ -37933,7 +37945,7 @@ gxy
 9999 mem: location 1164 is 1
 9999 mem: location 1165 is 0
 9999 mem: location 1166 is 1
-9999 mem: location 1167 is 1600
+9999 mem: location 1167 is 1601
 9999 mem: location 1168 is 0
 9999 mem: location 1392 is 1156
 9999 mem: skipping refcount at 1156
@@ -38013,6 +38025,7 @@ gxy
  105 run: jump-unless console, 
 9999 mem: location 1406 is 1577
 9998 run: jump-unless fell through
+9990 schedule: read-event/editor-event-loop/run_1003/scenario_editor-can-scroll-up-past-empty-lines
  105 run: current-event-index:address:number <- get-address *console, current-event-index:offset
 9999 mem: location 1406 is 1577
 9999 mem: skipping refcount at 1577
@@ -38034,7 +38047,6 @@ gxy
 9999 mem: location 1579 is 1571
 9999 mem: storing 1571 in location 1408
 9999 mem: incrementing refcount of 1571: 1 -> 2
-9990 schedule: read-event/editor-event-loop/run_1003/scenario_editor-can-scroll-up-past-empty-lines
  105 run: max:number <- length *buf
 9999 mem: location 1408 is 1571
 9999 mem: skipping refcount at 1571

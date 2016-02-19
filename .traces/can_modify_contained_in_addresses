@@ -1,6 +1,6 @@
 9991 parse: --- defining container test-list
 9999 parse: type number: 1000
-9993 parse:   element: next: <address : <shared : <test-list : <>>>> -- {"next": <"address" : <"shared" : <"test-list" : <>>>>}
+9993 parse:   element: next: <address : <shared : <test-list : <>>>> -- {"next": ("address" "shared" "test-list")}
 9991 parse: --- defining main
 9993 parse: instruction: local-scope
 9993 parse:   number of ingredients: 0
@@ -8,11 +8,11 @@
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"test-list": "type"}
-9993 parse:   product: {"p": <"address" : <"shared" : <"test-list" : <>>>>}
+9993 parse:   product: {"p": ("address" "shared" "test-list")}
 9992 load: after rewriting: p:address:shared:test-list <- new test-list:type
 9993 parse: instruction: foo
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"p": <>}
+9993 parse:   ingredient: {"p": ()}
 9992 load: after rewriting: foo p
 9999 parse: recipe main has a header
 9999 parse: recipe has a header; parsing
@@ -27,14 +27,14 @@
 9992 load: after rewriting:  
 9993 parse: instruction: test-next
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"p": <>}
-9993 parse:   product: {"p2": <"address" : <"shared" : <"test-list" : <>>>>}
+9993 parse:   ingredient: {"p": ()}
+9993 parse:   product: {"p2": ("address" "shared" "test-list")}
 9992 load: after rewriting: p2:address:shared:test-list <- test-next p
 9993 parse: instruction: test-remove
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"p2": <>}
-9993 parse:   ingredient: {"p": <>}
-9993 parse:   product: {"p": <>}
+9993 parse:   ingredient: {"p2": ()}
+9993 parse:   ingredient: {"p": ()}
+9993 parse:   product: {"p": ()}
 9992 load: after rewriting: p <- test-remove p2, p
 9999 parse: recipe foo has a header
 9999 parse: recipe has a header; parsing
@@ -49,9 +49,9 @@
 9992 load: after rewriting:  
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"x": <>, "lookup": <>}
+9993 parse:   ingredient: {"x": (), "lookup": ()}
 9993 parse:   ingredient: {"next": "offset"}
-9993 parse:   product: {"y": <>}
+9993 parse:   product: {"y": ()}
 9992 load: after rewriting: y <- get *x, next:offset
 9999 parse: recipe test-next has a header
 9999 parse: recipe has a header; parsing
@@ -67,9 +67,9 @@
 9992 load: after rewriting:  
 9993 parse: instruction: get-address
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"x": <>, "lookup": <>}
+9993 parse:   ingredient: {"x": (), "lookup": ()}
 9993 parse:   ingredient: {"next": "offset"}
-9993 parse:   product: {"x2": <"address" : <"address" : <"shared" : <"test-list" : <>>>>>}
+9993 parse:   product: {"x2": ("address" "address" "shared" "test-list")}
 9992 load: after rewriting: x2:address:address:shared:test-list <- get-address *x, next:offset
 9999 parse: recipe test-remove has a header
 9990 transform: === transform_all()
@@ -111,23 +111,23 @@
 9993 transform: type of p is <address : <shared : <test-list : <>>>>
 9993 transform: type of p is <address : <shared : <test-list : <>>>>
 9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: default-space: <address : <shared : <array : <number : <>>>>> -- {"default-space": <"address" : <"shared" : <"array" : <"location" : <>>>>>}
+9993 transform:   product: default-space: <address : <shared : <array : <number : <>>>>> -- {"default-space": ("address" "shared" "array" "location")}
 9992 transform: instruction: p:address:shared:test-list <- next-ingredient-without-typechecking 
-9993 transform:   product: p: <address : <shared : <test-list : <>>>> -- {"p": <"address" : <"shared" : <"test-list" : <>>>>}
+9993 transform:   product: p: <address : <shared : <test-list : <>>>> -- {"p": ("address" "shared" "test-list")}
 9992 transform: instruction: p2:address:shared:test-list <- test-next p
-9993 transform:   product: p2: <address : <shared : <test-list : <>>>> -- {"p2": <"address" : <"shared" : <"test-list" : <>>>>}
+9993 transform:   product: p2: <address : <shared : <test-list : <>>>> -- {"p2": ("address" "shared" "test-list")}
 9992 transform: instruction: p <- test-remove p2, p
-9993 transform:   product: p: <address : <shared : <test-list : <>>>> -- {"p": <"address" : <"shared" : <"test-list" : <>>>>}
+9993 transform:   product: p: <address : <shared : <test-list : <>>>> -- {"p": ("address" "shared" "test-list")}
 9992 transform: instruction: reply p:address:shared:test-list
 9991 transform: --- deduce types from header for test-next
 9993 transform: type of x is <address : <shared : <test-list : <>>>>
 9993 transform: type of y is <address : <shared : <test-list : <>>>>
 9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: default-space: <address : <shared : <array : <number : <>>>>> -- {"default-space": <"address" : <"shared" : <"array" : <"location" : <>>>>>}
+9993 transform:   product: default-space: <address : <shared : <array : <number : <>>>>> -- {"default-space": ("address" "shared" "array" "location")}
 9992 transform: instruction: x:address:shared:test-list <- next-ingredient-without-typechecking 
-9993 transform:   product: x: <address : <shared : <test-list : <>>>> -- {"x": <"address" : <"shared" : <"test-list" : <>>>>}
+9993 transform:   product: x: <address : <shared : <test-list : <>>>> -- {"x": ("address" "shared" "test-list")}
 9992 transform: instruction: y <- get *x, next:offset
-9993 transform:   product: y: NULLNULLNULL -- {"y": <>}
+9993 transform:   product: y: NULLNULLNULL -- {"y": ()}
 9993 transform: type of y is <address : <shared : <test-list : <>>>>
 9992 transform: instruction: reply y:address:shared:test-list
 9991 transform: --- deduce types from header for test-remove
@@ -135,13 +135,13 @@
 9993 transform: type of from is <address : <shared : <test-list : <>>>>
 9993 transform: type of from is <address : <shared : <test-list : <>>>>
 9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: default-space: <address : <shared : <array : <number : <>>>>> -- {"default-space": <"address" : <"shared" : <"array" : <"location" : <>>>>>}
+9993 transform:   product: default-space: <address : <shared : <array : <number : <>>>>> -- {"default-space": ("address" "shared" "array" "location")}
 9992 transform: instruction: x:address:shared:test-list/contained-in:from <- next-ingredient-without-typechecking 
-9993 transform:   product: x: <address : <shared : <test-list : <>>>> -- {"x": <"address" : <"shared" : <"test-list" : <>>>>, "contained-in": "from"}
+9993 transform:   product: x: <address : <shared : <test-list : <>>>> -- {"x": ("address" "shared" "test-list"), "contained-in": "from"}
 9992 transform: instruction: from:address:shared:test-list <- next-ingredient-without-typechecking 
-9993 transform:   product: from: <address : <shared : <test-list : <>>>> -- {"from": <"address" : <"shared" : <"test-list" : <>>>>}
+9993 transform:   product: from: <address : <shared : <test-list : <>>>> -- {"from": ("address" "shared" "test-list")}
 9992 transform: instruction: x2:address:address:shared:test-list <- get-address *x, next:offset
-9993 transform:   product: x2: <address : <address : <shared : <test-list : <>>>>> -- {"x2": <"address" : <"address" : <"shared" : <"test-list" : <>>>>>}
+9993 transform:   product: x2: <address : <address : <shared : <test-list : <>>>>> -- {"x2": ("address" "address" "shared" "test-list")}
 9992 transform: instruction: reply from:address:shared:test-list
 9991 transform: --- check for invalid types in recipe main
 9991 transform: --- check for invalid types in recipe foo
@@ -167,12 +167,12 @@
 9993 name: assign x2 3
 9991 transform: --- resolve ambiguous calls for recipe main
 9992 transform: instruction foo p
-9992 transform: checking variant (strict) 71: recipe foo {"p": <"address" : <"shared" : <"test-list" : <>>>>} -> {"p": <"address" : <"shared" : <"test-list" : <>>>>}
+9992 transform: checking variant (strict) 71: recipe foo {"p": ("address" "shared" "test-list")} -> {"p": ("address" "shared" "test-list")}
 9991 transform: --- resolve ambiguous calls for recipe foo
 9992 transform: instruction p2:address:shared:test-list <- test-next p
-9992 transform: checking variant (strict) 1: recipe test-next {"x": <"address" : <"shared" : <"test-list" : <>>>>} -> {"y": <"address" : <"shared" : <"test-list" : <>>>>}
+9992 transform: checking variant (strict) 1: recipe test-next {"x": ("address" "shared" "test-list")} -> {"y": ("address" "shared" "test-list")}
 9992 transform: instruction p <- test-remove p2, p
-9992 transform: checking variant (strict) 0: recipe test-remove {"x": <"address" : <"shared" : <"test-list" : <>>>>, "contained-in": "from"} {"from": <"address" : <"shared" : <"test-list" : <>>>>} -> {"from": <"address" : <"shared" : <"test-list" : <>>>>}
+9992 transform: checking variant (strict) 0: recipe test-remove {"x": ("address" "shared" "test-list"), "contained-in": "from"} {"from": ("address" "shared" "test-list")} -> {"from": ("address" "shared" "test-list")}
 9991 transform: --- resolve ambiguous calls for recipe test-next
 9991 transform: --- resolve ambiguous calls for recipe test-remove
 9991 transform: --- compute instruction operations for recipe main

@@ -1,7 +1,7 @@
 9991 parse: --- defining scenario_channel-read-not-full
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:shared:channel <- new-channel 1/capacity\n    1:address:shared:channel <- write 1:address:shared:channel, 34\n    _, 1:address:shared:channel <- read 1:address:shared:channel\n    2:boolean <- channel-empty? 1:address:shared:channel\n    3:boolean <- channel-full? 1:address:shared:channel\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    1:address:shared:channel <- new-channel 1/capacity\n    1:address:shared:channel <- write 1:address:shared:channel, 34\n    _, 1:address:shared:channel <- read 1:address:shared:channel\n    2:boolean <- channel-empty? 1:address:shared:channel\n    3:boolean <- channel-full? 1:address:shared:channel\n  ": "literal-string"
 9992 load: after rewriting: run [
     1:address:shared:channel <- new-channel 1/capacity
     1:address:shared:channel <- write 1:address:shared:channel, 34
@@ -11,7 +11,7 @@
   ]
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    2 <- 1  # empty?\n    3 <- 0  # full?\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    2 <- 1  # empty?\n    3 <- 0  # full?\n  ": "literal-string"
 9992 load: after rewriting: memory-should-contain [
     2 <- 1  # empty?
     3 <- 0  # full?
@@ -52,30 +52,30 @@
 9991 parse: --- defining run_1001
 9993 parse: instruction: new-channel
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"1": "literal", "capacity": ()}
-9993 parse:   product: {"1": ("address" "shared" "channel")}
+9993 parse:   ingredient: 1: "literal", {"capacity": ()}
+9993 parse:   product: 1: ("address" "shared" "channel")
 9992 load: after rewriting: 1:address:shared:channel <- new-channel 1/capacity
 9993 parse: instruction: write
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"1": ("address" "shared" "channel")}
-9993 parse:   ingredient: {"34": "literal"}
-9993 parse:   product: {"1": ("address" "shared" "channel")}
+9993 parse:   ingredient: 1: ("address" "shared" "channel")
+9993 parse:   ingredient: 34: "literal"
+9993 parse:   product: 1: ("address" "shared" "channel")
 9992 load: after rewriting: 1:address:shared:channel <- write 1:address:shared:channel, 34
 9993 parse: instruction: read
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"1": ("address" "shared" "channel")}
-9993 parse:   product: {"_": "dummy"}
-9993 parse:   product: {"1": ("address" "shared" "channel")}
+9993 parse:   ingredient: 1: ("address" "shared" "channel")
+9993 parse:   product: _: "literal"
+9993 parse:   product: 1: ("address" "shared" "channel")
 9992 load: after rewriting: _, 1:address:shared:channel <- read 1:address:shared:channel
 9993 parse: instruction: channel-empty?
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"1": ("address" "shared" "channel")}
-9993 parse:   product: {"2": "boolean"}
+9993 parse:   ingredient: 1: ("address" "shared" "channel")
+9993 parse:   product: 2: "boolean"
 9992 load: after rewriting: 2:boolean <- channel-empty? 1:address:shared:channel
 9993 parse: instruction: channel-full?
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"1": ("address" "shared" "channel")}
-9993 parse:   product: {"3": "boolean"}
+9993 parse:   ingredient: 1: ("address" "shared" "channel")
+9993 parse:   product: 3: "boolean"
 9992 load: after rewriting: 3:boolean <- channel-full? 1:address:shared:channel
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
@@ -87,19 +87,19 @@
 9991 transform: --- transform names for recipe run_1001
 9991 transform: --- resolve ambiguous calls for recipe run_1001
 9992 transform: instruction 1:address:shared:channel <- new-channel 1/capacity
-9992 transform: checking variant (strict) 0: recipe new-channel {"capacity": "number"} -> {"result": ("address" "shared" "channel")}
+9992 transform: checking variant (strict) 0: recipe new-channel capacity: "number" -> result: ("address" "shared" "channel")
 9992 transform: instruction 1:address:shared:channel <- write 1:address:shared:channel, 34
-9992 transform: checking variant (strict) 0: recipe write {"chan": ("address" "shared" "channel")} {"val": "character"} -> {"chan": ("address" "shared" "channel")}
+9992 transform: checking variant (strict) 0: recipe write chan: ("address" "shared" "channel") val: "character" -> chan: ("address" "shared" "channel")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict except literals-against-booleans) 0: recipe write {"chan": ("address" "shared" "channel")} {"val": "character"} -> {"chan": ("address" "shared" "channel")}
+9992 transform: checking variant (strict except literals-against-booleans) 0: recipe write chan: ("address" "shared" "channel") val: "character" -> chan: ("address" "shared" "channel")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant 0: recipe write {"chan": ("address" "shared" "channel")} {"val": "character"} -> {"chan": ("address" "shared" "channel")}
+9992 transform: checking variant 0: recipe write chan: ("address" "shared" "channel") val: "character" -> chan: ("address" "shared" "channel")
 9992 transform: instruction _, 1:address:shared:channel <- read 1:address:shared:channel
-9992 transform: checking variant (strict) 0: recipe read {"chan": ("address" "shared" "channel")} -> {"result": "character"} {"chan": ("address" "shared" "channel")}
+9992 transform: checking variant (strict) 0: recipe read chan: ("address" "shared" "channel") -> result: "character" chan: ("address" "shared" "channel")
 9992 transform: instruction 2:boolean <- channel-empty? 1:address:shared:channel
-9992 transform: checking variant (strict) 0: recipe channel-empty? {"chan": ("address" "shared" "channel")} -> {"result": "boolean"}
+9992 transform: checking variant (strict) 0: recipe channel-empty? chan: ("address" "shared" "channel") -> result: "boolean"
 9992 transform: instruction 3:boolean <- channel-full? 1:address:shared:channel
-9992 transform: checking variant (strict) 0: recipe channel-full? {"chan": ("address" "shared" "channel")} -> {"result": "boolean"}
+9992 transform: checking variant (strict) 0: recipe channel-full? chan: ("address" "shared" "channel") -> result: "boolean"
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new-channel ...
@@ -220,7 +220,7 @@
 9999 mem: location 1031 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1010
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1010 is 0
 9999 mem: storing 0 in location 1032
  105 run: tmp <- add tmp, 1
@@ -246,7 +246,7 @@
 9999 mem: location 1040 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1011
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1011 is 1012
 9999 mem: storing 1012 in location 1041
 9999 mem: incrementing refcount of 1012: 1 -> 2
@@ -276,7 +276,7 @@
 9999 mem: location 1031 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1009 is 0
 9999 mem: storing 0 in location 1035
  105 run: result <- equal full, tmp
@@ -301,7 +301,7 @@
 9999 mem: location 1019 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1011
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1011 is 1012
 9999 mem: storing 1012 in location 1023
 9999 mem: incrementing refcount of 1012: 2 -> 3
@@ -381,7 +381,7 @@
 9999 mem: location 1057 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1009 is 0
 9999 mem: storing 0 in location 1058
  105 run: free:number <- get *chan, first-free:offset
@@ -393,7 +393,7 @@
 9999 mem: location 1057 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1010
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1010 is 1
 9999 mem: storing 1 in location 1059
  105 run: result <- equal full, free
@@ -428,7 +428,7 @@
 9999 mem: location 1046 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1011
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1011 is 1012
 9999 mem: storing 1012 in location 1050
 9999 mem: incrementing refcount of 1012: 3 -> 4
@@ -488,7 +488,7 @@
 9999 mem: location 1057 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1009 is 1
 9999 mem: storing 1 in location 1058
  104 run: free:number <- get *chan, first-free:offset
@@ -500,7 +500,7 @@
 9999 mem: location 1057 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1010
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1010 is 1
 9999 mem: storing 1 in location 1059
  104 run: result <- equal full, free
@@ -532,7 +532,7 @@
 9999 mem: location 1031 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1010
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1010 is 1
 9999 mem: storing 1 in location 1032
  104 run: tmp <- add tmp, 1
@@ -557,7 +557,7 @@
 9999 mem: location 1040 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1011
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1011 is 1012
 9999 mem: storing 1012 in location 1041
 9999 mem: incrementing refcount of 1012: 4 -> 5
@@ -589,7 +589,7 @@
 9999 mem: location 1031 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1009 is 1
 9999 mem: storing 1 in location 1035
  104 run: result <- equal full, tmp

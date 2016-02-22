@@ -1,19 +1,19 @@
 9991 parse: --- defining scenario_screen-in-scenario
 9993 parse: instruction: assume-screen
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"5": "literal", "width": ()}
-9993 parse:   ingredient: {"3": "literal", "height": ()}
+9993 parse:   ingredient: 5: "literal", {"width": ()}
+9993 parse:   ingredient: 3: "literal", {"height": ()}
 9992 load: after rewriting: screen:address:shared:screen <- new-fake-screen 5/width, 3/height
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:character <- copy 97/a\n    screen:address:shared:screen <- print screen:address:shared:screen, 1:character/a\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    1:character <- copy 97/a\n    screen:address:shared:screen <- print screen:address:shared:screen, 1:character/a\n  ": "literal-string"
 9992 load: after rewriting: run [
     1:character <- copy 97/a
     screen:address:shared:screen <- print screen:address:shared:screen, 1:character/a
   ]
 9993 parse: instruction: screen-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n  #  01234\n    .a    .\n    .     .\n    .     .\n  ": "literal-string"}
+9993 parse:   ingredient: "\n  #  01234\n    .a    .\n    .     .\n    .     .\n  ": "literal-string"
 9992 load: after rewriting: screen-should-contain [
   #  01234
     .a    .
@@ -25,13 +25,13 @@
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_screen-in-scenario
 9991 transform: --- fill in reply ingredients from header for recipe scenario_screen-in-scenario
 9991 transform: --- deduce types for recipe scenario_screen-in-scenario
-9992 transform: screen => <address : <shared : <screen : <>>>>
+9992 transform: screen => ("address" "shared" "screen")
 9991 transform: --- check for invalid types in recipe scenario_screen-in-scenario
 9991 transform: --- collect surrounding spaces for recipe scenario_screen-in-scenario
 9991 transform: --- transform names for recipe scenario_screen-in-scenario
 9991 transform: --- resolve ambiguous calls for recipe scenario_screen-in-scenario
 9992 transform: instruction screen:address:shared:screen <- new-fake-screen 5/width, 3/height
-9992 transform: checking variant (strict) 0: recipe new-fake-screen {"w": "number"} {"h": "number"} -> {"result": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 0: recipe new-fake-screen w: "number" h: "number" -> result: ("address" "shared" "screen")
 9991 transform: --- compute instruction operations for recipe scenario_screen-in-scenario
 9991 transform: --- transform braces for recipe scenario_screen-in-scenario
 9992 transform: assume-screen ...
@@ -180,7 +180,7 @@
 9999 mem: location 1053 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1054
 9999 mem: incrementing refcount of 1018: 1 -> 2
@@ -804,32 +804,32 @@
 9991 parse: --- defining run_1001
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"97": "literal", "a": ()}
-9993 parse:   product: {"1": "character"}
+9993 parse:   ingredient: 97: "literal", {"a": ()}
+9993 parse:   product: 1: "character"
 9992 load: after rewriting: 1:character <- copy 97/a
 9993 parse: instruction: print
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"screen": ("address" "shared" "screen")}
-9993 parse:   ingredient: {"1": "character", "a": ()}
-9993 parse:   product: {"screen": ("address" "shared" "screen")}
+9993 parse:   ingredient: screen: ("address" "shared" "screen")
+9993 parse:   ingredient: 1: "character", {"a": ()}
+9993 parse:   product: screen: ("address" "shared" "screen")
 9992 load: after rewriting: screen:address:shared:screen <- print screen:address:shared:screen, 1:character/a
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
-9992 transform: screen => <address : <shared : <screen : <>>>>
+9992 transform: screen => ("address" "shared" "screen")
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
 9991 transform: --- resolve ambiguous calls for recipe run_1001
 9992 transform: instruction screen:address:shared:screen <- print screen:address:shared:screen, 1:character/a
-9992 transform: checking variant (strict) 0: recipe print {"screen": ("address" "shared" "screen")} {"c": "character"} -> {"screen": ("address" "shared" "screen")}
-9992 transform: checking variant (strict) 1: recipe print_2 {"screen": ("address" "shared" "screen")} {"s": ("address" "shared" "array" "character")} -> {"screen": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 0: recipe print screen: ("address" "shared" "screen") c: "character" -> screen: ("address" "shared" "screen")
+9992 transform: checking variant (strict) 1: recipe print_2 screen: ("address" "shared" "screen") s: ("address" "shared" "array" "character") -> screen: ("address" "shared" "screen")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 2: recipe print_3 {"screen": ("address" "shared" "screen")} {"n": "number"} -> {"screen": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 2: recipe print_3 screen: ("address" "shared" "screen") n: "number" -> screen: ("address" "shared" "screen")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 3: recipe print_4 {"screen": ("address" "shared" "screen")} {"n": ("address" "_elem")} -> {"screen": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 3: recipe print_4 screen: ("address" "shared" "screen") n: ("address" "_elem") -> screen: ("address" "shared" "screen")
 9993 transform: strict match failed: ingredient 1
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
@@ -895,7 +895,7 @@
 9999 mem: location 1065 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1071
  104 run: height:number <- get *screen, num-rows:offset
@@ -909,7 +909,7 @@
 9999 mem: location 1065 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 3
 9999 mem: storing 3 in location 1072
  104 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -993,7 +993,7 @@
 9999 mem: location 1065 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1080
 9999 mem: incrementing refcount of 1018: 2 -> 3

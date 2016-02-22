@@ -1,34 +1,34 @@
 9991 parse: --- defining scenario_editor-scrolls-down-on-right-arrow
 9993 parse: instruction: assume-screen
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"5": "literal", "width": ()}
-9993 parse:   ingredient: {"4": "literal", "height": ()}
+9993 parse:   ingredient: 5: "literal", {"width": ()}
+9993 parse:   ingredient: 4: "literal", {"height": ()}
 9992 load: after rewriting: screen:address:shared:screen <- new-fake-screen 5/width, 4/height
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"a\nb\ncdefgh": "literal-string"}
-9993 parse:   product: {"1": ("address" "shared" "array" "character")}
+9993 parse:   ingredient: "a\nb\ncdefgh": "literal-string"
+9993 parse:   product: 1: ("address" "shared" "array" "character")
 9992 load: after rewriting: 1:address:shared:array:character <- new [a
 b
 cdefgh]
 9993 parse: instruction: new-editor
 9993 parse:   number of ingredients: 4
-9993 parse:   ingredient: {"1": ("address" "shared" "array" "character")}
-9993 parse:   ingredient: {"screen": ("address" "shared" "screen")}
-9993 parse:   ingredient: {"0": "literal", "left": ()}
-9993 parse:   ingredient: {"5": "literal", "right": ()}
-9993 parse:   product: {"2": ("address" "shared" "editor-data")}
+9993 parse:   ingredient: 1: ("address" "shared" "array" "character")
+9993 parse:   ingredient: screen: ("address" "shared" "screen")
+9993 parse:   ingredient: 0: "literal", {"left": ()}
+9993 parse:   ingredient: 5: "literal", {"right": ()}
+9993 parse:   product: 2: ("address" "shared" "editor-data")
 9992 load: after rewriting: 2:address:shared:editor-data <- new-editor 1:address:shared:array:character, screen:address:shared:screen, 0/left, 5/right
 9993 parse: instruction: assume-console
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    left-click 3, 3\n    press right-arrow\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    left-click 3, 3\n    press right-arrow\n  ": "literal-string"
 9992 load: after rewriting: assume-console [
     left-click 3, 3
     press right-arrow
   ]
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    editor-event-loop screen:address:shared:screen, console:address:shared:console, 2:address:shared:editor-data\n    3:number <- get *2:address:shared:editor-data, cursor-row:offset\n    4:number <- get *2:address:shared:editor-data, cursor-column:offset\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    editor-event-loop screen:address:shared:screen, console:address:shared:console, 2:address:shared:editor-data\n    3:number <- get *2:address:shared:editor-data, cursor-row:offset\n    4:number <- get *2:address:shared:editor-data, cursor-column:offset\n  ": "literal-string"
 9992 load: after rewriting: run [
     editor-event-loop screen:address:shared:screen, console:address:shared:console, 2:address:shared:editor-data
     3:number <- get *2:address:shared:editor-data, cursor-row:offset
@@ -36,7 +36,7 @@ cdefgh]
   ]
 9993 parse: instruction: screen-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    .     .\n    .b    .\n    .cdef↩.\n    .gh   .\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    .     .\n    .b    .\n    .cdef↩.\n    .gh   .\n  ": "literal-string"
 9992 load: after rewriting: screen-should-contain [
     .     .
     .b    .
@@ -45,7 +45,7 @@ cdefgh]
   ]
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    3 <- 3\n    4 <- 0\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    3 <- 3\n    4 <- 0\n  ": "literal-string"
 9992 load: after rewriting: memory-should-contain [
     3 <- 3
     4 <- 0
@@ -55,15 +55,15 @@ cdefgh]
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_editor-scrolls-down-on-right-arrow
 9991 transform: --- fill in reply ingredients from header for recipe scenario_editor-scrolls-down-on-right-arrow
 9991 transform: --- deduce types for recipe scenario_editor-scrolls-down-on-right-arrow
-9992 transform: screen => <address : <shared : <screen : <>>>>
+9992 transform: screen => ("address" "shared" "screen")
 9991 transform: --- check for invalid types in recipe scenario_editor-scrolls-down-on-right-arrow
 9991 transform: --- collect surrounding spaces for recipe scenario_editor-scrolls-down-on-right-arrow
 9991 transform: --- transform names for recipe scenario_editor-scrolls-down-on-right-arrow
 9991 transform: --- resolve ambiguous calls for recipe scenario_editor-scrolls-down-on-right-arrow
 9992 transform: instruction screen:address:shared:screen <- new-fake-screen 5/width, 4/height
-9992 transform: checking variant (strict) 0: recipe new-fake-screen {"w": "number"} {"h": "number"} -> {"result": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 0: recipe new-fake-screen w: "number" h: "number" -> result: ("address" "shared" "screen")
 9992 transform: instruction 2:address:shared:editor-data <- new-editor 1:address:shared:array:character, screen:address:shared:screen, 0/left, 5/right
-9992 transform: checking variant (strict) 0: recipe new-editor {"s": ("address" "shared" "array" "character")} {"screen": ("address" "shared" "screen")} {"left": "number"} {"right": "number"} -> {"result": ("address" "shared" "editor-data")} {"screen": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 0: recipe new-editor s: ("address" "shared" "array" "character") screen: ("address" "shared" "screen") left: "number" right: "number" -> result: ("address" "shared" "editor-data") screen: ("address" "shared" "screen")
 9991 transform: --- compute instruction operations for recipe scenario_editor-scrolls-down-on-right-arrow
 9991 transform: --- transform braces for recipe scenario_editor-scrolls-down-on-right-arrow
 9992 transform: assume-screen ...
@@ -216,7 +216,7 @@ cdefgh]
 9999 mem: location 1063 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1064
 9999 mem: incrementing refcount of 1018: 1 -> 2
@@ -1311,7 +1311,7 @@ cdefgh]
 9999 mem: location 1126 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1098
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1098 is 1119
 9999 mem: storing 1119 in location 1130
 9999 mem: incrementing refcount of 1119: 4 -> 5
@@ -1373,7 +1373,7 @@ cdefgh]
 9999 mem: skipping refcount at 1119
 9999 type: type deduced to be character$
 9998 run: address to copy is 1121
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1121 is 0
 9999 mem: storing 0 in location 1117
  105 run: y:address:address:shared:duplex-list:_elem <- get-address *in, next:offset
@@ -1454,7 +1454,7 @@ cdefgh]
 9999 mem: skipping refcount at 1119
 9999 type: type deduced to be character$
 9998 run: address to copy is 1121
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1121 is 1133
 9999 mem: storing 1133 in location 1141
 9999 mem: incrementing refcount of 1133: 2 -> 3
@@ -1529,7 +1529,7 @@ cdefgh]
 9999 mem: skipping refcount at 1133
 9999 type: type deduced to be character$
 9998 run: address to copy is 1135
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1135 is 0
 9999 mem: storing 0 in location 1117
  105 run: y:address:address:shared:duplex-list:_elem <- get-address *in, next:offset
@@ -1609,7 +1609,7 @@ cdefgh]
 9999 mem: skipping refcount at 1133
 9999 type: type deduced to be character$
 9998 run: address to copy is 1135
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1135 is 1142
 9999 mem: storing 1142 in location 1141
 9999 mem: incrementing refcount of 1142: 2 -> 3
@@ -1684,7 +1684,7 @@ cdefgh]
 9999 mem: skipping refcount at 1142
 9999 type: type deduced to be character$
 9998 run: address to copy is 1144
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1144 is 0
 9999 mem: storing 0 in location 1117
  105 run: y:address:address:shared:duplex-list:_elem <- get-address *in, next:offset
@@ -1764,7 +1764,7 @@ cdefgh]
 9999 mem: skipping refcount at 1142
 9999 type: type deduced to be character$
 9998 run: address to copy is 1144
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1144 is 1146
 9999 mem: storing 1146 in location 1141
 9999 mem: incrementing refcount of 1146: 2 -> 3
@@ -1839,7 +1839,7 @@ cdefgh]
 9999 mem: skipping refcount at 1146
 9999 type: type deduced to be character$
 9998 run: address to copy is 1148
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1148 is 0
 9999 mem: storing 0 in location 1117
  105 run: y:address:address:shared:duplex-list:_elem <- get-address *in, next:offset
@@ -1919,7 +1919,7 @@ cdefgh]
 9999 mem: skipping refcount at 1146
 9999 type: type deduced to be character$
 9998 run: address to copy is 1148
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1148 is 1150
 9999 mem: storing 1150 in location 1141
 9999 mem: incrementing refcount of 1150: 2 -> 3
@@ -1994,7 +1994,7 @@ cdefgh]
 9999 mem: skipping refcount at 1150
 9999 type: type deduced to be character$
 9998 run: address to copy is 1152
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1152 is 0
 9999 mem: storing 0 in location 1117
  105 run: y:address:address:shared:duplex-list:_elem <- get-address *in, next:offset
@@ -2074,7 +2074,7 @@ cdefgh]
 9999 mem: skipping refcount at 1150
 9999 type: type deduced to be character$
 9998 run: address to copy is 1152
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1152 is 1154
 9999 mem: storing 1154 in location 1141
 9999 mem: incrementing refcount of 1154: 2 -> 3
@@ -2149,7 +2149,7 @@ cdefgh]
 9999 mem: skipping refcount at 1154
 9999 type: type deduced to be character$
 9998 run: address to copy is 1156
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1156 is 0
 9999 mem: storing 0 in location 1117
  105 run: y:address:address:shared:duplex-list:_elem <- get-address *in, next:offset
@@ -2229,7 +2229,7 @@ cdefgh]
 9999 mem: skipping refcount at 1154
 9999 type: type deduced to be character$
 9998 run: address to copy is 1156
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1156 is 1158
 9999 mem: storing 1158 in location 1141
 9999 mem: incrementing refcount of 1158: 2 -> 3
@@ -2304,7 +2304,7 @@ cdefgh]
 9999 mem: skipping refcount at 1158
 9999 type: type deduced to be character$
 9998 run: address to copy is 1160
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1160 is 0
 9999 mem: storing 0 in location 1117
  105 run: y:address:address:shared:duplex-list:_elem <- get-address *in, next:offset
@@ -2384,7 +2384,7 @@ cdefgh]
 9999 mem: skipping refcount at 1158
 9999 type: type deduced to be character$
 9998 run: address to copy is 1160
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1160 is 1162
 9999 mem: storing 1162 in location 1141
 9999 mem: incrementing refcount of 1162: 2 -> 3
@@ -2459,7 +2459,7 @@ cdefgh]
 9999 mem: skipping refcount at 1162
 9999 type: type deduced to be character$
 9998 run: address to copy is 1164
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1164 is 0
 9999 mem: storing 0 in location 1117
  105 run: y:address:address:shared:duplex-list:_elem <- get-address *in, next:offset
@@ -2539,7 +2539,7 @@ cdefgh]
 9999 mem: skipping refcount at 1162
 9999 type: type deduced to be character$
 9998 run: address to copy is 1164
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1164 is 1166
 9999 mem: storing 1166 in location 1141
 9999 mem: incrementing refcount of 1166: 2 -> 3
@@ -2614,7 +2614,7 @@ cdefgh]
 9999 mem: skipping refcount at 1166
 9999 type: type deduced to be character$
 9998 run: address to copy is 1168
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1168 is 0
 9999 mem: storing 0 in location 1117
  105 run: y:address:address:shared:duplex-list:_elem <- get-address *in, next:offset
@@ -2694,7 +2694,7 @@ cdefgh]
 9999 mem: skipping refcount at 1166
 9999 type: type deduced to be character$
 9998 run: address to copy is 1168
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1168 is 1170
 9999 mem: storing 1170 in location 1141
 9999 mem: incrementing refcount of 1170: 2 -> 3
@@ -2770,7 +2770,7 @@ cdefgh]
 9999 mem: skipping refcount at 1170
 9999 type: type deduced to be character$
 9998 run: address to copy is 1172
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1172 is 0
 9999 mem: storing 0 in location 1117
  105 run: y:address:address:shared:duplex-list:_elem <- get-address *in, next:offset
@@ -2850,7 +2850,7 @@ cdefgh]
 9999 mem: skipping refcount at 1170
 9999 type: type deduced to be character$
 9998 run: address to copy is 1172
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1172 is 1174
 9999 mem: storing 1174 in location 1141
 9999 mem: incrementing refcount of 1174: 2 -> 3
@@ -2944,7 +2944,7 @@ cdefgh]
 9999 mem: location 1182 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1102
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1102 is 0
 9999 mem: storing 0 in location 1183
  104 run: screen-height:number <- screen-height screen
@@ -2971,7 +2971,7 @@ cdefgh]
 9999 mem: location 1140 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1141
  105 run: reply height:number
@@ -2998,7 +2998,7 @@ cdefgh]
 9999 mem: location 1182 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1103
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1103 is 4
 9999 mem: storing 4 in location 1185
  104 run: curr:address:shared:duplex-list:character <- get *editor, top-of-screen:offset
@@ -3019,7 +3019,7 @@ cdefgh]
 9999 mem: location 1182 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1099
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1099 is 1119
 9999 mem: storing 1119 in location 1186
 9999 mem: incrementing refcount of 1119: 7 -> 8
@@ -3050,7 +3050,7 @@ cdefgh]
 9999 mem: skipping refcount at 1119
 9999 type: type deduced to be character$
 9998 run: address to copy is 1121
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1121 is 1133
 9999 mem: storing 1133 in location 1141
 9999 mem: incrementing refcount of 1133: 6 -> 7
@@ -3227,7 +3227,7 @@ cdefgh]
 9999 mem: location 1186 is 1133
 9999 mem: skipping refcount at 1133
 9998 run: address to copy is 1134
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1134 is 97
 9999 mem: storing 97 in location 1197
  104 run: color <- get-color color, c
@@ -3340,7 +3340,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  105 run: height:number <- get *screen, num-rows:offset
@@ -3354,7 +3354,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  105 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -3438,7 +3438,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 2 -> 3
@@ -3522,7 +3522,7 @@ cdefgh]
 9999 mem: skipping refcount at 1133
 9999 type: type deduced to be character$
 9998 run: address to copy is 1135
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1135 is 1142
 9999 mem: storing 1142 in location 1141
 9999 mem: incrementing refcount of 1142: 6 -> 7
@@ -3557,7 +3557,7 @@ cdefgh]
 9999 mem: skipping refcount at 1119
 9999 type: type deduced to be character$
 9998 run: address to copy is 1121
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1121 is 1133
 9999 mem: storing 1133 in location 1141
 9999 mem: incrementing refcount of 1133: 8 -> 9
@@ -3609,7 +3609,7 @@ cdefgh]
 9999 mem: location 1186 is 1142
 9999 mem: skipping refcount at 1142
 9998 run: address to copy is 1143
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1143 is 10
 9999 mem: storing 10 in location 1197
  104 run: color <- get-color color, c
@@ -3761,7 +3761,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  106 run: height:number <- get *screen, num-rows:offset
@@ -3775,7 +3775,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  106 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -3859,7 +3859,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 3 -> 4
@@ -3979,7 +3979,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  106 run: height:number <- get *screen, num-rows:offset
@@ -3993,7 +3993,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  106 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -4077,7 +4077,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 4 -> 5
@@ -4197,7 +4197,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  106 run: height:number <- get *screen, num-rows:offset
@@ -4211,7 +4211,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  106 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -4295,7 +4295,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 5 -> 6
@@ -4415,7 +4415,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  106 run: height:number <- get *screen, num-rows:offset
@@ -4429,7 +4429,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  106 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -4513,7 +4513,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 6 -> 7
@@ -4677,7 +4677,7 @@ cdefgh]
 9999 mem: skipping refcount at 1142
 9999 type: type deduced to be character$
 9998 run: address to copy is 1144
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1144 is 1146
 9999 mem: storing 1146 in location 1141
 9999 mem: incrementing refcount of 1146: 6 -> 7
@@ -4712,7 +4712,7 @@ cdefgh]
 9999 mem: skipping refcount at 1133
 9999 type: type deduced to be character$
 9998 run: address to copy is 1135
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1135 is 1142
 9999 mem: storing 1142 in location 1141
 9999 mem: incrementing refcount of 1142: 8 -> 9
@@ -4754,7 +4754,7 @@ cdefgh]
 9999 mem: location 1186 is 1146
 9999 mem: skipping refcount at 1146
 9998 run: address to copy is 1147
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1147 is 98
 9999 mem: storing 98 in location 1197
  104 run: color <- get-color color, c
@@ -4866,7 +4866,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  105 run: height:number <- get *screen, num-rows:offset
@@ -4880,7 +4880,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  105 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -4964,7 +4964,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 7 -> 8
@@ -5048,7 +5048,7 @@ cdefgh]
 9999 mem: skipping refcount at 1146
 9999 type: type deduced to be character$
 9998 run: address to copy is 1148
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1148 is 1150
 9999 mem: storing 1150 in location 1141
 9999 mem: incrementing refcount of 1150: 6 -> 7
@@ -5083,7 +5083,7 @@ cdefgh]
 9999 mem: skipping refcount at 1142
 9999 type: type deduced to be character$
 9998 run: address to copy is 1144
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1144 is 1146
 9999 mem: storing 1146 in location 1141
 9999 mem: incrementing refcount of 1146: 8 -> 9
@@ -5127,7 +5127,7 @@ cdefgh]
 9999 mem: location 1186 is 1150
 9999 mem: skipping refcount at 1150
 9998 run: address to copy is 1151
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1151 is 10
 9999 mem: storing 10 in location 1197
  104 run: color <- get-color color, c
@@ -5271,7 +5271,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  106 run: height:number <- get *screen, num-rows:offset
@@ -5285,7 +5285,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  106 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -5369,7 +5369,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 8 -> 9
@@ -5489,7 +5489,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  106 run: height:number <- get *screen, num-rows:offset
@@ -5503,7 +5503,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  106 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -5587,7 +5587,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 9 -> 10
@@ -5707,7 +5707,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  106 run: height:number <- get *screen, num-rows:offset
@@ -5721,7 +5721,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  106 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -5805,7 +5805,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 10 -> 11
@@ -5925,7 +5925,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  106 run: height:number <- get *screen, num-rows:offset
@@ -5939,7 +5939,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  106 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -6023,7 +6023,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 11 -> 12
@@ -6187,7 +6187,7 @@ cdefgh]
 9999 mem: skipping refcount at 1150
 9999 type: type deduced to be character$
 9998 run: address to copy is 1152
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1152 is 1154
 9999 mem: storing 1154 in location 1141
 9999 mem: incrementing refcount of 1154: 6 -> 7
@@ -6222,7 +6222,7 @@ cdefgh]
 9999 mem: skipping refcount at 1146
 9999 type: type deduced to be character$
 9998 run: address to copy is 1148
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1148 is 1150
 9999 mem: storing 1150 in location 1141
 9999 mem: incrementing refcount of 1150: 8 -> 9
@@ -6263,7 +6263,7 @@ cdefgh]
 9999 mem: location 1186 is 1154
 9999 mem: skipping refcount at 1154
 9998 run: address to copy is 1155
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1155 is 99
 9999 mem: storing 99 in location 1197
  104 run: color <- get-color color, c
@@ -6375,7 +6375,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  105 run: height:number <- get *screen, num-rows:offset
@@ -6389,7 +6389,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  105 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -6473,7 +6473,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 12 -> 13
@@ -6558,7 +6558,7 @@ cdefgh]
 9999 mem: skipping refcount at 1154
 9999 type: type deduced to be character$
 9998 run: address to copy is 1156
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1156 is 1158
 9999 mem: storing 1158 in location 1141
 9999 mem: incrementing refcount of 1158: 6 -> 7
@@ -6593,7 +6593,7 @@ cdefgh]
 9999 mem: skipping refcount at 1150
 9999 type: type deduced to be character$
 9998 run: address to copy is 1152
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1152 is 1154
 9999 mem: storing 1154 in location 1141
 9999 mem: incrementing refcount of 1154: 8 -> 9
@@ -6637,7 +6637,7 @@ cdefgh]
 9999 mem: location 1186 is 1158
 9999 mem: skipping refcount at 1158
 9998 run: address to copy is 1159
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1159 is 100
 9999 mem: storing 100 in location 1197
  104 run: color <- get-color color, c
@@ -6749,7 +6749,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  105 run: height:number <- get *screen, num-rows:offset
@@ -6763,7 +6763,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  105 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -6847,7 +6847,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 13 -> 14
@@ -6931,7 +6931,7 @@ cdefgh]
 9999 mem: skipping refcount at 1158
 9999 type: type deduced to be character$
 9998 run: address to copy is 1160
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1160 is 1162
 9999 mem: storing 1162 in location 1141
 9999 mem: incrementing refcount of 1162: 6 -> 7
@@ -6966,7 +6966,7 @@ cdefgh]
 9999 mem: skipping refcount at 1154
 9999 type: type deduced to be character$
 9998 run: address to copy is 1156
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1156 is 1158
 9999 mem: storing 1158 in location 1141
 9999 mem: incrementing refcount of 1158: 8 -> 9
@@ -7010,7 +7010,7 @@ cdefgh]
 9999 mem: location 1186 is 1162
 9999 mem: skipping refcount at 1162
 9998 run: address to copy is 1163
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1163 is 101
 9999 mem: storing 101 in location 1197
  104 run: color <- get-color color, c
@@ -7122,7 +7122,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  105 run: height:number <- get *screen, num-rows:offset
@@ -7136,7 +7136,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  105 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -7220,7 +7220,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 14 -> 15
@@ -7304,7 +7304,7 @@ cdefgh]
 9999 mem: skipping refcount at 1162
 9999 type: type deduced to be character$
 9998 run: address to copy is 1164
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1164 is 1166
 9999 mem: storing 1166 in location 1141
 9999 mem: incrementing refcount of 1166: 6 -> 7
@@ -7339,7 +7339,7 @@ cdefgh]
 9999 mem: skipping refcount at 1158
 9999 type: type deduced to be character$
 9998 run: address to copy is 1160
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1160 is 1162
 9999 mem: storing 1162 in location 1141
 9999 mem: incrementing refcount of 1162: 8 -> 9
@@ -7383,7 +7383,7 @@ cdefgh]
 9999 mem: location 1186 is 1166
 9999 mem: skipping refcount at 1166
 9998 run: address to copy is 1167
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1167 is 102
 9999 mem: storing 102 in location 1197
  104 run: color <- get-color color, c
@@ -7495,7 +7495,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  105 run: height:number <- get *screen, num-rows:offset
@@ -7509,7 +7509,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  105 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -7593,7 +7593,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 15 -> 16
@@ -7677,7 +7677,7 @@ cdefgh]
 9999 mem: skipping refcount at 1166
 9999 type: type deduced to be character$
 9998 run: address to copy is 1168
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1168 is 1170
 9999 mem: storing 1170 in location 1141
 9999 mem: incrementing refcount of 1170: 6 -> 7
@@ -7712,7 +7712,7 @@ cdefgh]
 9999 mem: skipping refcount at 1162
 9999 type: type deduced to be character$
 9998 run: address to copy is 1164
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1164 is 1166
 9999 mem: storing 1166 in location 1141
 9999 mem: incrementing refcount of 1166: 8 -> 9
@@ -7756,7 +7756,7 @@ cdefgh]
 9999 mem: location 1186 is 1170
 9999 mem: skipping refcount at 1170
 9998 run: address to copy is 1171
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1171 is 103
 9999 mem: storing 103 in location 1197
  104 run: color <- get-color color, c
@@ -7869,7 +7869,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  105 run: height:number <- get *screen, num-rows:offset
@@ -7883,7 +7883,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  105 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -7967,7 +7967,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 16 -> 17
@@ -8226,12 +8226,12 @@ cdefgh]
   ]
 9993 parse: instruction: left-click
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"3": "literal"}
-9993 parse:   ingredient: {"3": "literal"}
+9993 parse:   ingredient: 3: "literal"
+9993 parse:   ingredient: 3: "literal"
 9992 load: after rewriting: left-click 3, 3
 9993 parse: instruction: press
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"right-arrow": ()}
+9993 parse:   ingredient: right-arrow: ()
 9992 load: after rewriting: press right-arrow
 9999 mem: storing 'left-click' event starting at 1245
 9999 mem: storing 'press' event starting at 1249
@@ -8245,29 +8245,29 @@ cdefgh]
 9991 parse: --- defining run_1001
 9993 parse: instruction: editor-event-loop
 9993 parse:   number of ingredients: 3
-9993 parse:   ingredient: {"screen": ("address" "shared" "screen")}
-9993 parse:   ingredient: {"console": ("address" "shared" "console")}
-9993 parse:   ingredient: {"2": ("address" "shared" "editor-data")}
+9993 parse:   ingredient: screen: ("address" "shared" "screen")
+9993 parse:   ingredient: console: ("address" "shared" "console")
+9993 parse:   ingredient: 2: ("address" "shared" "editor-data")
 9992 load: after rewriting: editor-event-loop screen:address:shared:screen, console:address:shared:console, 2:address:shared:editor-data
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"2": ("address" "shared" "editor-data"), "lookup": ()}
-9993 parse:   ingredient: {"cursor-row": "offset"}
-9993 parse:   product: {"3": "number"}
+9993 parse:   ingredient: 2: ("address" "shared" "editor-data"), {"lookup": ()}
+9993 parse:   ingredient: cursor-row: "offset"
+9993 parse:   product: 3: "number"
 9992 load: after rewriting: 3:number <- get *2:address:shared:editor-data, cursor-row:offset
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"2": ("address" "shared" "editor-data"), "lookup": ()}
-9993 parse:   ingredient: {"cursor-column": "offset"}
-9993 parse:   product: {"4": "number"}
+9993 parse:   ingredient: 2: ("address" "shared" "editor-data"), {"lookup": ()}
+9993 parse:   ingredient: cursor-column: "offset"
+9993 parse:   product: 4: "number"
 9992 load: after rewriting: 4:number <- get *2:address:shared:editor-data, cursor-column:offset
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
-9992 transform: screen => <address : <shared : <screen : <>>>>
-9992 transform: console => <address : <shared : <console : <>>>>
+9992 transform: screen => ("address" "shared" "screen")
+9992 transform: console => ("address" "shared" "console")
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
@@ -8275,7 +8275,7 @@ cdefgh]
 9993 name: element cursor-column of type editor-data is at offset 8
 9991 transform: --- resolve ambiguous calls for recipe run_1001
 9992 transform: instruction editor-event-loop screen:address:shared:screen, console:address:shared:console, 2:address:shared:editor-data
-9992 transform: checking variant (strict) 0: recipe editor-event-loop {"screen": ("address" "shared" "screen")} {"console": ("address" "shared" "console")} {"editor": ("address" "shared" "editor-data")} -> {"screen": ("address" "shared" "screen")} {"console": ("address" "shared" "console")} {"editor": ("address" "shared" "editor-data")}
+9992 transform: checking variant (strict) 0: recipe editor-event-loop screen: ("address" "shared" "screen") console: ("address" "shared" "console") editor: ("address" "shared" "editor-data") -> screen: ("address" "shared" "screen") console: ("address" "shared" "console") editor: ("address" "shared" "editor-data")
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: editor-event-loop ...
@@ -8329,7 +8329,7 @@ cdefgh]
 9999 mem: location 1261 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1105
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1105 is 1
 9999 mem: storing 1 in location 1262
  104 run: cursor-column:number <- get *editor, cursor-column:offset
@@ -8350,7 +8350,7 @@ cdefgh]
 9999 mem: location 1261 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1106
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1106 is 0
 9999 mem: storing 0 in location 1263
  104 run: screen <- move-cursor screen, cursor-row, cursor-column
@@ -8444,7 +8444,7 @@ cdefgh]
 9999 mem: location 1275 is 1253
 9999 mem: skipping refcount at 1253
 9998 run: address to copy is 1255
-9998 run: its type is <address : <shared : <array : <event : <>>>>>
+9998 run: its type is ("address" "shared" "array" "event")
 9999 mem: location 1255 is 1243
 9999 mem: storing 1243 in location 1277
 9999 mem: incrementing refcount of 1243: 0 -> 1
@@ -8550,7 +8550,7 @@ cdefgh]
 9999 mem: location 1292 is 3
 9999 mem: location 1293 is 3
 9998 run: address to copy is 1292
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1292 is 3
 9999 mem: storing 3 in location 1294
  105 run: jump-if click-row, 1:offset
@@ -8561,7 +8561,7 @@ cdefgh]
 9999 mem: location 1292 is 3
 9999 mem: location 1293 is 3
 9998 run: address to copy is 1293
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1293 is 3
 9999 mem: storing 3 in location 1295
  105 run: left:number <- get *editor, left:offset
@@ -8582,7 +8582,7 @@ cdefgh]
 9999 mem: location 1290 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1102
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1102 is 0
 9999 mem: storing 0 in location 1296
  105 run: too-far-left?:boolean <- lesser-than click-column, left
@@ -8610,7 +8610,7 @@ cdefgh]
 9999 mem: location 1290 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1103
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1103 is 4
 9999 mem: storing 4 in location 1298
  105 run: too-far-right?:boolean <- greater-than click-column, right
@@ -8638,7 +8638,7 @@ cdefgh]
 9999 mem: location 1290 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1105
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1105 is 1
 9999 mem: storing 1 in location 1300
  105 run: before-cursor-column:number <- get *editor, cursor-column:offset
@@ -8659,7 +8659,7 @@ cdefgh]
 9999 mem: location 1290 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1106
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1106 is 0
 9999 mem: storing 0 in location 1301
  105 run: before-top-of-screen:address:shared:duplex-list:character <- get *editor, top-of-screen:offset
@@ -8680,7 +8680,7 @@ cdefgh]
 9999 mem: location 1290 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1099
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1099 is 1119
 9999 mem: storing 1119 in location 1302
 9999 mem: incrementing refcount of 1119: 9 -> 10
@@ -8726,7 +8726,7 @@ cdefgh]
 9999 mem: location 1319 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1102
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1102 is 0
 9999 mem: storing 0 in location 1322
  106 run: right:number <- get *editor, right:offset
@@ -8747,7 +8747,7 @@ cdefgh]
 9999 mem: location 1319 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1103
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1103 is 4
 9999 mem: storing 4 in location 1323
  106 run: screen-height:number <- screen-height screen
@@ -8774,7 +8774,7 @@ cdefgh]
 9999 mem: location 1140 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1141
  107 run: reply height:number
@@ -8801,7 +8801,7 @@ cdefgh]
 9999 mem: location 1319 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1099
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1099 is 1119
 9999 mem: storing 1119 in location 1325
 9999 mem: incrementing refcount of 1119: 10 -> 11
@@ -8832,7 +8832,7 @@ cdefgh]
 9999 mem: skipping refcount at 1119
 9999 type: type deduced to be character$
 9998 run: address to copy is 1121
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1121 is 1133
 9999 mem: storing 1133 in location 1141
 9999 mem: incrementing refcount of 1133: 10 -> 11
@@ -8941,7 +8941,7 @@ cdefgh]
 9999 mem: location 1325 is 1133
 9999 mem: skipping refcount at 1133
 9998 run: address to copy is 1134
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1134 is 97
 9999 mem: storing 97 in location 1335
  106 run: newline?:boolean <- equal c, 10/newline
@@ -8980,7 +8980,7 @@ cdefgh]
 9999 mem: skipping refcount at 1133
 9999 type: type deduced to be character$
 9998 run: address to copy is 1135
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1135 is 1142
 9999 mem: storing 1142 in location 1141
 9999 mem: incrementing refcount of 1142: 10 -> 11
@@ -9015,7 +9015,7 @@ cdefgh]
 9999 mem: skipping refcount at 1119
 9999 type: type deduced to be character$
 9998 run: address to copy is 1121
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1121 is 1133
 9999 mem: storing 1133 in location 1141
 9999 mem: incrementing refcount of 1133: 12 -> 13
@@ -9059,7 +9059,7 @@ cdefgh]
 9999 mem: location 1325 is 1142
 9999 mem: skipping refcount at 1142
 9998 run: address to copy is 1143
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1143 is 10
 9999 mem: storing 10 in location 1335
  106 run: newline?:boolean <- equal c, 10/newline
@@ -9105,7 +9105,7 @@ cdefgh]
 9999 mem: skipping refcount at 1142
 9999 type: type deduced to be character$
 9998 run: address to copy is 1144
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1144 is 1146
 9999 mem: storing 1146 in location 1141
 9999 mem: incrementing refcount of 1146: 10 -> 11
@@ -9140,7 +9140,7 @@ cdefgh]
 9999 mem: skipping refcount at 1133
 9999 type: type deduced to be character$
 9998 run: address to copy is 1135
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1135 is 1142
 9999 mem: storing 1142 in location 1141
 9999 mem: incrementing refcount of 1142: 12 -> 13
@@ -9181,7 +9181,7 @@ cdefgh]
 9999 mem: location 1325 is 1146
 9999 mem: skipping refcount at 1146
 9998 run: address to copy is 1147
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1147 is 98
 9999 mem: storing 98 in location 1335
  106 run: newline?:boolean <- equal c, 10/newline
@@ -9220,7 +9220,7 @@ cdefgh]
 9999 mem: skipping refcount at 1146
 9999 type: type deduced to be character$
 9998 run: address to copy is 1148
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1148 is 1150
 9999 mem: storing 1150 in location 1141
 9999 mem: incrementing refcount of 1150: 10 -> 11
@@ -9255,7 +9255,7 @@ cdefgh]
 9999 mem: skipping refcount at 1142
 9999 type: type deduced to be character$
 9998 run: address to copy is 1144
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1144 is 1146
 9999 mem: storing 1146 in location 1141
 9999 mem: incrementing refcount of 1146: 12 -> 13
@@ -9299,7 +9299,7 @@ cdefgh]
 9999 mem: location 1325 is 1150
 9999 mem: skipping refcount at 1150
 9998 run: address to copy is 1151
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1151 is 10
 9999 mem: storing 10 in location 1335
  106 run: newline?:boolean <- equal c, 10/newline
@@ -9345,7 +9345,7 @@ cdefgh]
 9999 mem: skipping refcount at 1150
 9999 type: type deduced to be character$
 9998 run: address to copy is 1152
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1152 is 1154
 9999 mem: storing 1154 in location 1141
 9999 mem: incrementing refcount of 1154: 10 -> 11
@@ -9380,7 +9380,7 @@ cdefgh]
 9999 mem: skipping refcount at 1146
 9999 type: type deduced to be character$
 9998 run: address to copy is 1148
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1148 is 1150
 9999 mem: storing 1150 in location 1141
 9999 mem: incrementing refcount of 1150: 12 -> 13
@@ -9429,7 +9429,7 @@ cdefgh]
 9999 mem: location 1325 is 1154
 9999 mem: skipping refcount at 1154
 9998 run: address to copy is 1155
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1155 is 99
 9999 mem: storing 99 in location 1335
  106 run: newline?:boolean <- equal c, 10/newline
@@ -9468,7 +9468,7 @@ cdefgh]
 9999 mem: skipping refcount at 1154
 9999 type: type deduced to be character$
 9998 run: address to copy is 1156
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1156 is 1158
 9999 mem: storing 1158 in location 1141
 9999 mem: incrementing refcount of 1158: 10 -> 11
@@ -9503,7 +9503,7 @@ cdefgh]
 9999 mem: skipping refcount at 1150
 9999 type: type deduced to be character$
 9998 run: address to copy is 1152
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1152 is 1154
 9999 mem: storing 1154 in location 1141
 9999 mem: incrementing refcount of 1154: 12 -> 13
@@ -9555,7 +9555,7 @@ cdefgh]
 9999 mem: location 1325 is 1158
 9999 mem: skipping refcount at 1158
 9998 run: address to copy is 1159
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1159 is 100
 9999 mem: storing 100 in location 1335
  106 run: newline?:boolean <- equal c, 10/newline
@@ -9594,7 +9594,7 @@ cdefgh]
 9999 mem: skipping refcount at 1158
 9999 type: type deduced to be character$
 9998 run: address to copy is 1160
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1160 is 1162
 9999 mem: storing 1162 in location 1141
 9999 mem: incrementing refcount of 1162: 10 -> 11
@@ -9629,7 +9629,7 @@ cdefgh]
 9999 mem: skipping refcount at 1154
 9999 type: type deduced to be character$
 9998 run: address to copy is 1156
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1156 is 1158
 9999 mem: storing 1158 in location 1141
 9999 mem: incrementing refcount of 1158: 12 -> 13
@@ -9681,7 +9681,7 @@ cdefgh]
 9999 mem: location 1325 is 1162
 9999 mem: skipping refcount at 1162
 9998 run: address to copy is 1163
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1163 is 101
 9999 mem: storing 101 in location 1335
  106 run: newline?:boolean <- equal c, 10/newline
@@ -9720,7 +9720,7 @@ cdefgh]
 9999 mem: skipping refcount at 1162
 9999 type: type deduced to be character$
 9998 run: address to copy is 1164
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1164 is 1166
 9999 mem: storing 1166 in location 1141
 9999 mem: incrementing refcount of 1166: 10 -> 11
@@ -9755,7 +9755,7 @@ cdefgh]
 9999 mem: skipping refcount at 1158
 9999 type: type deduced to be character$
 9998 run: address to copy is 1160
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1160 is 1162
 9999 mem: storing 1162 in location 1141
 9999 mem: incrementing refcount of 1162: 12 -> 13
@@ -9813,7 +9813,7 @@ cdefgh]
 9999 mem: location 1325 is 1166
 9999 mem: skipping refcount at 1166
 9998 run: address to copy is 1167
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1167 is 102
 9999 mem: storing 102 in location 1335
  106 run: newline?:boolean <- equal c, 10/newline
@@ -9852,7 +9852,7 @@ cdefgh]
 9999 mem: skipping refcount at 1166
 9999 type: type deduced to be character$
 9998 run: address to copy is 1168
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1168 is 1170
 9999 mem: storing 1170 in location 1141
 9999 mem: incrementing refcount of 1170: 9 -> 10
@@ -9887,7 +9887,7 @@ cdefgh]
 9999 mem: skipping refcount at 1162
 9999 type: type deduced to be character$
 9998 run: address to copy is 1164
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1164 is 1166
 9999 mem: storing 1166 in location 1141
 9999 mem: incrementing refcount of 1166: 12 -> 13
@@ -9939,7 +9939,7 @@ cdefgh]
 9999 mem: location 1325 is 1170
 9999 mem: skipping refcount at 1170
 9998 run: address to copy is 1171
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1171 is 103
 9999 mem: storing 103 in location 1335
  106 run: newline?:boolean <- equal c, 10/newline
@@ -10027,7 +10027,7 @@ cdefgh]
 9999 mem: location 1290 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1105
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1105 is 3
 9999 mem: storing 3 in location 1304
  105 run: after-cursor-column:number <- get *editor, cursor-column:offset
@@ -10048,7 +10048,7 @@ cdefgh]
 9999 mem: location 1290 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1106
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1106 is 3
 9999 mem: storing 3 in location 1305
  105 run: after-top-of-screen:address:shared:duplex-list:character <- get *editor, top-of-screen:offset
@@ -10069,7 +10069,7 @@ cdefgh]
 9999 mem: location 1290 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1099
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1099 is 1119
 9999 mem: storing 1119 in location 1306
 9999 mem: incrementing refcount of 1119: 11 -> 12
@@ -10244,7 +10244,7 @@ cdefgh]
 9999 mem: location 1261 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1105
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1105 is 3
 9999 mem: storing 3 in location 1262
  104 run: cursor-column:number <- get *editor, cursor-column:offset
@@ -10265,7 +10265,7 @@ cdefgh]
 9999 mem: location 1261 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1106
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1106 is 3
 9999 mem: storing 3 in location 1263
  104 run: screen <- move-cursor screen, cursor-row, cursor-column
@@ -10357,7 +10357,7 @@ cdefgh]
 9999 mem: location 1275 is 1253
 9999 mem: skipping refcount at 1253
 9998 run: address to copy is 1255
-9998 run: its type is <address : <shared : <array : <event : <>>>>>
+9998 run: its type is ("address" "shared" "array" "event")
 9999 mem: location 1255 is 1243
 9999 mem: storing 1243 in location 1277
 9999 mem: incrementing refcount of 1243: 1 -> 2
@@ -10488,7 +10488,7 @@ cdefgh]
 9999 mem: location 1140 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1141
  106 run: reply width:number
@@ -10521,7 +10521,7 @@ cdefgh]
 9999 mem: location 1140 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1141
  106 run: reply height:number
@@ -10548,7 +10548,7 @@ cdefgh]
 9999 mem: location 1357 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1102
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1102 is 0
 9999 mem: storing 0 in location 1365
  105 run: right:number <- get *editor, right:offset
@@ -10569,7 +10569,7 @@ cdefgh]
 9999 mem: location 1357 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1103
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1103 is 4
 9999 mem: storing 4 in location 1366
  105 run: before-cursor:address:address:shared:duplex-list:character <- get-address *editor, before-cursor:offset
@@ -10734,7 +10734,7 @@ cdefgh]
 9999 mem: skipping refcount at 1162
 9999 type: type deduced to be character$
 9998 run: address to copy is 1164
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1164 is 1166
 9999 mem: storing 1166 in location 1141
 9999 mem: incrementing refcount of 1166: 14 -> 15
@@ -10767,7 +10767,7 @@ cdefgh]
 9999 mem: location 1357 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1105
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1105 is 3
 9999 mem: storing 3 in location 1392
  105 run: before-cursor-column:number <- get *editor, cursor-column:offset
@@ -10788,7 +10788,7 @@ cdefgh]
 9999 mem: location 1357 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1106
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1106 is 3
 9999 mem: storing 3 in location 1393
  105 run: before-top-of-screen:address:shared:duplex-list:character <- get *editor, top-of-screen:offset
@@ -10809,7 +10809,7 @@ cdefgh]
 9999 mem: location 1357 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1099
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1099 is 1119
 9999 mem: storing 1119 in location 1394
 9999 mem: incrementing refcount of 1119: 12 -> 13
@@ -10851,7 +10851,7 @@ cdefgh]
 9999 mem: location 1443 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1101
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1101 is 1166
 9999 mem: storing 1166 in location 1445
 9999 mem: incrementing refcount of 1166: 17 -> 18
@@ -10911,7 +10911,7 @@ cdefgh]
 9999 mem: location 1443 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1102
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1102 is 0
 9999 mem: storing 0 in location 1448
  106 run: right:number <- get *editor, right:offset
@@ -10932,7 +10932,7 @@ cdefgh]
 9999 mem: location 1443 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1103
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1103 is 4
 9999 mem: storing 4 in location 1449
  106 run: old-cursor-character:character <- get *before-cursor, value:offset
@@ -10944,7 +10944,7 @@ cdefgh]
 9999 mem: location 1445 is 1166
 9999 mem: skipping refcount at 1166
 9998 run: address to copy is 1167
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1167 is 102
 9999 mem: storing 102 in location 1450
  106 run: was-at-newline?:boolean <- equal old-cursor-character, 10/newline
@@ -10987,7 +10987,7 @@ cdefgh]
 9999 mem: skipping refcount at 1166
 9999 type: type deduced to be character$
 9998 run: address to copy is 1168
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1168 is 1170
 9999 mem: storing 1170 in location 1141
 9999 mem: incrementing refcount of 1170: 11 -> 12
@@ -11010,7 +11010,7 @@ cdefgh]
 9999 mem: location 1460 is 1170
 9999 mem: skipping refcount at 1170
 9998 run: address to copy is 1171
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1171 is 103
 9999 mem: storing 103 in location 1461
  106 run: newline?:boolean <- equal next-character, 10/newline
@@ -11075,7 +11075,7 @@ cdefgh]
 9999 mem: location 1443 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1102
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1102 is 0
 9999 mem: storing 0 in location 1448
  106 run: right:number <- get *editor, right:offset
@@ -11096,7 +11096,7 @@ cdefgh]
 9999 mem: location 1443 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1103
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1103 is 4
 9999 mem: storing 4 in location 1449
  106 run: max:number <- subtract right, left
@@ -11137,7 +11137,7 @@ cdefgh]
 9999 mem: location 1129 is 1119
 9999 mem: skipping refcount at 1119
 9998 run: address to copy is 1120
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1120 is 167
 9999 mem: storing 167 in location 1130
  107 run: at-newline?:boolean <- equal c, 10/newline
@@ -11165,7 +11165,7 @@ cdefgh]
 9999 mem: location 1129 is 1119
 9999 mem: skipping refcount at 1119
 9998 run: address to copy is 1120
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1120 is 167
 9999 mem: storing 167 in location 1130
  107 run: at-newline?:boolean <- equal c, 10/newline
@@ -11197,7 +11197,7 @@ cdefgh]
 9999 mem: skipping refcount at 1119
 9999 type: type deduced to be character$
 9998 run: address to copy is 1121
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1121 is 1133
 9999 mem: storing 1133 in location 1141
 9999 mem: incrementing refcount of 1133: 14 -> 15
@@ -11233,7 +11233,7 @@ cdefgh]
 9999 mem: location 1129 is 1133
 9999 mem: skipping refcount at 1133
 9998 run: address to copy is 1134
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1134 is 97
 9999 mem: storing 97 in location 1130
  107 run: at-newline?:boolean <- equal c, 10/newline
@@ -11265,7 +11265,7 @@ cdefgh]
 9999 mem: skipping refcount at 1133
 9999 type: type deduced to be character$
 9998 run: address to copy is 1135
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1135 is 1142
 9999 mem: storing 1142 in location 1141
 9999 mem: incrementing refcount of 1142: 14 -> 15
@@ -11301,7 +11301,7 @@ cdefgh]
 9999 mem: location 1129 is 1142
 9999 mem: skipping refcount at 1142
 9998 run: address to copy is 1143
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1143 is 10
 9999 mem: storing 10 in location 1130
  107 run: at-newline?:boolean <- equal c, 10/newline
@@ -11431,7 +11431,7 @@ cdefgh]
 9999 mem: location 1357 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1105
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1105 is 3
 9999 mem: storing 3 in location 1396
  105 run: after-cursor-column:number <- get *editor, cursor-column:offset
@@ -11452,7 +11452,7 @@ cdefgh]
 9999 mem: location 1357 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1106
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1106 is 0
 9999 mem: storing 0 in location 1397
  105 run: after-top-of-screen:address:shared:duplex-list:character <- get *editor, top-of-screen:offset
@@ -11473,7 +11473,7 @@ cdefgh]
 9999 mem: location 1357 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1099
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1099 is 1142
 9999 mem: storing 1142 in location 1398
 9999 mem: incrementing refcount of 1142: 17 -> 18
@@ -11522,7 +11522,7 @@ cdefgh]
 9999 mem: location 1140 is 1350
 9999 mem: skipping refcount at 1350
 9998 run: address to copy is 1351
-9998 run: its type is <address : <shared : <operation : <>>>>
+9998 run: its type is ("address" "shared" "operation")
 9999 mem: location 1351 is 1000
 9999 mem: storing 1000 in location 1141
 9999 mem: incrementing refcount of 1000: 4 -> 5
@@ -11564,7 +11564,7 @@ cdefgh]
 9999 mem: location 1008 is 0
 9999 mem: location 1381 is 1002
 9998 run: address to copy is 1008
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1008 is 0
 9999 mem: storing 0 in location 1399
  105 run: coalesce?:boolean <- equal undo-coalesce-tag, previous-coalesce-tag
@@ -11772,7 +11772,7 @@ cdefgh]
 9999 mem: location 1114 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1102
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1102 is 0
 9999 mem: storing 0 in location 1115
  105 run: right:number <- get *editor, right:offset
@@ -11793,7 +11793,7 @@ cdefgh]
 9999 mem: location 1114 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1103
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1103 is 4
 9999 mem: storing 4 in location 1116
  105 run: row:number, column:number <- render screen, editor
@@ -11831,7 +11831,7 @@ cdefgh]
 9999 mem: location 1182 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1102
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1102 is 0
 9999 mem: storing 0 in location 1183
  106 run: screen-height:number <- screen-height screen
@@ -11858,7 +11858,7 @@ cdefgh]
 9999 mem: location 1140 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1141
  107 run: reply height:number
@@ -11885,7 +11885,7 @@ cdefgh]
 9999 mem: location 1182 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1103
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1103 is 4
 9999 mem: storing 4 in location 1185
  106 run: curr:address:shared:duplex-list:character <- get *editor, top-of-screen:offset
@@ -11906,7 +11906,7 @@ cdefgh]
 9999 mem: location 1182 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1099
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1099 is 1142
 9999 mem: storing 1142 in location 1186
 9999 mem: incrementing refcount of 1142: 18 -> 19
@@ -11937,7 +11937,7 @@ cdefgh]
 9999 mem: skipping refcount at 1142
 9999 type: type deduced to be character$
 9998 run: address to copy is 1144
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1144 is 1146
 9999 mem: storing 1146 in location 1141
 9999 mem: incrementing refcount of 1146: 14 -> 15
@@ -12099,7 +12099,7 @@ cdefgh]
 9999 mem: location 1186 is 1146
 9999 mem: skipping refcount at 1146
 9998 run: address to copy is 1147
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1147 is 98
 9999 mem: storing 98 in location 1197
  106 run: color <- get-color color, c
@@ -12212,7 +12212,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -12226,7 +12226,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -12310,7 +12310,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 17 -> 18
@@ -12394,7 +12394,7 @@ cdefgh]
 9999 mem: skipping refcount at 1146
 9999 type: type deduced to be character$
 9998 run: address to copy is 1148
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1148 is 1150
 9999 mem: storing 1150 in location 1141
 9999 mem: incrementing refcount of 1150: 14 -> 15
@@ -12429,7 +12429,7 @@ cdefgh]
 9999 mem: skipping refcount at 1142
 9999 type: type deduced to be character$
 9998 run: address to copy is 1144
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1144 is 1146
 9999 mem: storing 1146 in location 1141
 9999 mem: incrementing refcount of 1146: 16 -> 17
@@ -12473,7 +12473,7 @@ cdefgh]
 9999 mem: location 1186 is 1150
 9999 mem: skipping refcount at 1150
 9998 run: address to copy is 1151
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1151 is 10
 9999 mem: storing 10 in location 1197
  106 run: color <- get-color color, c
@@ -12617,7 +12617,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  108 run: height:number <- get *screen, num-rows:offset
@@ -12631,7 +12631,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  108 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -12715,7 +12715,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 18 -> 19
@@ -12835,7 +12835,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  108 run: height:number <- get *screen, num-rows:offset
@@ -12849,7 +12849,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  108 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -12933,7 +12933,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 19 -> 20
@@ -13053,7 +13053,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  108 run: height:number <- get *screen, num-rows:offset
@@ -13067,7 +13067,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  108 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -13152,7 +13152,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 20 -> 21
@@ -13272,7 +13272,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  108 run: height:number <- get *screen, num-rows:offset
@@ -13286,7 +13286,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  108 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -13370,7 +13370,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 21 -> 22
@@ -13534,7 +13534,7 @@ cdefgh]
 9999 mem: skipping refcount at 1150
 9999 type: type deduced to be character$
 9998 run: address to copy is 1152
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1152 is 1154
 9999 mem: storing 1154 in location 1141
 9999 mem: incrementing refcount of 1154: 14 -> 15
@@ -13569,7 +13569,7 @@ cdefgh]
 9999 mem: skipping refcount at 1146
 9999 type: type deduced to be character$
 9998 run: address to copy is 1148
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1148 is 1150
 9999 mem: storing 1150 in location 1141
 9999 mem: incrementing refcount of 1150: 16 -> 17
@@ -13610,7 +13610,7 @@ cdefgh]
 9999 mem: location 1186 is 1154
 9999 mem: skipping refcount at 1154
 9998 run: address to copy is 1155
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1155 is 99
 9999 mem: storing 99 in location 1197
  106 run: color <- get-color color, c
@@ -13722,7 +13722,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -13736,7 +13736,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -13820,7 +13820,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 22 -> 23
@@ -13904,7 +13904,7 @@ cdefgh]
 9999 mem: skipping refcount at 1154
 9999 type: type deduced to be character$
 9998 run: address to copy is 1156
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1156 is 1158
 9999 mem: storing 1158 in location 1141
 9999 mem: incrementing refcount of 1158: 14 -> 15
@@ -13939,7 +13939,7 @@ cdefgh]
 9999 mem: skipping refcount at 1150
 9999 type: type deduced to be character$
 9998 run: address to copy is 1152
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1152 is 1154
 9999 mem: storing 1154 in location 1141
 9999 mem: incrementing refcount of 1154: 16 -> 17
@@ -13983,7 +13983,7 @@ cdefgh]
 9999 mem: location 1186 is 1158
 9999 mem: skipping refcount at 1158
 9998 run: address to copy is 1159
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1159 is 100
 9999 mem: storing 100 in location 1197
  106 run: color <- get-color color, c
@@ -14095,7 +14095,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -14109,7 +14109,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -14193,7 +14193,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 23 -> 24
@@ -14277,7 +14277,7 @@ cdefgh]
 9999 mem: skipping refcount at 1158
 9999 type: type deduced to be character$
 9998 run: address to copy is 1160
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1160 is 1162
 9999 mem: storing 1162 in location 1141
 9999 mem: incrementing refcount of 1162: 15 -> 16
@@ -14312,7 +14312,7 @@ cdefgh]
 9999 mem: skipping refcount at 1154
 9999 type: type deduced to be character$
 9998 run: address to copy is 1156
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1156 is 1158
 9999 mem: storing 1158 in location 1141
 9999 mem: incrementing refcount of 1158: 16 -> 17
@@ -14356,7 +14356,7 @@ cdefgh]
 9999 mem: location 1186 is 1162
 9999 mem: skipping refcount at 1162
 9998 run: address to copy is 1163
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1163 is 101
 9999 mem: storing 101 in location 1197
  106 run: color <- get-color color, c
@@ -14468,7 +14468,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -14482,7 +14482,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -14566,7 +14566,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 24 -> 25
@@ -14650,7 +14650,7 @@ cdefgh]
 9999 mem: skipping refcount at 1162
 9999 type: type deduced to be character$
 9998 run: address to copy is 1164
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1164 is 1166
 9999 mem: storing 1166 in location 1141
 9999 mem: incrementing refcount of 1166: 19 -> 20
@@ -14685,7 +14685,7 @@ cdefgh]
 9999 mem: skipping refcount at 1158
 9999 type: type deduced to be character$
 9998 run: address to copy is 1160
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1160 is 1162
 9999 mem: storing 1162 in location 1141
 9999 mem: incrementing refcount of 1162: 17 -> 18
@@ -14729,7 +14729,7 @@ cdefgh]
 9999 mem: location 1186 is 1166
 9999 mem: skipping refcount at 1166
 9998 run: address to copy is 1167
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1167 is 102
 9999 mem: storing 102 in location 1197
  106 run: color <- get-color color, c
@@ -14842,7 +14842,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -14856,7 +14856,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -14940,7 +14940,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 25 -> 26
@@ -15024,7 +15024,7 @@ cdefgh]
 9999 mem: skipping refcount at 1166
 9999 type: type deduced to be character$
 9998 run: address to copy is 1168
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1168 is 1170
 9999 mem: storing 1170 in location 1141
 9999 mem: incrementing refcount of 1170: 13 -> 14
@@ -15059,7 +15059,7 @@ cdefgh]
 9999 mem: skipping refcount at 1162
 9999 type: type deduced to be character$
 9998 run: address to copy is 1164
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1164 is 1166
 9999 mem: storing 1166 in location 1141
 9999 mem: incrementing refcount of 1166: 21 -> 22
@@ -15103,7 +15103,7 @@ cdefgh]
 9999 mem: location 1186 is 1170
 9999 mem: skipping refcount at 1170
 9998 run: address to copy is 1171
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1171 is 103
 9999 mem: storing 103 in location 1197
  106 run: color <- get-color color, c
@@ -15216,7 +15216,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -15230,7 +15230,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -15314,7 +15314,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 26 -> 27
@@ -15478,7 +15478,7 @@ cdefgh]
 9999 mem: location 1186 is 1170
 9999 mem: skipping refcount at 1170
 9998 run: address to copy is 1171
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1171 is 103
 9999 mem: storing 103 in location 1197
  106 run: color <- get-color color, c
@@ -15590,7 +15590,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -15604,7 +15604,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -15688,7 +15688,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 27 -> 28
@@ -15772,7 +15772,7 @@ cdefgh]
 9999 mem: skipping refcount at 1170
 9999 type: type deduced to be character$
 9998 run: address to copy is 1172
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1172 is 1174
 9999 mem: storing 1174 in location 1141
 9999 mem: incrementing refcount of 1174: 4 -> 5
@@ -15807,7 +15807,7 @@ cdefgh]
 9999 mem: skipping refcount at 1166
 9999 type: type deduced to be character$
 9998 run: address to copy is 1168
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1168 is 1170
 9999 mem: storing 1170 in location 1141
 9999 mem: incrementing refcount of 1170: 15 -> 16
@@ -15859,7 +15859,7 @@ cdefgh]
 9999 mem: location 1186 is 1174
 9999 mem: skipping refcount at 1174
 9998 run: address to copy is 1175
-9998 run: its type is character
+9998 run: its type is "character"
 9999 mem: location 1175 is 104
 9999 mem: storing 104 in location 1197
  106 run: color <- get-color color, c
@@ -15971,7 +15971,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -15985,7 +15985,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -16069,7 +16069,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 28 -> 29
@@ -16153,7 +16153,7 @@ cdefgh]
 9999 mem: skipping refcount at 1174
 9999 type: type deduced to be character$
 9998 run: address to copy is 1176
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1176 is 0
 9999 mem: storing 0 in location 1141
  107 run: reply result:address:shared:duplex-list:_elem/contained-in:in
@@ -16186,7 +16186,7 @@ cdefgh]
 9999 mem: skipping refcount at 1170
 9999 type: type deduced to be character$
 9998 run: address to copy is 1172
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1172 is 1174
 9999 mem: storing 1174 in location 1141
 9999 mem: incrementing refcount of 1174: 6 -> 7
@@ -16366,7 +16366,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -16380,7 +16380,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -16464,7 +16464,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 29 -> 30
@@ -16584,7 +16584,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -16598,7 +16598,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -16683,7 +16683,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 30 -> 31
@@ -16803,7 +16803,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -16817,7 +16817,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -16901,7 +16901,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1234
 9999 mem: incrementing refcount of 1018: 31 -> 32
@@ -17131,7 +17131,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -17145,7 +17145,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -17235,7 +17235,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -17249,7 +17249,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -17339,7 +17339,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -17353,7 +17353,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -17443,7 +17443,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -17457,7 +17457,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -17547,7 +17547,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  107 run: height:number <- get *screen, num-rows:offset
@@ -17561,7 +17561,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  107 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -17775,7 +17775,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  108 run: height:number <- get *screen, num-rows:offset
@@ -17789,7 +17789,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  108 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -17882,7 +17882,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  108 run: height:number <- get *screen, num-rows:offset
@@ -17896,7 +17896,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  108 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -17989,7 +17989,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  108 run: height:number <- get *screen, num-rows:offset
@@ -18003,7 +18003,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  108 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -18096,7 +18096,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  108 run: height:number <- get *screen, num-rows:offset
@@ -18110,7 +18110,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  108 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -18203,7 +18203,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 5
 9999 mem: storing 5 in location 1225
  108 run: height:number <- get *screen, num-rows:offset
@@ -18217,7 +18217,7 @@ cdefgh]
 9999 mem: location 1219 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1226
  108 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -18377,7 +18377,7 @@ cdefgh]
 9999 mem: location 1140 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 4
 9999 mem: storing 4 in location 1141
  108 run: reply height:number
@@ -18430,7 +18430,7 @@ cdefgh]
 9999 mem: location 1261 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1105
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1105 is 3
 9999 mem: storing 3 in location 1262
  104 run: cursor-column:number <- get *editor, cursor-column:offset
@@ -18451,7 +18451,7 @@ cdefgh]
 9999 mem: location 1261 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1106
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1106 is 0
 9999 mem: storing 0 in location 1263
  104 run: screen <- move-cursor screen, cursor-row, cursor-column
@@ -18543,7 +18543,7 @@ cdefgh]
 9999 mem: location 1275 is 1253
 9999 mem: skipping refcount at 1253
 9998 run: address to copy is 1255
-9998 run: its type is <address : <shared : <array : <event : <>>>>>
+9998 run: its type is ("address" "shared" "array" "event")
 9999 mem: location 1255 is 1243
 9999 mem: storing 1243 in location 1277
 9999 mem: incrementing refcount of 1243: 2 -> 3
@@ -18617,7 +18617,7 @@ cdefgh]
 9999 mem: location 2 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1105
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1105 is 3
 9999 mem: storing 3 in location 3
  103 run: 4:number <- get *2:address:shared:editor-data, cursor-column:offset
@@ -18638,7 +18638,7 @@ cdefgh]
 9999 mem: location 2 is 1097
 9999 mem: skipping refcount at 1097
 9998 run: address to copy is 1106
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1106 is 0
 9999 mem: storing 0 in location 4
  103 run: reply 

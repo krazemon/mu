@@ -1,14 +1,14 @@
 9991 parse: --- defining main
 9993 parse: instruction: merge
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"14": "literal"}
-9993 parse:   ingredient: {"15": "literal"}
-9993 parse:   product: {"10": "point"}
+9993 parse:   ingredient: 14: "literal"
+9993 parse:   ingredient: 15: "literal"
+9993 parse:   product: 10: "point"
 9992 load: after rewriting: 10:point <- merge 14, 15
 9993 parse: instruction: foo
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"10": "point"}
-9993 parse:   product: {"11": "point"}
+9993 parse:   ingredient: 10: "point"
+9993 parse:   product: 11: "point"
 9992 load: after rewriting: 11:point <- foo 10:point
 9999 parse: recipe main has a header
 9999 parse: recipe has a header; parsing
@@ -24,8 +24,8 @@
 9992 load: after rewriting:  
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"34": "literal"}
-9993 parse:   product: {"result": ()}
+9993 parse:   ingredient: 34: "literal"
+9993 parse:   product: result: ()
 9992 load: after rewriting: result <- copy 34
 9999 parse: recipe foo has a header
 9999 parse: recipe has a header; parsing
@@ -41,8 +41,8 @@
 9992 load: after rewriting:  
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"a": ()}
-9993 parse:   product: {"result": ()}
+9993 parse:   ingredient: a: ()
+9993 parse:   product: result: ()
 9992 load: after rewriting: result <- copy a
 9999 parse: recipe foo_2 has a header
 9990 transform: === transform_all()
@@ -54,76 +54,68 @@
 9991 transform: --- transform names for recipe main
 9991 transform: --- resolve ambiguous calls for recipe main
 9992 transform: instruction 11:point <- foo 10:point
-9992 transform: checking variant (strict) 20: recipe foo {"a": "_t"} {"b": "_t"} -> {"result": "number"}
+9992 transform: checking variant (strict) 20: recipe foo a: "_t" b: "_t" -> result: "number"
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 21: recipe foo_2 {"a": "_t"} -> {"result": "_t"}
+9992 transform: checking variant (strict) 21: recipe foo_2 a: "_t" -> result: "_t"
 9993 transform: strict match failed: ingredient 0
 9993 transform: too few ingredients
 9992 transform: found variant to specialize: 1002 foo_2
-9993 transform: switching foo to specialized recipe foo_3 {"a": "_t"} -> {"result": "_t"}
+9993 transform: switching foo to specialized recipe foo_3 a: "_t" -> result: "_t"
 9993 transform: compute type names: foo_3
-9994 transform:     checking {"a": "_t"}: "_t"
+9994 transform:     checking a: "_t": "_t"
 9993 transform: type of a is "_t"
-9994 transform:     checking {"result": "_t"}: "_t"
+9994 transform:     checking result: "_t": "_t"
 9993 transform: type of result is "_t"
 9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9994 transform:     checking {"location": "type"}: "type"
+9994 transform:     checking location: "type": "type"
 9993 transform: type of location is "type"
-9994 transform:     checking {"number-of-locals": "literal"}: "literal"
+9994 transform:     checking number-of-locals: "literal": "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking {"default-space": ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
+9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
 9993 transform: type of default-space is ("address" "shared" "array" "location")
 9993 transform:   instruction: a:_t <- next-ingredient-without-typechecking 
-9994 transform:     checking {"a": "_t"}: "_t"
+9994 transform:     checking a: "_t": "_t"
 9993 transform:   instruction: result <- copy a
-9994 transform:     checking {"a": ()}: ()
+9994 transform:     checking a: (): ()
 9994 transform:     deducing type to "_t"
-9994 transform:     checking {"result": ()}: ()
+9994 transform:     checking result: (): ()
 9994 transform:     deducing type to "_t"
-9993 transform: adding mapping from _t to "point"
+9993 transform: adding mapping from _t to 6
 9993 transform: replacing in recipe header ingredients
 9993 transform: replacing in ingredient a:_t
 9993 transform: _t => "point"
-9993 transform:   after: point
 9993 transform: replacing in recipe header products
 9993 transform: replacing in ingredient result:_t
 9993 transform: _t => "point"
-9993 transform:   after: point
 9993 transform: replacing in instruction 'default-space:address:shared:array:location <- new location:type, number-of-locals:literal'
 9993 transform: replacing in ingredient location:type
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient number-of-locals:literal
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient default-space:address:shared:array:location
-9993 transform:   after: <address : <shared : <array : <number : <>>>>>
 9993 transform: replacing in instruction 'a:_t <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient a:_t
 9993 transform: _t => "point"
-9993 transform:   after: point
 9993 transform: replacing in instruction 'result <- copy a'
 9993 transform: replacing in ingredient a
 9993 transform: _t => "point"
-9993 transform:   after: point
 9993 transform: replacing in ingredient result
 9993 transform: _t => "point"
-9993 transform:   after: point
 9992 transform: transforming new specialization: foo_3
 9991 transform: --- rewrite 'stash' instructions in recipe foo_3
 9991 transform: --- checking reply instructions against header for foo_3
 9991 transform: --- fill in reply ingredients from header for recipe foo_3
 9991 transform: --- deduce types for recipe foo_3
-9992 transform: default-space => <address : <shared : <array : <number : <>>>>>
-9992 transform: a => point
-9992 transform: result => point
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: a => "point"
+9992 transform: result => "point"
 9991 transform: --- deduce types from header for foo_3
-9993 transform: type of a is point
-9993 transform: type of result is point
+9993 transform: type of a is "point"
+9993 transform: type of result is "point"
 9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: {"default-space": ("address" "shared" "array" "location")}
+9993 transform:   product: default-space: ("address" "shared" "array" "location")
 9992 transform: instruction: a:_t <- next-ingredient-without-typechecking 
-9993 transform:   product: {"a": "point"}
+9993 transform:   product: a: "point"
 9992 transform: instruction: result <- copy a
-9993 transform:   product: {"result": "point"}
+9993 transform:   product: result: "point"
 9992 transform: instruction: reply result:_t
 9991 transform: --- check for invalid types in recipe foo_3
 9991 transform: --- collect surrounding spaces for recipe foo_3
@@ -159,9 +151,9 @@
 9991 transform: --- convert 'new' to 'allocate' for recipe main
 9991 transform: --- type-check merge instructions in recipe main
 9999 transform: 0 vs 2
-9999 transform: checking container {"10": "point"} || {"x": "number"} vs ingredient 0
+9999 transform: checking container 10: "point" || x: "number" vs ingredient 0
 9999 transform: 1 vs 2
-9999 transform: checking container {"10": "point"} || {"y": "number"} vs ingredient 1
+9999 transform: checking container 10: "point" || y: "number" vs ingredient 1
 9991 transform: --- check types of reply instructions in recipe main
 9991 transform: --- checking reply instructions against header for main
 9991 transform: --- parsing any uninitialized reagents as integers

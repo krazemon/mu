@@ -1,7 +1,7 @@
 9991 parse: --- defining scenario_print-character-at-top-left
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:shared:screen <- new-fake-screen 3/width, 2/height\n    11:character <- copy 97/a\n    1:address:shared:screen <- print 1:address:shared:screen, 11:character/a\n    2:address:shared:array:screen-cell <- get *1:address:shared:screen, data:offset\n    3:array:screen-cell <- copy *2:address:shared:array:screen-cell\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    1:address:shared:screen <- new-fake-screen 3/width, 2/height\n    11:character <- copy 97/a\n    1:address:shared:screen <- print 1:address:shared:screen, 11:character/a\n    2:address:shared:array:screen-cell <- get *1:address:shared:screen, data:offset\n    3:array:screen-cell <- copy *2:address:shared:array:screen-cell\n  ": "literal-string"
 9992 load: after rewriting: run [
     1:address:shared:screen <- new-fake-screen 3/width, 2/height
     11:character <- copy 97/a
@@ -11,7 +11,7 @@
   ]
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    3 <- 6  # width*height\n    4 <- 97  # 'a'\n    5 <- 7  # white\n    6 <- 0\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    3 <- 6  # width*height\n    4 <- 97  # 'a'\n    5 <- 7  # white\n    6 <- 0\n  ": "literal-string"
 9992 load: after rewriting: memory-should-contain [
     3 <- 6  # width*height
     4 <- 97  # 'a'
@@ -54,31 +54,31 @@
 9991 parse: --- defining run_1001
 9993 parse: instruction: new-fake-screen
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"3": "literal", "width": ()}
-9993 parse:   ingredient: {"2": "literal", "height": ()}
-9993 parse:   product: {"1": ("address" "shared" "screen")}
+9993 parse:   ingredient: 3: "literal", {"width": ()}
+9993 parse:   ingredient: 2: "literal", {"height": ()}
+9993 parse:   product: 1: ("address" "shared" "screen")
 9992 load: after rewriting: 1:address:shared:screen <- new-fake-screen 3/width, 2/height
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"97": "literal", "a": ()}
-9993 parse:   product: {"11": "character"}
+9993 parse:   ingredient: 97: "literal", {"a": ()}
+9993 parse:   product: 11: "character"
 9992 load: after rewriting: 11:character <- copy 97/a
 9993 parse: instruction: print
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"1": ("address" "shared" "screen")}
-9993 parse:   ingredient: {"11": "character", "a": ()}
-9993 parse:   product: {"1": ("address" "shared" "screen")}
+9993 parse:   ingredient: 1: ("address" "shared" "screen")
+9993 parse:   ingredient: 11: "character", {"a": ()}
+9993 parse:   product: 1: ("address" "shared" "screen")
 9992 load: after rewriting: 1:address:shared:screen <- print 1:address:shared:screen, 11:character/a
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"1": ("address" "shared" "screen"), "lookup": ()}
-9993 parse:   ingredient: {"data": "offset"}
-9993 parse:   product: {"2": ("address" "shared" "array" "screen-cell")}
+9993 parse:   ingredient: 1: ("address" "shared" "screen"), {"lookup": ()}
+9993 parse:   ingredient: data: "offset"
+9993 parse:   product: 2: ("address" "shared" "array" "screen-cell")
 9992 load: after rewriting: 2:address:shared:array:screen-cell <- get *1:address:shared:screen, data:offset
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"2": ("address" "shared" "array" "screen-cell"), "lookup": ()}
-9993 parse:   product: {"3": ("array" "screen-cell")}
+9993 parse:   ingredient: 2: ("address" "shared" "array" "screen-cell"), {"lookup": ()}
+9993 parse:   product: 3: ("array" "screen-cell")
 9992 load: after rewriting: 3:array:screen-cell <- copy *2:address:shared:array:screen-cell
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
@@ -91,14 +91,14 @@
 9993 name: element data of type screen is at offset 4
 9991 transform: --- resolve ambiguous calls for recipe run_1001
 9992 transform: instruction 1:address:shared:screen <- new-fake-screen 3/width, 2/height
-9992 transform: checking variant (strict) 0: recipe new-fake-screen {"w": "number"} {"h": "number"} -> {"result": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 0: recipe new-fake-screen w: "number" h: "number" -> result: ("address" "shared" "screen")
 9992 transform: instruction 1:address:shared:screen <- print 1:address:shared:screen, 11:character/a
-9992 transform: checking variant (strict) 0: recipe print {"screen": ("address" "shared" "screen")} {"c": "character"} -> {"screen": ("address" "shared" "screen")}
-9992 transform: checking variant (strict) 1: recipe print_2 {"screen": ("address" "shared" "screen")} {"s": ("address" "shared" "array" "character")} -> {"screen": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 0: recipe print screen: ("address" "shared" "screen") c: "character" -> screen: ("address" "shared" "screen")
+9992 transform: checking variant (strict) 1: recipe print_2 screen: ("address" "shared" "screen") s: ("address" "shared" "array" "character") -> screen: ("address" "shared" "screen")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 2: recipe print_3 {"screen": ("address" "shared" "screen")} {"n": "number"} -> {"screen": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 2: recipe print_3 screen: ("address" "shared" "screen") n: "number" -> screen: ("address" "shared" "screen")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 3: recipe print_4 {"screen": ("address" "shared" "screen")} {"n": ("address" "_elem")} -> {"screen": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 3: recipe print_4 screen: ("address" "shared" "screen") n: ("address" "_elem") -> screen: ("address" "shared" "screen")
 9993 transform: strict match failed: ingredient 1
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
@@ -248,7 +248,7 @@
 9999 mem: location 1035 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1036
 9999 mem: incrementing refcount of 1018: 1 -> 2
@@ -581,7 +581,7 @@
 9999 mem: location 1047 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1014
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1014 is 3
 9999 mem: storing 3 in location 1053
  104 run: height:number <- get *screen, num-rows:offset
@@ -595,7 +595,7 @@
 9999 mem: location 1047 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 2
 9999 mem: storing 2 in location 1054
  104 run: row:address:number <- get-address *screen, cursor-row:offset
@@ -679,7 +679,7 @@
 9999 mem: location 1047 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1062
 9999 mem: incrementing refcount of 1018: 2 -> 3
@@ -755,7 +755,7 @@
 9999 mem: location 1 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 2
 9999 mem: incrementing refcount of 1018: 3 -> 4

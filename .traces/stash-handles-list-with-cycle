@@ -1,7 +1,7 @@
 9991 parse: --- defining scenario_stash-handles-list-with-cycle
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    x:address:shared:list:number <- push 4, 0\n    y:address:address:shared:list:number <- get-address *x, next:offset\n    *y <- copy x\n    stash [foo foo], x\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    x:address:shared:list:number <- push 4, 0\n    y:address:address:shared:list:number <- get-address *x, next:offset\n    *y <- copy x\n    stash [foo foo], x\n  ": "literal-string"
 9992 load: after rewriting: run [
     x:address:shared:list:number <- push 4, 0
     y:address:address:shared:list:number <- get-address *x, next:offset
@@ -10,7 +10,7 @@
   ]
 9993 parse: instruction: trace-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    app: foo foo 4 -> 4 -> 4 -> 4 -> 4 -> 4 -> 4 -> ...\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    app: foo foo 4 -> 4 -> 4 -> 4 -> 4 -> 4 -> 4 -> ...\n  ": "literal-string"
 9992 load: after rewriting: trace-should-contain [
     app: foo foo 4 -> 4 -> 4 -> 4 -> 4 -> 4 -> 4 -> ...
   ]
@@ -49,38 +49,38 @@
 9991 parse: --- defining run_1001
 9993 parse: instruction: push
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"4": "literal"}
-9993 parse:   ingredient: {"0": "literal"}
-9993 parse:   product: {"x": ("address" "shared" "list" "number")}
+9993 parse:   ingredient: 4: "literal"
+9993 parse:   ingredient: 0: "literal"
+9993 parse:   product: x: ("address" "shared" "list" "number")
 9992 load: after rewriting: x:address:shared:list:number <- push 4, 0
 9993 parse: instruction: get-address
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"x": (), "lookup": ()}
-9993 parse:   ingredient: {"next": "offset"}
-9993 parse:   product: {"y": ("address" "address" "shared" "list" "number")}
+9993 parse:   ingredient: x: (), {"lookup": ()}
+9993 parse:   ingredient: next: "offset"
+9993 parse:   product: y: ("address" "address" "shared" "list" "number")
 9992 load: after rewriting: y:address:address:shared:list:number <- get-address *x, next:offset
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"x": ()}
-9993 parse:   product: {"y": (), "lookup": ()}
+9993 parse:   ingredient: x: ()
+9993 parse:   product: y: (), {"lookup": ()}
 9992 load: after rewriting: *y <- copy x
 9993 parse: instruction: stash
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"foo foo": "literal-string"}
-9993 parse:   ingredient: {"x": ()}
+9993 parse:   ingredient: "foo foo": "literal-string"
+9993 parse:   ingredient: x: ()
 9992 load: after rewriting: stash [foo foo], x
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
-9992 transform: x => <address : <shared : <list : <number : <>>>>>
-9992 transform: x <= <address : <shared : <list : <number : <>>>>>
-9992 transform: y => <address : <address : <shared : <list : <number : <>>>>>>
-9992 transform: x <= <address : <shared : <list : <number : <>>>>>
-9992 transform: y <= <address : <address : <shared : <list : <number : <>>>>>>
-9992 transform: x <= <address : <shared : <list : <number : <>>>>>
-9992 transform: stash_0_1 => <address : <shared : <array : <character : <>>>>>
+9992 transform: x => ("address" "shared" "list" "number")
+9992 transform: x <= ("address" "shared" "list" "number")
+9992 transform: y => ("address" "address" "shared" "list" "number")
+9992 transform: x <= ("address" "shared" "list" "number")
+9992 transform: y <= ("address" "address" "shared" "list" "number")
+9992 transform: x <= ("address" "shared" "list" "number")
+9992 transform: stash_0_1 => ("address" "shared" "array" "character")
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
@@ -90,167 +90,146 @@
 9993 name: assign stash_0_1 3
 9991 transform: --- resolve ambiguous calls for recipe run_1001
 9992 transform: instruction x:address:shared:list:number <- push 4, 0
-9992 transform: checking variant (strict) 0: recipe push {"x": "_elem"} {"in": ("address" "shared" "list" "_elem")} -> {"in": ("address" "shared" "list" "_elem")}
+9992 transform: checking variant (strict) 0: recipe push x: "_elem" in: ("address" "shared" "list" "_elem") -> in: ("address" "shared" "list" "_elem")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 1: recipe push_2 {"x": "_elem"} {"in": ("address" "shared" "duplex-list" "_elem")} -> {"in": ("address" "shared" "duplex-list" "_elem")}
+9992 transform: checking variant (strict) 1: recipe push_2 x: "_elem" in: ("address" "shared" "duplex-list" "_elem") -> in: ("address" "shared" "duplex-list" "_elem")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 2: recipe push_3 {"x": "character"} {"in": ("address" "shared" "duplex-list" "character")} -> {"in": ("address" "shared" "duplex-list" "character")}
+9992 transform: checking variant (strict) 2: recipe push_3 x: "character" in: ("address" "shared" "duplex-list" "character") -> in: ("address" "shared" "duplex-list" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 3: recipe push_4 {"x": ("address" "shared" "operation")} {"in": ("address" "shared" "list" "address" "shared" "operation")} -> {"in": ("address" "shared" "list" "address" "shared" "operation")}
+9992 transform: checking variant (strict) 3: recipe push_4 x: ("address" "shared" "operation") in: ("address" "shared" "list" "address" "shared" "operation") -> in: ("address" "shared" "list" "address" "shared" "operation")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 4: recipe push_5 {"x": "character"} {"in": ("address" "shared" "duplex-list" "character")} -> {"in": ("address" "shared" "duplex-list" "character")}
+9992 transform: checking variant (strict) 4: recipe push_5 x: "character" in: ("address" "shared" "duplex-list" "character") -> in: ("address" "shared" "duplex-list" "character")
 9993 transform: strict match failed: ingredient 0
 9993 transform: strict match failed: product 0
 9992 transform: found variant to specialize: 235 push
-9993 transform: switching push to specialized recipe push_6 {"x": "_elem"} {"in": ("address" "shared" "list" "_elem")} -> {"in": ("address" "shared" "list" "_elem")}
+9993 transform: switching push to specialized recipe push_6 x: "_elem" in: ("address" "shared" "list" "_elem") -> in: ("address" "shared" "list" "_elem")
 9993 transform: compute type names: push_6
-9994 transform:     checking {"x": "_elem"}: "_elem"
+9994 transform:     checking x: "_elem": "_elem"
 9993 transform: type of x is "_elem"
-9994 transform:     checking {"in": ("address" "shared" "list" "_elem")}: ("address" "shared" "list" "_elem")
+9994 transform:     checking in: ("address" "shared" "list" "_elem"): ("address" "shared" "list" "_elem")
 9993 transform: type of in is ("address" "shared" "list" "_elem")
-9994 transform:     checking {"in": ("address" "shared" "list" "_elem")}: ("address" "shared" "list" "_elem")
+9994 transform:     checking in: ("address" "shared" "list" "_elem"): ("address" "shared" "list" "_elem")
 9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9994 transform:     checking {"location": "type"}: "type"
+9994 transform:     checking location: "type": "type"
 9993 transform: type of location is "type"
-9994 transform:     checking {"number-of-locals": "literal"}: "literal"
+9994 transform:     checking number-of-locals: "literal": "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking {"default-space": ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
+9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
 9993 transform: type of default-space is ("address" "shared" "array" "location")
 9993 transform:   instruction: x:_elem <- next-ingredient-without-typechecking 
-9994 transform:     checking {"x": "_elem"}: "_elem"
+9994 transform:     checking x: "_elem": "_elem"
 9993 transform:   instruction: in:address:shared:list:_elem <- next-ingredient-without-typechecking 
-9994 transform:     checking {"in": ("address" "shared" "list" "_elem")}: ("address" "shared" "list" "_elem")
+9994 transform:     checking in: ("address" "shared" "list" "_elem"): ("address" "shared" "list" "_elem")
 9993 transform:   instruction: result:address:shared:list:_elem <- new {(list _elem): type}
-9994 transform:     checking {"(list _elem)": "type"}: "type"
+9994 transform:     checking (list _elem): "type": "type"
 9993 transform: type of (list _elem) is "type"
-9994 transform:     checking {"result": ("address" "shared" "list" "_elem")}: ("address" "shared" "list" "_elem")
+9994 transform:     checking result: ("address" "shared" "list" "_elem"): ("address" "shared" "list" "_elem")
 9993 transform: type of result is ("address" "shared" "list" "_elem")
 9993 transform:   instruction: val:address:_elem <- get-address *result, value:offset
-9994 transform:     checking {"result": (), "lookup": ()}: ()
+9994 transform:     checking result: (), {"lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9994 transform:     checking {"value": "offset"}: "offset"
-9994 transform:     checking {"val": ("address" "_elem")}: ("address" "_elem")
+9994 transform:     checking value: "offset": "offset"
+9994 transform:     checking val: ("address" "_elem"): ("address" "_elem")
 9993 transform: type of val is ("address" "_elem")
 9993 transform:   instruction: *val <- copy x
-9994 transform:     checking {"x": ()}: ()
+9994 transform:     checking x: (): ()
 9994 transform:     deducing type to "_elem"
-9994 transform:     checking {"val": (), "lookup": ()}: ()
+9994 transform:     checking val: (), {"lookup": ()}: ()
 9994 transform:     deducing type to ("address" "_elem")
 9993 transform:   instruction: next:address:address:shared:list:_elem <- get-address *result, next:offset
-9994 transform:     checking {"result": (), "lookup": ()}: ()
+9994 transform:     checking result: (), {"lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9994 transform:     checking {"next": "offset"}: "offset"
-9994 transform:     checking {"next": ("address" "address" "shared" "list" "_elem")}: ("address" "address" "shared" "list" "_elem")
+9994 transform:     checking next: "offset": "offset"
+9994 transform:     checking next: ("address" "address" "shared" "list" "_elem"): ("address" "address" "shared" "list" "_elem")
 9993 transform: type of next is ("address" "address" "shared" "list" "_elem")
 9993 transform:   instruction: *next <- copy in
-9994 transform:     checking {"in": ()}: ()
+9994 transform:     checking in: (): ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9994 transform:     checking {"next": (), "lookup": ()}: ()
+9994 transform:     checking next: (), {"lookup": ()}: ()
 9994 transform:     deducing type to ("address" "address" "shared" "list" "_elem")
 9993 transform:   instruction: reply result
-9994 transform:     checking {"result": ()}: ()
+9994 transform:     checking result: (): ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9993 transform: adding mapping from _elem to "literal"
+9993 transform: adding mapping from _elem to 0
 9993 transform: replacing in recipe header ingredients
 9993 transform: replacing in ingredient x:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: number
 9993 transform: replacing in ingredient in:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in recipe header products
 9993 transform: replacing in ingredient in:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in instruction 'default-space:address:shared:array:location <- new location:type, number-of-locals:literal'
 9993 transform: replacing in ingredient location:type
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient number-of-locals:literal
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient default-space:address:shared:array:location
-9993 transform:   after: <address : <shared : <array : <number : <>>>>>
 9993 transform: replacing in instruction 'x:_elem <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient x:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: number
 9993 transform: replacing in instruction 'in:address:shared:list:_elem <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient in:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in instruction 'result:address:shared:list:_elem <- new {(list _elem): type}'
 9993 transform: replacing in ingredient {(list _elem): type}
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient result:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: _elem => "number"
 9993 transform: replacing in instruction 'val:address:_elem <- get-address *result, value:offset'
 9993 transform: replacing in ingredient *result
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient value:offset
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient val:address:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <number : <>>>
 9993 transform: replacing in instruction '*val <- copy x'
 9993 transform: replacing in ingredient x
 9993 transform: _elem => "number"
-9993 transform:   after: number
 9993 transform: replacing in ingredient *val
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <number : <>>>
 9993 transform: replacing in instruction 'next:address:address:shared:list:_elem <- get-address *result, next:offset'
 9993 transform: replacing in ingredient *result
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient next:offset
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient next:address:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <address : <shared : <list : <number : <>>>>>>
 9993 transform: replacing in instruction '*next <- copy in'
 9993 transform: replacing in ingredient in
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient *next
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <address : <shared : <list : <number : <>>>>>>
 9993 transform: replacing in instruction 'reply result'
 9993 transform: replacing in ingredient result
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9992 transform: transforming new specialization: push_6
 9991 transform: --- rewrite 'stash' instructions in recipe push_6
 9991 transform: --- checking reply instructions against header for push_6
 9991 transform: --- fill in reply ingredients from header for recipe push_6
 9991 transform: --- deduce types for recipe push_6
-9992 transform: default-space => <address : <shared : <array : <number : <>>>>>
-9992 transform: x => number
-9992 transform: in => <address : <shared : <list : <number : <>>>>>
-9992 transform: result => <address : <shared : <list : <number : <>>>>>
-9992 transform: val => <address : <number : <>>>
-9992 transform: next => <address : <address : <shared : <list : <number : <>>>>>>
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: x => "number"
+9992 transform: in => ("address" "shared" "list" "number")
+9992 transform: result => ("address" "shared" "list" "number")
+9992 transform: val => ("address" "number")
+9992 transform: next => ("address" "address" "shared" "list" "number")
 9991 transform: --- deduce types from header for push_6
-9993 transform: type of x is number
-9993 transform: type of in is <address : <shared : <list : <number : <>>>>>
-9993 transform: type of in is <address : <shared : <list : <number : <>>>>>
+9993 transform: type of x is "number"
+9993 transform: type of in is ("address" "shared" "list" "number")
+9993 transform: type of in is ("address" "shared" "list" "number")
 9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: {"default-space": ("address" "shared" "array" "location")}
+9993 transform:   product: default-space: ("address" "shared" "array" "location")
 9992 transform: instruction: x:_elem <- next-ingredient-without-typechecking 
-9993 transform:   product: {"x": "number"}
+9993 transform:   product: x: "number"
 9992 transform: instruction: in:address:shared:list:_elem <- next-ingredient-without-typechecking 
-9993 transform:   product: {"in": ("address" "shared" "list" "number")}
+9993 transform:   product: in: ("address" "shared" "list" "number")
 9992 transform: instruction: result:address:shared:list:_elem <- new {(list _elem): type}
-9993 transform:   product: {"result": ("address" "shared" "list" "number")}
+9993 transform:   product: result: ("address" "shared" "list" "number")
 9992 transform: instruction: val:address:_elem <- get-address *result, value:offset
-9993 transform:   product: {"val": ("address" "number")}
+9993 transform:   product: val: ("address" "number")
 9992 transform: instruction: *val <- copy x
-9993 transform:   product: {"val": ("address" "number"), "lookup": ()}
+9993 transform:   product: val: ("address" "number"), {"lookup": ()}
 9992 transform: instruction: next:address:address:shared:list:_elem <- get-address *result, next:offset
-9993 transform:   product: {"next": ("address" "address" "shared" "list" "number")}
+9993 transform:   product: next: ("address" "address" "shared" "list" "number")
 9992 transform: instruction: *next <- copy in
-9993 transform:   product: {"next": ("address" "address" "shared" "list" "number"), "lookup": ()}
+9993 transform:   product: next: ("address" "address" "shared" "list" "number"), {"lookup": ()}
 9992 transform: instruction: reply result
 9991 transform: --- check for invalid types in recipe push_6
 9991 transform: --- collect surrounding spaces for recipe push_6
@@ -287,106 +266,92 @@
 9991 transform: --- checking reply instructions against header for push_6
 9992 transform: new specialization: push_6
 9992 transform: instruction 
-9992 transform: checking variant (strict) 0: recipe to-text-line {"x": "_elem"} -> {"y": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 0: recipe to-text-line x: "_elem" -> y: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 1: recipe to-text-line_2 {"in": ("address" "shared" "list" "_elem")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 1: recipe to-text-line_2 in: ("address" "shared" "list" "_elem") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
 9992 transform: found variant to specialize: 239 to-text-line_2
-9993 transform: switching to-text-line to specialized recipe to-text-line_3 {"in": ("address" "shared" "list" "_elem")} -> {"result": ("address" "shared" "array" "character")}
+9993 transform: switching to-text-line to specialized recipe to-text-line_3 in: ("address" "shared" "list" "_elem") -> result: ("address" "shared" "array" "character")
 9993 transform: compute type names: to-text-line_3
-9994 transform:     checking {"in": ("address" "shared" "list" "_elem")}: ("address" "shared" "list" "_elem")
+9994 transform:     checking in: ("address" "shared" "list" "_elem"): ("address" "shared" "list" "_elem")
 9993 transform: type of in is ("address" "shared" "list" "_elem")
-9994 transform:     checking {"result": ("address" "shared" "array" "character")}: ("address" "shared" "array" "character")
+9994 transform:     checking result: ("address" "shared" "array" "character"): ("address" "shared" "array" "character")
 9993 transform: type of result is ("address" "shared" "array" "character")
 9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9994 transform:     checking {"location": "type"}: "type"
+9994 transform:     checking location: "type": "type"
 9993 transform: type of location is "type"
-9994 transform:     checking {"number-of-locals": "literal"}: "literal"
+9994 transform:     checking number-of-locals: "literal": "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking {"default-space": ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
+9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
 9993 transform: type of default-space is ("address" "shared" "array" "location")
 9993 transform:   instruction: in:address:shared:list:_elem <- next-ingredient-without-typechecking 
-9994 transform:     checking {"in": ("address" "shared" "list" "_elem")}: ("address" "shared" "list" "_elem")
+9994 transform:     checking in: ("address" "shared" "list" "_elem"): ("address" "shared" "list" "_elem")
 9993 transform:   instruction: buf:address:shared:buffer <- new-buffer 80
-9994 transform:     checking {"80": "literal"}: "literal"
+9994 transform:     checking 80: "literal": "literal"
 9993 transform: type of 80 is "literal"
-9994 transform:     checking {"buf": ("address" "shared" "buffer")}: ("address" "shared" "buffer")
+9994 transform:     checking buf: ("address" "shared" "buffer"): ("address" "shared" "buffer")
 9993 transform: type of buf is ("address" "shared" "buffer")
 9993 transform:   instruction: buf <- to-buffer in, buf, 6
-9994 transform:     checking {"in": ()}: ()
+9994 transform:     checking in: (): ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
-9994 transform:     checking {"6": "literal"}: "literal"
+9994 transform:     checking 6: "literal": "literal"
 9993 transform: type of 6 is "literal"
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
 9993 transform:   instruction: result <- buffer-to-array buf
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
-9994 transform:     checking {"result": ()}: ()
+9994 transform:     checking result: (): ()
 9994 transform:     deducing type to ("address" "shared" "array" "character")
-9993 transform: adding mapping from _elem to "number"
+9993 transform: adding mapping from _elem to 1
 9993 transform: replacing in recipe header ingredients
 9993 transform: replacing in ingredient in:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in recipe header products
 9993 transform: replacing in ingredient result:address:shared:array:character
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in instruction 'default-space:address:shared:array:location <- new location:type, number-of-locals:literal'
 9993 transform: replacing in ingredient location:type
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient number-of-locals:literal
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient default-space:address:shared:array:location
-9993 transform:   after: <address : <shared : <array : <number : <>>>>>
 9993 transform: replacing in instruction 'in:address:shared:list:_elem <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient in:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in instruction 'buf:address:shared:buffer <- new-buffer 80'
 9993 transform: replacing in ingredient 80
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient buf:address:shared:buffer
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'buf <- to-buffer in, buf, 6'
 9993 transform: replacing in ingredient in
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient 6
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'result <- buffer-to-array buf'
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient result
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9992 transform: transforming new specialization: to-text-line_3
 9991 transform: --- rewrite 'stash' instructions in recipe to-text-line_3
 9991 transform: --- checking reply instructions against header for to-text-line_3
 9991 transform: --- fill in reply ingredients from header for recipe to-text-line_3
 9991 transform: --- deduce types for recipe to-text-line_3
-9992 transform: default-space => <address : <shared : <array : <number : <>>>>>
-9992 transform: in => <address : <shared : <list : <number : <>>>>>
-9992 transform: buf => <address : <shared : <buffer : <>>>>
-9992 transform: result => <address : <shared : <array : <character : <>>>>>
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: in => ("address" "shared" "list" "number")
+9992 transform: buf => ("address" "shared" "buffer")
+9992 transform: result => ("address" "shared" "array" "character")
 9991 transform: --- deduce types from header for to-text-line_3
-9993 transform: type of in is <address : <shared : <list : <number : <>>>>>
-9993 transform: type of result is <address : <shared : <array : <character : <>>>>>
+9993 transform: type of in is ("address" "shared" "list" "number")
+9993 transform: type of result is ("address" "shared" "array" "character")
 9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: {"default-space": ("address" "shared" "array" "location")}
+9993 transform:   product: default-space: ("address" "shared" "array" "location")
 9992 transform: instruction: in:address:shared:list:_elem <- next-ingredient-without-typechecking 
-9993 transform:   product: {"in": ("address" "shared" "list" "number")}
+9993 transform:   product: in: ("address" "shared" "list" "number")
 9992 transform: instruction: buf:address:shared:buffer <- new-buffer 80
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: buf <- to-buffer in, buf, 6
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: result <- buffer-to-array buf
-9993 transform:   product: {"result": ("address" "shared" "array" "character")}
+9993 transform:   product: result: ("address" "shared" "array" "character")
 9992 transform: instruction: reply result:address:shared:array:character
 9991 transform: --- check for invalid types in recipe to-text-line_3
 9991 transform: --- collect surrounding spaces for recipe to-text-line_3
@@ -396,374 +361,320 @@
 9993 name: assign result 3
 9991 transform: --- resolve ambiguous calls for recipe to-text-line_3
 9992 transform: instruction buf:address:shared:buffer <- new-buffer 80
-9992 transform: checking variant (strict) 0: recipe new-buffer {"capacity": "number"} -> {"result": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 0: recipe new-buffer capacity: "number" -> result: ("address" "shared" "buffer")
 9992 transform: instruction buf <- to-buffer in, buf, 6
-9992 transform: checking variant (strict) 0: recipe to-buffer {"in": ("address" "shared" "list" "_elem")} {"buf": ("address" "shared" "buffer")} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 0: recipe to-buffer in: ("address" "shared" "list" "_elem") buf: ("address" "shared" "buffer") -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 0
 9992 transform: found variant to specialize: 240 to-buffer
-9993 transform: switching to-buffer to specialized recipe to-buffer_2 {"in": ("address" "shared" "list" "_elem")} {"buf": ("address" "shared" "buffer")} -> {"buf": ("address" "shared" "buffer")}
+9993 transform: switching to-buffer to specialized recipe to-buffer_2 in: ("address" "shared" "list" "_elem") buf: ("address" "shared" "buffer") -> buf: ("address" "shared" "buffer")
 9993 transform: compute type names: to-buffer_2
-9994 transform:     checking {"in": ("address" "shared" "list" "_elem")}: ("address" "shared" "list" "_elem")
+9994 transform:     checking in: ("address" "shared" "list" "_elem"): ("address" "shared" "list" "_elem")
 9993 transform: type of in is ("address" "shared" "list" "_elem")
-9994 transform:     checking {"buf": ("address" "shared" "buffer")}: ("address" "shared" "buffer")
+9994 transform:     checking buf: ("address" "shared" "buffer"): ("address" "shared" "buffer")
 9993 transform: type of buf is ("address" "shared" "buffer")
-9994 transform:     checking {"buf": ("address" "shared" "buffer")}: ("address" "shared" "buffer")
+9994 transform:     checking buf: ("address" "shared" "buffer"): ("address" "shared" "buffer")
 9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9994 transform:     checking {"location": "type"}: "type"
+9994 transform:     checking location: "type": "type"
 9993 transform: type of location is "type"
-9994 transform:     checking {"number-of-locals": "literal"}: "literal"
+9994 transform:     checking number-of-locals: "literal": "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking {"default-space": ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
+9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
 9993 transform: type of default-space is ("address" "shared" "array" "location")
 9993 transform:   instruction: in:address:shared:list:_elem <- next-ingredient-without-typechecking 
-9994 transform:     checking {"in": ("address" "shared" "list" "_elem")}: ("address" "shared" "list" "_elem")
+9994 transform:     checking in: ("address" "shared" "list" "_elem"): ("address" "shared" "list" "_elem")
 9993 transform:   instruction: buf:address:shared:buffer <- next-ingredient-without-typechecking 
-9994 transform:     checking {"buf": ("address" "shared" "buffer")}: ("address" "shared" "buffer")
+9994 transform:     checking buf: ("address" "shared" "buffer"): ("address" "shared" "buffer")
 9993 transform:   instruction: {
 9993 transform:   instruction: break-if in
-9994 transform:     checking {"in": ()}: ()
+9994 transform:     checking in: (): ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
 9993 transform:   instruction: buf <- append buf, 48/0
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
-9994 transform:     checking {"48": "literal", "0": ()}: "literal"
+9994 transform:     checking 48: "literal", {"0": ()}: "literal"
 9993 transform: type of 48 is "literal"
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
 9993 transform:   instruction: reply 
 9993 transform:   instruction: }
 9993 transform:   instruction: val:_elem <- get *in, value:offset
-9994 transform:     checking {"in": (), "lookup": ()}: ()
+9994 transform:     checking in: (), {"lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9994 transform:     checking {"value": "offset"}: "offset"
-9994 transform:     checking {"val": "_elem"}: "_elem"
+9994 transform:     checking value: "offset": "offset"
+9994 transform:     checking val: "_elem": "_elem"
 9993 transform: type of val is "_elem"
 9993 transform:   instruction: buf <- append buf, val
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
-9994 transform:     checking {"val": ()}: ()
+9994 transform:     checking val: (): ()
 9994 transform:     deducing type to "_elem"
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
 9993 transform:   instruction: next:address:shared:list:_elem <- rest in
-9994 transform:     checking {"in": ()}: ()
+9994 transform:     checking in: (): ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9994 transform:     checking {"next": ("address" "shared" "list" "_elem")}: ("address" "shared" "list" "_elem")
+9994 transform:     checking next: ("address" "shared" "list" "_elem"): ("address" "shared" "list" "_elem")
 9993 transform: type of next is ("address" "shared" "list" "_elem")
 9993 transform:   instruction: nextn:number <- copy next
-9994 transform:     checking {"next": ()}: ()
+9994 transform:     checking next: (): ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9994 transform:     checking {"nextn": "number"}: "number"
+9994 transform:     checking nextn: "number": "number"
 9993 transform: type of nextn is "number"
 9993 transform:   instruction: jump-if next, 1:offset
-9994 transform:     checking {"next": ()}: ()
+9994 transform:     checking next: (): ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9994 transform:     checking {"1": "offset"}: "offset"
+9994 transform:     checking 1: "offset": "offset"
 9993 transform:   instruction: reply 
 9993 transform:   instruction: space:character <- copy 32/space
-9994 transform:     checking {"32": "literal", "space": ()}: "literal"
+9994 transform:     checking 32: "literal", {"space": ()}: "literal"
 9993 transform: type of 32 is "literal"
-9994 transform:     checking {"space": "character"}: "character"
+9994 transform:     checking space: "character": "character"
 9993 transform: type of space is "character"
 9993 transform:   instruction: buf <- append buf, space:character
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
-9994 transform:     checking {"space": "character"}: "character"
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking space: "character": "character"
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
 9993 transform:   instruction: s:address:shared:array:character <- new [-> ]
-9994 transform:     checking {"-> ": "literal-string"}: "literal-string"
+9994 transform:     checking "-> ": "literal-string": "literal-string"
 9993 transform: type of ->  is "literal-string"
-9994 transform:     checking {"s": ("address" "shared" "array" "character")}: ("address" "shared" "array" "character")
+9994 transform:     checking s: ("address" "shared" "array" "character"): ("address" "shared" "array" "character")
 9993 transform: type of s is ("address" "shared" "array" "character")
 9993 transform:   instruction: n:number <- length *s
-9994 transform:     checking {"s": (), "lookup": ()}: ()
+9994 transform:     checking s: (), {"lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "array" "character")
-9994 transform:     checking {"n": "number"}: "number"
+9994 transform:     checking n: "number": "number"
 9993 transform: type of n is "number"
 9993 transform:   instruction: buf <- append buf, s
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
-9994 transform:     checking {"s": ()}: ()
+9994 transform:     checking s: (): ()
 9994 transform:     deducing type to ("address" "shared" "array" "character")
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
 9993 transform:   instruction: remaining:number, optional-ingredient-found?:boolean <- next-ingredient 
-9994 transform:     checking {"remaining": "number"}: "number"
+9994 transform:     checking remaining: "number": "number"
 9993 transform: type of remaining is "number"
-9994 transform:     checking {"optional-ingredient-found?": "boolean"}: "boolean"
+9994 transform:     checking optional-ingredient-found?: "boolean": "boolean"
 9993 transform: type of optional-ingredient-found? is "boolean"
 9993 transform:   instruction: {
 9993 transform:   instruction: break-if optional-ingredient-found?
-9994 transform:     checking {"optional-ingredient-found?": ()}: ()
+9994 transform:     checking optional-ingredient-found?: (): ()
 9994 transform:     deducing type to "boolean"
 9993 transform:   instruction: buf <- to-buffer next, buf
-9994 transform:     checking {"next": ()}: ()
+9994 transform:     checking next: (): ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
 9993 transform:   instruction: reply 
 9993 transform:   instruction: }
 9993 transform:   instruction: {
 9993 transform:   instruction: break-unless remaining
-9994 transform:     checking {"remaining": ()}: ()
+9994 transform:     checking remaining: (): ()
 9994 transform:     deducing type to "number"
 9993 transform:   instruction: remaining <- subtract remaining, 1
-9994 transform:     checking {"remaining": ()}: ()
+9994 transform:     checking remaining: (): ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {"1": "literal"}: "literal"
+9994 transform:     checking 1: "literal": "literal"
 9993 transform: type of 1 is "literal"
-9994 transform:     checking {"remaining": ()}: ()
+9994 transform:     checking remaining: (): ()
 9994 transform:     deducing type to "number"
 9993 transform:   instruction: buf <- to-buffer next, buf, remaining
-9994 transform:     checking {"next": ()}: ()
+9994 transform:     checking next: (): ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
-9994 transform:     checking {"remaining": ()}: ()
+9994 transform:     checking remaining: (): ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
 9993 transform:   instruction: reply 
 9993 transform:   instruction: }
 9993 transform:   instruction: s:address:shared:array:character <- new [...]
-9994 transform:     checking {"...": "literal-string"}: "literal-string"
+9994 transform:     checking "...": "literal-string": "literal-string"
 9993 transform: type of ... is "literal-string"
-9994 transform:     checking {"s": ("address" "shared" "array" "character")}: ("address" "shared" "array" "character")
+9994 transform:     checking s: ("address" "shared" "array" "character"): ("address" "shared" "array" "character")
 9993 transform:   instruction: append buf, s
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
-9994 transform:     checking {"s": ()}: ()
+9994 transform:     checking s: (): ()
 9994 transform:     deducing type to ("address" "shared" "array" "character")
-9993 transform: adding mapping from _elem to "number"
+9993 transform: adding mapping from _elem to 1
 9993 transform: replacing in recipe header ingredients
 9993 transform: replacing in ingredient in:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient buf:address:shared:buffer
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in recipe header products
 9993 transform: replacing in ingredient buf:address:shared:buffer
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'default-space:address:shared:array:location <- new location:type, number-of-locals:literal'
 9993 transform: replacing in ingredient location:type
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient number-of-locals:literal
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient default-space:address:shared:array:location
-9993 transform:   after: <address : <shared : <array : <number : <>>>>>
 9993 transform: replacing in instruction 'in:address:shared:list:_elem <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient in:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in instruction 'buf:address:shared:buffer <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient buf:address:shared:buffer
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction '{'
 9993 transform: replacing in instruction 'break-if in'
 9993 transform: replacing in ingredient in
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in instruction 'buf <- append buf, 48/0'
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient 48/0
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'reply '
 9993 transform: replacing in instruction '}'
 9993 transform: replacing in instruction 'val:_elem <- get *in, value:offset'
 9993 transform: replacing in ingredient *in
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient value:offset
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient val:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: number
 9993 transform: replacing in instruction 'buf <- append buf, val'
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient val
 9993 transform: _elem => "number"
-9993 transform:   after: number
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'next:address:shared:list:_elem <- rest in'
 9993 transform: replacing in ingredient in
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient next:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in instruction 'nextn:number <- copy next'
 9993 transform: replacing in ingredient next
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient nextn:number
-9993 transform:   after: number
 9993 transform: replacing in instruction 'jump-if next, 1:offset'
 9993 transform: replacing in ingredient next
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient 1:offset
-9993 transform:   after: ?0
 9993 transform: replacing in instruction 'reply '
 9993 transform: replacing in instruction 'space:character <- copy 32/space'
 9993 transform: replacing in ingredient 32/space
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient space:character
-9993 transform:   after: character
 9993 transform: replacing in instruction 'buf <- append buf, space:character'
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient space:character
-9993 transform:   after: character
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 's:address:shared:array:character <- new [-> ]'
 9993 transform: replacing in ingredient [-> ]
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient s:address:shared:array:character
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in instruction 'n:number <- length *s'
 9993 transform: replacing in ingredient *s
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in ingredient n:number
-9993 transform:   after: number
 9993 transform: replacing in instruction 'buf <- append buf, s'
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient s
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'remaining:number, optional-ingredient-found?:boolean <- next-ingredient '
 9993 transform: replacing in ingredient remaining:number
-9993 transform:   after: number
 9993 transform: replacing in ingredient optional-ingredient-found?:boolean
-9993 transform:   after: boolean
 9993 transform: replacing in instruction '{'
 9993 transform: replacing in instruction 'break-if optional-ingredient-found?'
 9993 transform: replacing in ingredient optional-ingredient-found?
-9993 transform:   after: boolean
 9993 transform: replacing in instruction 'buf <- to-buffer next, buf'
 9993 transform: replacing in ingredient next
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'reply '
 9993 transform: replacing in instruction '}'
 9993 transform: replacing in instruction '{'
 9993 transform: replacing in instruction 'break-unless remaining'
 9993 transform: replacing in ingredient remaining
-9993 transform:   after: number
 9993 transform: replacing in instruction 'remaining <- subtract remaining, 1'
 9993 transform: replacing in ingredient remaining
-9993 transform:   after: number
 9993 transform: replacing in ingredient 1
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient remaining
-9993 transform:   after: number
 9993 transform: replacing in instruction 'buf <- to-buffer next, buf, remaining'
 9993 transform: replacing in ingredient next
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient remaining
-9993 transform:   after: number
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'reply '
 9993 transform: replacing in instruction '}'
 9993 transform: replacing in instruction 's:address:shared:array:character <- new [...]'
 9993 transform: replacing in ingredient [...]
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient s:address:shared:array:character
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in instruction 'append buf, s'
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient s
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9992 transform: transforming new specialization: to-buffer_2
 9991 transform: --- rewrite 'stash' instructions in recipe to-buffer_2
 9991 transform: --- checking reply instructions against header for to-buffer_2
 9991 transform: --- fill in reply ingredients from header for recipe to-buffer_2
 9991 transform: --- deduce types for recipe to-buffer_2
-9992 transform: default-space => <address : <shared : <array : <number : <>>>>>
-9992 transform: in => <address : <shared : <list : <number : <>>>>>
-9992 transform: buf => <address : <shared : <buffer : <>>>>
-9992 transform: val => number
-9992 transform: next => <address : <shared : <list : <number : <>>>>>
-9992 transform: nextn => number
-9992 transform: space => character
-9992 transform: s => <address : <shared : <array : <character : <>>>>>
-9992 transform: n => number
-9992 transform: remaining => number
-9992 transform: optional-ingredient-found? => boolean
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: in => ("address" "shared" "list" "number")
+9992 transform: buf => ("address" "shared" "buffer")
+9992 transform: val => "number"
+9992 transform: next => ("address" "shared" "list" "number")
+9992 transform: nextn => "number"
+9992 transform: space => "character"
+9992 transform: s => ("address" "shared" "array" "character")
+9992 transform: n => "number"
+9992 transform: remaining => "number"
+9992 transform: optional-ingredient-found? => "boolean"
 9991 transform: --- deduce types from header for to-buffer_2
-9993 transform: type of in is <address : <shared : <list : <number : <>>>>>
-9993 transform: type of buf is <address : <shared : <buffer : <>>>>
-9993 transform: type of buf is <address : <shared : <buffer : <>>>>
+9993 transform: type of in is ("address" "shared" "list" "number")
+9993 transform: type of buf is ("address" "shared" "buffer")
+9993 transform: type of buf is ("address" "shared" "buffer")
 9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: {"default-space": ("address" "shared" "array" "location")}
+9993 transform:   product: default-space: ("address" "shared" "array" "location")
 9992 transform: instruction: in:address:shared:list:_elem <- next-ingredient-without-typechecking 
-9993 transform:   product: {"in": ("address" "shared" "list" "number")}
+9993 transform:   product: in: ("address" "shared" "list" "number")
 9992 transform: instruction: buf:address:shared:buffer <- next-ingredient-without-typechecking 
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: {
 9992 transform: instruction: break-if in
 9992 transform: instruction: buf <- append buf, 48/0
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: reply buf:address:shared:buffer
 9992 transform: instruction: }
 9992 transform: instruction: val:_elem <- get *in, value:offset
-9993 transform:   product: {"val": "number"}
+9993 transform:   product: val: "number"
 9992 transform: instruction: buf <- append buf, val
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: next:address:shared:list:_elem <- rest in
-9993 transform:   product: {"next": ("address" "shared" "list" "number")}
+9993 transform:   product: next: ("address" "shared" "list" "number")
 9992 transform: instruction: nextn:number <- copy next
-9993 transform:   product: {"nextn": "number"}
+9993 transform:   product: nextn: "number"
 9992 transform: instruction: jump-if next, 1:offset
 9992 transform: instruction: reply buf:address:shared:buffer
 9992 transform: instruction: space:character <- copy 32/space
-9993 transform:   product: {"space": "character"}
+9993 transform:   product: space: "character"
 9992 transform: instruction: buf <- append buf, space:character
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: s:address:shared:array:character <- new [-> ]
-9993 transform:   product: {"s": ("address" "shared" "array" "character")}
+9993 transform:   product: s: ("address" "shared" "array" "character")
 9992 transform: instruction: n:number <- length *s
-9993 transform:   product: {"n": "number"}
+9993 transform:   product: n: "number"
 9992 transform: instruction: buf <- append buf, s
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: remaining:number, optional-ingredient-found?:boolean <- next-ingredient 
-9993 transform:   product: {"remaining": "number"}
-9993 transform:   product: {"optional-ingredient-found?": "boolean"}
+9993 transform:   product: remaining: "number"
+9993 transform:   product: optional-ingredient-found?: "boolean"
 9992 transform: instruction: {
 9992 transform: instruction: break-if optional-ingredient-found?
 9992 transform: instruction: buf <- to-buffer next, buf
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: reply buf:address:shared:buffer
 9992 transform: instruction: }
 9992 transform: instruction: {
 9992 transform: instruction: break-unless remaining
 9992 transform: instruction: remaining <- subtract remaining, 1
-9993 transform:   product: {"remaining": "number"}
+9993 transform:   product: remaining: "number"
 9992 transform: instruction: buf <- to-buffer next, buf, remaining
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: reply buf:address:shared:buffer
 9992 transform: instruction: }
 9992 transform: instruction: s:address:shared:array:character <- new [...]
-9993 transform:   product: {"s": ("address" "shared" "array" "character")}
+9993 transform:   product: s: ("address" "shared" "array" "character")
 9992 transform: instruction: append buf, s
 9992 transform: instruction: reply buf:address:shared:buffer
 9991 transform: --- check for invalid types in recipe to-buffer_2
@@ -782,157 +693,130 @@
 9993 name: assign optional-ingredient-found? 10
 9991 transform: --- resolve ambiguous calls for recipe to-buffer_2
 9992 transform: instruction buf <- append buf, 48/0
-9992 transform: checking variant (strict) 0: recipe append {"buf": ("address" "shared" "buffer")} {"x": "_elem"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 0: recipe append buf: ("address" "shared" "buffer") x: "_elem" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 1: recipe append_2 {"in": ("address" "shared" "buffer")} {"c": "character"} -> {"in": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 1: recipe append_2 in: ("address" "shared" "buffer") c: "character" -> in: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 2: recipe append_3 {"a": ("address" "shared" "array" "character")} {"b": ("address" "shared" "array" "character")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 2: recipe append_3 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 3: recipe append_4 {"in": ("address" "shared" "duplex-list" "_elem")} {"new": ("address" "shared" "duplex-list" "_elem"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "_elem")}
+9992 transform: checking variant (strict) 3: recipe append_4 in: ("address" "shared" "duplex-list" "_elem") new: ("address" "shared" "duplex-list" "_elem"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "_elem")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 4: recipe append_5 {"in": ("address" "shared" "duplex-list" "character")} {"new": ("address" "shared" "duplex-list" "character"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "character")}
+9992 transform: checking variant (strict) 4: recipe append_5 in: ("address" "shared" "duplex-list" "character") new: ("address" "shared" "duplex-list" "character"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "character")
 9993 transform: strict match failed: ingredient 0
 9993 transform: concrete-type match failed: ingredient 0
 9992 transform: found variant to specialize: 207 append
-9993 transform: switching append to specialized recipe append_6 {"buf": ("address" "shared" "buffer")} {"x": "_elem"} -> {"buf": ("address" "shared" "buffer")}
+9993 transform: switching append to specialized recipe append_6 buf: ("address" "shared" "buffer") x: "_elem" -> buf: ("address" "shared" "buffer")
 9993 transform: compute type names: append_6
-9994 transform:     checking {"buf": ("address" "shared" "buffer")}: ("address" "shared" "buffer")
+9994 transform:     checking buf: ("address" "shared" "buffer"): ("address" "shared" "buffer")
 9993 transform: type of buf is ("address" "shared" "buffer")
-9994 transform:     checking {"x": "_elem"}: "_elem"
+9994 transform:     checking x: "_elem": "_elem"
 9993 transform: type of x is "_elem"
-9994 transform:     checking {"buf": ("address" "shared" "buffer")}: ("address" "shared" "buffer")
+9994 transform:     checking buf: ("address" "shared" "buffer"): ("address" "shared" "buffer")
 9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9994 transform:     checking {"location": "type"}: "type"
+9994 transform:     checking location: "type": "type"
 9993 transform: type of location is "type"
-9994 transform:     checking {"number-of-locals": "literal"}: "literal"
+9994 transform:     checking number-of-locals: "literal": "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking {"default-space": ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
+9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
 9993 transform: type of default-space is ("address" "shared" "array" "location")
 9993 transform:   instruction: buf:address:shared:buffer <- next-ingredient-without-typechecking 
-9994 transform:     checking {"buf": ("address" "shared" "buffer")}: ("address" "shared" "buffer")
+9994 transform:     checking buf: ("address" "shared" "buffer"): ("address" "shared" "buffer")
 9993 transform:   instruction: x:_elem <- next-ingredient-without-typechecking 
-9994 transform:     checking {"x": "_elem"}: "_elem"
+9994 transform:     checking x: "_elem": "_elem"
 9993 transform:   instruction: text:address:shared:array:character <- to-text x
-9994 transform:     checking {"x": ()}: ()
+9994 transform:     checking x: (): ()
 9994 transform:     deducing type to "_elem"
-9994 transform:     checking {"text": ("address" "shared" "array" "character")}: ("address" "shared" "array" "character")
+9994 transform:     checking text: ("address" "shared" "array" "character"): ("address" "shared" "array" "character")
 9993 transform: type of text is ("address" "shared" "array" "character")
 9993 transform:   instruction: len:number <- length *text
-9994 transform:     checking {"text": (), "lookup": ()}: ()
+9994 transform:     checking text: (), {"lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "array" "character")
-9994 transform:     checking {"len": "number"}: "number"
+9994 transform:     checking len: "number": "number"
 9993 transform: type of len is "number"
 9993 transform:   instruction: i:number <- copy 0
-9994 transform:     checking {"0": "literal"}: "literal"
+9994 transform:     checking 0: "literal": "literal"
 9993 transform: type of 0 is "literal"
-9994 transform:     checking {"i": "number"}: "number"
+9994 transform:     checking i: "number": "number"
 9993 transform: type of i is "number"
 9993 transform:   instruction: {
 9993 transform:   instruction: done?:boolean <- greater-or-equal i, len
-9994 transform:     checking {"i": ()}: ()
+9994 transform:     checking i: (): ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {"len": ()}: ()
+9994 transform:     checking len: (): ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {"done?": "boolean"}: "boolean"
+9994 transform:     checking done?: "boolean": "boolean"
 9993 transform: type of done? is "boolean"
 9993 transform:   instruction: break-if done?
-9994 transform:     checking {"done?": ()}: ()
+9994 transform:     checking done?: (): ()
 9994 transform:     deducing type to "boolean"
 9993 transform:   instruction: c:character <- index *text, i
-9994 transform:     checking {"text": (), "lookup": ()}: ()
+9994 transform:     checking text: (), {"lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "array" "character")
-9994 transform:     checking {"i": ()}: ()
+9994 transform:     checking i: (): ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {"c": "character"}: "character"
+9994 transform:     checking c: "character": "character"
 9993 transform: type of c is "character"
 9993 transform:   instruction: buf <- append buf, c
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
-9994 transform:     checking {"c": ()}: ()
+9994 transform:     checking c: (): ()
 9994 transform:     deducing type to "character"
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
 9993 transform:   instruction: i <- add i, 1
-9994 transform:     checking {"i": ()}: ()
+9994 transform:     checking i: (): ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {"1": "literal"}: "literal"
+9994 transform:     checking 1: "literal": "literal"
 9993 transform: type of 1 is "literal"
-9994 transform:     checking {"i": ()}: ()
+9994 transform:     checking i: (): ()
 9994 transform:     deducing type to "number"
 9993 transform:   instruction: loop 
 9993 transform:   instruction: }
-9993 transform: adding mapping from _elem to "literal"
+9993 transform: adding mapping from _elem to 0
 9993 transform: replacing in recipe header ingredients
 9993 transform: replacing in ingredient buf:address:shared:buffer
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient x:_elem
 9993 transform: _elem => "literal"
-9993 transform:   after: number
 9993 transform: replacing in recipe header products
 9993 transform: replacing in ingredient buf:address:shared:buffer
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'default-space:address:shared:array:location <- new location:type, number-of-locals:literal'
 9993 transform: replacing in ingredient location:type
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient number-of-locals:literal
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient default-space:address:shared:array:location
-9993 transform:   after: <address : <shared : <array : <number : <>>>>>
 9993 transform: replacing in instruction 'buf:address:shared:buffer <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient buf:address:shared:buffer
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'x:_elem <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient x:_elem
 9993 transform: _elem => "literal"
-9993 transform:   after: number
 9993 transform: replacing in instruction 'text:address:shared:array:character <- to-text x'
 9993 transform: replacing in ingredient x
 9993 transform: _elem => "literal"
-9993 transform:   after: number
 9993 transform: replacing in ingredient text:address:shared:array:character
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in instruction 'len:number <- length *text'
 9993 transform: replacing in ingredient *text
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in ingredient len:number
-9993 transform:   after: number
 9993 transform: replacing in instruction 'i:number <- copy 0'
 9993 transform: replacing in ingredient 0
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient i:number
-9993 transform:   after: number
 9993 transform: replacing in instruction '{'
 9993 transform: replacing in instruction 'done?:boolean <- greater-or-equal i, len'
 9993 transform: replacing in ingredient i
-9993 transform:   after: number
 9993 transform: replacing in ingredient len
-9993 transform:   after: number
 9993 transform: replacing in ingredient done?:boolean
-9993 transform:   after: boolean
 9993 transform: replacing in instruction 'break-if done?'
 9993 transform: replacing in ingredient done?
-9993 transform:   after: boolean
 9993 transform: replacing in instruction 'c:character <- index *text, i'
 9993 transform: replacing in ingredient *text
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in ingredient i
-9993 transform:   after: number
 9993 transform: replacing in ingredient c:character
-9993 transform:   after: character
 9993 transform: replacing in instruction 'buf <- append buf, c'
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient c
-9993 transform:   after: character
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'i <- add i, 1'
 9993 transform: replacing in ingredient i
-9993 transform:   after: number
 9993 transform: replacing in ingredient 1
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient i
-9993 transform:   after: number
 9993 transform: replacing in instruction 'loop '
 9993 transform: replacing in instruction '}'
 9992 transform: transforming new specialization: append_6
@@ -940,40 +824,40 @@
 9991 transform: --- checking reply instructions against header for append_6
 9991 transform: --- fill in reply ingredients from header for recipe append_6
 9991 transform: --- deduce types for recipe append_6
-9992 transform: default-space => <address : <shared : <array : <number : <>>>>>
-9992 transform: buf => <address : <shared : <buffer : <>>>>
-9992 transform: x => number
-9992 transform: text => <address : <shared : <array : <character : <>>>>>
-9992 transform: len => number
-9992 transform: i => number
-9992 transform: done? => boolean
-9992 transform: c => character
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: buf => ("address" "shared" "buffer")
+9992 transform: x => "number"
+9992 transform: text => ("address" "shared" "array" "character")
+9992 transform: len => "number"
+9992 transform: i => "number"
+9992 transform: done? => "boolean"
+9992 transform: c => "character"
 9991 transform: --- deduce types from header for append_6
-9993 transform: type of buf is <address : <shared : <buffer : <>>>>
-9993 transform: type of x is number
-9993 transform: type of buf is <address : <shared : <buffer : <>>>>
+9993 transform: type of buf is ("address" "shared" "buffer")
+9993 transform: type of x is "number"
+9993 transform: type of buf is ("address" "shared" "buffer")
 9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: {"default-space": ("address" "shared" "array" "location")}
+9993 transform:   product: default-space: ("address" "shared" "array" "location")
 9992 transform: instruction: buf:address:shared:buffer <- next-ingredient-without-typechecking 
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: x:_elem <- next-ingredient-without-typechecking 
-9993 transform:   product: {"x": "number"}
+9993 transform:   product: x: "number"
 9992 transform: instruction: text:address:shared:array:character <- to-text x
-9993 transform:   product: {"text": ("address" "shared" "array" "character")}
+9993 transform:   product: text: ("address" "shared" "array" "character")
 9992 transform: instruction: len:number <- length *text
-9993 transform:   product: {"len": "number"}
+9993 transform:   product: len: "number"
 9992 transform: instruction: i:number <- copy 0
-9993 transform:   product: {"i": "number"}
+9993 transform:   product: i: "number"
 9992 transform: instruction: {
 9992 transform: instruction: done?:boolean <- greater-or-equal i, len
-9993 transform:   product: {"done?": "boolean"}
+9993 transform:   product: done?: "boolean"
 9992 transform: instruction: break-if done?
 9992 transform: instruction: c:character <- index *text, i
-9993 transform:   product: {"c": "character"}
+9993 transform:   product: c: "character"
 9992 transform: instruction: buf <- append buf, c
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: i <- add i, 1
-9993 transform:   product: {"i": "number"}
+9993 transform:   product: i: "number"
 9992 transform: instruction: loop 
 9992 transform: instruction: }
 9992 transform: instruction: reply buf:address:shared:buffer
@@ -989,26 +873,26 @@
 9993 name: assign c 7
 9991 transform: --- resolve ambiguous calls for recipe append_6
 9992 transform: instruction text:address:shared:array:character <- to-text x
-9992 transform: checking variant (strict) 0: recipe to-text {"x": ("address" "shared" "array" "character")} -> {"y": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 0: recipe to-text x: ("address" "shared" "array" "character") -> y: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 1: recipe to-text_2 {"n": "number"} -> {"result": ("address" "shared" "array" "character")}
-9992 transform: checking variant (strict) 2: recipe to-text_3 {"x": "boolean"} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 1: recipe to-text_2 n: "number" -> result: ("address" "shared" "array" "character")
+9992 transform: checking variant (strict) 2: recipe to-text_3 x: "boolean" -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 3: recipe to-text_4 {"x": ("address" "_elem")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 3: recipe to-text_4 x: ("address" "_elem") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 4: recipe to-text_5 {"in": ("address" "shared" "list" "_elem")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 4: recipe to-text_5 in: ("address" "shared" "list" "_elem") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
 9992 transform: instruction buf <- append buf, c
-9992 transform: checking variant (strict) 0: recipe append {"buf": ("address" "shared" "buffer")} {"x": "_elem"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 0: recipe append buf: ("address" "shared" "buffer") x: "_elem" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 1: recipe append_2 {"in": ("address" "shared" "buffer")} {"c": "character"} -> {"in": ("address" "shared" "buffer")}
-9992 transform: checking variant (strict) 2: recipe append_3 {"a": ("address" "shared" "array" "character")} {"b": ("address" "shared" "array" "character")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 1: recipe append_2 in: ("address" "shared" "buffer") c: "character" -> in: ("address" "shared" "buffer")
+9992 transform: checking variant (strict) 2: recipe append_3 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 3: recipe append_4 {"in": ("address" "shared" "duplex-list" "_elem")} {"new": ("address" "shared" "duplex-list" "_elem"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "_elem")}
+9992 transform: checking variant (strict) 3: recipe append_4 in: ("address" "shared" "duplex-list" "_elem") new: ("address" "shared" "duplex-list" "_elem"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "_elem")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 4: recipe append_5 {"in": ("address" "shared" "duplex-list" "character")} {"new": ("address" "shared" "duplex-list" "character"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "character")}
+9992 transform: checking variant (strict) 4: recipe append_5 in: ("address" "shared" "duplex-list" "character") new: ("address" "shared" "duplex-list" "character"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 7: recipe append_6 {"buf": ("address" "shared" "buffer")} {"x": "number"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 7: recipe append_6 buf: ("address" "shared" "buffer") x: "number" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
 9991 transform: --- compute instruction operations for recipe append_6
 9991 transform: --- transform braces for recipe append_6
@@ -1039,90 +923,81 @@
 9991 transform: --- checking reply instructions against header for append_6
 9992 transform: new specialization: append_6
 9992 transform: instruction buf <- append buf, val
-9992 transform: checking variant (strict) 0: recipe append {"buf": ("address" "shared" "buffer")} {"x": "_elem"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 0: recipe append buf: ("address" "shared" "buffer") x: "_elem" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 1: recipe append_2 {"in": ("address" "shared" "buffer")} {"c": "character"} -> {"in": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 1: recipe append_2 in: ("address" "shared" "buffer") c: "character" -> in: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 2: recipe append_3 {"a": ("address" "shared" "array" "character")} {"b": ("address" "shared" "array" "character")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 2: recipe append_3 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 3: recipe append_4 {"in": ("address" "shared" "duplex-list" "_elem")} {"new": ("address" "shared" "duplex-list" "_elem"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "_elem")}
+9992 transform: checking variant (strict) 3: recipe append_4 in: ("address" "shared" "duplex-list" "_elem") new: ("address" "shared" "duplex-list" "_elem"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "_elem")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 4: recipe append_5 {"in": ("address" "shared" "duplex-list" "character")} {"new": ("address" "shared" "duplex-list" "character"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "character")}
+9992 transform: checking variant (strict) 4: recipe append_5 in: ("address" "shared" "duplex-list" "character") new: ("address" "shared" "duplex-list" "character"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 7: recipe append_6 {"buf": ("address" "shared" "buffer")} {"x": "number"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 7: recipe append_6 buf: ("address" "shared" "buffer") x: "number" -> buf: ("address" "shared" "buffer")
 9992 transform: instruction next:address:shared:list:_elem <- rest in
-9992 transform: checking variant (strict) 0: recipe rest {"in": ("address" "shared" "list" "_elem")} -> {"result": ("address" "shared" "list" "_elem"), "contained-in": "in"}
+9992 transform: checking variant (strict) 0: recipe rest in: ("address" "shared" "list" "_elem") -> result: ("address" "shared" "list" "_elem"), {"contained-in": "in"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 1: recipe rest_2 {"in": ("address" "shared" "list" "address" "shared" "operation")} -> {"result": ("address" "shared" "list" "address" "shared" "operation"), "contained-in": "in"}
+9992 transform: checking variant (strict) 1: recipe rest_2 in: ("address" "shared" "list" "address" "shared" "operation") -> result: ("address" "shared" "list" "address" "shared" "operation"), {"contained-in": "in"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: found variant to specialize: 237 rest
-9993 transform: switching rest to specialized recipe rest_3 {"in": ("address" "shared" "list" "_elem")} -> {"result": ("address" "shared" "list" "_elem"), "contained-in": "in"}
+9993 transform: switching rest to specialized recipe rest_3 in: ("address" "shared" "list" "_elem") -> result: ("address" "shared" "list" "_elem"), {"contained-in": "in"}
 9993 transform: compute type names: rest_3
-9994 transform:     checking {"in": ("address" "shared" "list" "_elem")}: ("address" "shared" "list" "_elem")
+9994 transform:     checking in: ("address" "shared" "list" "_elem"): ("address" "shared" "list" "_elem")
 9993 transform: type of in is ("address" "shared" "list" "_elem")
-9994 transform:     checking {"result": ("address" "shared" "list" "_elem"), "contained-in": "in"}: ("address" "shared" "list" "_elem")
+9994 transform:     checking result: ("address" "shared" "list" "_elem"), {"contained-in": "in"}: ("address" "shared" "list" "_elem")
 9993 transform: type of result is ("address" "shared" "list" "_elem")
 9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9994 transform:     checking {"location": "type"}: "type"
+9994 transform:     checking location: "type": "type"
 9993 transform: type of location is "type"
-9994 transform:     checking {"number-of-locals": "literal"}: "literal"
+9994 transform:     checking number-of-locals: "literal": "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking {"default-space": ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
+9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
 9993 transform: type of default-space is ("address" "shared" "array" "location")
 9993 transform:   instruction: in:address:shared:list:_elem <- next-ingredient-without-typechecking 
-9994 transform:     checking {"in": ("address" "shared" "list" "_elem")}: ("address" "shared" "list" "_elem")
+9994 transform:     checking in: ("address" "shared" "list" "_elem"): ("address" "shared" "list" "_elem")
 9993 transform:   instruction: result <- get *in, next:offset
-9994 transform:     checking {"in": (), "lookup": ()}: ()
+9994 transform:     checking in: (), {"lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9994 transform:     checking {"next": "offset"}: "offset"
-9994 transform:     checking {"result": ()}: ()
+9994 transform:     checking next: "offset": "offset"
+9994 transform:     checking result: (): ()
 9994 transform:     deducing type to ("address" "shared" "list" "_elem")
-9993 transform: adding mapping from _elem to "number"
+9993 transform: adding mapping from _elem to 1
 9993 transform: replacing in recipe header ingredients
 9993 transform: replacing in ingredient in:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in recipe header products
 9993 transform: replacing in ingredient result:address:shared:list:_elem/contained-in:in
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in instruction 'default-space:address:shared:array:location <- new location:type, number-of-locals:literal'
 9993 transform: replacing in ingredient location:type
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient number-of-locals:literal
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient default-space:address:shared:array:location
-9993 transform:   after: <address : <shared : <array : <number : <>>>>>
 9993 transform: replacing in instruction 'in:address:shared:list:_elem <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient in:address:shared:list:_elem
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in instruction 'result <- get *in, next:offset'
 9993 transform: replacing in ingredient *in
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9993 transform: replacing in ingredient next:offset
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient result
 9993 transform: _elem => "number"
-9993 transform:   after: <address : <shared : <list : <number : <>>>>>
 9992 transform: transforming new specialization: rest_3
 9991 transform: --- rewrite 'stash' instructions in recipe rest_3
 9991 transform: --- checking reply instructions against header for rest_3
 9991 transform: --- fill in reply ingredients from header for recipe rest_3
 9991 transform: --- deduce types for recipe rest_3
-9992 transform: default-space => <address : <shared : <array : <number : <>>>>>
-9992 transform: in => <address : <shared : <list : <number : <>>>>>
-9992 transform: result => <address : <shared : <list : <number : <>>>>>
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: in => ("address" "shared" "list" "number")
+9992 transform: result => ("address" "shared" "list" "number")
 9991 transform: --- deduce types from header for rest_3
-9993 transform: type of in is <address : <shared : <list : <number : <>>>>>
-9993 transform: type of result is <address : <shared : <list : <number : <>>>>>
+9993 transform: type of in is ("address" "shared" "list" "number")
+9993 transform: type of result is ("address" "shared" "list" "number")
 9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: {"default-space": ("address" "shared" "array" "location")}
+9993 transform:   product: default-space: ("address" "shared" "array" "location")
 9992 transform: instruction: in:address:shared:list:_elem <- next-ingredient-without-typechecking 
-9993 transform:   product: {"in": ("address" "shared" "list" "number")}
+9993 transform:   product: in: ("address" "shared" "list" "number")
 9992 transform: instruction: result <- get *in, next:offset
-9993 transform:   product: {"result": ("address" "shared" "list" "number")}
+9993 transform:   product: result: ("address" "shared" "list" "number")
 9992 transform: instruction: reply result:address:shared:list:_elem/contained-in:in
 9991 transform: --- check for invalid types in recipe rest_3
 9991 transform: --- collect surrounding spaces for recipe rest_3
@@ -1149,171 +1024,144 @@
 9991 transform: --- checking reply instructions against header for rest_3
 9992 transform: new specialization: rest_3
 9992 transform: instruction buf <- append buf, space:character
-9992 transform: checking variant (strict) 0: recipe append {"buf": ("address" "shared" "buffer")} {"x": "_elem"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 0: recipe append buf: ("address" "shared" "buffer") x: "_elem" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 1: recipe append_2 {"in": ("address" "shared" "buffer")} {"c": "character"} -> {"in": ("address" "shared" "buffer")}
-9992 transform: checking variant (strict) 2: recipe append_3 {"a": ("address" "shared" "array" "character")} {"b": ("address" "shared" "array" "character")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 1: recipe append_2 in: ("address" "shared" "buffer") c: "character" -> in: ("address" "shared" "buffer")
+9992 transform: checking variant (strict) 2: recipe append_3 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 3: recipe append_4 {"in": ("address" "shared" "duplex-list" "_elem")} {"new": ("address" "shared" "duplex-list" "_elem"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "_elem")}
+9992 transform: checking variant (strict) 3: recipe append_4 in: ("address" "shared" "duplex-list" "_elem") new: ("address" "shared" "duplex-list" "_elem"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "_elem")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 4: recipe append_5 {"in": ("address" "shared" "duplex-list" "character")} {"new": ("address" "shared" "duplex-list" "character"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "character")}
+9992 transform: checking variant (strict) 4: recipe append_5 in: ("address" "shared" "duplex-list" "character") new: ("address" "shared" "duplex-list" "character"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 7: recipe append_6 {"buf": ("address" "shared" "buffer")} {"x": "number"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 7: recipe append_6 buf: ("address" "shared" "buffer") x: "number" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
 9992 transform: instruction buf <- append buf, s
-9992 transform: checking variant (strict) 0: recipe append {"buf": ("address" "shared" "buffer")} {"x": "_elem"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 0: recipe append buf: ("address" "shared" "buffer") x: "_elem" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 1: recipe append_2 {"in": ("address" "shared" "buffer")} {"c": "character"} -> {"in": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 1: recipe append_2 in: ("address" "shared" "buffer") c: "character" -> in: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 2: recipe append_3 {"a": ("address" "shared" "array" "character")} {"b": ("address" "shared" "array" "character")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 2: recipe append_3 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 3: recipe append_4 {"in": ("address" "shared" "duplex-list" "_elem")} {"new": ("address" "shared" "duplex-list" "_elem"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "_elem")}
+9992 transform: checking variant (strict) 3: recipe append_4 in: ("address" "shared" "duplex-list" "_elem") new: ("address" "shared" "duplex-list" "_elem"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "_elem")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 4: recipe append_5 {"in": ("address" "shared" "duplex-list" "character")} {"new": ("address" "shared" "duplex-list" "character"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "character")}
+9992 transform: checking variant (strict) 4: recipe append_5 in: ("address" "shared" "duplex-list" "character") new: ("address" "shared" "duplex-list" "character"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 7: recipe append_6 {"buf": ("address" "shared" "buffer")} {"x": "number"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 7: recipe append_6 buf: ("address" "shared" "buffer") x: "number" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
 9993 transform: concrete-type match failed: ingredient 0
 9992 transform: found variant to specialize: 207 append
-9993 transform: switching append to specialized recipe append_7 {"buf": ("address" "shared" "buffer")} {"x": "_elem"} -> {"buf": ("address" "shared" "buffer")}
+9993 transform: switching append to specialized recipe append_7 buf: ("address" "shared" "buffer") x: "_elem" -> buf: ("address" "shared" "buffer")
 9993 transform: compute type names: append_7
-9994 transform:     checking {"buf": ("address" "shared" "buffer")}: ("address" "shared" "buffer")
+9994 transform:     checking buf: ("address" "shared" "buffer"): ("address" "shared" "buffer")
 9993 transform: type of buf is ("address" "shared" "buffer")
-9994 transform:     checking {"x": "_elem"}: "_elem"
+9994 transform:     checking x: "_elem": "_elem"
 9993 transform: type of x is "_elem"
-9994 transform:     checking {"buf": ("address" "shared" "buffer")}: ("address" "shared" "buffer")
+9994 transform:     checking buf: ("address" "shared" "buffer"): ("address" "shared" "buffer")
 9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9994 transform:     checking {"location": "type"}: "type"
+9994 transform:     checking location: "type": "type"
 9993 transform: type of location is "type"
-9994 transform:     checking {"number-of-locals": "literal"}: "literal"
+9994 transform:     checking number-of-locals: "literal": "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking {"default-space": ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
+9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
 9993 transform: type of default-space is ("address" "shared" "array" "location")
 9993 transform:   instruction: buf:address:shared:buffer <- next-ingredient-without-typechecking 
-9994 transform:     checking {"buf": ("address" "shared" "buffer")}: ("address" "shared" "buffer")
+9994 transform:     checking buf: ("address" "shared" "buffer"): ("address" "shared" "buffer")
 9993 transform:   instruction: x:_elem <- next-ingredient-without-typechecking 
-9994 transform:     checking {"x": "_elem"}: "_elem"
+9994 transform:     checking x: "_elem": "_elem"
 9993 transform:   instruction: text:address:shared:array:character <- to-text x
-9994 transform:     checking {"x": ()}: ()
+9994 transform:     checking x: (): ()
 9994 transform:     deducing type to "_elem"
-9994 transform:     checking {"text": ("address" "shared" "array" "character")}: ("address" "shared" "array" "character")
+9994 transform:     checking text: ("address" "shared" "array" "character"): ("address" "shared" "array" "character")
 9993 transform: type of text is ("address" "shared" "array" "character")
 9993 transform:   instruction: len:number <- length *text
-9994 transform:     checking {"text": (), "lookup": ()}: ()
+9994 transform:     checking text: (), {"lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "array" "character")
-9994 transform:     checking {"len": "number"}: "number"
+9994 transform:     checking len: "number": "number"
 9993 transform: type of len is "number"
 9993 transform:   instruction: i:number <- copy 0
-9994 transform:     checking {"0": "literal"}: "literal"
+9994 transform:     checking 0: "literal": "literal"
 9993 transform: type of 0 is "literal"
-9994 transform:     checking {"i": "number"}: "number"
+9994 transform:     checking i: "number": "number"
 9993 transform: type of i is "number"
 9993 transform:   instruction: {
 9993 transform:   instruction: done?:boolean <- greater-or-equal i, len
-9994 transform:     checking {"i": ()}: ()
+9994 transform:     checking i: (): ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {"len": ()}: ()
+9994 transform:     checking len: (): ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {"done?": "boolean"}: "boolean"
+9994 transform:     checking done?: "boolean": "boolean"
 9993 transform: type of done? is "boolean"
 9993 transform:   instruction: break-if done?
-9994 transform:     checking {"done?": ()}: ()
+9994 transform:     checking done?: (): ()
 9994 transform:     deducing type to "boolean"
 9993 transform:   instruction: c:character <- index *text, i
-9994 transform:     checking {"text": (), "lookup": ()}: ()
+9994 transform:     checking text: (), {"lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "array" "character")
-9994 transform:     checking {"i": ()}: ()
+9994 transform:     checking i: (): ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {"c": "character"}: "character"
+9994 transform:     checking c: "character": "character"
 9993 transform: type of c is "character"
 9993 transform:   instruction: buf <- append buf, c
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
-9994 transform:     checking {"c": ()}: ()
+9994 transform:     checking c: (): ()
 9994 transform:     deducing type to "character"
-9994 transform:     checking {"buf": ()}: ()
+9994 transform:     checking buf: (): ()
 9994 transform:     deducing type to ("address" "shared" "buffer")
 9993 transform:   instruction: i <- add i, 1
-9994 transform:     checking {"i": ()}: ()
+9994 transform:     checking i: (): ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {"1": "literal"}: "literal"
+9994 transform:     checking 1: "literal": "literal"
 9993 transform: type of 1 is "literal"
-9994 transform:     checking {"i": ()}: ()
+9994 transform:     checking i: (): ()
 9994 transform:     deducing type to "number"
 9993 transform:   instruction: loop 
 9993 transform:   instruction: }
-9993 transform: adding mapping from _elem to ("address" "shared" "array" "character")
+9993 transform: adding mapping from _elem to (address shared array character)
 9993 transform: replacing in recipe header ingredients
 9993 transform: replacing in ingredient buf:address:shared:buffer
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient x:_elem
 9993 transform: _elem => ("address" "shared" "array" "character")
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in recipe header products
 9993 transform: replacing in ingredient buf:address:shared:buffer
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'default-space:address:shared:array:location <- new location:type, number-of-locals:literal'
 9993 transform: replacing in ingredient location:type
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient number-of-locals:literal
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient default-space:address:shared:array:location
-9993 transform:   after: <address : <shared : <array : <number : <>>>>>
 9993 transform: replacing in instruction 'buf:address:shared:buffer <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient buf:address:shared:buffer
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'x:_elem <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient x:_elem
 9993 transform: _elem => ("address" "shared" "array" "character")
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in instruction 'text:address:shared:array:character <- to-text x'
 9993 transform: replacing in ingredient x
 9993 transform: _elem => ("address" "shared" "array" "character")
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in ingredient text:address:shared:array:character
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in instruction 'len:number <- length *text'
 9993 transform: replacing in ingredient *text
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in ingredient len:number
-9993 transform:   after: number
 9993 transform: replacing in instruction 'i:number <- copy 0'
 9993 transform: replacing in ingredient 0
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient i:number
-9993 transform:   after: number
 9993 transform: replacing in instruction '{'
 9993 transform: replacing in instruction 'done?:boolean <- greater-or-equal i, len'
 9993 transform: replacing in ingredient i
-9993 transform:   after: number
 9993 transform: replacing in ingredient len
-9993 transform:   after: number
 9993 transform: replacing in ingredient done?:boolean
-9993 transform:   after: boolean
 9993 transform: replacing in instruction 'break-if done?'
 9993 transform: replacing in ingredient done?
-9993 transform:   after: boolean
 9993 transform: replacing in instruction 'c:character <- index *text, i'
 9993 transform: replacing in ingredient *text
-9993 transform:   after: <address : <shared : <array : <character : <>>>>>
 9993 transform: replacing in ingredient i
-9993 transform:   after: number
 9993 transform: replacing in ingredient c:character
-9993 transform:   after: character
 9993 transform: replacing in instruction 'buf <- append buf, c'
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in ingredient c
-9993 transform:   after: character
 9993 transform: replacing in ingredient buf
-9993 transform:   after: <address : <shared : <buffer : <>>>>
 9993 transform: replacing in instruction 'i <- add i, 1'
 9993 transform: replacing in ingredient i
-9993 transform:   after: number
 9993 transform: replacing in ingredient 1
-9993 transform:   after: ?0
 9993 transform: replacing in ingredient i
-9993 transform:   after: number
 9993 transform: replacing in instruction 'loop '
 9993 transform: replacing in instruction '}'
 9992 transform: transforming new specialization: append_7
@@ -1321,40 +1169,40 @@
 9991 transform: --- checking reply instructions against header for append_7
 9991 transform: --- fill in reply ingredients from header for recipe append_7
 9991 transform: --- deduce types for recipe append_7
-9992 transform: default-space => <address : <shared : <array : <number : <>>>>>
-9992 transform: buf => <address : <shared : <buffer : <>>>>
-9992 transform: x => <address : <shared : <array : <character : <>>>>>
-9992 transform: text => <address : <shared : <array : <character : <>>>>>
-9992 transform: len => number
-9992 transform: i => number
-9992 transform: done? => boolean
-9992 transform: c => character
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: buf => ("address" "shared" "buffer")
+9992 transform: x => ("address" "shared" "array" "character")
+9992 transform: text => ("address" "shared" "array" "character")
+9992 transform: len => "number"
+9992 transform: i => "number"
+9992 transform: done? => "boolean"
+9992 transform: c => "character"
 9991 transform: --- deduce types from header for append_7
-9993 transform: type of buf is <address : <shared : <buffer : <>>>>
-9993 transform: type of x is <address : <shared : <array : <character : <>>>>>
-9993 transform: type of buf is <address : <shared : <buffer : <>>>>
+9993 transform: type of buf is ("address" "shared" "buffer")
+9993 transform: type of x is ("address" "shared" "array" "character")
+9993 transform: type of buf is ("address" "shared" "buffer")
 9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: {"default-space": ("address" "shared" "array" "location")}
+9993 transform:   product: default-space: ("address" "shared" "array" "location")
 9992 transform: instruction: buf:address:shared:buffer <- next-ingredient-without-typechecking 
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: x:_elem <- next-ingredient-without-typechecking 
-9993 transform:   product: {"x": ("address" "shared" "array" "character")}
+9993 transform:   product: x: ("address" "shared" "array" "character")
 9992 transform: instruction: text:address:shared:array:character <- to-text x
-9993 transform:   product: {"text": ("address" "shared" "array" "character")}
+9993 transform:   product: text: ("address" "shared" "array" "character")
 9992 transform: instruction: len:number <- length *text
-9993 transform:   product: {"len": "number"}
+9993 transform:   product: len: "number"
 9992 transform: instruction: i:number <- copy 0
-9993 transform:   product: {"i": "number"}
+9993 transform:   product: i: "number"
 9992 transform: instruction: {
 9992 transform: instruction: done?:boolean <- greater-or-equal i, len
-9993 transform:   product: {"done?": "boolean"}
+9993 transform:   product: done?: "boolean"
 9992 transform: instruction: break-if done?
 9992 transform: instruction: c:character <- index *text, i
-9993 transform:   product: {"c": "character"}
+9993 transform:   product: c: "character"
 9992 transform: instruction: buf <- append buf, c
-9993 transform:   product: {"buf": ("address" "shared" "buffer")}
+9993 transform:   product: buf: ("address" "shared" "buffer")
 9992 transform: instruction: i <- add i, 1
-9993 transform:   product: {"i": "number"}
+9993 transform:   product: i: "number"
 9992 transform: instruction: loop 
 9992 transform: instruction: }
 9992 transform: instruction: reply buf:address:shared:buffer
@@ -1370,28 +1218,28 @@
 9993 name: assign c 7
 9991 transform: --- resolve ambiguous calls for recipe append_7
 9992 transform: instruction text:address:shared:array:character <- to-text x
-9992 transform: checking variant (strict) 0: recipe to-text {"x": ("address" "shared" "array" "character")} -> {"y": ("address" "shared" "array" "character")}
-9992 transform: checking variant (strict) 1: recipe to-text_2 {"n": "number"} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 0: recipe to-text x: ("address" "shared" "array" "character") -> y: ("address" "shared" "array" "character")
+9992 transform: checking variant (strict) 1: recipe to-text_2 n: "number" -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 2: recipe to-text_3 {"x": "boolean"} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 2: recipe to-text_3 x: "boolean" -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 3: recipe to-text_4 {"x": ("address" "_elem")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 3: recipe to-text_4 x: ("address" "_elem") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 4: recipe to-text_5 {"in": ("address" "shared" "list" "_elem")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 4: recipe to-text_5 in: ("address" "shared" "list" "_elem") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
 9992 transform: instruction buf <- append buf, c
-9992 transform: checking variant (strict) 0: recipe append {"buf": ("address" "shared" "buffer")} {"x": "_elem"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 0: recipe append buf: ("address" "shared" "buffer") x: "_elem" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 1: recipe append_2 {"in": ("address" "shared" "buffer")} {"c": "character"} -> {"in": ("address" "shared" "buffer")}
-9992 transform: checking variant (strict) 2: recipe append_3 {"a": ("address" "shared" "array" "character")} {"b": ("address" "shared" "array" "character")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 1: recipe append_2 in: ("address" "shared" "buffer") c: "character" -> in: ("address" "shared" "buffer")
+9992 transform: checking variant (strict) 2: recipe append_3 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 3: recipe append_4 {"in": ("address" "shared" "duplex-list" "_elem")} {"new": ("address" "shared" "duplex-list" "_elem"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "_elem")}
+9992 transform: checking variant (strict) 3: recipe append_4 in: ("address" "shared" "duplex-list" "_elem") new: ("address" "shared" "duplex-list" "_elem"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "_elem")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 4: recipe append_5 {"in": ("address" "shared" "duplex-list" "character")} {"new": ("address" "shared" "duplex-list" "character"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "character")}
+9992 transform: checking variant (strict) 4: recipe append_5 in: ("address" "shared" "duplex-list" "character") new: ("address" "shared" "duplex-list" "character"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 7: recipe append_6 {"buf": ("address" "shared" "buffer")} {"x": "number"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 7: recipe append_6 buf: ("address" "shared" "buffer") x: "number" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 8: recipe append_7 {"buf": ("address" "shared" "buffer")} {"x": ("address" "shared" "array" "character")} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 8: recipe append_7 buf: ("address" "shared" "buffer") x: ("address" "shared" "array" "character") -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
 9991 transform: --- compute instruction operations for recipe append_7
 9991 transform: --- transform braces for recipe append_7
@@ -1422,27 +1270,27 @@
 9991 transform: --- checking reply instructions against header for append_7
 9992 transform: new specialization: append_7
 9992 transform: instruction buf <- to-buffer next, buf
-9992 transform: checking variant (strict) 0: recipe to-buffer {"in": ("address" "shared" "list" "_elem")} {"buf": ("address" "shared" "buffer")} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 0: recipe to-buffer in: ("address" "shared" "list" "_elem") buf: ("address" "shared" "buffer") -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 2: recipe to-buffer_2 {"in": ("address" "shared" "list" "number")} {"buf": ("address" "shared" "buffer")} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 2: recipe to-buffer_2 in: ("address" "shared" "list" "number") buf: ("address" "shared" "buffer") -> buf: ("address" "shared" "buffer")
 9992 transform: instruction buf <- to-buffer next, buf, remaining
-9992 transform: checking variant (strict) 0: recipe to-buffer {"in": ("address" "shared" "list" "_elem")} {"buf": ("address" "shared" "buffer")} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 0: recipe to-buffer in: ("address" "shared" "list" "_elem") buf: ("address" "shared" "buffer") -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 2: recipe to-buffer_2 {"in": ("address" "shared" "list" "number")} {"buf": ("address" "shared" "buffer")} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 2: recipe to-buffer_2 in: ("address" "shared" "list" "number") buf: ("address" "shared" "buffer") -> buf: ("address" "shared" "buffer")
 9992 transform: instruction append buf, s
-9992 transform: checking variant (strict) 0: recipe append {"buf": ("address" "shared" "buffer")} {"x": "_elem"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 0: recipe append buf: ("address" "shared" "buffer") x: "_elem" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 1: recipe append_2 {"in": ("address" "shared" "buffer")} {"c": "character"} -> {"in": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 1: recipe append_2 in: ("address" "shared" "buffer") c: "character" -> in: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 2: recipe append_3 {"a": ("address" "shared" "array" "character")} {"b": ("address" "shared" "array" "character")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 2: recipe append_3 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: ("address" "shared" "array" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 3: recipe append_4 {"in": ("address" "shared" "duplex-list" "_elem")} {"new": ("address" "shared" "duplex-list" "_elem"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "_elem")}
+9992 transform: checking variant (strict) 3: recipe append_4 in: ("address" "shared" "duplex-list" "_elem") new: ("address" "shared" "duplex-list" "_elem"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "_elem")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 4: recipe append_5 {"in": ("address" "shared" "duplex-list" "character")} {"new": ("address" "shared" "duplex-list" "character"), "contained-in": "in"} -> {"in": ("address" "shared" "duplex-list" "character")}
+9992 transform: checking variant (strict) 4: recipe append_5 in: ("address" "shared" "duplex-list" "character") new: ("address" "shared" "duplex-list" "character"), {"contained-in": "in"} -> in: ("address" "shared" "duplex-list" "character")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 7: recipe append_6 {"buf": ("address" "shared" "buffer")} {"x": "number"} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 7: recipe append_6 buf: ("address" "shared" "buffer") x: "number" -> buf: ("address" "shared" "buffer")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 8: recipe append_7 {"buf": ("address" "shared" "buffer")} {"x": ("address" "shared" "array" "character")} -> {"buf": ("address" "shared" "buffer")}
+9992 transform: checking variant (strict) 8: recipe append_7 buf: ("address" "shared" "buffer") x: ("address" "shared" "array" "character") -> buf: ("address" "shared" "buffer")
 9991 transform: --- compute instruction operations for recipe to-buffer_2
 9991 transform: --- transform braces for recipe to-buffer_2
 9993 transform: to-buffer_2: push (open, 3)
@@ -1491,7 +1339,7 @@
 9991 transform: --- checking reply instructions against header for to-buffer_2
 9992 transform: new specialization: to-buffer_2
 9992 transform: instruction result <- buffer-to-array buf
-9992 transform: checking variant (strict) 0: recipe buffer-to-array {"in": ("address" "shared" "buffer")} -> {"result": ("address" "shared" "array" "character")}
+9992 transform: checking variant (strict) 0: recipe buffer-to-array in: ("address" "shared" "buffer") -> result: ("address" "shared" "array" "character")
 9991 transform: --- compute instruction operations for recipe to-text-line_3
 9991 transform: --- transform braces for recipe to-text-line_3
 9992 transform: local-scope ...
@@ -1682,7 +1530,7 @@
 9999 mem: location 1112 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1009 is 4
 9999 mem: storing 4 in location 1114
  105 run: buf <- append_6 buf, val
@@ -1833,7 +1681,7 @@
 9999 mem: location 1003 is 1151
 9999 mem: skipping refcount at 1151
 9998 run: address to copy is 1152
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1152 is 0
 9999 mem: storing 0 in location 1004
  109 run: s:address:shared:array:character <- get *in, data:offset
@@ -1844,7 +1692,7 @@
 9999 mem: location 1003 is 1151
 9999 mem: skipping refcount at 1151
 9998 run: address to copy is 1153
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1153 is 1154
 9999 mem: storing 1154 in location 1005
 9999 mem: incrementing refcount of 1154: 1 -> 2
@@ -1873,7 +1721,7 @@
 9999 mem: location 1189 is 1151
 9999 mem: skipping refcount at 1151
 9998 run: address to copy is 1153
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1153 is 1154
 9999 mem: storing 1154 in location 1195
 9999 mem: incrementing refcount of 1154: 2 -> 3
@@ -1919,7 +1767,7 @@
 9999 mem: location 1139 is 1151
 9999 mem: skipping refcount at 1151
 9998 run: address to copy is 1152
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1152 is 1
 9999 mem: storing 1 in location 1145
  107 run: buf:address:shared:array:character <- get *tmp, data:offset
@@ -1930,7 +1778,7 @@
 9999 mem: location 1139 is 1151
 9999 mem: skipping refcount at 1151
 9998 run: address to copy is 1153
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1153 is 1154
 9999 mem: storing 1154 in location 1146
 9999 mem: incrementing refcount of 1154: 3 -> 4
@@ -2060,7 +1908,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 0
 9999 mem: storing 0 in location 1004
  108 run: s:address:shared:array:character <- get *in, data:offset
@@ -2071,7 +1919,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 1 -> 2
@@ -2100,7 +1948,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 2 -> 3
@@ -2167,7 +2015,7 @@
 9999 mem: skipping refcount at 1008
 9999 type: type deduced to be number$
 9998 run: address to copy is 1010
-9998 run: its type is <address : <shared : <list : <number : <>>>>>
+9998 run: its type is ("address" "shared" "list" "number")
 9999 mem: location 1010 is 1008
 9999 mem: storing 1008 in location 1204
 9999 mem: incrementing refcount of 1008: 6 -> 7
@@ -2232,7 +2080,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 1
 9999 mem: storing 1 in location 1004
  107 run: s:address:shared:array:character <- get *in, data:offset
@@ -2243,7 +2091,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 3 -> 4
@@ -2272,7 +2120,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 4 -> 5
@@ -2406,7 +2254,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 2
 9999 mem: storing 2 in location 1004
  108 run: s:address:shared:array:character <- get *in, data:offset
@@ -2417,7 +2265,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 5 -> 6
@@ -2446,7 +2294,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 6 -> 7
@@ -2540,7 +2388,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 3
 9999 mem: storing 3 in location 1004
  108 run: s:address:shared:array:character <- get *in, data:offset
@@ -2551,7 +2399,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 7 -> 8
@@ -2580,7 +2428,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 8 -> 9
@@ -2674,7 +2522,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 4
 9999 mem: storing 4 in location 1004
  108 run: s:address:shared:array:character <- get *in, data:offset
@@ -2685,7 +2533,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 9 -> 10
@@ -2714,7 +2562,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 10 -> 11
@@ -2800,7 +2648,7 @@
 9999 mem: location 1217 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1009 is 4
 9999 mem: storing 4 in location 1219
  106 run: buf <- append_6 buf, val
@@ -2948,7 +2796,7 @@
 9999 mem: location 1003 is 1227
 9999 mem: skipping refcount at 1227
 9998 run: address to copy is 1228
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1228 is 0
 9999 mem: storing 0 in location 1004
  110 run: s:address:shared:array:character <- get *in, data:offset
@@ -2959,7 +2807,7 @@
 9999 mem: location 1003 is 1227
 9999 mem: skipping refcount at 1227
 9998 run: address to copy is 1229
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1229 is 1230
 9999 mem: storing 1230 in location 1005
 9999 mem: incrementing refcount of 1230: 1 -> 2
@@ -2988,7 +2836,7 @@
 9999 mem: location 1189 is 1227
 9999 mem: skipping refcount at 1227
 9998 run: address to copy is 1229
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1229 is 1230
 9999 mem: storing 1230 in location 1195
 9999 mem: incrementing refcount of 1230: 2 -> 3
@@ -3034,7 +2882,7 @@
 9999 mem: location 1139 is 1227
 9999 mem: skipping refcount at 1227
 9998 run: address to copy is 1228
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1228 is 1
 9999 mem: storing 1 in location 1145
  108 run: buf:address:shared:array:character <- get *tmp, data:offset
@@ -3045,7 +2893,7 @@
 9999 mem: location 1139 is 1227
 9999 mem: skipping refcount at 1227
 9998 run: address to copy is 1229
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1229 is 1230
 9999 mem: storing 1230 in location 1146
 9999 mem: incrementing refcount of 1230: 3 -> 4
@@ -3175,7 +3023,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 5
 9999 mem: storing 5 in location 1004
  109 run: s:address:shared:array:character <- get *in, data:offset
@@ -3186,7 +3034,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 11 -> 12
@@ -3215,7 +3063,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 12 -> 13
@@ -3281,7 +3129,7 @@
 9999 mem: skipping refcount at 1008
 9999 type: type deduced to be number$
 9998 run: address to copy is 1010
-9998 run: its type is <address : <shared : <list : <number : <>>>>>
+9998 run: its type is ("address" "shared" "list" "number")
 9999 mem: location 1010 is 1008
 9999 mem: storing 1008 in location 1204
 9999 mem: incrementing refcount of 1008: 10 -> 11
@@ -3346,7 +3194,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 6
 9999 mem: storing 6 in location 1004
  108 run: s:address:shared:array:character <- get *in, data:offset
@@ -3357,7 +3205,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 13 -> 14
@@ -3386,7 +3234,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 14 -> 15
@@ -3519,7 +3367,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 7
 9999 mem: storing 7 in location 1004
  109 run: s:address:shared:array:character <- get *in, data:offset
@@ -3530,7 +3378,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 15 -> 16
@@ -3559,7 +3407,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 16 -> 17
@@ -3654,7 +3502,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 8
 9999 mem: storing 8 in location 1004
  109 run: s:address:shared:array:character <- get *in, data:offset
@@ -3665,7 +3513,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 17 -> 18
@@ -3694,7 +3542,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 18 -> 19
@@ -3788,7 +3636,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 9
 9999 mem: storing 9 in location 1004
  109 run: s:address:shared:array:character <- get *in, data:offset
@@ -3799,7 +3647,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 19 -> 20
@@ -3828,7 +3676,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 20 -> 21
@@ -3914,7 +3762,7 @@
 9999 mem: location 1273 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1009 is 4
 9999 mem: storing 4 in location 1275
  107 run: buf <- append_6 buf, val
@@ -4062,7 +3910,7 @@
 9999 mem: location 1003 is 1283
 9999 mem: skipping refcount at 1283
 9998 run: address to copy is 1284
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1284 is 0
 9999 mem: storing 0 in location 1004
  111 run: s:address:shared:array:character <- get *in, data:offset
@@ -4073,7 +3921,7 @@
 9999 mem: location 1003 is 1283
 9999 mem: skipping refcount at 1283
 9998 run: address to copy is 1285
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1285 is 1286
 9999 mem: storing 1286 in location 1005
 9999 mem: incrementing refcount of 1286: 1 -> 2
@@ -4102,7 +3950,7 @@
 9999 mem: location 1189 is 1283
 9999 mem: skipping refcount at 1283
 9998 run: address to copy is 1285
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1285 is 1286
 9999 mem: storing 1286 in location 1195
 9999 mem: incrementing refcount of 1286: 2 -> 3
@@ -4148,7 +3996,7 @@
 9999 mem: location 1139 is 1283
 9999 mem: skipping refcount at 1283
 9998 run: address to copy is 1284
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1284 is 1
 9999 mem: storing 1 in location 1145
  109 run: buf:address:shared:array:character <- get *tmp, data:offset
@@ -4159,7 +4007,7 @@
 9999 mem: location 1139 is 1283
 9999 mem: skipping refcount at 1283
 9998 run: address to copy is 1285
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1285 is 1286
 9999 mem: storing 1286 in location 1146
 9999 mem: incrementing refcount of 1286: 3 -> 4
@@ -4289,7 +4137,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 10
 9999 mem: storing 10 in location 1004
  110 run: s:address:shared:array:character <- get *in, data:offset
@@ -4300,7 +4148,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 21 -> 22
@@ -4329,7 +4177,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 22 -> 23
@@ -4395,7 +4243,7 @@
 9999 mem: skipping refcount at 1008
 9999 type: type deduced to be number$
 9998 run: address to copy is 1010
-9998 run: its type is <address : <shared : <list : <number : <>>>>>
+9998 run: its type is ("address" "shared" "list" "number")
 9999 mem: location 1010 is 1008
 9999 mem: storing 1008 in location 1204
 9999 mem: incrementing refcount of 1008: 14 -> 15
@@ -4460,7 +4308,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 11
 9999 mem: storing 11 in location 1004
  109 run: s:address:shared:array:character <- get *in, data:offset
@@ -4471,7 +4319,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 23 -> 24
@@ -4500,7 +4348,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 24 -> 25
@@ -4633,7 +4481,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 12
 9999 mem: storing 12 in location 1004
  110 run: s:address:shared:array:character <- get *in, data:offset
@@ -4644,7 +4492,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 25 -> 26
@@ -4673,7 +4521,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 26 -> 27
@@ -4767,7 +4615,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 13
 9999 mem: storing 13 in location 1004
  110 run: s:address:shared:array:character <- get *in, data:offset
@@ -4778,7 +4626,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 27 -> 28
@@ -4807,7 +4655,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 28 -> 29
@@ -4901,7 +4749,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 14
 9999 mem: storing 14 in location 1004
  110 run: s:address:shared:array:character <- get *in, data:offset
@@ -4912,7 +4760,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 29 -> 30
@@ -4941,7 +4789,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 30 -> 31
@@ -5027,7 +4875,7 @@
 9999 mem: location 1329 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1009 is 4
 9999 mem: storing 4 in location 1331
  108 run: buf <- append_6 buf, val
@@ -5175,7 +5023,7 @@
 9999 mem: location 1003 is 1339
 9999 mem: skipping refcount at 1339
 9998 run: address to copy is 1340
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1340 is 0
 9999 mem: storing 0 in location 1004
  112 run: s:address:shared:array:character <- get *in, data:offset
@@ -5186,7 +5034,7 @@
 9999 mem: location 1003 is 1339
 9999 mem: skipping refcount at 1339
 9998 run: address to copy is 1341
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1341 is 1342
 9999 mem: storing 1342 in location 1005
 9999 mem: incrementing refcount of 1342: 1 -> 2
@@ -5215,7 +5063,7 @@
 9999 mem: location 1189 is 1339
 9999 mem: skipping refcount at 1339
 9998 run: address to copy is 1341
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1341 is 1342
 9999 mem: storing 1342 in location 1195
 9999 mem: incrementing refcount of 1342: 2 -> 3
@@ -5261,7 +5109,7 @@
 9999 mem: location 1139 is 1339
 9999 mem: skipping refcount at 1339
 9998 run: address to copy is 1340
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1340 is 1
 9999 mem: storing 1 in location 1145
  110 run: buf:address:shared:array:character <- get *tmp, data:offset
@@ -5272,7 +5120,7 @@
 9999 mem: location 1139 is 1339
 9999 mem: skipping refcount at 1339
 9998 run: address to copy is 1341
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1341 is 1342
 9999 mem: storing 1342 in location 1146
 9999 mem: incrementing refcount of 1342: 3 -> 4
@@ -5402,7 +5250,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 15
 9999 mem: storing 15 in location 1004
  111 run: s:address:shared:array:character <- get *in, data:offset
@@ -5413,7 +5261,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 31 -> 32
@@ -5442,7 +5290,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 32 -> 33
@@ -5508,7 +5356,7 @@
 9999 mem: skipping refcount at 1008
 9999 type: type deduced to be number$
 9998 run: address to copy is 1010
-9998 run: its type is <address : <shared : <list : <number : <>>>>>
+9998 run: its type is ("address" "shared" "list" "number")
 9999 mem: location 1010 is 1008
 9999 mem: storing 1008 in location 1204
 9999 mem: incrementing refcount of 1008: 18 -> 19
@@ -5573,7 +5421,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 16
 9999 mem: storing 16 in location 1004
  110 run: s:address:shared:array:character <- get *in, data:offset
@@ -5584,7 +5432,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 33 -> 34
@@ -5613,7 +5461,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 34 -> 35
@@ -5747,7 +5595,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 17
 9999 mem: storing 17 in location 1004
  111 run: s:address:shared:array:character <- get *in, data:offset
@@ -5758,7 +5606,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 35 -> 36
@@ -5787,7 +5635,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 36 -> 37
@@ -5881,7 +5729,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 18
 9999 mem: storing 18 in location 1004
  111 run: s:address:shared:array:character <- get *in, data:offset
@@ -5892,7 +5740,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 37 -> 38
@@ -5921,7 +5769,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 38 -> 39
@@ -6015,7 +5863,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 19
 9999 mem: storing 19 in location 1004
  111 run: s:address:shared:array:character <- get *in, data:offset
@@ -6026,7 +5874,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 39 -> 40
@@ -6055,7 +5903,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 40 -> 41
@@ -6141,7 +5989,7 @@
 9999 mem: location 1385 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1009 is 4
 9999 mem: storing 4 in location 1387
  109 run: buf <- append_6 buf, val
@@ -6289,7 +6137,7 @@
 9999 mem: location 1003 is 1395
 9999 mem: skipping refcount at 1395
 9998 run: address to copy is 1396
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1396 is 0
 9999 mem: storing 0 in location 1004
  113 run: s:address:shared:array:character <- get *in, data:offset
@@ -6300,7 +6148,7 @@
 9999 mem: location 1003 is 1395
 9999 mem: skipping refcount at 1395
 9998 run: address to copy is 1397
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1397 is 1398
 9999 mem: storing 1398 in location 1005
 9999 mem: incrementing refcount of 1398: 1 -> 2
@@ -6329,7 +6177,7 @@
 9999 mem: location 1189 is 1395
 9999 mem: skipping refcount at 1395
 9998 run: address to copy is 1397
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1397 is 1398
 9999 mem: storing 1398 in location 1195
 9999 mem: incrementing refcount of 1398: 2 -> 3
@@ -6375,7 +6223,7 @@
 9999 mem: location 1139 is 1395
 9999 mem: skipping refcount at 1395
 9998 run: address to copy is 1396
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1396 is 1
 9999 mem: storing 1 in location 1145
  111 run: buf:address:shared:array:character <- get *tmp, data:offset
@@ -6386,7 +6234,7 @@
 9999 mem: location 1139 is 1395
 9999 mem: skipping refcount at 1395
 9998 run: address to copy is 1397
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1397 is 1398
 9999 mem: storing 1398 in location 1146
 9999 mem: incrementing refcount of 1398: 3 -> 4
@@ -6516,7 +6364,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 20
 9999 mem: storing 20 in location 1004
  112 run: s:address:shared:array:character <- get *in, data:offset
@@ -6527,7 +6375,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 41 -> 42
@@ -6556,7 +6404,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 42 -> 43
@@ -6622,7 +6470,7 @@
 9999 mem: skipping refcount at 1008
 9999 type: type deduced to be number$
 9998 run: address to copy is 1010
-9998 run: its type is <address : <shared : <list : <number : <>>>>>
+9998 run: its type is ("address" "shared" "list" "number")
 9999 mem: location 1010 is 1008
 9999 mem: storing 1008 in location 1204
 9999 mem: incrementing refcount of 1008: 22 -> 23
@@ -6687,7 +6535,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 21
 9999 mem: storing 21 in location 1004
  111 run: s:address:shared:array:character <- get *in, data:offset
@@ -6698,7 +6546,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 43 -> 44
@@ -6727,7 +6575,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 44 -> 45
@@ -6860,7 +6708,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 22
 9999 mem: storing 22 in location 1004
  112 run: s:address:shared:array:character <- get *in, data:offset
@@ -6871,7 +6719,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 45 -> 46
@@ -6900,7 +6748,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 46 -> 47
@@ -6994,7 +6842,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 23
 9999 mem: storing 23 in location 1004
  112 run: s:address:shared:array:character <- get *in, data:offset
@@ -7005,7 +6853,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 47 -> 48
@@ -7034,7 +6882,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 48 -> 49
@@ -7128,7 +6976,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 24
 9999 mem: storing 24 in location 1004
  112 run: s:address:shared:array:character <- get *in, data:offset
@@ -7139,7 +6987,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 49 -> 50
@@ -7168,7 +7016,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 50 -> 51
@@ -7254,7 +7102,7 @@
 9999 mem: location 1441 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1009 is 4
 9999 mem: storing 4 in location 1443
  110 run: buf <- append_6 buf, val
@@ -7402,7 +7250,7 @@
 9999 mem: location 1003 is 1451
 9999 mem: skipping refcount at 1451
 9998 run: address to copy is 1452
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1452 is 0
 9999 mem: storing 0 in location 1004
  114 run: s:address:shared:array:character <- get *in, data:offset
@@ -7413,7 +7261,7 @@
 9999 mem: location 1003 is 1451
 9999 mem: skipping refcount at 1451
 9998 run: address to copy is 1453
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1453 is 1454
 9999 mem: storing 1454 in location 1005
 9999 mem: incrementing refcount of 1454: 1 -> 2
@@ -7442,7 +7290,7 @@
 9999 mem: location 1189 is 1451
 9999 mem: skipping refcount at 1451
 9998 run: address to copy is 1453
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1453 is 1454
 9999 mem: storing 1454 in location 1195
 9999 mem: incrementing refcount of 1454: 2 -> 3
@@ -7488,7 +7336,7 @@
 9999 mem: location 1139 is 1451
 9999 mem: skipping refcount at 1451
 9998 run: address to copy is 1452
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1452 is 1
 9999 mem: storing 1 in location 1145
  112 run: buf:address:shared:array:character <- get *tmp, data:offset
@@ -7499,7 +7347,7 @@
 9999 mem: location 1139 is 1451
 9999 mem: skipping refcount at 1451
 9998 run: address to copy is 1453
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1453 is 1454
 9999 mem: storing 1454 in location 1146
 9999 mem: incrementing refcount of 1454: 3 -> 4
@@ -7629,7 +7477,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 25
 9999 mem: storing 25 in location 1004
  113 run: s:address:shared:array:character <- get *in, data:offset
@@ -7640,7 +7488,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 51 -> 52
@@ -7669,7 +7517,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 52 -> 53
@@ -7736,7 +7584,7 @@
 9999 mem: skipping refcount at 1008
 9999 type: type deduced to be number$
 9998 run: address to copy is 1010
-9998 run: its type is <address : <shared : <list : <number : <>>>>>
+9998 run: its type is ("address" "shared" "list" "number")
 9999 mem: location 1010 is 1008
 9999 mem: storing 1008 in location 1204
 9999 mem: incrementing refcount of 1008: 26 -> 27
@@ -7801,7 +7649,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 26
 9999 mem: storing 26 in location 1004
  112 run: s:address:shared:array:character <- get *in, data:offset
@@ -7812,7 +7660,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 53 -> 54
@@ -7841,7 +7689,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 54 -> 55
@@ -7974,7 +7822,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 27
 9999 mem: storing 27 in location 1004
  113 run: s:address:shared:array:character <- get *in, data:offset
@@ -7985,7 +7833,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 55 -> 56
@@ -8014,7 +7862,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 56 -> 57
@@ -8108,7 +7956,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 28
 9999 mem: storing 28 in location 1004
  113 run: s:address:shared:array:character <- get *in, data:offset
@@ -8119,7 +7967,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 57 -> 58
@@ -8148,7 +7996,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 58 -> 59
@@ -8242,7 +8090,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 29
 9999 mem: storing 29 in location 1004
  113 run: s:address:shared:array:character <- get *in, data:offset
@@ -8253,7 +8101,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 59 -> 60
@@ -8282,7 +8130,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 60 -> 61
@@ -8368,7 +8216,7 @@
 9999 mem: location 1497 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1009 is 4
 9999 mem: storing 4 in location 1499
  111 run: buf <- append_6 buf, val
@@ -8516,7 +8364,7 @@
 9999 mem: location 1003 is 1507
 9999 mem: skipping refcount at 1507
 9998 run: address to copy is 1508
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1508 is 0
 9999 mem: storing 0 in location 1004
  115 run: s:address:shared:array:character <- get *in, data:offset
@@ -8527,7 +8375,7 @@
 9999 mem: location 1003 is 1507
 9999 mem: skipping refcount at 1507
 9998 run: address to copy is 1509
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1509 is 1510
 9999 mem: storing 1510 in location 1005
 9999 mem: incrementing refcount of 1510: 1 -> 2
@@ -8556,7 +8404,7 @@
 9999 mem: location 1189 is 1507
 9999 mem: skipping refcount at 1507
 9998 run: address to copy is 1509
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1509 is 1510
 9999 mem: storing 1510 in location 1195
 9999 mem: incrementing refcount of 1510: 2 -> 3
@@ -8602,7 +8450,7 @@
 9999 mem: location 1139 is 1507
 9999 mem: skipping refcount at 1507
 9998 run: address to copy is 1508
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1508 is 1
 9999 mem: storing 1 in location 1145
  113 run: buf:address:shared:array:character <- get *tmp, data:offset
@@ -8613,7 +8461,7 @@
 9999 mem: location 1139 is 1507
 9999 mem: skipping refcount at 1507
 9998 run: address to copy is 1509
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1509 is 1510
 9999 mem: storing 1510 in location 1146
 9999 mem: incrementing refcount of 1510: 3 -> 4
@@ -8743,7 +8591,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 30
 9999 mem: storing 30 in location 1004
  114 run: s:address:shared:array:character <- get *in, data:offset
@@ -8754,7 +8602,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 61 -> 62
@@ -8783,7 +8631,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 62 -> 63
@@ -8849,7 +8697,7 @@
 9999 mem: skipping refcount at 1008
 9999 type: type deduced to be number$
 9998 run: address to copy is 1010
-9998 run: its type is <address : <shared : <list : <number : <>>>>>
+9998 run: its type is ("address" "shared" "list" "number")
 9999 mem: location 1010 is 1008
 9999 mem: storing 1008 in location 1204
 9999 mem: incrementing refcount of 1008: 30 -> 31
@@ -8914,7 +8762,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 31
 9999 mem: storing 31 in location 1004
  113 run: s:address:shared:array:character <- get *in, data:offset
@@ -8925,7 +8773,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 63 -> 64
@@ -8954,7 +8802,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 64 -> 65
@@ -9087,7 +8935,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 32
 9999 mem: storing 32 in location 1004
  114 run: s:address:shared:array:character <- get *in, data:offset
@@ -9098,7 +8946,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 65 -> 66
@@ -9127,7 +8975,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 66 -> 67
@@ -9221,7 +9069,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 33
 9999 mem: storing 33 in location 1004
  114 run: s:address:shared:array:character <- get *in, data:offset
@@ -9232,7 +9080,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 67 -> 68
@@ -9261,7 +9109,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 68 -> 69
@@ -9355,7 +9203,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 34
 9999 mem: storing 34 in location 1004
  114 run: s:address:shared:array:character <- get *in, data:offset
@@ -9366,7 +9214,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 69 -> 70
@@ -9395,7 +9243,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 70 -> 71
@@ -9554,7 +9402,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 35
 9999 mem: storing 35 in location 1004
  114 run: s:address:shared:array:character <- get *in, data:offset
@@ -9565,7 +9413,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 71 -> 72
@@ -9594,7 +9442,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 72 -> 73
@@ -9688,7 +9536,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 36
 9999 mem: storing 36 in location 1004
  114 run: s:address:shared:array:character <- get *in, data:offset
@@ -9699,7 +9547,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 73 -> 74
@@ -9728,7 +9576,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 74 -> 75
@@ -9823,7 +9671,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 37
 9999 mem: storing 37 in location 1004
  114 run: s:address:shared:array:character <- get *in, data:offset
@@ -9834,7 +9682,7 @@
 9999 mem: location 1003 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1005
 9999 mem: incrementing refcount of 1027: 75 -> 76
@@ -9863,7 +9711,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1195
 9999 mem: incrementing refcount of 1027: 76 -> 77
@@ -9983,7 +9831,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1025
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1025 is 38
 9999 mem: storing 38 in location 1190
  105 run: s:address:shared:array:character <- get *in, data:offset
@@ -9994,7 +9842,7 @@
 9999 mem: location 1189 is 1024
 9999 mem: skipping refcount at 1024
 9998 run: address to copy is 1026
-9998 run: its type is <address : <shared : <array : <character : <>>>>>
+9998 run: its type is ("address" "shared" "array" "character")
 9999 mem: location 1026 is 1027
 9999 mem: storing 1027 in location 1191
 9999 mem: incrementing refcount of 1027: 77 -> 78

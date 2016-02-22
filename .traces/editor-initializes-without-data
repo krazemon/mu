@@ -1,19 +1,19 @@
 9991 parse: --- defining scenario_editor-initializes-without-data
 9993 parse: instruction: assume-screen
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {"5": "literal", "width": ()}
-9993 parse:   ingredient: {"3": "literal", "height": ()}
+9993 parse:   ingredient: 5: "literal", {"width": ()}
+9993 parse:   ingredient: 3: "literal", {"height": ()}
 9992 load: after rewriting: screen:address:shared:screen <- new-fake-screen 5/width, 3/height
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:shared:editor-data <- new-editor 0/data, screen:address:shared:screen, 2/left, 5/right\n    2:editor-data <- copy *1:address:shared:editor-data\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    1:address:shared:editor-data <- new-editor 0/data, screen:address:shared:screen, 2/left, 5/right\n    2:editor-data <- copy *1:address:shared:editor-data\n  ": "literal-string"
 9992 load: after rewriting: run [
     1:address:shared:editor-data <- new-editor 0/data, screen:address:shared:screen, 2/left, 5/right
     2:editor-data <- copy *1:address:shared:editor-data
   ]
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    # 2 (data) <- just the § sentinel\n    # 3 (top of screen) <- the § sentinel\n    4 <- 0  # bottom-of-screen; null since text fits on screen\n    # 5 (before cursor) <- the § sentinel\n    6 <- 2  # left\n    7 <- 4  # right  (inclusive)\n    8 <- 1  # bottom\n    9 <- 1  # cursor row\n    10 <- 2  # cursor column\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    # 2 (data) <- just the § sentinel\n    # 3 (top of screen) <- the § sentinel\n    4 <- 0  # bottom-of-screen; null since text fits on screen\n    # 5 (before cursor) <- the § sentinel\n    6 <- 2  # left\n    7 <- 4  # right  (inclusive)\n    8 <- 1  # bottom\n    9 <- 1  # cursor row\n    10 <- 2  # cursor column\n  ": "literal-string"
 9992 load: after rewriting: memory-should-contain [
     # 2 (data) <- just the § sentinel
     # 3 (top of screen) <- the § sentinel
@@ -27,7 +27,7 @@
   ]
 9993 parse: instruction: screen-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    .     .\n    .     .\n    .     .\n  ": "literal-string"}
+9993 parse:   ingredient: "\n    .     .\n    .     .\n    .     .\n  ": "literal-string"
 9992 load: after rewriting: screen-should-contain [
     .     .
     .     .
@@ -38,13 +38,13 @@
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_editor-initializes-without-data
 9991 transform: --- fill in reply ingredients from header for recipe scenario_editor-initializes-without-data
 9991 transform: --- deduce types for recipe scenario_editor-initializes-without-data
-9992 transform: screen => <address : <shared : <screen : <>>>>
+9992 transform: screen => ("address" "shared" "screen")
 9991 transform: --- check for invalid types in recipe scenario_editor-initializes-without-data
 9991 transform: --- collect surrounding spaces for recipe scenario_editor-initializes-without-data
 9991 transform: --- transform names for recipe scenario_editor-initializes-without-data
 9991 transform: --- resolve ambiguous calls for recipe scenario_editor-initializes-without-data
 9992 transform: instruction screen:address:shared:screen <- new-fake-screen 5/width, 3/height
-9992 transform: checking variant (strict) 0: recipe new-fake-screen {"w": "number"} {"h": "number"} -> {"result": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 0: recipe new-fake-screen w: "number" h: "number" -> result: ("address" "shared" "screen")
 9991 transform: --- compute instruction operations for recipe scenario_editor-initializes-without-data
 9991 transform: --- transform braces for recipe scenario_editor-initializes-without-data
 9992 transform: assume-screen ...
@@ -194,7 +194,7 @@
 9999 mem: location 1053 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1017
-9998 run: its type is <address : <shared : <array : <screen-cell : <>>>>>
+9998 run: its type is ("address" "shared" "array" "screen-cell")
 9999 mem: location 1017 is 1018
 9999 mem: storing 1018 in location 1054
 9999 mem: incrementing refcount of 1018: 1 -> 2
@@ -818,33 +818,33 @@
 9991 parse: --- defining run_1001
 9993 parse: instruction: new-editor
 9993 parse:   number of ingredients: 4
-9993 parse:   ingredient: {"0": "literal", "data": ()}
-9993 parse:   ingredient: {"screen": ("address" "shared" "screen")}
-9993 parse:   ingredient: {"2": "literal", "left": ()}
-9993 parse:   ingredient: {"5": "literal", "right": ()}
-9993 parse:   product: {"1": ("address" "shared" "editor-data")}
+9993 parse:   ingredient: 0: "literal", {"data": ()}
+9993 parse:   ingredient: screen: ("address" "shared" "screen")
+9993 parse:   ingredient: 2: "literal", {"left": ()}
+9993 parse:   ingredient: 5: "literal", {"right": ()}
+9993 parse:   product: 1: ("address" "shared" "editor-data")
 9992 load: after rewriting: 1:address:shared:editor-data <- new-editor 0/data, screen:address:shared:screen, 2/left, 5/right
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"1": ("address" "shared" "editor-data"), "lookup": ()}
-9993 parse:   product: {"2": "editor-data"}
+9993 parse:   ingredient: 1: ("address" "shared" "editor-data"), {"lookup": ()}
+9993 parse:   product: 2: "editor-data"
 9992 load: after rewriting: 2:editor-data <- copy *1:address:shared:editor-data
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
-9992 transform: screen => <address : <shared : <screen : <>>>>
+9992 transform: screen => ("address" "shared" "screen")
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
 9991 transform: --- resolve ambiguous calls for recipe run_1001
 9992 transform: instruction 1:address:shared:editor-data <- new-editor 0/data, screen:address:shared:screen, 2/left, 5/right
-9992 transform: checking variant (strict) 0: recipe new-editor {"s": ("address" "shared" "array" "character")} {"screen": ("address" "shared" "screen")} {"left": "number"} {"right": "number"} -> {"result": ("address" "shared" "editor-data")} {"screen": ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 0: recipe new-editor s: ("address" "shared" "array" "character") screen: ("address" "shared" "screen") left: "number" right: "number" -> result: ("address" "shared" "editor-data") screen: ("address" "shared" "screen")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literals-against-booleans) 0: recipe new-editor {"s": ("address" "shared" "array" "character")} {"screen": ("address" "shared" "screen")} {"left": "number"} {"right": "number"} -> {"result": ("address" "shared" "editor-data")} {"screen": ("address" "shared" "screen")}
+9992 transform: checking variant (strict except literals-against-booleans) 0: recipe new-editor s: ("address" "shared" "array" "character") screen: ("address" "shared" "screen") left: "number" right: "number" -> result: ("address" "shared" "editor-data") screen: ("address" "shared" "screen")
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe new-editor {"s": ("address" "shared" "array" "character")} {"screen": ("address" "shared" "screen")} {"left": "number"} {"right": "number"} -> {"result": ("address" "shared" "editor-data")} {"screen": ("address" "shared" "screen")}
+9992 transform: checking variant 0: recipe new-editor s: ("address" "shared" "array" "character") screen: ("address" "shared" "screen") left: "number" right: "number" -> result: ("address" "shared" "editor-data") screen: ("address" "shared" "screen")
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new-editor ...
@@ -1188,7 +1188,7 @@
 9999 mem: location 1115 is 1075
 9999 mem: skipping refcount at 1075
 9998 run: address to copy is 1080
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1080 is 2
 9999 mem: storing 2 in location 1116
  105 run: screen-height:number <- screen-height screen
@@ -1216,7 +1216,7 @@
 9999 mem: location 1144 is 1012
 9999 mem: skipping refcount at 1012
 9998 run: address to copy is 1013
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1013 is 3
 9999 mem: storing 3 in location 1145
  106 run: reply height:number
@@ -1243,7 +1243,7 @@
 9999 mem: location 1115 is 1075
 9999 mem: skipping refcount at 1075
 9998 run: address to copy is 1081
-9998 run: its type is number
+9998 run: its type is "number"
 9999 mem: location 1081 is 4
 9999 mem: storing 4 in location 1118
  105 run: curr:address:shared:duplex-list:character <- get *editor, top-of-screen:offset
@@ -1264,7 +1264,7 @@
 9999 mem: location 1115 is 1075
 9999 mem: skipping refcount at 1075
 9998 run: address to copy is 1077
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1077 is 1097
 9999 mem: storing 1097 in location 1119
 9999 mem: incrementing refcount of 1097: 4 -> 5
@@ -1295,7 +1295,7 @@
 9999 mem: skipping refcount at 1097
 9999 type: type deduced to be character$
 9998 run: address to copy is 1099
-9998 run: its type is <address : <shared : <duplex-list : <character : <>>>>>
+9998 run: its type is ("address" "shared" "duplex-list" "character")
 9999 mem: location 1099 is 0
 9999 mem: storing 0 in location 1145
  106 run: reply result:address:shared:duplex-list:_elem/contained-in:in

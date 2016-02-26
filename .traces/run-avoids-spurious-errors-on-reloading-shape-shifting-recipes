@@ -1,4 +1,4 @@
-9991 parse: --- defining scenario_run-updates-warnings-for-shape-shifting-recipes
+9991 parse: --- defining scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
 9993 parse: instruction: trace-until
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: 100: "literal", {"app": ()}
@@ -10,18 +10,16 @@
 9992 load: after rewriting: screen:address:shared:screen <- new-fake-screen 100/width, 15/height
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "recipe foo x:_elem -> z:_elem [\nlocal-scope\nload-ingredients\nz <- add x, [a]\n]": "literal-string"
+9993 parse:   ingredient: "recipe length l:address:shared:list:_elem -> n:number [\n]": "literal-string"
 9993 parse:   product: 1: ("address" "shared" "array" "character")
-9992 load: after rewriting: 1:address:shared:array:character <- new [recipe foo x:_elem -> z:_elem [
-local-scope
-load-ingredients
-z <- add x, [a]
+9992 load: after rewriting: 1:address:shared:array:character <- new [recipe length l:address:shared:list:_elem -> n:number [
 ]]
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "foo 2": "literal-string"
+9993 parse:   ingredient: "x:address:shared:list:number <- copy 0\nto-text x": "literal-string"
 9993 parse:   product: 2: ("address" "shared" "array" "character")
-9992 load: after rewriting: 2:address:shared:array:character <- new [foo 2]
+9992 load: after rewriting: 2:address:shared:array:character <- new [x:address:shared:list:number <- copy 0
+to-text x]
 9993 parse: instruction: new-programming-environment
 9993 parse:   number of ingredients: 3
 9993 parse:   ingredient: screen: ("address" "shared" "screen")
@@ -41,19 +39,26 @@ z <- add x, [a]
 9993 parse:   ingredient: console: ("address" "shared" "console")
 9993 parse:   ingredient: 3: ("address" "shared" "programming-environment-data")
 9992 load: after rewriting: event-loop screen:address:shared:screen, console:address:shared:console, 3:address:shared:programming-environment-data
-9993 parse: instruction: screen-should-contain
-9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "\n    .  errors found (0)                                                               run (F4)           .\n    .recipe foo x:_elem -> z:_elem [                   ┊                                                 .\n    .local-scope                                       ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .load-ingredients                                  ┊0                                               x.\n    .z <- add x, [a]                                   ┊foo 2                                            .\n    .]                                                 ┊foo_2: 'add' requires number ingredients, but go↩.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊t [a]                                            .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .                                                  ┊                                                 .\n  ": "literal-string"
-9992 load: after rewriting: screen-should-contain [
-    .  errors found (0)                                                               run (F4)           .
-    .recipe foo x:_elem -> z:_elem [                   ┊                                                 .
-    .local-scope                                       ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.
-    .load-ingredients                                  ┊0                                               x.
-    .z <- add x, [a]                                   ┊foo 2                                            .
-    .]                                                 ┊foo_2: 'add' requires number ingredients, but go↩.
-    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊t [a]                                            .
-    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.
-    .                                                  ┊                                                 .
+9993 parse: instruction: screen-should-contain-in-color
+9993 parse:   number of ingredients: 2
+9993 parse:   ingredient: 1: "literal", {"red": ()}
+9993 parse:   ingredient: "\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                <-                  .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n  ": "literal-string"
+9992 load: after rewriting: screen-should-contain-in-color 1/red, [
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                <-                  .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
   ]
 9993 parse: instruction: assume-console
 9993 parse:   number of ingredients: 1
@@ -67,39 +72,46 @@ z <- add x, [a]
 9992 load: after rewriting: run [
     event-loop screen:address:shared:screen, console:address:shared:console, 3:address:shared:programming-environment-data
   ]
-9993 parse: instruction: screen-should-contain
-9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "\n    .  errors found (0)                                                               run (F4)           .\n    .recipe foo x:_elem -> z:_elem [                   ┊                                                 .\n    .local-scope                                       ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .load-ingredients                                  ┊0                                               x.\n    .z <- add x, [a]                                   ┊foo 2                                            .\n    .]                                                 ┊foo_2: 'add' requires number ingredients, but go↩.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊t [a]                                            .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .                                                  ┊                                                 .\n  ": "literal-string"
-9992 load: after rewriting: screen-should-contain [
-    .  errors found (0)                                                               run (F4)           .
-    .recipe foo x:_elem -> z:_elem [                   ┊                                                 .
-    .local-scope                                       ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.
-    .load-ingredients                                  ┊0                                               x.
-    .z <- add x, [a]                                   ┊foo 2                                            .
-    .]                                                 ┊foo_2: 'add' requires number ingredients, but go↩.
-    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊t [a]                                            .
-    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.
-    .                                                  ┊                                                 .
+9993 parse: instruction: screen-should-contain-in-color
+9993 parse:   number of ingredients: 2
+9993 parse:   ingredient: 1: "literal", {"red": ()}
+9993 parse:   ingredient: "\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                <-                  .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n    .                                                                                                    .\n  ": "literal-string"
+9992 load: after rewriting: screen-should-contain-in-color 1/red, [
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                <-                  .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
+    .                                                                                                    .
   ]
-9999 parse: recipe scenario_run-updates-warnings-for-shape-shifting-recipes has a header
+9999 parse: recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes has a header
 9990 transform: === transform_all()
-9991 transform: --- rewrite 'stash' instructions in recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- fill in reply ingredients from header for recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- deduce types for recipe scenario_run-updates-warnings-for-shape-shifting-recipes
+9991 transform: --- rewrite 'stash' instructions in recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- fill in reply ingredients from header for recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- deduce types for recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
 9992 transform: screen => ("address" "shared" "screen")
 9992 transform: console => ("address" "shared" "console")
-9991 transform: --- check for invalid types in recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- collect surrounding spaces for recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- transform names for recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- resolve ambiguous calls for recipe scenario_run-updates-warnings-for-shape-shifting-recipes
+9991 transform: --- check for invalid types in recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- collect surrounding spaces for recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- transform names for recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- resolve ambiguous calls for recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
 9992 transform: instruction screen:address:shared:screen <- new-fake-screen 100/width, 15/height
 9992 transform: checking variant (strict) 0: recipe new-fake-screen w: "number" h: "number" -> result: ("address" "shared" "screen")
 9992 transform: instruction 3:address:shared:programming-environment-data <- new-programming-environment screen:address:shared:screen, 1:address:shared:array:character, 2:address:shared:array:character
 9992 transform: checking variant (strict) 0: recipe new-programming-environment screen: ("address" "shared" "screen") initial-recipe-contents: ("address" "shared" "array" "character") initial-sandbox-contents: ("address" "shared" "array" "character") -> result: ("address" "shared" "programming-environment-data") screen: ("address" "shared" "screen")
 9992 transform: instruction event-loop screen:address:shared:screen, console:address:shared:console, 3:address:shared:programming-environment-data
 9992 transform: checking variant (strict) 0: recipe event-loop screen: ("address" "shared" "screen") console: ("address" "shared" "console") env: ("address" "shared" "programming-environment-data") -> screen: ("address" "shared" "screen") console: ("address" "shared" "console") env: ("address" "shared" "programming-environment-data")
-9991 transform: --- compute instruction operations for recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- transform braces for recipe scenario_run-updates-warnings-for-shape-shifting-recipes
+9991 transform: --- compute instruction operations for recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- transform braces for recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
 9992 transform: trace-until ...
 9992 transform: assume-screen ...
 9992 transform: new ...
@@ -107,23 +119,23 @@ z <- add x, [a]
 9992 transform: new-programming-environment ...
 9992 transform: assume-console ...
 9992 transform: event-loop ...
-9992 transform: screen-should-contain ...
+9992 transform: screen-should-contain-in-color ...
 9992 transform: assume-console ...
 9992 transform: run ...
-9992 transform: screen-should-contain ...
+9992 transform: screen-should-contain-in-color ...
 9992 transform:  ...
-9991 transform: --- check mutability of ingredients in recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- perform checks for recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- type-check 'call' instructions inside recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- type-check calls inside recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- convert 'new' to 'allocate' for recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- type-check merge instructions in recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- check types of reply instructions in recipe scenario_run-updates-warnings-for-shape-shifting-recipes
-9991 transform: --- checking reply instructions against header for scenario_run-updates-warnings-for-shape-shifting-recipes
+9991 transform: --- check mutability of ingredients in recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- perform checks for recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- type-check 'call' instructions inside recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- type-check calls inside recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- convert 'new' to 'allocate' for recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- type-check merge instructions in recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- check types of reply instructions in recipe scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
+9991 transform: --- checking reply instructions against header for scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
 9991 transform: --- parsing any uninitialized reagents as integers
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
-9990 schedule: scenario_run-updates-warnings-for-shape-shifting-recipes
+9990 schedule: scenario_run-avoids-spurious-errors-on-reloading-shape-shifting-recipes
  102 run: trace-until 100/app
   90 print-character: 32 
   90 print-character: 32 
@@ -257,11 +269,34 @@ z <- add x, [a]
   90 print-character: 112 
   90 print-character: 101 
   90 print-character: 32 
-  90 print-character: 102 
-  90 print-character: 111 
-  90 print-character: 111 
+  90 print-character: 108 
+  90 print-character: 101 
+  90 print-character: 110 
+  90 print-character: 103 
+  90 print-character: 116 
+  90 print-character: 104 
   90 print-character: 32 
-  90 print-character: 120 
+  90 print-character: 108 
+  90 print-character: 58 
+  90 print-character: 97 
+  90 print-character: 100 
+  90 print-character: 100 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 115 
+  90 print-character: 115 
+  90 print-character: 58 
+  90 print-character: 115 
+  90 print-character: 104 
+  90 print-character: 97 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 100 
+  90 print-character: 58 
+  90 print-character: 108 
+  90 print-character: 105 
+  90 print-character: 115 
+  90 print-character: 116 
   90 print-character: 58 
   90 print-character: 95 
   90 print-character: 101 
@@ -272,13 +307,15 @@ z <- add x, [a]
   90 print-character: 45 
   90 print-character: 62 
   90 print-character: 32 
-  90 print-character: 122 
+  90 print-character: 110 
   90 print-character: 58 
-  90 print-character: 95 
-  90 print-character: 101 
-  90 print-character: 108 
-  90 print-character: 101 
+  90 print-character: 110 
+  90 print-character: 117 
+  90 print-character: 8617 
   90 print-character: 109 
+  90 print-character: 98 
+  90 print-character: 101 
+  90 print-character: 114 
   90 print-character: 32 
   90 print-character: 91 
   90 print-character: 32 
@@ -300,17 +337,6 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
-  90 print-character: 108 
-  90 print-character: 111 
-  90 print-character: 99 
-  90 print-character: 97 
-  90 print-character: 108 
-  90 print-character: 45 
-  90 print-character: 115 
-  90 print-character: 99 
-  90 print-character: 111 
-  90 print-character: 112 
-  90 print-character: 101 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -336,126 +362,65 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 108 
-  90 print-character: 111 
+  90 print-character: 93 
+  90 print-character: 120 
+  90 print-character: 58 
   90 print-character: 97 
   90 print-character: 100 
-  90 print-character: 45 
-  90 print-character: 105 
-  90 print-character: 110 
-  90 print-character: 103 
+  90 print-character: 100 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 115 
+  90 print-character: 115 
+  90 print-character: 58 
+  90 print-character: 115 
+  90 print-character: 104 
+  90 print-character: 97 
   90 print-character: 114 
   90 print-character: 101 
   90 print-character: 100 
+  90 print-character: 58 
+  90 print-character: 108 
   90 print-character: 105 
-  90 print-character: 101 
-  90 print-character: 110 
-  90 print-character: 116 
   90 print-character: 115 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 122 
+  90 print-character: 116 
+  90 print-character: 58 
+  90 print-character: 110 
+  90 print-character: 117 
+  90 print-character: 109 
+  90 print-character: 98 
+  90 print-character: 101 
+  90 print-character: 114 
   90 print-character: 32 
   90 print-character: 60 
   90 print-character: 45 
   90 print-character: 32 
-  90 print-character: 97 
-  90 print-character: 100 
-  90 print-character: 100 
+  90 print-character: 99 
+  90 print-character: 111 
+  90 print-character: 112 
+  90 print-character: 121 
+  90 print-character: 32 
+  90 print-character: 48 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 116 
+  90 print-character: 111 
+  90 print-character: 45 
+  90 print-character: 116 
+  90 print-character: 101 
+  90 print-character: 120 
+  90 print-character: 116 
   90 print-character: 32 
   90 print-character: 120 
-  90 print-character: 44 
-  90 print-character: 32 
-  90 print-character: 91 
-  90 print-character: 97 
-  90 print-character: 93 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 93 
-  90 print-character: 102 
-  90 print-character: 111 
-  90 print-character: 111 
-  90 print-character: 32 
-  90 print-character: 50 
   10 app: next-event 
   90 print-character: 114 
   90 print-character: 117 
@@ -610,11 +575,34 @@ z <- add x, [a]
   90 print-character: 112 
   90 print-character: 101 
   90 print-character: 32 
-  90 print-character: 102 
-  90 print-character: 111 
-  90 print-character: 111 
+  90 print-character: 108 
+  90 print-character: 101 
+  90 print-character: 110 
+  90 print-character: 103 
+  90 print-character: 116 
+  90 print-character: 104 
   90 print-character: 32 
-  90 print-character: 120 
+  90 print-character: 108 
+  90 print-character: 58 
+  90 print-character: 97 
+  90 print-character: 100 
+  90 print-character: 100 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 115 
+  90 print-character: 115 
+  90 print-character: 58 
+  90 print-character: 115 
+  90 print-character: 104 
+  90 print-character: 97 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 100 
+  90 print-character: 58 
+  90 print-character: 108 
+  90 print-character: 105 
+  90 print-character: 115 
+  90 print-character: 116 
   90 print-character: 58 
   90 print-character: 95 
   90 print-character: 101 
@@ -625,148 +613,61 @@ z <- add x, [a]
   90 print-character: 45 
   90 print-character: 62 
   90 print-character: 32 
-  90 print-character: 122 
+  90 print-character: 110 
   90 print-character: 58 
-  90 print-character: 95 
-  90 print-character: 101 
-  90 print-character: 108 
-  90 print-character: 101 
+  90 print-character: 110 
+  90 print-character: 117 
+  90 print-character: 8617 
   90 print-character: 109 
-  90 print-character: 32 
-  90 print-character: 91 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 108 
-  90 print-character: 111 
-  90 print-character: 99 
-  90 print-character: 97 
-  90 print-character: 108 
-  90 print-character: 45 
-  90 print-character: 115 
-  90 print-character: 99 
-  90 print-character: 111 
-  90 print-character: 112 
+  90 print-character: 98 
   90 print-character: 101 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 108 
-  90 print-character: 111 
-  90 print-character: 97 
-  90 print-character: 100 
-  90 print-character: 45 
-  90 print-character: 105 
-  90 print-character: 110 
-  90 print-character: 103 
   90 print-character: 114 
-  90 print-character: 101 
-  90 print-character: 100 
-  90 print-character: 105 
-  90 print-character: 101 
-  90 print-character: 110 
-  90 print-character: 116 
-  90 print-character: 115 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 122 
-  90 print-character: 32 
-  90 print-character: 60 
-  90 print-character: 45 
-  90 print-character: 32 
-  90 print-character: 97 
-  90 print-character: 100 
-  90 print-character: 100 
-  90 print-character: 32 
-  90 print-character: 120 
-  90 print-character: 44 
   90 print-character: 32 
   90 print-character: 91 
-  90 print-character: 97 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 93 
   90 print-character: 32 
   90 print-character: 32 
@@ -803,42 +704,6 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
-  90 print-character: 93 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -903,6 +768,106 @@ z <- add x, [a]
   90 print-character: 9480 
   90 print-character: 9480 
   90 print-character: 9480 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -2090,77 +2055,28 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 120 
-  90 print-character: 102 
-  90 print-character: 111 
-  90 print-character: 111 
-  90 print-character: 32 
-  90 print-character: 50 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 102 
-  90 print-character: 111 
-  90 print-character: 111 
-  90 print-character: 95 
-  90 print-character: 50 
+  90 print-character: 120 
   90 print-character: 58 
-  90 print-character: 32 
-  90 print-character: 39 
   90 print-character: 97 
   90 print-character: 100 
   90 print-character: 100 
-  90 print-character: 39 
-  90 print-character: 32 
-  90 print-character: 114 
-  90 print-character: 101 
-  90 print-character: 113 
-  90 print-character: 117 
-  90 print-character: 105 
   90 print-character: 114 
   90 print-character: 101 
   90 print-character: 115 
-  90 print-character: 32 
+  90 print-character: 115 
+  90 print-character: 58 
+  90 print-character: 115 
+  90 print-character: 104 
+  90 print-character: 97 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 100 
+  90 print-character: 58 
+  90 print-character: 108 
+  90 print-character: 105 
+  90 print-character: 115 
+  90 print-character: 116 
+  90 print-character: 58 
   90 print-character: 110 
   90 print-character: 117 
   90 print-character: 109 
@@ -2168,32 +2084,81 @@ z <- add x, [a]
   90 print-character: 101 
   90 print-character: 114 
   90 print-character: 32 
-  90 print-character: 105 
-  90 print-character: 110 
-  90 print-character: 103 
-  90 print-character: 114 
-  90 print-character: 101 
-  90 print-character: 100 
-  90 print-character: 105 
-  90 print-character: 101 
-  90 print-character: 110 
-  90 print-character: 116 
-  90 print-character: 115 
-  90 print-character: 44 
+  90 print-character: 60 
+  90 print-character: 45 
   90 print-character: 32 
-  90 print-character: 98 
-  90 print-character: 117 
-  90 print-character: 116 
-  90 print-character: 32 
-  90 print-character: 103 
+  90 print-character: 99 
   90 print-character: 111 
-  90 print-character: 8617 
+  90 print-character: 112 
+  90 print-character: 121 
+  90 print-character: 32 
+  90 print-character: 48 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 116 
+  90 print-character: 111 
+  90 print-character: 45 
+  90 print-character: 116 
+  90 print-character: 101 
+  90 print-character: 120 
   90 print-character: 116 
   90 print-character: 32 
-  90 print-character: 91 
-  90 print-character: 97 
-  90 print-character: 93 
+  90 print-character: 120 
   90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 49 
+  90 print-character: 48 
+  90 print-character: 49 
+  90 print-character: 49 
+  90 print-character: 52 
+  90 print-character: 48 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -2679,22 +2644,19 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   11 app: render status 
-  90 print-character: 101 
-  90 print-character: 114 
-  90 print-character: 114 
-  90 print-character: 111 
-  90 print-character: 114 
-  90 print-character: 115 
   90 print-character: 32 
-  90 print-character: 102 
-  90 print-character: 111 
-  90 print-character: 117 
-  90 print-character: 110 
-  90 print-character: 100 
   90 print-character: 32 
-  90 print-character: 40 
-  90 print-character: 48 
-  90 print-character: 41 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -2853,11 +2815,34 @@ z <- add x, [a]
   90 print-character: 112 
   90 print-character: 101 
   90 print-character: 32 
-  90 print-character: 102 
-  90 print-character: 111 
-  90 print-character: 111 
+  90 print-character: 108 
+  90 print-character: 101 
+  90 print-character: 110 
+  90 print-character: 103 
+  90 print-character: 116 
+  90 print-character: 104 
   90 print-character: 32 
-  90 print-character: 120 
+  90 print-character: 108 
+  90 print-character: 58 
+  90 print-character: 97 
+  90 print-character: 100 
+  90 print-character: 100 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 115 
+  90 print-character: 115 
+  90 print-character: 58 
+  90 print-character: 115 
+  90 print-character: 104 
+  90 print-character: 97 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 100 
+  90 print-character: 58 
+  90 print-character: 108 
+  90 print-character: 105 
+  90 print-character: 115 
+  90 print-character: 116 
   90 print-character: 58 
   90 print-character: 95 
   90 print-character: 101 
@@ -2868,148 +2853,61 @@ z <- add x, [a]
   90 print-character: 45 
   90 print-character: 62 
   90 print-character: 32 
-  90 print-character: 122 
+  90 print-character: 110 
   90 print-character: 58 
-  90 print-character: 95 
-  90 print-character: 101 
-  90 print-character: 108 
-  90 print-character: 101 
+  90 print-character: 110 
+  90 print-character: 117 
+  90 print-character: 8617 
   90 print-character: 109 
-  90 print-character: 32 
-  90 print-character: 91 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 108 
-  90 print-character: 111 
-  90 print-character: 99 
-  90 print-character: 97 
-  90 print-character: 108 
-  90 print-character: 45 
-  90 print-character: 115 
-  90 print-character: 99 
-  90 print-character: 111 
-  90 print-character: 112 
+  90 print-character: 98 
   90 print-character: 101 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 108 
-  90 print-character: 111 
-  90 print-character: 97 
-  90 print-character: 100 
-  90 print-character: 45 
-  90 print-character: 105 
-  90 print-character: 110 
-  90 print-character: 103 
   90 print-character: 114 
-  90 print-character: 101 
-  90 print-character: 100 
-  90 print-character: 105 
-  90 print-character: 101 
-  90 print-character: 110 
-  90 print-character: 116 
-  90 print-character: 115 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 122 
-  90 print-character: 32 
-  90 print-character: 60 
-  90 print-character: 45 
-  90 print-character: 32 
-  90 print-character: 97 
-  90 print-character: 100 
-  90 print-character: 100 
-  90 print-character: 32 
-  90 print-character: 120 
-  90 print-character: 44 
   90 print-character: 32 
   90 print-character: 91 
-  90 print-character: 97 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 93 
   90 print-character: 32 
   90 print-character: 32 
@@ -3046,42 +2944,6 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
-  90 print-character: 93 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -3146,6 +3008,106 @@ z <- add x, [a]
   90 print-character: 9480 
   90 print-character: 9480 
   90 print-character: 9480 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -4333,77 +4295,28 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 120 
-  90 print-character: 102 
-  90 print-character: 111 
-  90 print-character: 111 
-  90 print-character: 32 
-  90 print-character: 50 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 102 
-  90 print-character: 111 
-  90 print-character: 111 
-  90 print-character: 95 
-  90 print-character: 50 
+  90 print-character: 120 
   90 print-character: 58 
-  90 print-character: 32 
-  90 print-character: 39 
   90 print-character: 97 
   90 print-character: 100 
   90 print-character: 100 
-  90 print-character: 39 
-  90 print-character: 32 
-  90 print-character: 114 
-  90 print-character: 101 
-  90 print-character: 113 
-  90 print-character: 117 
-  90 print-character: 105 
   90 print-character: 114 
   90 print-character: 101 
   90 print-character: 115 
-  90 print-character: 32 
+  90 print-character: 115 
+  90 print-character: 58 
+  90 print-character: 115 
+  90 print-character: 104 
+  90 print-character: 97 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 100 
+  90 print-character: 58 
+  90 print-character: 108 
+  90 print-character: 105 
+  90 print-character: 115 
+  90 print-character: 116 
+  90 print-character: 58 
   90 print-character: 110 
   90 print-character: 117 
   90 print-character: 109 
@@ -4411,32 +4324,81 @@ z <- add x, [a]
   90 print-character: 101 
   90 print-character: 114 
   90 print-character: 32 
-  90 print-character: 105 
-  90 print-character: 110 
-  90 print-character: 103 
-  90 print-character: 114 
-  90 print-character: 101 
-  90 print-character: 100 
-  90 print-character: 105 
-  90 print-character: 101 
-  90 print-character: 110 
-  90 print-character: 116 
-  90 print-character: 115 
-  90 print-character: 44 
+  90 print-character: 60 
+  90 print-character: 45 
   90 print-character: 32 
-  90 print-character: 98 
-  90 print-character: 117 
-  90 print-character: 116 
-  90 print-character: 32 
-  90 print-character: 103 
+  90 print-character: 99 
   90 print-character: 111 
-  90 print-character: 8617 
+  90 print-character: 112 
+  90 print-character: 121 
+  90 print-character: 32 
+  90 print-character: 48 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 116 
+  90 print-character: 111 
+  90 print-character: 45 
+  90 print-character: 116 
+  90 print-character: 101 
+  90 print-character: 120 
   90 print-character: 116 
   90 print-character: 32 
-  90 print-character: 91 
-  90 print-character: 97 
-  90 print-character: 93 
+  90 print-character: 120 
   90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 50 
+  90 print-character: 48 
+  90 print-character: 49 
+  90 print-character: 49 
+  90 print-character: 50 
+  90 print-character: 54 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -4922,22 +4884,19 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   11 app: render status 
-  90 print-character: 101 
-  90 print-character: 114 
-  90 print-character: 114 
-  90 print-character: 111 
-  90 print-character: 114 
-  90 print-character: 115 
   90 print-character: 32 
-  90 print-character: 102 
-  90 print-character: 111 
-  90 print-character: 117 
-  90 print-character: 110 
-  90 print-character: 100 
   90 print-character: 32 
-  90 print-character: 40 
-  90 print-character: 48 
-  90 print-character: 41 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 

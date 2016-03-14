@@ -47,6 +47,46 @@ F buffer-lines-blocks-until-newline: channel should contain data after writing n
 9999 parse: recipe scenario_buffer-lines-blocks-until-newline has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_buffer-lines-blocks-until-newline
+9993 transform: run [
+    1:address:shared:channel/stdin <- new-channel 10/capacity
+    2:address:shared:channel/buffered-stdin <- new-channel 10/capacity
+    3:boolean <- channel-empty? 2:address:shared:channel/buffered-stdin
+    assert 3:boolean, [
+F buffer-lines-blocks-until-newline: channel should be empty after init]
+    # buffer stdin into buffered-stdin, try to read from buffered-stdin
+    4:number/buffer-routine <- start-running buffer-lines, 1:address:shared:channel/stdin, 2:address:shared:channel/buffered-stdin
+    wait-for-routine 4:number/buffer-routine
+    5:boolean <- channel-empty? 2:address:shared:channel/buffered-stdin
+    assert 5:boolean, [
+F buffer-lines-blocks-until-newline: channel should be empty after buffer-lines bring-up]
+    # write 'a'
+    1:address:shared:channel <- write 1:address:shared:channel, 97/a
+    restart 4:number/buffer-routine
+    wait-for-routine 4:number/buffer-routine
+    6:boolean <- channel-empty? 2:address:shared:channel/buffered-stdin
+    assert 6:boolean, [
+F buffer-lines-blocks-until-newline: channel should be empty after writing 'a']
+    # write 'b'
+    1:address:shared:channel <- write 1:address:shared:channel, 98/b
+    restart 4:number/buffer-routine
+    wait-for-routine 4:number/buffer-routine
+    7:boolean <- channel-empty? 2:address:shared:channel/buffered-stdin
+    assert 7:boolean, [
+F buffer-lines-blocks-until-newline: channel should be empty after writing 'b']
+    # write newline
+    1:address:shared:channel <- write 1:address:shared:channel, 10/newline
+    restart 4:number/buffer-routine
+    wait-for-routine 4:number/buffer-routine
+    8:boolean <- channel-empty? 2:address:shared:channel/buffered-stdin
+    9:boolean/completed? <- not 8:boolean
+    assert 9:boolean/completed?, [
+F buffer-lines-blocks-until-newline: channel should contain data after writing newline]
+    trace 1, [test], [reached end]
+  ]
+9993 transform: trace-should-contain [
+    test: reached end
+  ]
+9991 transform: --- rewrite literal strings in recipe scenario_buffer-lines-blocks-until-newline
 9991 transform: --- fill in reply ingredients from header for recipe scenario_buffer-lines-blocks-until-newline
 9991 transform: --- deduce types for recipe scenario_buffer-lines-blocks-until-newline
 9991 transform: --- check for invalid types in recipe scenario_buffer-lines-blocks-until-newline
@@ -239,36 +279,7 @@ F buffer-lines-blocks-until-newline: channel should contain data after writing n
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
-9993 transform: 1:address:shared:channel/stdin <- new-channel 10/capacity
-9993 transform: 2:address:shared:channel/buffered-stdin <- new-channel 10/capacity
-9993 transform: 3:boolean <- channel-empty? 2:address:shared:channel/buffered-stdin
-9993 transform: assert 3:boolean, [
-F buffer-lines-blocks-until-newline: channel should be empty after init]
-9993 transform: 4:number/buffer-routine <- start-running buffer-lines, 1:address:shared:channel/stdin, 2:address:shared:channel/buffered-stdin
-9993 transform: wait-for-routine 4:number/buffer-routine
-9993 transform: 5:boolean <- channel-empty? 2:address:shared:channel/buffered-stdin
-9993 transform: assert 5:boolean, [
-F buffer-lines-blocks-until-newline: channel should be empty after buffer-lines bring-up]
-9993 transform: 1:address:shared:channel <- write 1:address:shared:channel, 97/a
-9993 transform: restart 4:number/buffer-routine
-9993 transform: wait-for-routine 4:number/buffer-routine
-9993 transform: 6:boolean <- channel-empty? 2:address:shared:channel/buffered-stdin
-9993 transform: assert 6:boolean, [
-F buffer-lines-blocks-until-newline: channel should be empty after writing 'a']
-9993 transform: 1:address:shared:channel <- write 1:address:shared:channel, 98/b
-9993 transform: restart 4:number/buffer-routine
-9993 transform: wait-for-routine 4:number/buffer-routine
-9993 transform: 7:boolean <- channel-empty? 2:address:shared:channel/buffered-stdin
-9993 transform: assert 7:boolean, [
-F buffer-lines-blocks-until-newline: channel should be empty after writing 'b']
-9993 transform: 1:address:shared:channel <- write 1:address:shared:channel, 10/newline
-9993 transform: restart 4:number/buffer-routine
-9993 transform: wait-for-routine 4:number/buffer-routine
-9993 transform: 8:boolean <- channel-empty? 2:address:shared:channel/buffered-stdin
-9993 transform: 9:boolean/completed? <- not 8:boolean
-9993 transform: assert 9:boolean/completed?, [
-F buffer-lines-blocks-until-newline: channel should contain data after writing newline]
-9993 transform: trace 1, [test], [reached end]
+9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9991 transform: --- check for invalid types in recipe run_1001

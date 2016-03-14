@@ -47,6 +47,46 @@
 9999 parse: recipe scenario_buffer-append-works has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_buffer-append-works
+9993 transform: run [
+    local-scope
+    x:address:shared:buffer <- new-buffer 3
+    s1:address:shared:array:character <- get *x, data:offset
+    c:character <- copy 97/a
+    x <- append x, c
+    c:character <- copy 98/b
+    x <- append x, c
+    c:character <- copy 99/c
+    x <- append x, c
+    s2:address:shared:array:character <- get *x, data:offset
+    1:boolean/raw <- equal s1, s2
+    2:array:character/raw <- copy *s2
+    +buffer-filled
+    c:character <- copy 100/d
+    x <- append x, c
+    s3:address:shared:array:character <- get *x, data:offset
+    10:boolean/raw <- equal s1, s3
+    11:number/raw <- get *x, length:offset
+    12:array:character/raw <- copy *s3
+  ]
+9993 transform: memory-should-contain [
+    # before +buffer-filled
+    1 <- 1   # no change in data pointer
+    2 <- 3   # size of data
+    3 <- 97  # data
+    4 <- 98
+    5 <- 99
+    # in the end
+    10 <- 0   # data pointer has grown
+    11 <- 4   # final length
+    12 <- 6   # but data's capacity has doubled
+    13 <- 97  # data
+    14 <- 98
+    15 <- 99
+    16 <- 100
+    17 <- 0
+    18 <- 0
+  ]
+9991 transform: --- rewrite literal strings in recipe scenario_buffer-append-works
 9991 transform: --- fill in reply ingredients from header for recipe scenario_buffer-append-works
 9991 transform: --- deduce types for recipe scenario_buffer-append-works
 9991 transform: --- check for invalid types in recipe scenario_buffer-append-works
@@ -214,6 +254,7 @@
 9993 transform: 10:boolean/raw <- equal s1, s3
 9993 transform: 11:number/raw <- get *x, length:offset
 9993 transform: 12:array:character/raw <- copy *s3
+9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9992 transform: default-space => ("address" "shared" "array" "location")

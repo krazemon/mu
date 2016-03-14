@@ -30,6 +30,29 @@
 9999 parse: recipe scenario_channel-wrap has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_channel-wrap
+9993 transform: run [
+    # channel with just 1 slot
+    1:address:shared:channel <- new-channel 1/capacity
+    # write and read a value
+    1:address:shared:channel <- write 1:address:shared:channel, 34
+    _, 1:address:shared:channel <- read 1:address:shared:channel
+    # first-free will now be 1
+    2:number <- get *1:address:shared:channel, first-free:offset
+    3:number <- get *1:address:shared:channel, first-free:offset
+    # write second value, verify that first-free wraps
+    1:address:shared:channel <- write 1:address:shared:channel, 34
+    4:number <- get *1:address:shared:channel, first-free:offset
+    # read second value, verify that first-full wraps
+    _, 1:address:shared:channel <- read 1:address:shared:channel
+    5:number <- get *1:address:shared:channel, first-full:offset
+  ]
+9993 transform: memory-should-contain [
+    2 <- 1  # first-free after first write
+    3 <- 1  # first-full after first read
+    4 <- 0  # first-free after second write, wrapped
+    5 <- 0  # first-full after second read, wrapped
+  ]
+9991 transform: --- rewrite literal strings in recipe scenario_channel-wrap
 9991 transform: --- fill in reply ingredients from header for recipe scenario_channel-wrap
 9991 transform: --- deduce types for recipe scenario_channel-wrap
 9991 transform: --- check for invalid types in recipe scenario_channel-wrap
@@ -126,6 +149,7 @@
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
+9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9991 transform: --- check for invalid types in recipe run_1001

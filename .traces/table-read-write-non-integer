@@ -17,6 +17,16 @@
 9999 parse: recipe scenario_table-read-write-non-integer has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_table-read-write-non-integer
+9993 transform: run [
+    1:address:shared:array:character <- new [abc def]
+    {2: (address shared table (address shared array character) number)} <- new-table 30
+    put {2: (address shared table (address shared array character) number)}, 1:address:shared:array:character, 34
+    3:number <- index {2: (address shared table (address shared array character) number)}, 1:address:shared:array:character
+  ]
+9993 transform: memory-should-contain [
+    3 <- 34
+  ]
+9991 transform: --- rewrite literal strings in recipe scenario_table-read-write-non-integer
 9991 transform: --- fill in reply ingredients from header for recipe scenario_table-read-write-non-integer
 9991 transform: --- deduce types for recipe scenario_table-read-write-non-integer
 9991 transform: --- check for invalid types in recipe scenario_table-read-write-non-integer
@@ -72,6 +82,7 @@
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
+9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9991 transform: --- check for invalid types in recipe run_1001
@@ -181,6 +192,7 @@
 9993 transform: *tmp <- copy capacity
 9993 transform: data:address:address:shared:array:table_row:_key:_value <- get-address *result, data:offset
 9993 transform: *data <- new {(table_row _key _value): type}, capacity
+9991 transform: --- rewrite literal strings in recipe new-table_2
 9991 transform: --- checking reply instructions against header for new-table_2
 9991 transform: --- fill in reply ingredients from header for recipe new-table_2
 9991 transform: --- deduce types for recipe new-table_2
@@ -436,6 +448,7 @@
 9993 transform: not-occupied?:boolean <- not occupied?:boolean
 9993 transform: assert not-occupied?, [can't handle collisions yet]
 9993 transform: *x <- merge 1/true, key, value
+9991 transform: --- rewrite literal strings in recipe put_2
 9991 transform: --- checking reply instructions against header for put_2
 9991 transform: --- fill in reply ingredients from header for recipe put_2
 9991 transform: --- deduce types for recipe put_2
@@ -713,6 +726,7 @@
 9993 transform: occupied?:boolean <- get x, occupied?:offset
 9993 transform: assert occupied?, [can't handle missing elements yet]
 9993 transform: result <- get x, value:offset
+9991 transform: --- rewrite literal strings in recipe index_3
 9991 transform: --- checking reply instructions against header for index_3
 9991 transform: --- fill in reply ingredients from header for recipe index_3
 9991 transform: --- deduce types for recipe index_3

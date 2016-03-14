@@ -81,6 +81,76 @@ F read-move-blocking: routine failed to terminate on newline]
 9999 parse: recipe scenario_read-move-blocking has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_read-move-blocking
+9993 transform: screen:address:shared:screen <- new-fake-screen 20/width, 2/height
+9993 transform: run [
+    1:address:shared:channel <- new-channel 2
+    2:number/routine <- start-running read-move, 1:address:shared:channel, screen:address:shared:screen
+    # 'read-move' is waiting for input
+    wait-for-routine 2:number
+    3:number <- routine-state 2:number/id
+    4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
+    assert 4:boolean/waiting?, [ 
+F read-move-blocking: routine failed to pause after coming up (before any keys were pressed)]
+    # press 'a'
+    1:address:shared:channel <- write 1:address:shared:channel, 97/a
+    restart 2:number/routine
+    # 'read-move' still waiting for input
+    wait-for-routine 2:number
+    3:number <- routine-state 2:number/id
+    4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
+    assert 4:boolean/waiting?, [ 
+F read-move-blocking: routine failed to pause after rank 'a']
+    # press '2'
+    1:address:shared:channel <- write 1:address:shared:channel, 50/'2'
+    restart 2:number/routine
+    # 'read-move' still waiting for input
+    wait-for-routine 2:number
+    3:number <- routine-state 2:number/id
+    4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
+    assert 4:boolean/waiting?, [ 
+F read-move-blocking: routine failed to pause after file 'a2']
+    # press '-'
+    1:address:shared:channel <- write 1:address:shared:channel, 45/'-'
+    restart 2:number/routine
+    # 'read-move' still waiting for input
+    wait-for-routine 2:number
+    3:number <- routine-state 2:number
+    4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
+    assert 4:boolean/waiting?/routine-state, [ 
+F read-move-blocking: routine failed to pause after hyphen 'a2-']
+    # press 'a'
+    1:address:shared:channel <- write 1:address:shared:channel, 97/a
+    restart 2:number/routine
+    # 'read-move' still waiting for input
+    wait-for-routine 2:number
+    3:number <- routine-state 2:number
+    4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
+    assert 4:boolean/waiting?/routine-state, [ 
+F read-move-blocking: routine failed to pause after rank 'a2-a']
+    # press '4'
+    1:address:shared:channel <- write 1:address:shared:channel, 52/'4'
+    restart 2:number/routine
+    # 'read-move' still waiting for input
+    wait-for-routine 2:number
+    3:number <- routine-state 2:number
+    4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
+    assert 4:boolean/waiting?, [ 
+F read-move-blocking: routine failed to pause after file 'a2-a4']
+    # press 'newline'
+    1:address:shared:channel <- write 1:address:shared:channel, 10  # newline
+    restart 2:number/routine
+    # 'read-move' now completes
+    wait-for-routine 2:number
+    3:number <- routine-state 2:number
+    4:boolean/completed? <- equal 3:number/routine-state, 1/completed
+    assert 4:boolean/completed?, [ 
+F read-move-blocking: routine failed to terminate on newline]
+    trace 1, [test], [reached end]
+  ]
+9993 transform: trace-should-contain [
+    test: reached end
+  ]
+9991 transform: --- rewrite literal strings in recipe scenario_read-move-blocking
 9991 transform: --- fill in reply ingredients from header for recipe scenario_read-move-blocking
 9991 transform: --- deduce types for recipe scenario_read-move-blocking
 9992 transform: screen => ("address" "shared" "screen")
@@ -2097,56 +2167,7 @@ F read-move-blocking: routine failed to terminate on newline]
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
-9993 transform: 1:address:shared:channel <- new-channel 2
-9993 transform: 2:number/routine <- start-running read-move, 1:address:shared:channel, screen:address:shared:screen
-9993 transform: wait-for-routine 2:number
-9993 transform: 3:number <- routine-state 2:number/id
-9993 transform: 4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
-9993 transform: assert 4:boolean/waiting?, [ 
-F read-move-blocking: routine failed to pause after coming up (before any keys were pressed)]
-9993 transform: 1:address:shared:channel <- write 1:address:shared:channel, 97/a
-9993 transform: restart 2:number/routine
-9993 transform: wait-for-routine 2:number
-9993 transform: 3:number <- routine-state 2:number/id
-9993 transform: 4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
-9993 transform: assert 4:boolean/waiting?, [ 
-F read-move-blocking: routine failed to pause after rank 'a']
-9993 transform: 1:address:shared:channel <- write 1:address:shared:channel, 50/'2'
-9993 transform: restart 2:number/routine
-9993 transform: wait-for-routine 2:number
-9993 transform: 3:number <- routine-state 2:number/id
-9993 transform: 4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
-9993 transform: assert 4:boolean/waiting?, [ 
-F read-move-blocking: routine failed to pause after file 'a2']
-9993 transform: 1:address:shared:channel <- write 1:address:shared:channel, 45/'-'
-9993 transform: restart 2:number/routine
-9993 transform: wait-for-routine 2:number
-9993 transform: 3:number <- routine-state 2:number
-9993 transform: 4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
-9993 transform: assert 4:boolean/waiting?/routine-state, [ 
-F read-move-blocking: routine failed to pause after hyphen 'a2-']
-9993 transform: 1:address:shared:channel <- write 1:address:shared:channel, 97/a
-9993 transform: restart 2:number/routine
-9993 transform: wait-for-routine 2:number
-9993 transform: 3:number <- routine-state 2:number
-9993 transform: 4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
-9993 transform: assert 4:boolean/waiting?/routine-state, [ 
-F read-move-blocking: routine failed to pause after rank 'a2-a']
-9993 transform: 1:address:shared:channel <- write 1:address:shared:channel, 52/'4'
-9993 transform: restart 2:number/routine
-9993 transform: wait-for-routine 2:number
-9993 transform: 3:number <- routine-state 2:number
-9993 transform: 4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
-9993 transform: assert 4:boolean/waiting?, [ 
-F read-move-blocking: routine failed to pause after file 'a2-a4']
-9993 transform: 1:address:shared:channel <- write 1:address:shared:channel, 10
-9993 transform: restart 2:number/routine
-9993 transform: wait-for-routine 2:number
-9993 transform: 3:number <- routine-state 2:number
-9993 transform: 4:boolean/completed? <- equal 3:number/routine-state, 1/completed
-9993 transform: assert 4:boolean/completed?, [ 
-F read-move-blocking: routine failed to terminate on newline]
-9993 transform: trace 1, [test], [reached end]
+9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9992 transform: screen => ("address" "shared" "screen")

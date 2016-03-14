@@ -25,6 +25,24 @@
 9999 parse: recipe scenario_list-handling has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_list-handling
+9993 transform: run [
+    1:address:shared:list:number <- push 3, 0
+    1:address:shared:list:number <- push 4, 1:address:shared:list:number
+    1:address:shared:list:number <- push 5, 1:address:shared:list:number
+    2:number <- first 1:address:shared:list:number
+    1:address:shared:list:number <- rest 1:address:shared:list:number
+    3:number <- first 1:address:shared:list:number
+    1:address:shared:list:number <- rest 1:address:shared:list:number
+    4:number <- first 1:address:shared:list:number
+    1:address:shared:list:number <- rest 1:address:shared:list:number
+  ]
+9993 transform: memory-should-contain [
+    1 <- 0  # empty to empty, dust to dust..
+    2 <- 5
+    3 <- 4
+    4 <- 3
+  ]
+9991 transform: --- rewrite literal strings in recipe scenario_list-handling
 9991 transform: --- fill in reply ingredients from header for recipe scenario_list-handling
 9991 transform: --- deduce types for recipe scenario_list-handling
 9991 transform: --- check for invalid types in recipe scenario_list-handling
@@ -111,6 +129,7 @@
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
+9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9991 transform: --- check for invalid types in recipe run_1001
@@ -238,6 +257,7 @@
 9993 transform: next:address:address:shared:list:_elem <- get-address *result, next:offset
 9993 transform: *next <- copy in
 9993 transform: return result
+9991 transform: --- rewrite literal strings in recipe push_6
 9991 transform: --- checking reply instructions against header for push_6
 9991 transform: --- fill in reply ingredients from header for recipe push_6
 9991 transform: --- deduce types for recipe push_6
@@ -381,6 +401,7 @@
 9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9993 transform: in:address:shared:list:_elem <- next-ingredient-without-typechecking 
 9993 transform: result <- get *in, value:offset
+9991 transform: --- rewrite literal strings in recipe first_4
 9991 transform: --- checking reply instructions against header for first_4
 9991 transform: --- fill in reply ingredients from header for recipe first_4
 9991 transform: --- deduce types for recipe first_4
@@ -473,6 +494,7 @@
 9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9993 transform: in:address:shared:list:_elem <- next-ingredient-without-typechecking 
 9993 transform: result <- get *in, next:offset
+9991 transform: --- rewrite literal strings in recipe rest_3
 9991 transform: --- checking reply instructions against header for rest_3
 9991 transform: --- fill in reply ingredients from header for recipe rest_3
 9991 transform: --- deduce types for recipe rest_3

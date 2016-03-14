@@ -10,12 +10,13 @@
 9992 load: after rewriting: screen:address:shared:screen <- new-fake-screen 100/width, 15/height
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "recipe foo x:_elem -> z:_elem [\nlocal-scope\nload-ingredients\nz <- add x, [a]\n]": "literal-string"
+9993 parse:   ingredient: "recipe foo x:_elem -> z:_elem [\nlocal-scope\nload-ingredients\ny:address:number <- copy 0\nz <- add x, y\n]": "literal-string"
 9993 parse:   product: 1: ("address" "shared" "array" "character")
 9992 load: after rewriting: 1:address:shared:array:character <- new [recipe foo x:_elem -> z:_elem [
 local-scope
 load-ingredients
-z <- add x, [a]
+y:address:number <- copy 0
+z <- add x, y
 ]]
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
@@ -43,16 +44,16 @@ z <- add x, [a]
 9992 load: after rewriting: event-loop screen:address:shared:screen, console:address:shared:console, 3:address:shared:programming-environment-data
 9993 parse: instruction: screen-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "\n    .  errors found (0)                                                               run (F4)           .\n    .recipe foo x:_elem -> z:_elem [                   ┊                                                 .\n    .local-scope                                       ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .load-ingredients                                  ┊0                                               x.\n    .z <- add x, [a]                                   ┊foo 2                                            .\n    .]                                                 ┊foo_2: 'add' requires number ingredients, but go↩.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊t [a]                                            .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .                                                  ┊                                                 .\n  ": "literal-string"
+9993 parse:   ingredient: "\n    .  errors found (0)                                                               run (F4)           .\n    .recipe foo x:_elem -> z:_elem [                   ┊                                                 .\n    .local-scope                                       ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .load-ingredients                                  ┊0                                               x.\n    .y:address:number <- copy 0                        ┊foo 2                                            .\n    .z <- add x, y                                     ┊foo_2: 'add' requires number ingredients, but go↩.\n    .]                                                 ┊t y                                              .\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .                                                  ┊                                                 .\n  ": "literal-string"
 9992 load: after rewriting: screen-should-contain [
     .  errors found (0)                                                               run (F4)           .
     .recipe foo x:_elem -> z:_elem [                   ┊                                                 .
     .local-scope                                       ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.
     .load-ingredients                                  ┊0                                               x.
-    .z <- add x, [a]                                   ┊foo 2                                            .
-    .]                                                 ┊foo_2: 'add' requires number ingredients, but go↩.
-    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊t [a]                                            .
-    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.
+    .y:address:number <- copy 0                        ┊foo 2                                            .
+    .z <- add x, y                                     ┊foo_2: 'add' requires number ingredients, but go↩.
+    .]                                                 ┊t y                                              .
+    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.
     .                                                  ┊                                                 .
   ]
 9993 parse: instruction: assume-console
@@ -69,21 +70,22 @@ z <- add x, [a]
   ]
 9993 parse: instruction: screen-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "\n    .  errors found (0)                                                               run (F4)           .\n    .recipe foo x:_elem -> z:_elem [                   ┊                                                 .\n    .local-scope                                       ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .load-ingredients                                  ┊0                                               x.\n    .z <- add x, [a]                                   ┊foo 2                                            .\n    .]                                                 ┊foo_2: 'add' requires number ingredients, but go↩.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊t [a]                                            .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .                                                  ┊                                                 .\n  ": "literal-string"
+9993 parse:   ingredient: "\n    .  errors found (0)                                                               run (F4)           .\n    .recipe foo x:_elem -> z:_elem [                   ┊                                                 .\n    .local-scope                                       ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .load-ingredients                                  ┊0                                               x.\n    .y:address:number <- copy 0                        ┊foo 2                                            .\n    .z <- add x, y                                     ┊foo_2: 'add' requires number ingredients, but go↩.\n    .]                                                 ┊t y                                              .\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .                                                  ┊                                                 .\n  ": "literal-string"
 9992 load: after rewriting: screen-should-contain [
     .  errors found (0)                                                               run (F4)           .
     .recipe foo x:_elem -> z:_elem [                   ┊                                                 .
     .local-scope                                       ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.
     .load-ingredients                                  ┊0                                               x.
-    .z <- add x, [a]                                   ┊foo 2                                            .
-    .]                                                 ┊foo_2: 'add' requires number ingredients, but go↩.
-    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊t [a]                                            .
-    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.
+    .y:address:number <- copy 0                        ┊foo 2                                            .
+    .z <- add x, y                                     ┊foo_2: 'add' requires number ingredients, but go↩.
+    .]                                                 ┊t y                                              .
+    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.
     .                                                  ┊                                                 .
   ]
 9999 parse: recipe scenario_run-updates-errors-for-shape-shifting-recipes has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_run-updates-errors-for-shape-shifting-recipes
+9991 transform: --- rewrite literal strings in recipe scenario_run-updates-errors-for-shape-shifting-recipes
 9991 transform: --- fill in reply ingredients from header for recipe scenario_run-updates-errors-for-shape-shifting-recipes
 9991 transform: --- deduce types for recipe scenario_run-updates-errors-for-shape-shifting-recipes
 9992 transform: screen => ("address" "shared" "screen")
@@ -400,6 +402,56 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
+  90 print-character: 121 
+  90 print-character: 58 
+  90 print-character: 97 
+  90 print-character: 100 
+  90 print-character: 100 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 115 
+  90 print-character: 115 
+  90 print-character: 58 
+  90 print-character: 110 
+  90 print-character: 117 
+  90 print-character: 109 
+  90 print-character: 98 
+  90 print-character: 101 
+  90 print-character: 114 
+  90 print-character: 32 
+  90 print-character: 60 
+  90 print-character: 45 
+  90 print-character: 32 
+  90 print-character: 99 
+  90 print-character: 111 
+  90 print-character: 112 
+  90 print-character: 121 
+  90 print-character: 32 
+  90 print-character: 48 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 122 
   90 print-character: 32 
   90 print-character: 60 
@@ -412,9 +464,9 @@ z <- add x, [a]
   90 print-character: 120 
   90 print-character: 44 
   90 print-character: 32 
-  90 print-character: 91 
-  90 print-character: 97 
-  90 print-character: 93 
+  90 print-character: 121 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -753,6 +805,56 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
+  90 print-character: 121 
+  90 print-character: 58 
+  90 print-character: 97 
+  90 print-character: 100 
+  90 print-character: 100 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 115 
+  90 print-character: 115 
+  90 print-character: 58 
+  90 print-character: 110 
+  90 print-character: 117 
+  90 print-character: 109 
+  90 print-character: 98 
+  90 print-character: 101 
+  90 print-character: 114 
+  90 print-character: 32 
+  90 print-character: 60 
+  90 print-character: 45 
+  90 print-character: 32 
+  90 print-character: 99 
+  90 print-character: 111 
+  90 print-character: 112 
+  90 print-character: 121 
+  90 print-character: 32 
+  90 print-character: 48 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 122 
   90 print-character: 32 
   90 print-character: 60 
@@ -765,8 +867,44 @@ z <- add x, [a]
   90 print-character: 120 
   90 print-character: 44 
   90 print-character: 32 
-  90 print-character: 91 
-  90 print-character: 97 
+  90 print-character: 121 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 93 
   90 print-character: 32 
   90 print-character: 32 
@@ -803,42 +941,6 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
-  90 print-character: 93 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -903,56 +1005,6 @@ z <- add x, [a]
   90 print-character: 9480 
   90 print-character: 9480 
   90 print-character: 9480 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -2190,9 +2242,9 @@ z <- add x, [a]
   90 print-character: 8617 
   90 print-character: 116 
   90 print-character: 32 
-  90 print-character: 91 
-  90 print-character: 97 
-  90 print-character: 93 
+  90 print-character: 121 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -2996,6 +3048,56 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
+  90 print-character: 121 
+  90 print-character: 58 
+  90 print-character: 97 
+  90 print-character: 100 
+  90 print-character: 100 
+  90 print-character: 114 
+  90 print-character: 101 
+  90 print-character: 115 
+  90 print-character: 115 
+  90 print-character: 58 
+  90 print-character: 110 
+  90 print-character: 117 
+  90 print-character: 109 
+  90 print-character: 98 
+  90 print-character: 101 
+  90 print-character: 114 
+  90 print-character: 32 
+  90 print-character: 60 
+  90 print-character: 45 
+  90 print-character: 32 
+  90 print-character: 99 
+  90 print-character: 111 
+  90 print-character: 112 
+  90 print-character: 121 
+  90 print-character: 32 
+  90 print-character: 48 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 122 
   90 print-character: 32 
   90 print-character: 60 
@@ -3008,8 +3110,44 @@ z <- add x, [a]
   90 print-character: 120 
   90 print-character: 44 
   90 print-character: 32 
-  90 print-character: 91 
-  90 print-character: 97 
+  90 print-character: 121 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 93 
   90 print-character: 32 
   90 print-character: 32 
@@ -3046,42 +3184,6 @@ z <- add x, [a]
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
-  90 print-character: 93 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -3146,56 +3248,6 @@ z <- add x, [a]
   90 print-character: 9480 
   90 print-character: 9480 
   90 print-character: 9480 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
-  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
@@ -4433,9 +4485,9 @@ z <- add x, [a]
   90 print-character: 8617 
   90 print-character: 116 
   90 print-character: 32 
-  90 print-character: 91 
-  90 print-character: 97 
-  90 print-character: 93 
+  90 print-character: 121 
+  90 print-character: 32 
+  90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 
   90 print-character: 32 

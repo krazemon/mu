@@ -6,17 +6,17 @@
 9992 load: after rewriting: screen:address:shared:screen <- new-fake-screen 20/width, 2/height
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "\n    1:address:shared:channel <- new-channel 2\n    2:number/routine <- start-running read-move, 1:address:shared:channel, screen:address:shared:screen\n    # 'read-move' is waiting for input\n    wait-for-routine 2:number\n    3:number <- routine-state 2:number/id\n    4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting\n    assert 4:boolean/waiting?, [ \nF read-move-file: routine failed to pause after coming up (before any keys were pressed)]\n    1:address:shared:channel <- write 1:address:shared:channel, 50/'2'\n    restart 2:number/routine\n    wait-for-routine 2:number\n  ": "literal-string"
+9993 parse:   ingredient: "\n    1:address:shared:channel:character <- new-channel 2\n    2:number/routine <- start-running read-move, 1:address:shared:channel:character, screen:address:shared:screen\n    # 'read-move' is waiting for input\n    wait-for-routine 2:number\n    3:number <- routine-state 2:number/id\n    4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting\n    assert 4:boolean/waiting?, [ \nF read-move-file: routine failed to pause after coming up (before any keys were pressed)]\n    1:address:shared:channel:character <- write 1:address:shared:channel:character, 50/'2'\n    restart 2:number/routine\n    wait-for-routine 2:number\n  ": "literal-string"
 9992 load: after rewriting: run [
-    1:address:shared:channel <- new-channel 2
-    2:number/routine <- start-running read-move, 1:address:shared:channel, screen:address:shared:screen
+    1:address:shared:channel:character <- new-channel 2
+    2:number/routine <- start-running read-move, 1:address:shared:channel:character, screen:address:shared:screen
     # 'read-move' is waiting for input
     wait-for-routine 2:number
     3:number <- routine-state 2:number/id
     4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
     assert 4:boolean/waiting?, [ 
 F read-move-file: routine failed to pause after coming up (before any keys were pressed)]
-    1:address:shared:channel <- write 1:address:shared:channel, 50/'2'
+    1:address:shared:channel:character <- write 1:address:shared:channel:character, 50/'2'
     restart 2:number/routine
     wait-for-routine 2:number
   ]
@@ -33,15 +33,15 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_read-move-illegal-file
 9993 transform: screen:address:shared:screen <- new-fake-screen 20/width, 2/height
 9993 transform: run [
-    1:address:shared:channel <- new-channel 2
-    2:number/routine <- start-running read-move, 1:address:shared:channel, screen:address:shared:screen
+    1:address:shared:channel:character <- new-channel 2
+    2:number/routine <- start-running read-move, 1:address:shared:channel:character, screen:address:shared:screen
     # 'read-move' is waiting for input
     wait-for-routine 2:number
     3:number <- routine-state 2:number/id
     4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
     assert 4:boolean/waiting?, [ 
 F read-move-file: routine failed to pause after coming up (before any keys were pressed)]
-    1:address:shared:channel <- write 1:address:shared:channel, 50/'2'
+    1:address:shared:channel:character <- write 1:address:shared:channel:character, 50/'2'
     restart 2:number/routine
     wait-for-routine 2:number
   ]
@@ -1772,15 +1772,15 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: storing 1012 in location 900
 9999 mem: incrementing refcount of 1012: 2 -> 3
  102 run: run [
-    1:address:shared:channel <- new-channel 2
-    2:number/routine <- start-running read-move, 1:address:shared:channel, screen:address:shared:screen
+    1:address:shared:channel:character <- new-channel 2
+    2:number/routine <- start-running read-move, 1:address:shared:channel:character, screen:address:shared:screen
     # 'read-move' is waiting for input
     wait-for-routine 2:number
     3:number <- routine-state 2:number/id
     4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
     assert 4:boolean/waiting?, [ 
 F read-move-file: routine failed to pause after coming up (before any keys were pressed)]
-    1:address:shared:channel <- write 1:address:shared:channel, 50/'2'
+    1:address:shared:channel:character <- write 1:address:shared:channel:character, 50/'2'
     restart 2:number/routine
     wait-for-routine 2:number
   ]
@@ -1788,15 +1788,15 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9993 parse: instruction: new-channel
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: 2: "literal"
-9993 parse:   product: 1: ("address" "shared" "channel")
-9992 load: after rewriting: 1:address:shared:channel <- new-channel 2
+9993 parse:   product: 1: ("address" "shared" "channel" "character")
+9992 load: after rewriting: 1:address:shared:channel:character <- new-channel 2
 9993 parse: instruction: start-running
 9993 parse:   number of ingredients: 3
 9993 parse:   ingredient: read-move: ()
-9993 parse:   ingredient: 1: ("address" "shared" "channel")
+9993 parse:   ingredient: 1: ("address" "shared" "channel" "character")
 9993 parse:   ingredient: screen: ("address" "shared" "screen")
 9993 parse:   product: 2: "number", {"routine": ()}
-9992 load: after rewriting: 2:number/routine <- start-running read-move, 1:address:shared:channel, screen:address:shared:screen
+9992 load: after rewriting: 2:number/routine <- start-running read-move, 1:address:shared:channel:character, screen:address:shared:screen
 9993 parse: instruction: wait-for-routine
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: 2: "number"
@@ -1820,10 +1820,10 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 F read-move-file: routine failed to pause after coming up (before any keys were pressed)]
 9993 parse: instruction: write
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 1: ("address" "shared" "channel")
+9993 parse:   ingredient: 1: ("address" "shared" "channel" "character")
 9993 parse:   ingredient: 50: "literal", {"'2'": ()}
-9993 parse:   product: 1: ("address" "shared" "channel")
-9992 load: after rewriting: 1:address:shared:channel <- write 1:address:shared:channel, 50/'2'
+9993 parse:   product: 1: ("address" "shared" "channel" "character")
+9992 load: after rewriting: 1:address:shared:channel:character <- write 1:address:shared:channel:character, 50/'2'
 9993 parse: instruction: restart
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: 2: "number", {"routine": ()}
@@ -1843,8 +1843,10 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction 1:address:shared:channel <- new-channel 2
-9992 transform: checking variant (strict) 0: recipe new-channel capacity: "number" -> result: ("address" "shared" "channel")
+9992 transform: instruction 1:address:shared:channel:character <- new-channel 2
+9992 transform: checking variant (strict) 0: recipe new-channel capacity: "number" -> result: ("address" "shared" "channel" "_elem")
+9993 transform: strict match failed: product 0
+9992 transform: checking variant (strict) 1: recipe new-channel_2 capacity: "number" -> result: ("address" "shared" "channel" "character")
 9992 transform: instruction 4:boolean/waiting? <- equal 3:number/routine-state, 3/waiting
 9992 transform: checking variant (strict) 0: recipe equal_2 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: "boolean"
 9993 transform: strict match failed: ingredient 0
@@ -1852,12 +1854,297 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe equal_2 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: "boolean"
 9993 transform: strict match failed: ingredient 0
-9992 transform: instruction 1:address:shared:channel <- write 1:address:shared:channel, 50/'2'
-9992 transform: checking variant (strict) 0: recipe write chan: ("address" "shared" "channel") val: "character" -> chan: ("address" "shared" "channel")
+9992 transform: instruction 1:address:shared:channel:character <- write 1:address:shared:channel:character, 50/'2'
+9992 transform: checking variant (strict) 0: recipe write chan: ("address" "shared" "channel" "_elem") val: "character" -> chan: ("address" "shared" "channel" "_elem")
+9993 transform: strict match failed: ingredient 0
+9992 transform: checking variant (strict) 1: recipe write_2 chan: ("address" "shared" "channel" "character") val: "character" -> chan: ("address" "shared" "channel" "character")
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict except literals-against-booleans) 0: recipe write chan: ("address" "shared" "channel") val: "character" -> chan: ("address" "shared" "channel")
-9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant 0: recipe write chan: ("address" "shared" "channel") val: "character" -> chan: ("address" "shared" "channel")
+9992 transform: found variant to specialize: 227 write
+9993 transform: switching write to specialized recipe write_3 chan: ("address" "shared" "channel" "_elem") val: "character" -> chan: ("address" "shared" "channel" "_elem")
+9993 transform: compute type names: write_3
+9994 transform:     checking chan: ("address" "shared" "channel" "_elem"): ("address" "shared" "channel" "_elem")
+9993 transform: type of chan is ("address" "shared" "channel" "_elem")
+9994 transform:     checking val: "character": "character"
+9993 transform: type of val is "character"
+9994 transform:     checking chan: ("address" "shared" "channel" "_elem"): ("address" "shared" "channel" "_elem")
+9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9994 transform:     checking location: "type": "type"
+9993 transform: type of location is "type"
+9994 transform:     checking number-of-locals: "literal": "literal"
+9993 transform: type of number-of-locals is "literal"
+9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
+9993 transform: type of default-space is ("address" "shared" "array" "location")
+9993 transform:   instruction: chan:address:shared:channel:_elem <- next-ingredient-without-typechecking 
+9994 transform:     checking chan: ("address" "shared" "channel" "_elem"): ("address" "shared" "channel" "_elem")
+9993 transform:   instruction: val:character <- next-ingredient-without-typechecking 
+9994 transform:     checking val: "character": "character"
+9993 transform:   instruction: {
+9993 transform:   instruction: full:boolean <- channel-full? chan
+9994 transform:     checking chan: (): ()
+9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
+9994 transform:     checking full: "boolean": "boolean"
+9993 transform: type of full is "boolean"
+9993 transform:   instruction: break-unless full
+9994 transform:     checking full: (): ()
+9994 transform:     deducing type to "boolean"
+9993 transform:   instruction: full-address:address:number <- get-address *chan, first-full:offset
+9994 transform:     checking chan: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
+9994 transform:     checking first-full: "offset": "offset"
+9994 transform:     checking full-address: ("address" "number"): ("address" "number")
+9993 transform: type of full-address is ("address" "number")
+9993 transform:   instruction: wait-for-location *full-address
+9994 transform:     checking full-address: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "number")
+9993 transform:   instruction: }
+9993 transform:   instruction: circular-buffer:address:shared:array:character <- get *chan, data:offset
+9994 transform:     checking chan: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
+9994 transform:     checking data: "offset": "offset"
+9994 transform:     checking circular-buffer: ("address" "shared" "array" "character"): ("address" "shared" "array" "character")
+9993 transform: type of circular-buffer is ("address" "shared" "array" "character")
+9993 transform:   instruction: free:address:number <- get-address *chan, first-free:offset
+9994 transform:     checking chan: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
+9994 transform:     checking first-free: "offset": "offset"
+9994 transform:     checking free: ("address" "number"): ("address" "number")
+9993 transform: type of free is ("address" "number")
+9993 transform:   instruction: dest:address:character <- index-address *circular-buffer, *free
+9994 transform:     checking circular-buffer: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "shared" "array" "character")
+9994 transform:     checking free: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "number")
+9994 transform:     checking dest: ("address" "character"): ("address" "character")
+9993 transform: type of dest is ("address" "character")
+9993 transform:   instruction: *dest <- copy val
+9994 transform:     checking val: (): ()
+9994 transform:     deducing type to "character"
+9994 transform:     checking dest: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "character")
+9993 transform:   instruction: *free <- add *free, 1
+9994 transform:     checking free: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "number")
+9994 transform:     checking 1: "literal": "literal"
+9993 transform: type of 1 is "literal"
+9994 transform:     checking free: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "number")
+9993 transform:   instruction: {
+9993 transform:   instruction: len:number <- length *circular-buffer
+9994 transform:     checking circular-buffer: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "shared" "array" "character")
+9994 transform:     checking len: "number": "number"
+9993 transform: type of len is "number"
+9993 transform:   instruction: at-end?:boolean <- greater-or-equal *free, len
+9994 transform:     checking free: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "number")
+9994 transform:     checking len: (): ()
+9994 transform:     deducing type to "number"
+9994 transform:     checking at-end?: "boolean": "boolean"
+9993 transform: type of at-end? is "boolean"
+9993 transform:   instruction: break-unless at-end?
+9994 transform:     checking at-end?: (): ()
+9994 transform:     deducing type to "boolean"
+9993 transform:   instruction: *free <- copy 0
+9994 transform:     checking 0: "literal": "literal"
+9993 transform: type of 0 is "literal"
+9994 transform:     checking free: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "number")
+9993 transform:   instruction: }
+9993 transform: adding mapping from _elem to character
+9993 transform: replacing in recipe header ingredients
+9993 transform: replacing in ingredient chan:address:shared:channel:_elem
+9993 transform: _elem => "character"
+9993 transform: replacing in ingredient val:character
+9993 transform: replacing in recipe header products
+9993 transform: replacing in ingredient chan:address:shared:channel:_elem
+9993 transform: _elem => "character"
+9993 transform: replacing in instruction 'default-space:address:shared:array:location <- new location:type, number-of-locals:literal'
+9993 transform: replacing in ingredient location:type
+9993 transform: replacing in ingredient number-of-locals:literal
+9993 transform: replacing in ingredient default-space:address:shared:array:location
+9993 transform: replacing in instruction 'chan:address:shared:channel:_elem <- next-ingredient-without-typechecking '
+9993 transform: replacing in ingredient chan:address:shared:channel:_elem
+9993 transform: _elem => "character"
+9993 transform: replacing in instruction 'val:character <- next-ingredient-without-typechecking '
+9993 transform: replacing in ingredient val:character
+9993 transform: replacing in instruction '{'
+9993 transform: replacing in instruction 'full:boolean <- channel-full? chan'
+9993 transform: replacing in ingredient chan
+9993 transform: _elem => "character"
+9993 transform: replacing in ingredient full:boolean
+9993 transform: replacing in instruction 'break-unless full'
+9993 transform: replacing in ingredient full
+9993 transform: replacing in instruction 'full-address:address:number <- get-address *chan, first-full:offset'
+9993 transform: replacing in ingredient *chan
+9993 transform: _elem => "character"
+9993 transform: replacing in ingredient first-full:offset
+9993 transform: replacing in ingredient full-address:address:number
+9993 transform: replacing in instruction 'wait-for-location *full-address'
+9993 transform: replacing in ingredient *full-address
+9993 transform: replacing in instruction '}'
+9993 transform: replacing in instruction 'circular-buffer:address:shared:array:character <- get *chan, data:offset'
+9993 transform: replacing in ingredient *chan
+9993 transform: _elem => "character"
+9993 transform: replacing in ingredient data:offset
+9993 transform: replacing in ingredient circular-buffer:address:shared:array:character
+9993 transform: replacing in instruction 'free:address:number <- get-address *chan, first-free:offset'
+9993 transform: replacing in ingredient *chan
+9993 transform: _elem => "character"
+9993 transform: replacing in ingredient first-free:offset
+9993 transform: replacing in ingredient free:address:number
+9993 transform: replacing in instruction 'dest:address:character <- index-address *circular-buffer, *free'
+9993 transform: replacing in ingredient *circular-buffer
+9993 transform: replacing in ingredient *free
+9993 transform: replacing in ingredient dest:address:character
+9993 transform: replacing in instruction '*dest <- copy val'
+9993 transform: replacing in ingredient val
+9993 transform: replacing in ingredient *dest
+9993 transform: replacing in instruction '*free <- add *free, 1'
+9993 transform: replacing in ingredient *free
+9993 transform: replacing in ingredient 1
+9993 transform: replacing in ingredient *free
+9993 transform: replacing in instruction '{'
+9993 transform: replacing in instruction 'len:number <- length *circular-buffer'
+9993 transform: replacing in ingredient *circular-buffer
+9993 transform: replacing in ingredient len:number
+9993 transform: replacing in instruction 'at-end?:boolean <- greater-or-equal *free, len'
+9993 transform: replacing in ingredient *free
+9993 transform: replacing in ingredient len
+9993 transform: replacing in ingredient at-end?:boolean
+9993 transform: replacing in instruction 'break-unless at-end?'
+9993 transform: replacing in ingredient at-end?
+9993 transform: replacing in instruction '*free <- copy 0'
+9993 transform: replacing in ingredient 0
+9993 transform: replacing in ingredient *free
+9993 transform: replacing in instruction '}'
+9992 transform: transforming new specialization: write_3
+9991 transform: --- rewrite literal strings in recipe write_3
+9991 transform: --- rewrite 'stash' instructions in recipe write_3
+9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9993 transform: chan:address:shared:channel:_elem <- next-ingredient-without-typechecking 
+9993 transform: val:character <- next-ingredient-without-typechecking 
+9993 transform: {
+9993 transform: full:boolean <- channel-full? chan
+9993 transform: break-unless full
+9993 transform: full-address:address:number <- get-address *chan, first-full:offset
+9993 transform: wait-for-location *full-address
+9993 transform: }
+9993 transform: circular-buffer:address:shared:array:character <- get *chan, data:offset
+9993 transform: free:address:number <- get-address *chan, first-free:offset
+9993 transform: dest:address:character <- index-address *circular-buffer, *free
+9993 transform: *dest <- copy val
+9993 transform: *free <- add *free, 1
+9993 transform: {
+9993 transform: len:number <- length *circular-buffer
+9993 transform: at-end?:boolean <- greater-or-equal *free, len
+9993 transform: break-unless at-end?
+9993 transform: *free <- copy 0
+9993 transform: }
+9991 transform: --- checking reply instructions against header for write_3
+9991 transform: --- fill in reply ingredients from header for recipe write_3
+9991 transform: --- deduce types for recipe write_3
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: chan => ("address" "shared" "channel" "character")
+9992 transform: val => "character"
+9992 transform: full => "boolean"
+9992 transform: full-address => ("address" "number")
+9992 transform: circular-buffer => ("address" "shared" "array" "character")
+9992 transform: free => ("address" "number")
+9992 transform: dest => ("address" "character")
+9992 transform: len => "number"
+9992 transform: at-end? => "boolean"
+9991 transform: --- deduce types from header for write_3
+9993 transform: type of chan is ("address" "shared" "channel" "character")
+9993 transform: type of val is "character"
+9993 transform: type of chan is ("address" "shared" "channel" "character")
+9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9993 transform:   product: default-space: ("address" "shared" "array" "location")
+9992 transform: instruction: chan:address:shared:channel:_elem <- next-ingredient-without-typechecking 
+9993 transform:   product: chan: ("address" "shared" "channel" "character")
+9992 transform: instruction: val:character <- next-ingredient-without-typechecking 
+9993 transform:   product: val: "character"
+9992 transform: instruction: {
+9992 transform: instruction: full:boolean <- channel-full? chan
+9993 transform:   product: full: "boolean"
+9992 transform: instruction: break-unless full
+9992 transform: instruction: full-address:address:number <- get-address *chan, first-full:offset
+9993 transform:   product: full-address: ("address" "number")
+9992 transform: instruction: wait-for-location *full-address
+9992 transform: instruction: }
+9992 transform: instruction: circular-buffer:address:shared:array:character <- get *chan, data:offset
+9993 transform:   product: circular-buffer: ("address" "shared" "array" "character")
+9992 transform: instruction: free:address:number <- get-address *chan, first-free:offset
+9993 transform:   product: free: ("address" "number")
+9992 transform: instruction: dest:address:character <- index-address *circular-buffer, *free
+9993 transform:   product: dest: ("address" "character")
+9992 transform: instruction: *dest <- copy val
+9993 transform:   product: dest: ("address" "character"), {"lookup": ()}
+9992 transform: instruction: *free <- add *free, 1
+9993 transform:   product: free: ("address" "number"), {"lookup": ()}
+9992 transform: instruction: {
+9992 transform: instruction: len:number <- length *circular-buffer
+9993 transform:   product: len: "number"
+9992 transform: instruction: at-end?:boolean <- greater-or-equal *free, len
+9993 transform:   product: at-end?: "boolean"
+9992 transform: instruction: break-unless at-end?
+9992 transform: instruction: *free <- copy 0
+9993 transform:   product: free: ("address" "number"), {"lookup": ()}
+9992 transform: instruction: }
+9992 transform: instruction: reply chan:address:shared:channel:_elem
+9991 transform: --- check for invalid types in recipe write_3
+9991 transform: --- collect surrounding spaces for recipe write_3
+9991 transform: --- transform names for recipe write_3
+9993 name: assign chan 1
+9993 name: assign val 2
+9993 name: assign full 3
+9993 name: element first-full of type channel is at offset 0
+9993 name: assign full-address 4
+9993 name: element data of type channel is at offset 2
+9993 name: assign circular-buffer 5
+9993 name: element first-free of type channel is at offset 1
+9993 name: assign free 6
+9993 name: assign dest 7
+9993 name: assign len 8
+9993 name: assign at-end? 9
+9991 transform: --- resolve ambiguous calls for recipe write_3
+9992 transform: instruction full:boolean <- channel-full? chan
+9992 transform: checking variant (strict) 0: recipe channel-full? chan: ("address" "shared" "channel" "_elem") -> result: "boolean"
+9993 transform: strict match failed: ingredient 0
+9992 transform: checking variant (strict) 1: recipe channel-full?_2 chan: ("address" "shared" "channel" "character") -> result: "boolean"
+9991 transform: --- compute instruction operations for recipe write_3
+9991 transform: --- transform braces for recipe write_3
+9993 transform: write_3: push (open, 3)
+9993 transform: push (close, 8)
+9993 transform: write_3: push (open, 14)
+9993 transform: push (close, 19)
+9992 transform: local-scope ...
+9992 transform:  ...
+9992 transform:  ...
+9992 transform: channel-full? ...
+9992 transform: jump-unless full, 2:offset
+9992 transform: get-address ...
+9992 transform: wait-for-location ...
+9992 transform: get ...
+9992 transform: get-address ...
+9992 transform: index-address ...
+9992 transform: copy ...
+9992 transform: add ...
+9992 transform: length ...
+9992 transform: greater-or-equal ...
+9992 transform: jump-unless at-end?, 1:offset
+9992 transform: copy ...
+9992 transform:  ...
+9991 transform: --- check mutability of ingredients in recipe write_3
+9991 transform: --- perform checks for recipe write_3
+9991 transform: --- type-check 'call' instructions inside recipe write_3
+9991 transform: --- type-check calls inside recipe write_3
+9991 transform: --- convert 'new' to 'allocate' for recipe write_3
+9992 new: size of "location" is 1
+9991 transform: --- type-check merge instructions in recipe write_3
+9991 transform: --- check types of reply instructions in recipe write_3
+9991 transform: --- check that recipe write_3 sets default-space
+9991 transform: --- checking reply instructions against header for write_3
+9992 transform: new specialization: write_3
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new-channel ...
@@ -1880,7 +2167,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: 1:address:shared:channel <- new-channel 2
+ 103 run: 1:address:shared:channel:character <- new-channel_2 2
 9999 trace: incrementing callstack depth to 3
  104 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9999 mem: array size is 6
@@ -1889,7 +2176,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: storing 6 in location 1113
  104 run: capacity:number <- next-ingredient-without-typechecking 
 9999 mem: storing 2 in location 1115
- 104 run: result <- new channel:type
+ 104 run: result <- new {(channel _elem): type}
 9999 mem: allocating size 4
 9999 mem: new alloc: 1120
 9999 mem: storing 1120 in location 1116
@@ -1942,7 +2229,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: location 1119 is 1123
 9999 mem: storing 1124 in location 1123
 9999 mem: incrementing refcount of 1124: 0 -> 1
- 104 run: reply result:address:shared:channel
+ 104 run: reply result:address:shared:channel:_elem
 9999 mem: location 1116 is 1120
 9999 mem: clearing full:address:number
 9999 mem: storing 0 in location 1117
@@ -1955,7 +2242,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9998 run: result 0 is 1120
 9999 mem: storing 1120 in location 1
 9999 mem: incrementing refcount of 1120: 1 -> 2
- 103 run: 2:number/routine <- start-running read-move, 1:address:shared:channel, screen:address:shared:screen
+ 103 run: 2:number/routine <- start-running read-move, 1:address:shared:channel:character, screen:address:shared:screen
 9999 mem: location 1 is 1120
 9999 mem: location 900 is 1012
 9999 trace: new routine; incrementing callstack depth to 3
@@ -1970,7 +2257,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: allocating size 10
 9999 mem: new alloc: 101000
 9999 mem: storing 8 in location 101001
- 104 run: stdin:address:shared:channel <- next-ingredient-without-typechecking 
+ 104 run: stdin:address:shared:channel:character <- next-ingredient-without-typechecking 
 9999 mem: storing 1120 in location 101003
 9999 mem: incrementing refcount of 1120: 2 -> 3
  104 run: screen:address:shared:screen <- next-ingredient-without-typechecking 
@@ -1985,13 +2272,13 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: allocating size 15
 9999 mem: new alloc: 101010
 9999 mem: storing 13 in location 101011
- 105 run: stdin:address:shared:channel <- next-ingredient-without-typechecking 
+ 105 run: stdin:address:shared:channel:character <- next-ingredient-without-typechecking 
 9999 mem: storing 1120 in location 101013
 9999 mem: incrementing refcount of 1120: 3 -> 4
  105 run: screen:address:shared:screen <- next-ingredient-without-typechecking 
 9999 mem: storing 1012 in location 101014
 9999 mem: incrementing refcount of 1012: 4 -> 5
- 105 run: c:character, stdin <- read stdin
+ 105 run: c:character, stdin <- read_2 stdin
 9999 mem: location 101013 is 1120
 9999 trace: incrementing callstack depth to 5
  106 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
@@ -1999,10 +2286,10 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: allocating size 11
 9999 mem: new alloc: 101025
 9999 mem: storing 9 in location 101026
- 106 run: chan:address:shared:channel <- next-ingredient-without-typechecking 
+ 106 run: chan:address:shared:channel:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1120 in location 101028
 9999 mem: incrementing refcount of 1120: 4 -> 5
- 106 run: empty?:boolean <- channel-empty? chan
+ 106 run: empty?:boolean <- channel-empty?_2 chan
 9999 mem: location 101028 is 1120
 9999 trace: incrementing callstack depth to 6
  107 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
@@ -2010,7 +2297,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: allocating size 7
 9999 mem: new alloc: 101036
 9999 mem: storing 5 in location 101037
- 107 run: chan:address:shared:channel <- next-ingredient-without-typechecking 
+ 107 run: chan:address:shared:channel:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1120 in location 101039
 9999 mem: incrementing refcount of 1120: 5 -> 6
  107 run: full:number <- get *chan, first-full:offset
@@ -2043,7 +2330,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: storing 1 in location 101042
  107 run: reply result:boolean
 9999 mem: location 101042 is 1
-9999 mem: clearing chan:address:shared:channel
+9999 mem: clearing chan:address:shared:channel:_elem
 9999 mem: decrementing refcount of 1120: 6 -> 5
 9999 mem: storing 0 in location 101039
 9999 abandon: saving in free-list of size 7
@@ -2079,19 +2366,19 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
  106 run: assert 4:boolean/waiting?, [ 
 F read-move-file: routine failed to pause after coming up (before any keys were pressed)]
 9999 mem: location 4 is 1
- 106 run: 1:address:shared:channel <- write 1:address:shared:channel, 50/'2'
+ 106 run: 1:address:shared:channel:character <- write_3 1:address:shared:channel:character, 50/'2'
 9999 mem: location 1 is 1120
 9999 trace: incrementing callstack depth to 6
  107 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9999 mem: array size is 10
 9999 mem: allocating size 12
 9999 abandon: picking up space from free-list of size 12
- 107 run: chan:address:shared:channel <- next-ingredient-without-typechecking 
+ 107 run: chan:address:shared:channel:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1120 in location 1003
 9999 mem: incrementing refcount of 1120: 5 -> 6
  107 run: val:character <- next-ingredient-without-typechecking 
 9999 mem: storing 50 in location 1004
- 107 run: full:boolean <- channel-full? chan
+ 107 run: full:boolean <- channel-full?_2 chan
 9999 mem: location 1003 is 1120
 9999 trace: incrementing callstack depth to 7
  108 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
@@ -2099,7 +2386,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: allocating size 9
 9999 mem: new alloc: 1129
 9999 mem: storing 7 in location 1130
- 108 run: chan:address:shared:channel <- next-ingredient-without-typechecking 
+ 108 run: chan:address:shared:channel:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1120 in location 1132
 9999 mem: incrementing refcount of 1120: 6 -> 7
  108 run: tmp:number <- get *chan, first-free:offset
@@ -2117,7 +2404,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
  108 run: tmp <- add tmp, 1
 9999 mem: location 1133 is 0
 9999 mem: storing 1 in location 1133
- 108 run: len:number <- channel-capacity chan
+ 108 run: len:number <- channel-capacity_2 chan
 9999 mem: location 1132 is 1120
 9999 trace: incrementing callstack depth to 8
  109 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
@@ -2125,7 +2412,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: allocating size 6
 9999 mem: new alloc: 1138
 9999 mem: storing 4 in location 1139
- 109 run: chan:address:shared:channel <- next-ingredient-without-typechecking 
+ 109 run: chan:address:shared:channel:_elem <- next-ingredient-without-typechecking 
 9999 mem: storing 1120 in location 1141
 9999 mem: incrementing refcount of 1120: 7 -> 8
  109 run: q:address:shared:array:character <- get *chan, data:offset
@@ -2147,7 +2434,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: storing 3 in location 1143
  109 run: reply result:number
 9999 mem: location 1143 is 3
-9999 mem: clearing chan:address:shared:channel
+9999 mem: clearing chan:address:shared:channel:_elem
 9999 mem: decrementing refcount of 1120: 8 -> 7
 9999 mem: storing 0 in location 1141
 9999 mem: clearing q:address:shared:array:character
@@ -2182,7 +2469,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: storing 0 in location 1137
  108 run: reply result:boolean
 9999 mem: location 1137 is 0
-9999 mem: clearing chan:address:shared:channel
+9999 mem: clearing chan:address:shared:channel:_elem
 9999 mem: decrementing refcount of 1120: 7 -> 6
 9999 mem: storing 0 in location 1132
 9999 abandon: saving in free-list of size 9
@@ -2242,7 +2529,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
  107 run: jump-unless at-end?, 
 9999 mem: location 1011 is 0
 9998 run: jumping to instruction 19
- 107 run: reply chan:address:shared:channel
+ 107 run: reply chan:address:shared:channel:_elem
 9999 mem: location 1003 is 1120
 9999 mem: clearing full-address:address:number
 9999 mem: storing 0 in location 1006
@@ -2264,7 +2551,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
  106 run: wait-for-routine 2:number
 9999 mem: location 2 is 2
 9998 run: waiting for routine 2
-9990 schedule: read/read-file/read-move
+9990 schedule: read_2/read-file/read-move
  106 run: full:address:number <- get-address *chan, first-full:offset
 9999 mem: location 101028 is 1120
 9999 mem: skipping refcount at 1120
@@ -2315,7 +2602,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
  106 run: jump-unless at-end?, 
 9999 mem: location 101035 is 0
 9998 run: jumping to instruction 17
- 106 run: reply result:character, chan:address:shared:channel
+ 106 run: reply result:character, chan:address:shared:channel:_elem
 9999 mem: location 101033 is 50
 9999 mem: location 101028 is 1120
 9999 mem: clearing free-address:address:number
@@ -6263,7 +6550,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 mem: location 101102 is 1012
 9999 abandon: saving in free-list of size 4
 9999 trace: reply: decrementing callstack depth from 5
- 105 run: return 0/dummy, 0/quit, 1/error, stdin:address:shared:channel, screen:address:shared:screen
+ 105 run: return 0/dummy, 0/quit, 1/error, stdin:address:shared:channel:character, screen:address:shared:screen
 9999 mem: location 101013 is 1120
 9999 mem: location 101014 is 1012
 9999 mem: clearing print_22_1:address:shared:array:character
@@ -6290,7 +6577,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
  104 run: jump-unless error?, 1:offset
 9999 mem: location 101007 is 1
 9998 run: jump-unless fell through
- 104 run: reply 0/dummy, quit?:boolean, error?:boolean, stdin:address:shared:channel, screen:address:shared:screen
+ 104 run: reply 0/dummy, quit?:boolean, error?:boolean, stdin:address:shared:channel:character, screen:address:shared:screen
 9999 mem: location 101006 is 0
 9999 mem: location 101007 is 1
 9999 mem: location 101003 is 1120

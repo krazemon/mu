@@ -1,11 +1,11 @@
 9991 parse: --- defining scenario_channel-initialization
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "\n    1:address:shared:channel:character <- new-channel 3/capacity\n    2:number <- get *1:address:shared:channel:character, first-full:offset\n    3:number <- get *1:address:shared:channel:character, first-free:offset\n  ": "literal-string"
+9993 parse:   ingredient: "\n    1:address:shared:channel:number <- new-channel 3/capacity\n    2:number <- get *1:address:shared:channel:number, first-full:offset\n    3:number <- get *1:address:shared:channel:number, first-free:offset\n  ": "literal-string"
 9992 load: after rewriting: run [
-    1:address:shared:channel:character <- new-channel 3/capacity
-    2:number <- get *1:address:shared:channel:character, first-full:offset
-    3:number <- get *1:address:shared:channel:character, first-free:offset
+    1:address:shared:channel:number <- new-channel 3/capacity
+    2:number <- get *1:address:shared:channel:number, first-full:offset
+    3:number <- get *1:address:shared:channel:number, first-free:offset
   ]
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
@@ -19,9 +19,9 @@
 9991 transform: --- rewrite literal strings in recipe scenario_channel-initialization
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_channel-initialization
 9993 transform: run [
-    1:address:shared:channel:character <- new-channel 3/capacity
-    2:number <- get *1:address:shared:channel:character, first-full:offset
-    3:number <- get *1:address:shared:channel:character, first-free:offset
+    1:address:shared:channel:number <- new-channel 3/capacity
+    2:number <- get *1:address:shared:channel:number, first-full:offset
+    3:number <- get *1:address:shared:channel:number, first-free:offset
   ]
 9993 transform: memory-should-contain [
     2 <- 0  # first-full
@@ -51,28 +51,28 @@
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_channel-initialization
  102 run: run [
-    1:address:shared:channel:character <- new-channel 3/capacity
-    2:number <- get *1:address:shared:channel:character, first-full:offset
-    3:number <- get *1:address:shared:channel:character, first-free:offset
+    1:address:shared:channel:number <- new-channel 3/capacity
+    2:number <- get *1:address:shared:channel:number, first-full:offset
+    3:number <- get *1:address:shared:channel:number, first-free:offset
   ]
 9991 parse: --- defining run_1001
 9993 parse: instruction: new-channel
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: 3: "literal", {"capacity": ()}
-9993 parse:   product: 1: ("address" "shared" "channel" "character")
-9992 load: after rewriting: 1:address:shared:channel:character <- new-channel 3/capacity
+9993 parse:   product: 1: ("address" "shared" "channel" "number")
+9992 load: after rewriting: 1:address:shared:channel:number <- new-channel 3/capacity
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 1: ("address" "shared" "channel" "character"), {"lookup": ()}
+9993 parse:   ingredient: 1: ("address" "shared" "channel" "number"), {"lookup": ()}
 9993 parse:   ingredient: first-full: "offset"
 9993 parse:   product: 2: "number"
-9992 load: after rewriting: 2:number <- get *1:address:shared:channel:character, first-full:offset
+9992 load: after rewriting: 2:number <- get *1:address:shared:channel:number, first-full:offset
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 1: ("address" "shared" "channel" "character"), {"lookup": ()}
+9993 parse:   ingredient: 1: ("address" "shared" "channel" "number"), {"lookup": ()}
 9993 parse:   ingredient: first-free: "offset"
 9993 parse:   product: 3: "number"
-9992 load: after rewriting: 3:number <- get *1:address:shared:channel:character, first-free:offset
+9992 load: after rewriting: 3:number <- get *1:address:shared:channel:number, first-free:offset
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
@@ -85,10 +85,206 @@
 9993 name: element first-full of type channel is at offset 0
 9993 name: element first-free of type channel is at offset 1
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction 1:address:shared:channel:character <- new-channel 3/capacity
+9992 transform: instruction 1:address:shared:channel:number <- new-channel 3/capacity
 9992 transform: checking variant (strict) 0: recipe new-channel capacity: "number" -> result: ("address" "shared" "channel" "_elem")
 9993 transform: strict match failed: product 0
 9992 transform: checking variant (strict) 1: recipe new-channel_2 capacity: "number" -> result: ("address" "shared" "channel" "character")
+9993 transform: strict match failed: product 0
+9992 transform: found variant to specialize: 226 new-channel
+9993 transform: switching new-channel to specialized recipe new-channel_3 capacity: "number" -> result: ("address" "shared" "channel" "_elem")
+9993 transform: compute type names: new-channel_3
+9994 transform:     checking capacity: "number": "number"
+9993 transform: type of capacity is "number"
+9994 transform:     checking result: ("address" "shared" "channel" "_elem"): ("address" "shared" "channel" "_elem")
+9993 transform: type of result is ("address" "shared" "channel" "_elem")
+9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9994 transform:     checking location: "type": "type"
+9993 transform: type of location is "type"
+9994 transform:     checking number-of-locals: "literal": "literal"
+9993 transform: type of number-of-locals is "literal"
+9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
+9993 transform: type of default-space is ("address" "shared" "array" "location")
+9993 transform:   instruction: capacity:number <- next-ingredient-without-typechecking 
+9994 transform:     checking capacity: "number": "number"
+9993 transform:   instruction: result <- new {(channel _elem): type}
+9994 transform:     checking (channel _elem): "type": "type"
+9993 transform: type of (channel _elem) is "type"
+9994 transform:     checking result: (): ()
+9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
+9993 transform:   instruction: full:address:number <- get-address *result, first-full:offset
+9994 transform:     checking result: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
+9994 transform:     checking first-full: "offset": "offset"
+9994 transform:     checking full: ("address" "number"): ("address" "number")
+9993 transform: type of full is ("address" "number")
+9993 transform:   instruction: *full <- copy 0
+9994 transform:     checking 0: "literal": "literal"
+9993 transform: type of 0 is "literal"
+9994 transform:     checking full: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "number")
+9993 transform:   instruction: free:address:number <- get-address *result, first-free:offset
+9994 transform:     checking result: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
+9994 transform:     checking first-free: "offset": "offset"
+9994 transform:     checking free: ("address" "number"): ("address" "number")
+9993 transform: type of free is ("address" "number")
+9993 transform:   instruction: *free <- copy 0
+9994 transform:     checking 0: "literal": "literal"
+9994 transform:     checking free: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "number")
+9993 transform:   instruction: capacity <- add capacity, 1
+9994 transform:     checking capacity: (): ()
+9994 transform:     deducing type to "number"
+9994 transform:     checking 1: "literal": "literal"
+9993 transform: type of 1 is "literal"
+9994 transform:     checking capacity: (): ()
+9994 transform:     deducing type to "number"
+9993 transform:   instruction: dest:address:address:shared:array:_elem <- get-address *result, data:offset
+9994 transform:     checking result: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
+9994 transform:     checking data: "offset": "offset"
+9994 transform:     checking dest: ("address" "address" "shared" "array" "_elem"): ("address" "address" "shared" "array" "_elem")
+9993 transform: type of dest is ("address" "address" "shared" "array" "_elem")
+9993 transform:   instruction: *dest <- new _elem:type, capacity
+9994 transform:     checking _elem: "type": "type"
+9993 transform: type of _elem is "type"
+9994 transform:     checking capacity: (): ()
+9994 transform:     deducing type to "number"
+9994 transform:     checking dest: (), {"lookup": ()}: ()
+9994 transform:     deducing type to ("address" "address" "shared" "array" "_elem")
+9993 transform: adding mapping from _elem to number
+9993 transform: replacing in recipe header ingredients
+9993 transform: replacing in ingredient capacity:number
+9993 transform: replacing in recipe header products
+9993 transform: replacing in ingredient result:address:shared:channel:_elem
+9993 transform: _elem => "number"
+9993 transform: replacing in instruction 'default-space:address:shared:array:location <- new location:type, number-of-locals:literal'
+9993 transform: replacing in ingredient location:type
+9993 transform: replacing in ingredient number-of-locals:literal
+9993 transform: replacing in ingredient default-space:address:shared:array:location
+9993 transform: replacing in instruction 'capacity:number <- next-ingredient-without-typechecking '
+9993 transform: replacing in ingredient capacity:number
+9993 transform: replacing in instruction 'result <- new {(channel _elem): type}'
+9993 transform: replacing in ingredient {(channel _elem): type}
+9993 transform: replacing in ingredient result
+9993 transform: _elem => "number"
+9993 transform: _elem => "number"
+9993 transform: replacing in instruction 'full:address:number <- get-address *result, first-full:offset'
+9993 transform: replacing in ingredient *result
+9993 transform: _elem => "number"
+9993 transform: replacing in ingredient first-full:offset
+9993 transform: replacing in ingredient full:address:number
+9993 transform: replacing in instruction '*full <- copy 0'
+9993 transform: replacing in ingredient 0
+9993 transform: replacing in ingredient *full
+9993 transform: replacing in instruction 'free:address:number <- get-address *result, first-free:offset'
+9993 transform: replacing in ingredient *result
+9993 transform: _elem => "number"
+9993 transform: replacing in ingredient first-free:offset
+9993 transform: replacing in ingredient free:address:number
+9993 transform: replacing in instruction '*free <- copy 0'
+9993 transform: replacing in ingredient 0
+9993 transform: replacing in ingredient *free
+9993 transform: replacing in instruction 'capacity <- add capacity, 1'
+9993 transform: replacing in ingredient capacity
+9993 transform: replacing in ingredient 1
+9993 transform: replacing in ingredient capacity
+9993 transform: replacing in instruction 'dest:address:address:shared:array:_elem <- get-address *result, data:offset'
+9993 transform: replacing in ingredient *result
+9993 transform: _elem => "number"
+9993 transform: replacing in ingredient data:offset
+9993 transform: replacing in ingredient dest:address:address:shared:array:_elem
+9993 transform: _elem => "number"
+9993 transform: replacing in instruction '*dest <- new _elem:type, capacity'
+9993 transform: replacing in ingredient _elem:type
+9993 transform: replacing in ingredient capacity
+9993 transform: replacing in ingredient *dest
+9993 transform: _elem => "number"
+9993 transform: _elem => "number"
+9992 transform: transforming new specialization: new-channel_3
+9991 transform: --- rewrite literal strings in recipe new-channel_3
+9991 transform: --- rewrite 'stash' instructions in recipe new-channel_3
+9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9993 transform: capacity:number <- next-ingredient-without-typechecking 
+9993 transform: result <- new {(channel _elem): type}
+9993 transform: full:address:number <- get-address *result, first-full:offset
+9993 transform: *full <- copy 0
+9993 transform: free:address:number <- get-address *result, first-free:offset
+9993 transform: *free <- copy 0
+9993 transform: capacity <- add capacity, 1
+9993 transform: dest:address:address:shared:array:_elem <- get-address *result, data:offset
+9993 transform: *dest <- new _elem:type, capacity
+9991 transform: --- checking reply instructions against header for new-channel_3
+9991 transform: --- fill in reply ingredients from header for recipe new-channel_3
+9991 transform: --- deduce types for recipe new-channel_3
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: capacity => "number"
+9992 transform: result => ("address" "shared" "channel" "number")
+9992 transform: full => ("address" "number")
+9992 transform: free => ("address" "number")
+9992 transform: dest => ("address" "address" "shared" "array" "number")
+9991 transform: --- deduce types from header for new-channel_3
+9993 transform: type of capacity is "number"
+9993 transform: type of result is ("address" "shared" "channel" "number")
+9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9993 transform:   product: default-space: ("address" "shared" "array" "location")
+9992 transform: instruction: capacity:number <- next-ingredient-without-typechecking 
+9993 transform:   product: capacity: "number"
+9992 transform: instruction: result <- new {(channel _elem): type}
+9993 transform:   product: result: ("address" "shared" "channel" "number")
+9992 transform: instruction: full:address:number <- get-address *result, first-full:offset
+9993 transform:   product: full: ("address" "number")
+9992 transform: instruction: *full <- copy 0
+9993 transform:   product: full: ("address" "number"), {"lookup": ()}
+9992 transform: instruction: free:address:number <- get-address *result, first-free:offset
+9993 transform:   product: free: ("address" "number")
+9992 transform: instruction: *free <- copy 0
+9993 transform:   product: free: ("address" "number"), {"lookup": ()}
+9992 transform: instruction: capacity <- add capacity, 1
+9993 transform:   product: capacity: "number"
+9992 transform: instruction: dest:address:address:shared:array:_elem <- get-address *result, data:offset
+9993 transform:   product: dest: ("address" "address" "shared" "array" "number")
+9992 transform: instruction: *dest <- new _elem:type, capacity
+9993 transform:   product: dest: ("address" "address" "shared" "array" "number"), {"lookup": ()}
+9992 transform: instruction: reply result:address:shared:channel:_elem
+9991 transform: --- check for invalid types in recipe new-channel_3
+9991 transform: --- collect surrounding spaces for recipe new-channel_3
+9991 transform: --- transform names for recipe new-channel_3
+9993 name: assign capacity 1
+9993 name: assign result 2
+9993 name: element first-full of type channel is at offset 0
+9993 name: assign full 3
+9993 name: element first-free of type channel is at offset 1
+9993 name: assign free 4
+9993 name: element data of type channel is at offset 2
+9993 name: assign dest 5
+9991 transform: --- resolve ambiguous calls for recipe new-channel_3
+9991 transform: --- compute instruction operations for recipe new-channel_3
+9991 transform: --- transform braces for recipe new-channel_3
+9992 transform: local-scope ...
+9992 transform:  ...
+9992 transform: new ...
+9992 transform: get-address ...
+9992 transform: copy ...
+9992 transform: get-address ...
+9992 transform: copy ...
+9992 transform: add ...
+9992 transform: get-address ...
+9992 transform: new ...
+9992 transform:  ...
+9991 transform: --- check mutability of ingredients in recipe new-channel_3
+9991 transform: --- perform checks for recipe new-channel_3
+9991 transform: --- type-check 'call' instructions inside recipe new-channel_3
+9991 transform: --- type-check calls inside recipe new-channel_3
+9991 transform: --- convert 'new' to 'allocate' for recipe new-channel_3
+9992 new: size of "location" is 1
+9992 new: size of ("channel" "number") is 3
+9992 new: size of "number" is 1
+9991 transform: --- type-check merge instructions in recipe new-channel_3
+9991 transform: --- check types of reply instructions in recipe new-channel_3
+9991 transform: --- check that recipe new-channel_3 sets default-space
+9991 transform: --- checking reply instructions against header for new-channel_3
+9992 transform: new specialization: new-channel_3
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new-channel ...
@@ -105,7 +301,7 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: 1:address:shared:channel:character <- new-channel_2 3/capacity
+ 103 run: 1:address:shared:channel:number <- new-channel_3 3/capacity
 9999 trace: incrementing callstack depth to 3
  104 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
 9999 mem: array size is 6
@@ -180,7 +376,7 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1
 9999 mem: incrementing refcount of 1008: 1 -> 2
- 103 run: 2:number <- get *1:address:shared:channel:character, first-full:offset
+ 103 run: 2:number <- get *1:address:shared:channel:number, first-full:offset
 9999 mem: location 1 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 0
@@ -192,7 +388,7 @@
 9998 run: its type is "number"
 9999 mem: location 1009 is 0
 9999 mem: storing 0 in location 2
- 103 run: 3:number <- get *1:address:shared:channel:character, first-free:offset
+ 103 run: 3:number <- get *1:address:shared:channel:number, first-free:offset
 9999 mem: location 1 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 0

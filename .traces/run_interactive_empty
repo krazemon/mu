@@ -1,13 +1,15 @@
 9991 parse: --- defining main
-9993 parse: instruction: foo
+9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: 1: "literal"
-9992 load: after rewriting: foo 1
+9993 parse:   ingredient: 0: "literal", {"unsafe": ()}
+9993 parse:   product: 1: ("address" "shared" "array" "character")
+9992 load: after rewriting: 1:address:shared:array:character <- copy 0/unsafe
+9993 parse: instruction: run-interactive
+9993 parse:   number of ingredients: 1
+9993 parse:   ingredient: 1: ("address" "shared" "array" "character")
+9993 parse:   product: 2: ("address" "shared" "array" "character")
+9992 load: after rewriting: 2:address:shared:array:character <- run-interactive 1:address:shared:array:character
 9999 parse: recipe main has a header
-9999 parse: recipe has a header; parsing
-9999 parse: header ingredient: a:_t
-9991 parse: --- defining foo
-9999 parse: recipe foo has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe main
 9991 transform: --- fill in reply ingredients from header for recipe main
@@ -16,23 +18,10 @@
 9991 transform: --- collect surrounding spaces for recipe main
 9991 transform: --- transform names for recipe main
 9991 transform: --- resolve ambiguous calls for recipe main
-9992 transform: instruction foo 1
-9992 transform: checking variant (strict) 0: recipe foo a: "_t"
-9993 transform: strict match failed: ingredient 0
-9992 transform: found variant to specialize: 1000 foo
-9993 transform: switching foo to specialized recipe foo_2 a: "_t"
-9993 transform: compute type names: foo_2
-9994 transform:     checking a: "_t": "_t"
-9993 transform: type of a is "_t"
-9993 transform: adding mapping from _t to ?0
-9993 transform: replacing in recipe header ingredients
-9993 transform: replacing in ingredient a:_t
-9993 transform: _t => "literal"
-9993 transform: replacing in recipe header products
-9992 transform: new specialization: foo_2
 9991 transform: --- compute instruction operations for recipe main
 9991 transform: --- transform braces for recipe main
-9992 transform: foo ...
+9992 transform: copy ...
+9992 transform: run-interactive ...
 9992 transform:  ...
 9991 transform: --- check mutability of ingredients in recipe main
 9991 transform: --- perform checks for recipe main
@@ -46,8 +35,10 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: main
- 102 run: foo_2 1
-9999 trace: incrementing callstack depth to 2
-9999 trace: fall-through: exiting foo_2; decrementing callstack depth from 2
+ 102 run: 1:address:shared:array:character <- copy 0/unsafe
+9999 mem: storing 0 in location 1
+ 102 run: 2:address:shared:array:character <- run-interactive 1:address:shared:array:character
+9999 mem: location 1 is 0
+9999 mem: storing 0 in location 2
  102 run: reply 
 9999 trace: reply: decrementing callstack depth from 1

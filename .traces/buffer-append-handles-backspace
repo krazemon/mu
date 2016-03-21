@@ -11,6 +11,7 @@
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_buffer-append-handles-backspace
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_buffer-append-handles-backspace
+9991 transform: --- deduce types for recipe scenario_buffer-append-handles-backspace
 9993 transform: run {"\n    local-scope\n    x:address:shared:buffer <- new-buffer 3\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 8/backspace\n    x <- append x, c\n    s:address:shared:array:character <- buffer-to-array x\n    1:array:character/raw <- copy *s\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    1 <- 1   # length\n    2 <- 97  # contents\n    3 <- 0\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_buffer-append-handles-backspace
@@ -93,17 +94,6 @@
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
-9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9993 transform: {x: ("address" "shared" "buffer")} <- new-buffer {3: "literal"}
-9993 transform: {c: "character"} <- copy {97: "literal", "a": ()}
-9993 transform: {x: ()} <- append {x: ()}, {c: ()}
-9993 transform: {c: "character"} <- copy {98: "literal", "b": ()}
-9993 transform: {x: ()} <- append {x: ()}, {c: ()}
-9993 transform: {c: "character"} <- copy {8: "literal", "backspace": ()}
-9993 transform: {x: ()} <- append {x: ()}, {c: ()}
-9993 transform: {s: ("address" "shared" "array" "character")} <- buffer-to-array {x: ()}
-9993 transform: {1: ("array" "character"), "raw": ()} <- copy {s: (), "lookup": ()}
-9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9992 transform: default-space => ("address" "shared" "array" "location")
 9992 transform: x => ("address" "shared" "buffer")
@@ -120,6 +110,22 @@
 9992 transform: x <= ("address" "shared" "buffer")
 9992 transform: s => ("address" "shared" "array" "character")
 9992 transform: s <= ("address" "shared" "array" "character")
+9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {x: ("address" "shared" "buffer")} <- new-buffer {3: "literal"}
+9993 transform: {c: "character"} <- copy {97: "literal", "a": ()}
+9993 transform: {x: ("address" "shared" "buffer")} <- append {x: ("address" "shared" "buffer")}, {c: "character"}
+9993 transform: {c: "character"} <- copy {98: "literal", "b": ()}
+9993 transform: {x: ("address" "shared" "buffer")} <- append {x: ("address" "shared" "buffer")}, {c: "character"}
+9993 transform: {c: "character"} <- copy {8: "literal", "backspace": ()}
+9993 transform: {x: ("address" "shared" "buffer")} <- append {x: ("address" "shared" "buffer")}, {c: "character"}
+9993 transform: {s: ("address" "shared" "array" "character")} <- buffer-to-array {x: ("address" "shared" "buffer")}
+9993 transform: {1: ("array" "character"), "raw": ()} <- copy {s: ("address" "shared" "array" "character"), "lookup": ()}
+9991 transform: --- fill in reply ingredients from header for recipe run_1001
+9991 transform: --- deduce types for recipe run_1001
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: x => ("address" "shared" "buffer")
+9992 transform: c => "character"
+9992 transform: s => ("address" "shared" "array" "character")
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001

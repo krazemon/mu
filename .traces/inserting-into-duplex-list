@@ -11,6 +11,7 @@
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_inserting-into-duplex-list
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_inserting-into-duplex-list
+9991 transform: --- deduce types for recipe scenario_inserting-into-duplex-list
 9993 transform: run {"\n    1:address:shared:duplex-list:character <- push 3, 0\n    1:address:shared:duplex-list:character <- push 4, 1:address:shared:duplex-list:character\n    1:address:shared:duplex-list:character <- push 5, 1:address:shared:duplex-list:character\n    2:address:shared:duplex-list:character <- next 1:address:shared:duplex-list:character  # 2 points inside list\n    2:address:shared:duplex-list:character <- insert 6, 2:address:shared:duplex-list:character\n    # check structure like before\n    2:address:shared:duplex-list:character <- copy 1:address:shared:duplex-list:character\n    3:character <- first 2:address:shared:duplex-list:character\n    2:address:shared:duplex-list:character <- next 2:address:shared:duplex-list:character\n    4:character <- first 2:address:shared:duplex-list:character\n    2:address:shared:duplex-list:character <- next 2:address:shared:duplex-list:character\n    5:character <- first 2:address:shared:duplex-list:character\n    2:address:shared:duplex-list:character <- next 2:address:shared:duplex-list:character\n    6:character <- first 2:address:shared:duplex-list:character\n    2:address:shared:duplex-list:character <- prev 2:address:shared:duplex-list:character\n    7:character <- first 2:address:shared:duplex-list:character\n    2:address:shared:duplex-list:character <- prev 2:address:shared:duplex-list:character\n    8:character <- first 2:address:shared:duplex-list:character\n    2:address:shared:duplex-list:character <- prev 2:address:shared:duplex-list:character\n    9:character <- first 2:address:shared:duplex-list:character\n    10:boolean <- equal 1:address:shared:duplex-list:character, 2:address:shared:duplex-list:character\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    3 <- 5  # scanning next\n    4 <- 4\n    5 <- 6  # inserted element\n    6 <- 3\n    7 <- 6  # then prev\n    8 <- 4\n    9 <- 5\n    10 <- 1  # list back at start\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_inserting-into-duplex-list
@@ -165,7 +166,7 @@
 9992 transform: checking variant (strict) 4: recipe push_5 {x: "character"} {in: ("address" "shared" "duplex-list" "character")} -> {in: ("address" "shared" "duplex-list" "character")}
 9993 transform: strict match failed: ingredient 0
 9993 transform: strict match failed: product 0
-9992 transform: found variant to specialize: 241 push_2
+9992 transform: found variant to specialize: 242 push_2
 9993 transform: switching push to specialized recipe push_6 {x: "_elem"} {in: ("address" "shared" "duplex-list" "_elem")} -> {in: ("address" "shared" "duplex-list" "_elem")}
 9993 transform: compute type names: push_6
 9994 transform:     checking {x: "_elem"}: "_elem"
@@ -298,6 +299,14 @@
 9992 transform: transforming new specialization: push_6
 9991 transform: --- rewrite literal strings in recipe push_6
 9991 transform: --- rewrite 'stash' instructions in recipe push_6
+9991 transform: --- deduce types for recipe push_6
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: x => "character"
+9992 transform: in => ("address" "shared" "duplex-list" "character")
+9992 transform: result => ("address" "shared" "duplex-list" "character")
+9992 transform: val => ("address" "character")
+9992 transform: next => ("address" "address" "shared" "duplex-list" "character")
+9992 transform: prev => ("address" "address" "shared" "duplex-list" "character")
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {x: "character"} <- next-ingredient-without-typechecking 
 9993 transform: {in: ("address" "shared" "duplex-list" "character")} <- next-ingredient-without-typechecking 
@@ -405,7 +414,7 @@
 9992 transform: checking variant (strict) 5: recipe push_6 {x: "character"} {in: ("address" "shared" "duplex-list" "character")} -> {in: ("address" "shared" "duplex-list" "character")}
 9993 transform: strict match failed: ingredient 0
 9993 transform: concrete-type match failed: ingredient 1
-9992 transform: found variant to specialize: 241 push_2
+9992 transform: found variant to specialize: 242 push_2
 9993 transform: switching push to specialized recipe push_7 {x: "_elem"} {in: ("address" "shared" "duplex-list" "_elem")} -> {in: ("address" "shared" "duplex-list" "_elem")}
 9993 transform: compute type names: push_7
 9994 transform:     checking {x: "_elem"}: "_elem"
@@ -538,6 +547,14 @@
 9992 transform: transforming new specialization: push_7
 9991 transform: --- rewrite literal strings in recipe push_7
 9991 transform: --- rewrite 'stash' instructions in recipe push_7
+9991 transform: --- deduce types for recipe push_7
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: x => "character"
+9992 transform: in => ("address" "shared" "duplex-list" "character")
+9992 transform: result => ("address" "shared" "duplex-list" "character")
+9992 transform: val => ("address" "character")
+9992 transform: next => ("address" "address" "shared" "duplex-list" "character")
+9992 transform: prev => ("address" "address" "shared" "duplex-list" "character")
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {x: "character"} <- next-ingredient-without-typechecking 
 9993 transform: {in: ("address" "shared" "duplex-list" "character")} <- next-ingredient-without-typechecking 
@@ -647,7 +664,7 @@
 9992 transform: checking variant (strict) 6: recipe push_7 {x: "character"} {in: ("address" "shared" "duplex-list" "character")} -> {in: ("address" "shared" "duplex-list" "character")}
 9993 transform: strict match failed: ingredient 0
 9993 transform: concrete-type match failed: ingredient 1
-9992 transform: found variant to specialize: 241 push_2
+9992 transform: found variant to specialize: 242 push_2
 9993 transform: switching push to specialized recipe push_8 {x: "_elem"} {in: ("address" "shared" "duplex-list" "_elem")} -> {in: ("address" "shared" "duplex-list" "_elem")}
 9993 transform: compute type names: push_8
 9994 transform:     checking {x: "_elem"}: "_elem"
@@ -780,6 +797,14 @@
 9992 transform: transforming new specialization: push_8
 9991 transform: --- rewrite literal strings in recipe push_8
 9991 transform: --- rewrite 'stash' instructions in recipe push_8
+9991 transform: --- deduce types for recipe push_8
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: x => "character"
+9992 transform: in => ("address" "shared" "duplex-list" "character")
+9992 transform: result => ("address" "shared" "duplex-list" "character")
+9992 transform: val => ("address" "character")
+9992 transform: next => ("address" "address" "shared" "duplex-list" "character")
+9992 transform: prev => ("address" "address" "shared" "duplex-list" "character")
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {x: "character"} <- next-ingredient-without-typechecking 
 9993 transform: {in: ("address" "shared" "duplex-list" "character")} <- next-ingredient-without-typechecking 
@@ -884,7 +909,7 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 2: recipe insert_3 {x: "character"} {in: ("address" "shared" "duplex-list" "character")} -> {in: ("address" "shared" "duplex-list" "character")}
 9993 transform: strict match failed: ingredient 0
-9992 transform: found variant to specialize: 245 insert
+9992 transform: found variant to specialize: 246 insert
 9993 transform: switching insert to specialized recipe insert_4 {x: "_elem"} {in: ("address" "shared" "duplex-list" "_elem")} -> {in: ("address" "shared" "duplex-list" "_elem")}
 9993 transform: compute type names: insert_4
 9994 transform:     checking {x: "_elem"}: "_elem"
@@ -1067,6 +1092,14 @@
 9992 transform: transforming new specialization: insert_4
 9991 transform: --- rewrite literal strings in recipe insert_4
 9991 transform: --- rewrite 'stash' instructions in recipe insert_4
+9991 transform: --- deduce types for recipe insert_4
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: x => "character"
+9992 transform: in => ("address" "shared" "duplex-list" "character")
+9992 transform: new-node => ("address" "shared" "duplex-list" "character")
+9992 transform: val => ("address" "character")
+9992 transform: next-node => ("address" "shared" "duplex-list" "character")
+9992 transform: y => ("address" "address" "shared" "duplex-list" "character")
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {x: "character"} <- next-ingredient-without-typechecking 
 9993 transform: {in: ("address" "shared" "duplex-list" "character")} <- next-ingredient-without-typechecking 
@@ -1187,7 +1220,7 @@
 9992 transform: checking variant (strict) 2: recipe first_3 {in: ("address" "shared" "list" "address" "shared" "operation")} -> {result: ("address" "shared" "operation")}
 9993 transform: strict match failed: ingredient 0
 9993 transform: concrete-type match failed: ingredient 0
-9992 transform: found variant to specialize: 242 first_2
+9992 transform: found variant to specialize: 243 first_2
 9993 transform: switching first to specialized recipe first_4 {in: ("address" "shared" "duplex-list" "_elem")} -> {result: "_elem"}
 9993 transform: compute type names: first_4
 9994 transform:     checking {in: ("address" "shared" "duplex-list" "_elem")}: ("address" "shared" "duplex-list" "_elem")
@@ -1245,6 +1278,10 @@
 9992 transform: transforming new specialization: first_4
 9991 transform: --- rewrite literal strings in recipe first_4
 9991 transform: --- rewrite 'stash' instructions in recipe first_4
+9991 transform: --- deduce types for recipe first_4
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: in => ("address" "shared" "duplex-list" "character")
+9992 transform: result => "character"
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {in: ("address" "shared" "duplex-list" "character")} <- next-ingredient-without-typechecking 
 9993 transform: jump-if {in: ("address" "shared" "duplex-list" "character")}, {1: "offset"}

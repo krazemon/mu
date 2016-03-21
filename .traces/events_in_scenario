@@ -15,6 +15,7 @@
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_events-in-scenario
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_events-in-scenario
+9991 transform: --- deduce types for recipe scenario_events-in-scenario
 9993 transform: assume-console {"\n    type [abc]\n    left-click 0, 1\n    press up-arrow\n    type [d]\n  ": "literal-string"}
 9993 transform: run {"\n    # 3 keyboard events; each event occupies 4 locations\n    1:event <- read-event console:address:shared:console\n    5:event <- read-event console:address:shared:console\n    9:event <- read-event console:address:shared:console\n    # mouse click\n    13:event <- read-event console:address:shared:console\n    # non-character keycode\n    17:event <- read-event console:address:shared:console\n    # final keyboard event\n    21:event <- read-event console:address:shared:console\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    1 <- 0  # 'text'\n    2 <- 97  # 'a'\n    3 <- 0  # unused\n    4 <- 0  # unused\n    5 <- 0  # 'text'\n    6 <- 98  # 'b'\n    7 <- 0  # unused\n    8 <- 0  # unused\n    9 <- 0  # 'text'\n    10 <- 99  # 'c'\n    11 <- 0  # unused\n    12 <- 0  # unused\n    13 <- 2  # 'mouse'\n    14 <- 65513  # mouse click\n    15 <- 0  # row\n    16 <- 1  # column\n    17 <- 1  # 'keycode'\n    18 <- 65517  # up arrow\n    19 <- 0  # unused\n    20 <- 0  # unused\n    21 <- 0  # 'text'\n    22 <- 100  # 'd'\n    23 <- 0  # unused\n    24 <- 0  # unused\n    25 <- 0\n  ": "literal-string"}

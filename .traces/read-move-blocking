@@ -16,6 +16,8 @@
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_read-move-blocking
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_read-move-blocking
+9991 transform: --- deduce types for recipe scenario_read-move-blocking
+9992 transform: screen => ("address" "shared" "screen")
 9993 transform: {screen: ("address" "shared" "screen")} <- new-fake-screen {20: "literal", "width": ()}, {2: "literal", "height": ()}
 9993 transform: run {"\n    1:address:shared:source:character, 2:address:shared:sink:character <- new-channel 2/capacity\n    3:number/routine <- start-running read-move, 1:address:shared:source:character, screen:address:shared:screen\n    # 'read-move' is waiting for input\n    wait-for-routine 3:number\n    4:number <- routine-state 3:number/id\n    5:boolean/waiting? <- equal 4:number/routine-state, 3/waiting\n    assert 5:boolean/waiting?, [ \nF read-move-blocking: routine failed to pause after coming up (before any keys were pressed)]\n    # press 'a'\n    2:address:shared:sink:character <- write 2:address:shared:sink:character, 97/a\n    restart 3:number/routine\n    # 'read-move' still waiting for input\n    wait-for-routine 3:number\n    4:number <- routine-state 3:number/id\n    5:boolean/waiting? <- equal 4:number/routine-state, 3/waiting\n    assert 5:boolean/waiting?, [ \nF read-move-blocking: routine failed to pause after rank 'a']\n    # press '2'\n    2:address:shared:sink:character <- write 2:address:shared:sink:character, 50/'2'\n    restart 3:number/routine\n    # 'read-move' still waiting for input\n    wait-for-routine 3:number\n    4:number <- routine-state 3:number/id\n    5:boolean/waiting? <- equal 4:number/routine-state, 3/waiting\n    assert 5:boolean/waiting?, [ \nF read-move-blocking: routine failed to pause after file 'a2']\n    # press '-'\n    2:address:shared:sink:character <- write 2:address:shared:sink:character, 45/'-'\n    restart 3:number/routine\n    # 'read-move' still waiting for input\n    wait-for-routine 3:number\n    4:number <- routine-state 3:number\n    5:boolean/waiting? <- equal 4:number/routine-state, 3/waiting\n    assert 5:boolean/waiting?/routine-state, [ \nF read-move-blocking: routine failed to pause after hyphen 'a2-']\n    # press 'a'\n    2:address:shared:sink:character <- write 2:address:shared:sink:character, 97/a\n    restart 3:number/routine\n    # 'read-move' still waiting for input\n    wait-for-routine 3:number\n    4:number <- routine-state 3:number\n    5:boolean/waiting? <- equal 4:number/routine-state, 3/waiting\n    assert 5:boolean/waiting?/routine-state, [ \nF read-move-blocking: routine failed to pause after rank 'a2-a']\n    # press '4'\n    2:address:shared:sink:character <- write 2:address:shared:sink:character, 52/'4'\n    restart 3:number/routine\n    # 'read-move' still waiting for input\n    wait-for-routine 3:number\n    4:number <- routine-state 3:number\n    5:boolean/waiting? <- equal 4:number/routine-state, 3/waiting\n    assert 5:boolean/waiting?, [ \nF read-move-blocking: routine failed to pause after file 'a2-a4']\n    # press 'newline'\n    2:address:shared:sink:character <- write 2:address:shared:sink:character, 10  # newline\n    restart 3:number/routine\n    # 'read-move' now completes\n    wait-for-routine 3:number\n    4:number <- routine-state 3:number\n    5:boolean/completed? <- equal 4:number/routine-state, 1/completed\n    assert 5:boolean/completed?, [ \nF read-move-blocking: routine failed to terminate on newline]\n    trace 1, [test], [reached end]\n  ": "literal-string"}
 9993 transform: trace-should-contain {"\n    test: reached end\n  ": "literal-string"}
@@ -1989,7 +1991,7 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe write_2 {out: ("address" "shared" "sink" "character")} {val: "character"} -> {out: ("address" "shared" "sink" "character")}
 9993 transform: strict match failed: ingredient 1
-9992 transform: found variant to specialize: 227 write
+9992 transform: found variant to specialize: 228 write
 9993 transform: switching write to specialized recipe write_3 {out: ("address" "shared" "sink" "_elem")} {val: "_elem"} -> {out: ("address" "shared" "sink" "_elem")}
 9993 transform: compute type names: write_3
 9994 transform:     checking {out: ("address" "shared" "sink" "_elem")}: ("address" "shared" "sink" "_elem")
@@ -2170,6 +2172,18 @@
 9992 transform: transforming new specialization: write_3
 9991 transform: --- rewrite literal strings in recipe write_3
 9991 transform: --- rewrite 'stash' instructions in recipe write_3
+9991 transform: --- deduce types for recipe write_3
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: out => ("address" "shared" "sink" "character")
+9992 transform: val => "character"
+9992 transform: chan => ("address" "shared" "channel" "character")
+9992 transform: full => "boolean"
+9992 transform: full-address => ("address" "number")
+9992 transform: circular-buffer => ("address" "shared" "array" "character")
+9992 transform: free => ("address" "number")
+9992 transform: dest => ("address" "character")
+9992 transform: len => "number"
+9992 transform: at-end? => "boolean"
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {out: ("address" "shared" "sink" "character")} <- next-ingredient-without-typechecking 
 9993 transform: {val: "character"} <- next-ingredient-without-typechecking 
@@ -2316,7 +2330,7 @@
 9993 transform: strict match failed: ingredient 1
 9992 transform: checking variant (strict) 2: recipe write_3 {out: ("address" "shared" "sink" "character")} {val: "character"} -> {out: ("address" "shared" "sink" "character")}
 9993 transform: strict match failed: ingredient 1
-9992 transform: found variant to specialize: 227 write
+9992 transform: found variant to specialize: 228 write
 9993 transform: switching write to specialized recipe write_4 {out: ("address" "shared" "sink" "_elem")} {val: "_elem"} -> {out: ("address" "shared" "sink" "_elem")}
 9993 transform: compute type names: write_4
 9994 transform:     checking {out: ("address" "shared" "sink" "_elem")}: ("address" "shared" "sink" "_elem")
@@ -2497,6 +2511,18 @@
 9992 transform: transforming new specialization: write_4
 9991 transform: --- rewrite literal strings in recipe write_4
 9991 transform: --- rewrite 'stash' instructions in recipe write_4
+9991 transform: --- deduce types for recipe write_4
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: out => ("address" "shared" "sink" "character")
+9992 transform: val => "character"
+9992 transform: chan => ("address" "shared" "channel" "character")
+9992 transform: full => "boolean"
+9992 transform: full-address => ("address" "number")
+9992 transform: circular-buffer => ("address" "shared" "array" "character")
+9992 transform: free => ("address" "number")
+9992 transform: dest => ("address" "character")
+9992 transform: len => "number"
+9992 transform: at-end? => "boolean"
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {out: ("address" "shared" "sink" "character")} <- next-ingredient-without-typechecking 
 9993 transform: {val: "character"} <- next-ingredient-without-typechecking 
@@ -2645,7 +2671,7 @@
 9993 transform: strict match failed: ingredient 1
 9992 transform: checking variant (strict) 3: recipe write_4 {out: ("address" "shared" "sink" "character")} {val: "character"} -> {out: ("address" "shared" "sink" "character")}
 9993 transform: strict match failed: ingredient 1
-9992 transform: found variant to specialize: 227 write
+9992 transform: found variant to specialize: 228 write
 9993 transform: switching write to specialized recipe write_5 {out: ("address" "shared" "sink" "_elem")} {val: "_elem"} -> {out: ("address" "shared" "sink" "_elem")}
 9993 transform: compute type names: write_5
 9994 transform:     checking {out: ("address" "shared" "sink" "_elem")}: ("address" "shared" "sink" "_elem")
@@ -2826,6 +2852,18 @@
 9992 transform: transforming new specialization: write_5
 9991 transform: --- rewrite literal strings in recipe write_5
 9991 transform: --- rewrite 'stash' instructions in recipe write_5
+9991 transform: --- deduce types for recipe write_5
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: out => ("address" "shared" "sink" "character")
+9992 transform: val => "character"
+9992 transform: chan => ("address" "shared" "channel" "character")
+9992 transform: full => "boolean"
+9992 transform: full-address => ("address" "number")
+9992 transform: circular-buffer => ("address" "shared" "array" "character")
+9992 transform: free => ("address" "number")
+9992 transform: dest => ("address" "character")
+9992 transform: len => "number"
+9992 transform: at-end? => "boolean"
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {out: ("address" "shared" "sink" "character")} <- next-ingredient-without-typechecking 
 9993 transform: {val: "character"} <- next-ingredient-without-typechecking 
@@ -2976,7 +3014,7 @@
 9993 transform: strict match failed: ingredient 1
 9992 transform: checking variant (strict) 4: recipe write_5 {out: ("address" "shared" "sink" "character")} {val: "character"} -> {out: ("address" "shared" "sink" "character")}
 9993 transform: strict match failed: ingredient 1
-9992 transform: found variant to specialize: 227 write
+9992 transform: found variant to specialize: 228 write
 9993 transform: switching write to specialized recipe write_6 {out: ("address" "shared" "sink" "_elem")} {val: "_elem"} -> {out: ("address" "shared" "sink" "_elem")}
 9993 transform: compute type names: write_6
 9994 transform:     checking {out: ("address" "shared" "sink" "_elem")}: ("address" "shared" "sink" "_elem")
@@ -3157,6 +3195,18 @@
 9992 transform: transforming new specialization: write_6
 9991 transform: --- rewrite literal strings in recipe write_6
 9991 transform: --- rewrite 'stash' instructions in recipe write_6
+9991 transform: --- deduce types for recipe write_6
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: out => ("address" "shared" "sink" "character")
+9992 transform: val => "character"
+9992 transform: chan => ("address" "shared" "channel" "character")
+9992 transform: full => "boolean"
+9992 transform: full-address => ("address" "number")
+9992 transform: circular-buffer => ("address" "shared" "array" "character")
+9992 transform: free => ("address" "number")
+9992 transform: dest => ("address" "character")
+9992 transform: len => "number"
+9992 transform: at-end? => "boolean"
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {out: ("address" "shared" "sink" "character")} <- next-ingredient-without-typechecking 
 9993 transform: {val: "character"} <- next-ingredient-without-typechecking 
@@ -3309,7 +3359,7 @@
 9993 transform: strict match failed: ingredient 1
 9992 transform: checking variant (strict) 5: recipe write_6 {out: ("address" "shared" "sink" "character")} {val: "character"} -> {out: ("address" "shared" "sink" "character")}
 9993 transform: strict match failed: ingredient 1
-9992 transform: found variant to specialize: 227 write
+9992 transform: found variant to specialize: 228 write
 9993 transform: switching write to specialized recipe write_7 {out: ("address" "shared" "sink" "_elem")} {val: "_elem"} -> {out: ("address" "shared" "sink" "_elem")}
 9993 transform: compute type names: write_7
 9994 transform:     checking {out: ("address" "shared" "sink" "_elem")}: ("address" "shared" "sink" "_elem")
@@ -3490,6 +3540,18 @@
 9992 transform: transforming new specialization: write_7
 9991 transform: --- rewrite literal strings in recipe write_7
 9991 transform: --- rewrite 'stash' instructions in recipe write_7
+9991 transform: --- deduce types for recipe write_7
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: out => ("address" "shared" "sink" "character")
+9992 transform: val => "character"
+9992 transform: chan => ("address" "shared" "channel" "character")
+9992 transform: full => "boolean"
+9992 transform: full-address => ("address" "number")
+9992 transform: circular-buffer => ("address" "shared" "array" "character")
+9992 transform: free => ("address" "number")
+9992 transform: dest => ("address" "character")
+9992 transform: len => "number"
+9992 transform: at-end? => "boolean"
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {out: ("address" "shared" "sink" "character")} <- next-ingredient-without-typechecking 
 9993 transform: {val: "character"} <- next-ingredient-without-typechecking 
@@ -3644,7 +3706,7 @@
 9993 transform: strict match failed: ingredient 1
 9992 transform: checking variant (strict) 6: recipe write_7 {out: ("address" "shared" "sink" "character")} {val: "character"} -> {out: ("address" "shared" "sink" "character")}
 9993 transform: strict match failed: ingredient 1
-9992 transform: found variant to specialize: 227 write
+9992 transform: found variant to specialize: 228 write
 9993 transform: switching write to specialized recipe write_8 {out: ("address" "shared" "sink" "_elem")} {val: "_elem"} -> {out: ("address" "shared" "sink" "_elem")}
 9993 transform: compute type names: write_8
 9994 transform:     checking {out: ("address" "shared" "sink" "_elem")}: ("address" "shared" "sink" "_elem")
@@ -3825,6 +3887,18 @@
 9992 transform: transforming new specialization: write_8
 9991 transform: --- rewrite literal strings in recipe write_8
 9991 transform: --- rewrite 'stash' instructions in recipe write_8
+9991 transform: --- deduce types for recipe write_8
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: out => ("address" "shared" "sink" "character")
+9992 transform: val => "character"
+9992 transform: chan => ("address" "shared" "channel" "character")
+9992 transform: full => "boolean"
+9992 transform: full-address => ("address" "number")
+9992 transform: circular-buffer => ("address" "shared" "array" "character")
+9992 transform: free => ("address" "number")
+9992 transform: dest => ("address" "character")
+9992 transform: len => "number"
+9992 transform: at-end? => "boolean"
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {out: ("address" "shared" "sink" "character")} <- next-ingredient-without-typechecking 
 9993 transform: {val: "character"} <- next-ingredient-without-typechecking 

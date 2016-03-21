@@ -11,6 +11,7 @@
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_buffer-append-works
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_buffer-append-works
+9991 transform: --- deduce types for recipe scenario_buffer-append-works
 9993 transform: run {"\n    local-scope\n    x:address:shared:buffer <- new-buffer 3\n    s1:address:shared:array:character <- get *x, data:offset\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 99/c\n    x <- append x, c\n    s2:address:shared:array:character <- get *x, data:offset\n    1:boolean/raw <- equal s1, s2\n    2:array:character/raw <- copy *s2\n    +buffer-filled\n    c:character <- copy 100/d\n    x <- append x, c\n    s3:address:shared:array:character <- get *x, data:offset\n    10:boolean/raw <- equal s1, s3\n    11:number/raw <- get *x, length:offset\n    12:array:character/raw <- copy *s3\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    # before +buffer-filled\n    1 <- 1   # no change in data pointer\n    2 <- 3   # size of data\n    3 <- 97  # data\n    4 <- 98\n    5 <- 99\n    # in the end\n    10 <- 0   # data pointer has grown\n    11 <- 4   # final length\n    12 <- 6   # but data's capacity has doubled\n    13 <- 97  # data\n    14 <- 98\n    15 <- 99\n    16 <- 100\n    17 <- 0\n    18 <- 0\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_buffer-append-works
@@ -142,26 +143,6 @@
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
-9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9993 transform: {x: ("address" "shared" "buffer")} <- new-buffer {3: "literal"}
-9993 transform: {s1: ("address" "shared" "array" "character")} <- get {x: (), "lookup": ()}, {data: "offset"}
-9993 transform: {c: "character"} <- copy {97: "literal", "a": ()}
-9993 transform: {x: ()} <- append {x: ()}, {c: ()}
-9993 transform: {c: "character"} <- copy {98: "literal", "b": ()}
-9993 transform: {x: ()} <- append {x: ()}, {c: ()}
-9993 transform: {c: "character"} <- copy {99: "literal", "c": ()}
-9993 transform: {x: ()} <- append {x: ()}, {c: ()}
-9993 transform: {s2: ("address" "shared" "array" "character")} <- get {x: (), "lookup": ()}, {data: "offset"}
-9993 transform: {1: "boolean", "raw": ()} <- equal {s1: ()}, {s2: ()}
-9993 transform: {2: ("array" "character"), "raw": ()} <- copy {s2: (), "lookup": ()}
-9993 transform: +buffer-filled
-9993 transform: {c: "character"} <- copy {100: "literal", "d": ()}
-9993 transform: {x: ()} <- append {x: ()}, {c: ()}
-9993 transform: {s3: ("address" "shared" "array" "character")} <- get {x: (), "lookup": ()}, {data: "offset"}
-9993 transform: {10: "boolean", "raw": ()} <- equal {s1: ()}, {s3: ()}
-9993 transform: {11: "number", "raw": ()} <- get {x: (), "lookup": ()}, {length: "offset"}
-9993 transform: {12: ("array" "character"), "raw": ()} <- copy {s3: (), "lookup": ()}
-9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9992 transform: default-space => ("address" "shared" "array" "location")
 9992 transform: x => ("address" "shared" "buffer")
@@ -191,6 +172,33 @@
 9992 transform: s3 <= ("address" "shared" "array" "character")
 9992 transform: x <= ("address" "shared" "buffer")
 9992 transform: s3 <= ("address" "shared" "array" "character")
+9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {x: ("address" "shared" "buffer")} <- new-buffer {3: "literal"}
+9993 transform: {s1: ("address" "shared" "array" "character")} <- get {x: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
+9993 transform: {c: "character"} <- copy {97: "literal", "a": ()}
+9993 transform: {x: ("address" "shared" "buffer")} <- append {x: ("address" "shared" "buffer")}, {c: "character"}
+9993 transform: {c: "character"} <- copy {98: "literal", "b": ()}
+9993 transform: {x: ("address" "shared" "buffer")} <- append {x: ("address" "shared" "buffer")}, {c: "character"}
+9993 transform: {c: "character"} <- copy {99: "literal", "c": ()}
+9993 transform: {x: ("address" "shared" "buffer")} <- append {x: ("address" "shared" "buffer")}, {c: "character"}
+9993 transform: {s2: ("address" "shared" "array" "character")} <- get {x: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
+9993 transform: {1: "boolean", "raw": ()} <- equal {s1: ("address" "shared" "array" "character")}, {s2: ("address" "shared" "array" "character")}
+9993 transform: {2: ("array" "character"), "raw": ()} <- copy {s2: ("address" "shared" "array" "character"), "lookup": ()}
+9993 transform: +buffer-filled
+9993 transform: {c: "character"} <- copy {100: "literal", "d": ()}
+9993 transform: {x: ("address" "shared" "buffer")} <- append {x: ("address" "shared" "buffer")}, {c: "character"}
+9993 transform: {s3: ("address" "shared" "array" "character")} <- get {x: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
+9993 transform: {10: "boolean", "raw": ()} <- equal {s1: ("address" "shared" "array" "character")}, {s3: ("address" "shared" "array" "character")}
+9993 transform: {11: "number", "raw": ()} <- get {x: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
+9993 transform: {12: ("array" "character"), "raw": ()} <- copy {s3: ("address" "shared" "array" "character"), "lookup": ()}
+9991 transform: --- fill in reply ingredients from header for recipe run_1001
+9991 transform: --- deduce types for recipe run_1001
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: x => ("address" "shared" "buffer")
+9992 transform: s1 => ("address" "shared" "array" "character")
+9992 transform: c => "character"
+9992 transform: s2 => ("address" "shared" "array" "character")
+9992 transform: s3 => ("address" "shared" "array" "character")
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001

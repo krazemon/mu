@@ -11,6 +11,7 @@
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_channel-write-full
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_channel-write-full
+9991 transform: --- deduce types for recipe scenario_channel-write-full
 9993 transform: run {"\n    1:address:shared:source:number, 2:address:shared:sink:number <- new-channel 1/capacity\n    3:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset\n    2:address:shared:sink:number <- write 2:address:shared:sink:number, 34\n    4:boolean <- channel-empty? 3:address:shared:channel:number\n    5:boolean <- channel-full? 3:address:shared:channel:number\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    4 <- 0  # empty?\n    5 <- 1  # full?\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_channel-write-full
@@ -82,7 +83,7 @@
 9993 transform: strict match failed: product 0
 9992 transform: checking variant (strict) 1: recipe new-channel_2 {capacity: "number"} -> {in: ("address" "shared" "source" "character")} {out: ("address" "shared" "sink" "character")}
 9993 transform: strict match failed: product 0
-9992 transform: found variant to specialize: 226 new-channel
+9992 transform: found variant to specialize: 227 new-channel
 9993 transform: switching new-channel to specialized recipe new-channel_3 {capacity: "number"} -> {in: ("address" "shared" "source" "_elem")} {out: ("address" "shared" "sink" "_elem")}
 9993 transform: compute type names: new-channel_3
 9994 transform:     checking {capacity: "number"}: "number"
@@ -263,6 +264,16 @@
 9992 transform: transforming new specialization: new-channel_3
 9991 transform: --- rewrite literal strings in recipe new-channel_3
 9991 transform: --- rewrite 'stash' instructions in recipe new-channel_3
+9991 transform: --- deduce types for recipe new-channel_3
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: capacity => "number"
+9992 transform: result => ("address" "shared" "channel" "number")
+9992 transform: full => ("address" "number")
+9992 transform: free => ("address" "number")
+9992 transform: dest => ("address" "address" "shared" "array" "number")
+9992 transform: in => ("address" "shared" "source" "number")
+9992 transform: chan => ("address" "address" "shared" "channel" "number")
+9992 transform: out => ("address" "shared" "sink" "number")
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {capacity: "number"} <- next-ingredient-without-typechecking 
 9993 transform: {result: ("address" "shared" "channel" "number")} <- new {(channel number): "type"}
@@ -384,7 +395,7 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe write_2 {out: ("address" "shared" "sink" "character")} {val: "character"} -> {out: ("address" "shared" "sink" "character")}
 9993 transform: strict match failed: ingredient 0
-9992 transform: found variant to specialize: 227 write
+9992 transform: found variant to specialize: 228 write
 9993 transform: switching write to specialized recipe write_3 {out: ("address" "shared" "sink" "_elem")} {val: "_elem"} -> {out: ("address" "shared" "sink" "_elem")}
 9993 transform: compute type names: write_3
 9994 transform:     checking {out: ("address" "shared" "sink" "_elem")}: ("address" "shared" "sink" "_elem")
@@ -565,6 +576,18 @@
 9992 transform: transforming new specialization: write_3
 9991 transform: --- rewrite literal strings in recipe write_3
 9991 transform: --- rewrite 'stash' instructions in recipe write_3
+9991 transform: --- deduce types for recipe write_3
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: out => ("address" "shared" "sink" "number")
+9992 transform: val => "number"
+9992 transform: chan => ("address" "shared" "channel" "number")
+9992 transform: full => "boolean"
+9992 transform: full-address => ("address" "number")
+9992 transform: circular-buffer => ("address" "shared" "array" "number")
+9992 transform: free => ("address" "number")
+9992 transform: dest => ("address" "number")
+9992 transform: len => "number"
+9992 transform: at-end? => "boolean"
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {out: ("address" "shared" "sink" "number")} <- next-ingredient-without-typechecking 
 9993 transform: {val: "number"} <- next-ingredient-without-typechecking 
@@ -663,7 +686,7 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe channel-full?_2 {chan: ("address" "shared" "channel" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: found variant to specialize: 231 channel-full?
+9992 transform: found variant to specialize: 232 channel-full?
 9993 transform: switching channel-full? to specialized recipe channel-full?_3 {chan: ("address" "shared" "channel" "_elem")} -> {result: "boolean"}
 9993 transform: compute type names: channel-full?_3
 9994 transform:     checking {chan: ("address" "shared" "channel" "_elem")}: ("address" "shared" "channel" "_elem")
@@ -776,6 +799,14 @@
 9992 transform: transforming new specialization: channel-full?_3
 9991 transform: --- rewrite literal strings in recipe channel-full?_3
 9991 transform: --- rewrite 'stash' instructions in recipe channel-full?_3
+9991 transform: --- deduce types for recipe channel-full?_3
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: chan => ("address" "shared" "channel" "number")
+9992 transform: tmp => "number"
+9992 transform: len => "number"
+9992 transform: at-end? => "boolean"
+9992 transform: full => "number"
+9992 transform: result => "boolean"
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {chan: ("address" "shared" "channel" "number")} <- next-ingredient-without-typechecking 
 9993 transform: {tmp: "number"} <- get {chan: ("address" "shared" "channel" "number"), "lookup": ()}, {first-free: "offset"}
@@ -840,7 +871,7 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe capacity_2 {chan: ("address" "shared" "channel" "character")} -> {result: "number"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: found variant to specialize: 232 capacity
+9992 transform: found variant to specialize: 233 capacity
 9993 transform: switching capacity to specialized recipe capacity_3 {chan: ("address" "shared" "channel" "_elem")} -> {result: "number"}
 9993 transform: compute type names: capacity_3
 9994 transform:     checking {chan: ("address" "shared" "channel" "_elem")}: ("address" "shared" "channel" "_elem")
@@ -893,6 +924,11 @@
 9992 transform: transforming new specialization: capacity_3
 9991 transform: --- rewrite literal strings in recipe capacity_3
 9991 transform: --- rewrite 'stash' instructions in recipe capacity_3
+9991 transform: --- deduce types for recipe capacity_3
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: chan => ("address" "shared" "channel" "number")
+9992 transform: q => ("address" "shared" "array" "number")
+9992 transform: result => "number"
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {chan: ("address" "shared" "channel" "number")} <- next-ingredient-without-typechecking 
 9993 transform: {q: ("address" "shared" "array" "number")} <- get {chan: ("address" "shared" "channel" "number"), "lookup": ()}, {data: "offset"}
@@ -1015,7 +1051,7 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe channel-empty?_2 {chan: ("address" "shared" "channel" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: found variant to specialize: 230 channel-empty?
+9992 transform: found variant to specialize: 231 channel-empty?
 9993 transform: switching channel-empty? to specialized recipe channel-empty?_3 {chan: ("address" "shared" "channel" "_elem")} -> {result: "boolean"}
 9993 transform: compute type names: channel-empty?_3
 9994 transform:     checking {chan: ("address" "shared" "channel" "_elem")}: ("address" "shared" "channel" "_elem")
@@ -1080,6 +1116,12 @@
 9992 transform: transforming new specialization: channel-empty?_3
 9991 transform: --- rewrite literal strings in recipe channel-empty?_3
 9991 transform: --- rewrite 'stash' instructions in recipe channel-empty?_3
+9991 transform: --- deduce types for recipe channel-empty?_3
+9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: chan => ("address" "shared" "channel" "number")
+9992 transform: full => "number"
+9992 transform: free => "number"
+9992 transform: result => "boolean"
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {chan: ("address" "shared" "channel" "number")} <- next-ingredient-without-typechecking 
 9993 transform: {full: "number"} <- get {chan: ("address" "shared" "channel" "number"), "lookup": ()}, {first-full: "offset"}

@@ -30,6 +30,22 @@
 9999 parse: recipe scenario_multiple-editors-cover-only-their-own-areas has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_multiple-editors-cover-only-their-own-areas
+9991 transform: --- rewrite 'stash' instructions in recipe scenario_multiple-editors-cover-only-their-own-areas
+9993 transform: trace-until 100/app
+9993 transform: screen:address:shared:screen <- new-fake-screen 60/width, 10/height
+9993 transform: run [
+    1:address:shared:array:character <- new [abc]
+    2:address:shared:array:character <- new [def]
+    3:address:shared:programming-environment-data <- new-programming-environment screen:address:shared:screen, 1:address:shared:array:character, 2:address:shared:array:character
+    render-all screen, 3:address:shared:programming-environment-data
+  ]
+9993 transform: screen-should-contain [
+    .                                         run (F4)           .
+    .abc                           ┊def                          .
+    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.
+    .                              ┊                             .
+    .                              ┊                             .
+  ]
 9991 transform: --- fill in reply ingredients from header for recipe scenario_multiple-editors-cover-only-their-own-areas
 9991 transform: --- deduce types for recipe scenario_multiple-editors-cover-only-their-own-areas
 9992 transform: screen => ("address" "shared" "screen")

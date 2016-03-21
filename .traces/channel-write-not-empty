@@ -19,6 +19,18 @@
 9999 parse: recipe scenario_channel-write-not-empty has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_channel-write-not-empty
+9991 transform: --- rewrite 'stash' instructions in recipe scenario_channel-write-not-empty
+9993 transform: run [
+    1:address:shared:source:number, 2:address:shared:sink:number <- new-channel 3/capacity
+    3:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset
+    2:address:shared:sink:number <- write 2:address:shared:sink:number, 34
+    4:boolean <- channel-empty? 3:address:shared:channel:number
+    5:boolean <- channel-full? 3:address:shared:channel:number
+  ]
+9993 transform: memory-should-contain [
+    4 <- 0  # empty?
+    5 <- 0  # full?
+  ]
 9991 transform: --- fill in reply ingredients from header for recipe scenario_channel-write-not-empty
 9991 transform: --- deduce types for recipe scenario_channel-write-not-empty
 9991 transform: --- check for invalid types in recipe scenario_channel-write-not-empty
@@ -81,6 +93,7 @@
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
+9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9991 transform: --- check for invalid types in recipe run_1001
@@ -273,6 +286,23 @@
 9993 transform: _elem => "number"
 9992 transform: transforming new specialization: new-channel_3
 9991 transform: --- rewrite literal strings in recipe new-channel_3
+9991 transform: --- rewrite 'stash' instructions in recipe new-channel_3
+9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9993 transform: capacity:number <- next-ingredient-without-typechecking 
+9993 transform: result:address:shared:channel:_elem <- new {(channel _elem): type}
+9993 transform: full:address:number <- get-address *result, first-full:offset
+9993 transform: *full <- copy 0
+9993 transform: free:address:number <- get-address *result, first-free:offset
+9993 transform: *free <- copy 0
+9993 transform: capacity <- add capacity, 1
+9993 transform: dest:address:address:shared:array:_elem <- get-address *result, data:offset
+9993 transform: *dest <- new _elem:type, capacity
+9993 transform: in <- new {(source _elem): type}
+9993 transform: chan:address:address:shared:channel:_elem <- get-address *in, chan:offset
+9993 transform: *chan <- copy result
+9993 transform: out <- new {(sink _elem): type}
+9993 transform: chan:address:address:shared:channel:_elem <- get-address *out, chan:offset
+9993 transform: *chan <- copy result
 9991 transform: --- checking reply instructions against header for new-channel_3
 9991 transform: --- fill in reply ingredients from header for recipe new-channel_3
 9991 transform: --- deduce types for recipe new-channel_3
@@ -558,6 +588,28 @@
 9993 transform: replacing in instruction '}'
 9992 transform: transforming new specialization: write_3
 9991 transform: --- rewrite literal strings in recipe write_3
+9991 transform: --- rewrite 'stash' instructions in recipe write_3
+9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9993 transform: out:address:shared:sink:_elem <- next-ingredient-without-typechecking 
+9993 transform: val:_elem <- next-ingredient-without-typechecking 
+9993 transform: chan:address:shared:channel:_elem <- get *out, chan:offset
+9993 transform: {
+9993 transform: full:boolean <- channel-full? chan
+9993 transform: break-unless full
+9993 transform: full-address:address:number <- get-address *chan, first-full:offset
+9993 transform: wait-for-location *full-address
+9993 transform: }
+9993 transform: circular-buffer:address:shared:array:_elem <- get *chan, data:offset
+9993 transform: free:address:number <- get-address *chan, first-free:offset
+9993 transform: dest:address:_elem <- index-address *circular-buffer, *free
+9993 transform: *dest <- copy val
+9993 transform: *free <- add *free, 1
+9993 transform: {
+9993 transform: len:number <- length *circular-buffer
+9993 transform: at-end?:boolean <- greater-or-equal *free, len
+9993 transform: break-unless at-end?
+9993 transform: *free <- copy 0
+9993 transform: }
 9991 transform: --- checking reply instructions against header for write_3
 9991 transform: --- fill in reply ingredients from header for recipe write_3
 9991 transform: --- deduce types for recipe write_3
@@ -747,6 +799,19 @@
 9993 transform: replacing in ingredient result
 9992 transform: transforming new specialization: channel-full?_3
 9991 transform: --- rewrite literal strings in recipe channel-full?_3
+9991 transform: --- rewrite 'stash' instructions in recipe channel-full?_3
+9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9993 transform: chan:address:shared:channel:_elem <- next-ingredient-without-typechecking 
+9993 transform: tmp:number <- get *chan, first-free:offset
+9993 transform: tmp <- add tmp, 1
+9993 transform: {
+9993 transform: len:number <- capacity chan
+9993 transform: at-end?:boolean <- greater-or-equal tmp, len
+9993 transform: break-unless at-end?
+9993 transform: tmp <- copy 0
+9993 transform: }
+9993 transform: full:number <- get *chan, first-full:offset
+9993 transform: result <- equal full, tmp
 9991 transform: --- checking reply instructions against header for channel-full?_3
 9991 transform: --- fill in reply ingredients from header for recipe channel-full?_3
 9991 transform: --- deduce types for recipe channel-full?_3
@@ -851,6 +916,11 @@
 9993 transform: replacing in ingredient result
 9992 transform: transforming new specialization: capacity_3
 9991 transform: --- rewrite literal strings in recipe capacity_3
+9991 transform: --- rewrite 'stash' instructions in recipe capacity_3
+9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9993 transform: chan:address:shared:channel:_elem <- next-ingredient-without-typechecking 
+9993 transform: q:address:shared:array:_elem <- get *chan, data:offset
+9993 transform: result <- length *q
 9991 transform: --- checking reply instructions against header for capacity_3
 9991 transform: --- fill in reply ingredients from header for recipe capacity_3
 9991 transform: --- deduce types for recipe capacity_3
@@ -1033,6 +1103,12 @@
 9993 transform: replacing in ingredient result
 9992 transform: transforming new specialization: channel-empty?_3
 9991 transform: --- rewrite literal strings in recipe channel-empty?_3
+9991 transform: --- rewrite 'stash' instructions in recipe channel-empty?_3
+9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9993 transform: chan:address:shared:channel:_elem <- next-ingredient-without-typechecking 
+9993 transform: full:number <- get *chan, first-full:offset
+9993 transform: free:number <- get *chan, first-free:offset
+9993 transform: result <- equal full, free
 9991 transform: --- checking reply instructions against header for channel-empty?_3
 9991 transform: --- fill in reply ingredients from header for recipe channel-empty?_3
 9991 transform: --- deduce types for recipe channel-empty?_3

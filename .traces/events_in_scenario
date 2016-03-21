@@ -56,6 +56,52 @@
 9999 parse: recipe scenario_events-in-scenario has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_events-in-scenario
+9991 transform: --- rewrite 'stash' instructions in recipe scenario_events-in-scenario
+9993 transform: assume-console [
+    type [abc]
+    left-click 0, 1
+    press up-arrow
+    type [d]
+  ]
+9993 transform: run [
+    # 3 keyboard events; each event occupies 4 locations
+    1:event <- read-event console:address:shared:console
+    5:event <- read-event console:address:shared:console
+    9:event <- read-event console:address:shared:console
+    # mouse click
+    13:event <- read-event console:address:shared:console
+    # non-character keycode
+    17:event <- read-event console:address:shared:console
+    # final keyboard event
+    21:event <- read-event console:address:shared:console
+  ]
+9993 transform: memory-should-contain [
+    1 <- 0  # 'text'
+    2 <- 97  # 'a'
+    3 <- 0  # unused
+    4 <- 0  # unused
+    5 <- 0  # 'text'
+    6 <- 98  # 'b'
+    7 <- 0  # unused
+    8 <- 0  # unused
+    9 <- 0  # 'text'
+    10 <- 99  # 'c'
+    11 <- 0  # unused
+    12 <- 0  # unused
+    13 <- 2  # 'mouse'
+    14 <- 65513  # mouse click
+    15 <- 0  # row
+    16 <- 1  # column
+    17 <- 1  # 'keycode'
+    18 <- 65517  # up arrow
+    19 <- 0  # unused
+    20 <- 0  # unused
+    21 <- 0  # 'text'
+    22 <- 100  # 'd'
+    23 <- 0  # unused
+    24 <- 0  # unused
+    25 <- 0
+  ]
 9991 transform: --- fill in reply ingredients from header for recipe scenario_events-in-scenario
 9991 transform: --- deduce types for recipe scenario_events-in-scenario
 9991 transform: --- check for invalid types in recipe scenario_events-in-scenario
@@ -163,6 +209,7 @@
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
+9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9992 transform: console => ("address" "shared" "console")

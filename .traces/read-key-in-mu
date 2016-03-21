@@ -30,6 +30,26 @@
 9999 parse: recipe scenario_read-key-in-mu has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_read-key-in-mu
+9991 transform: --- rewrite 'stash' instructions in recipe scenario_read-key-in-mu
+9993 transform: assume-console [
+    type [abc]
+  ]
+9993 transform: run [
+    1:character, console:address:shared:console, 2:boolean <- read-key console:address:shared:console
+    3:character, console:address:shared:console, 4:boolean <- read-key console:address:shared:console
+    5:character, console:address:shared:console, 6:boolean <- read-key console:address:shared:console
+    7:character, console:address:shared:console, 8:boolean <- read-key console:address:shared:console
+  ]
+9993 transform: memory-should-contain [
+    1 <- 97  # 'a'
+    2 <- 1
+    3 <- 98  # 'b'
+    4 <- 1
+    5 <- 99  # 'c'
+    6 <- 1
+    7 <- 0  # eof
+    8 <- 1
+  ]
 9991 transform: --- fill in reply ingredients from header for recipe scenario_read-key-in-mu
 9991 transform: --- deduce types for recipe scenario_read-key-in-mu
 9991 transform: --- check for invalid types in recipe scenario_read-key-in-mu
@@ -108,6 +128,7 @@
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
+9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9992 transform: console => ("address" "shared" "console")

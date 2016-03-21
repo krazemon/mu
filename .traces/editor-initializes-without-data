@@ -36,6 +36,28 @@
 9999 parse: recipe scenario_editor-initializes-without-data has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_editor-initializes-without-data
+9991 transform: --- rewrite 'stash' instructions in recipe scenario_editor-initializes-without-data
+9993 transform: screen:address:shared:screen <- new-fake-screen 5/width, 3/height
+9993 transform: run [
+    1:address:shared:editor-data <- new-editor 0/data, screen:address:shared:screen, 2/left, 5/right
+    2:editor-data <- copy *1:address:shared:editor-data
+  ]
+9993 transform: memory-should-contain [
+    # 2 (data) <- just the § sentinel
+    # 3 (top of screen) <- the § sentinel
+    4 <- 0  # bottom-of-screen; null since text fits on screen
+    # 5 (before cursor) <- the § sentinel
+    6 <- 2  # left
+    7 <- 4  # right  (inclusive)
+    8 <- 1  # bottom
+    9 <- 1  # cursor row
+    10 <- 2  # cursor column
+  ]
+9993 transform: screen-should-contain [
+    .     .
+    .     .
+    .     .
+  ]
 9991 transform: --- fill in reply ingredients from header for recipe scenario_editor-initializes-without-data
 9991 transform: --- deduce types for recipe scenario_editor-initializes-without-data
 9992 transform: screen => ("address" "shared" "screen")
@@ -855,6 +877,7 @@
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
+9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9992 transform: screen => ("address" "shared" "screen")

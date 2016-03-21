@@ -30,6 +30,25 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 parse: recipe scenario_read-move-illegal-file has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_read-move-illegal-file
+9991 transform: --- rewrite 'stash' instructions in recipe scenario_read-move-illegal-file
+9993 transform: screen:address:shared:screen <- new-fake-screen 20/width, 2/height
+9993 transform: run [
+    1:address:shared:source:character, 2:address:shared:sink:character <- new-channel 2/capacity
+    3:number/routine <- start-running read-move, 1:address:shared:source:character, screen:address:shared:screen
+    # 'read-move' is waiting for input
+    wait-for-routine 3:number
+    4:number <- routine-state 3:number/id
+    5:boolean/waiting? <- equal 4:number/routine-state, 3/waiting
+    assert 5:boolean/waiting?, [ 
+F read-move-file: routine failed to pause after coming up (before any keys were pressed)]
+    1:address:shared:sink:character <- write 1:address:shared:sink:character, 50/'2'
+    restart 3:number/routine
+    wait-for-routine 3:number
+  ]
+9993 transform: screen-should-contain [
+    .file too low: 2     .
+    .                    .
+  ]
 9991 transform: --- fill in reply ingredients from header for recipe scenario_read-move-illegal-file
 9991 transform: --- deduce types for recipe scenario_read-move-illegal-file
 9992 transform: screen => ("address" "shared" "screen")
@@ -1817,6 +1836,7 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
+9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9992 transform: screen => ("address" "shared" "screen")
@@ -2020,6 +2040,28 @@ F read-move-file: routine failed to pause after coming up (before any keys were 
 9993 transform: replacing in instruction '}'
 9992 transform: transforming new specialization: write_3
 9991 transform: --- rewrite literal strings in recipe write_3
+9991 transform: --- rewrite 'stash' instructions in recipe write_3
+9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9993 transform: out:address:shared:sink:_elem <- next-ingredient-without-typechecking 
+9993 transform: val:_elem <- next-ingredient-without-typechecking 
+9993 transform: chan:address:shared:channel:_elem <- get *out, chan:offset
+9993 transform: {
+9993 transform: full:boolean <- channel-full? chan
+9993 transform: break-unless full
+9993 transform: full-address:address:number <- get-address *chan, first-full:offset
+9993 transform: wait-for-location *full-address
+9993 transform: }
+9993 transform: circular-buffer:address:shared:array:_elem <- get *chan, data:offset
+9993 transform: free:address:number <- get-address *chan, first-free:offset
+9993 transform: dest:address:_elem <- index-address *circular-buffer, *free
+9993 transform: *dest <- copy val
+9993 transform: *free <- add *free, 1
+9993 transform: {
+9993 transform: len:number <- length *circular-buffer
+9993 transform: at-end?:boolean <- greater-or-equal *free, len
+9993 transform: break-unless at-end?
+9993 transform: *free <- copy 0
+9993 transform: }
 9991 transform: --- checking reply instructions against header for write_3
 9991 transform: --- fill in reply ingredients from header for recipe write_3
 9991 transform: --- deduce types for recipe write_3

@@ -1,11 +1,11 @@
 9991 parse: --- defining main
 9993 parse: instruction: local-scope
 9993 parse:   number of ingredients: 0
-9992 load: after rewriting: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9992 load: after rewriting: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 parse: instruction: foo
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: 0: "literal"
-9992 load: after rewriting: foo 0
+9993 parse:   ingredient: {0: "literal"}
+9992 load: after rewriting: foo {0: "literal"}
 9999 parse: recipe main has a header
 9999 parse: recipe has a header; parsing
 9999 parse: header ingredient: x:address:_elem
@@ -13,21 +13,21 @@
 9991 parse: --- defining foo
 9993 parse: instruction: local-scope
 9993 parse:   number of ingredients: 0
-9992 load: after rewriting: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9992 load: after rewriting: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 parse: instruction: load-ingredients
 9993 parse:   number of ingredients: 0
 9992 load: after rewriting:  
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: x: ()
-9993 parse:   product: y: ()
-9992 load: after rewriting: y <- copy x
+9993 parse:   ingredient: {x: ()}
+9993 parse:   product: {y: ()}
+9992 load: after rewriting: {y: ()} <- copy {x: ()}
 9999 parse: recipe foo has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe main
 9991 transform: --- rewrite 'stash' instructions in recipe main
-9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform: foo 0
+9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: foo {0: "literal"}
 9991 transform: --- fill in reply ingredients from header for recipe main
 9991 transform: --- deduce types for recipe main
 9992 transform: default-space => ("address" "shared" "array" "location")
@@ -35,29 +35,29 @@
 9991 transform: --- collect surrounding spaces for recipe main
 9991 transform: --- transform names for recipe main
 9991 transform: --- resolve ambiguous calls for recipe main
-9992 transform: instruction foo 0
-9992 transform: checking variant (strict) 0: recipe foo x: ("address" "_elem") -> y: ("address" "_elem")
+9992 transform: instruction foo {0: "literal"}
+9992 transform: checking variant (strict) 0: recipe foo {x: ("address" "_elem")} -> {y: ("address" "_elem")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: found variant to specialize: 1000 foo
-9993 transform: switching foo to specialized recipe foo_2 x: ("address" "_elem") -> y: ("address" "_elem")
+9993 transform: switching foo to specialized recipe foo_2 {x: ("address" "_elem")} -> {y: ("address" "_elem")}
 9993 transform: compute type names: foo_2
-9994 transform:     checking x: ("address" "_elem"): ("address" "_elem")
+9994 transform:     checking {x: ("address" "_elem")}: ("address" "_elem")
 9993 transform: type of x is ("address" "_elem")
-9994 transform:     checking y: ("address" "_elem"): ("address" "_elem")
+9994 transform:     checking {y: ("address" "_elem")}: ("address" "_elem")
 9993 transform: type of y is ("address" "_elem")
-9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9994 transform:     checking location: "type": "type"
+9993 transform:   instruction: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9994 transform:     checking {location: "type"}: "type"
 9993 transform: type of location is "type"
-9994 transform:     checking number-of-locals: "literal": "literal"
+9994 transform:     checking {number-of-locals: "literal"}: "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
+9994 transform:     checking {default-space: ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
 9993 transform: type of default-space is ("address" "shared" "array" "location")
-9993 transform:   instruction: x:address:_elem <- next-ingredient-without-typechecking 
-9994 transform:     checking x: ("address" "_elem"): ("address" "_elem")
-9993 transform:   instruction: y <- copy x
-9994 transform:     checking x: (): ()
+9993 transform:   instruction: {x: ("address" "_elem")} <- next-ingredient-without-typechecking 
+9994 transform:     checking {x: ("address" "_elem")}: ("address" "_elem")
+9993 transform:   instruction: {y: ()} <- copy {x: ()}
+9994 transform:     checking {x: ()}: ()
 9994 transform:     deducing type to ("address" "_elem")
-9994 transform:     checking y: (): ()
+9994 transform:     checking {y: ()}: ()
 9994 transform:     deducing type to ("address" "_elem")
    0 error: foo: failed to map a type to x:address:_elem
 
@@ -72,9 +72,9 @@
 9992 transform: transforming new specialization: foo_2
 9991 transform: --- rewrite literal strings in recipe foo_2
 9991 transform: --- rewrite 'stash' instructions in recipe foo_2
-9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform: x:address:_elem <- next-ingredient-without-typechecking 
-9993 transform: y <- copy x
+9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {x: ("address" "_elem")} <- next-ingredient-without-typechecking 
+9993 transform: {y: ("address" "_elem")} <- copy {x: ("address" "_elem")}
 9991 transform: --- checking reply instructions against header for foo_2
 9991 transform: --- fill in reply ingredients from header for recipe foo_2
 9991 transform: --- deduce types for recipe foo_2
@@ -84,13 +84,13 @@
 9991 transform: --- deduce types from header for foo_2
 9993 transform: type of x is ("address" "_elem")
 9993 transform: type of y is ("address" "_elem")
-9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: default-space: ("address" "shared" "array" "location")
-9992 transform: instruction: x:address:_elem <- next-ingredient-without-typechecking 
-9993 transform:   product: x: ("address" "_elem")
-9992 transform: instruction: y <- copy x
-9993 transform:   product: y: ("address" "_elem")
-9992 transform: instruction: reply y:address:_elem
+9992 transform: instruction: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform:   product: {default-space: ("address" "shared" "array" "location")}
+9992 transform: instruction: {x: ("address" "_elem")} <- next-ingredient-without-typechecking 
+9993 transform:   product: {x: ("address" "_elem")}
+9992 transform: instruction: {y: ("address" "_elem")} <- copy {x: ("address" "_elem")}
+9993 transform:   product: {y: ("address" "_elem")}
+9992 transform: instruction: reply {y: ("address" "_elem")}
 9991 transform: --- check for invalid types in recipe foo_2
    0 error: foo_2: unknown type _elem in 'x:address:_elem <- next-ingredient-without-typechecking '
 

@@ -1,23 +1,19 @@
 9991 parse: --- defining main
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "\n    trace 1, [a], [foo]\n  ": "literal-string"
-9992 load: after rewriting: run [
-    trace 1, [a], [foo]
-  ]
+9993 parse:   ingredient: {"\n    trace 1, [a], [foo]\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    trace 1, [a], [foo]\n  ": "literal-string"}
 9993 parse: instruction: check-trace-count-for-label
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 1: "literal"
-9993 parse:   ingredient: "a": "literal-string"
-9992 load: after rewriting: check-trace-count-for-label 1, [a]
+9993 parse:   ingredient: {1: "literal"}
+9993 parse:   ingredient: {"a": "literal-string"}
+9992 load: after rewriting: check-trace-count-for-label {1: "literal"}, {"a": "literal-string"}
 9999 parse: recipe main has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe main
 9991 transform: --- rewrite 'stash' instructions in recipe main
-9993 transform: run [
-    trace 1, [a], [foo]
-  ]
-9993 transform: check-trace-count-for-label 1, [a]
+9993 transform: run {"\n    trace 1, [a], [foo]\n  ": "literal-string"}
+9993 transform: check-trace-count-for-label {1: "literal"}, {"a": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe main
 9991 transform: --- deduce types for recipe main
 9991 transform: --- check for invalid types in recipe main
@@ -41,21 +37,19 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: main
- 102 run: run [
-    trace 1, [a], [foo]
-  ]
+ 102 run: run {"\n    trace 1, [a], [foo]\n  ": "literal-string"}
 9991 parse: --- defining run_1000
 9993 parse: instruction: trace
 9993 parse:   number of ingredients: 3
-9993 parse:   ingredient: 1: "literal"
-9993 parse:   ingredient: "a": "literal-string"
-9993 parse:   ingredient: "foo": "literal-string"
-9992 load: after rewriting: trace 1, [a], [foo]
+9993 parse:   ingredient: {1: "literal"}
+9993 parse:   ingredient: {"a": "literal-string"}
+9993 parse:   ingredient: {"foo": "literal-string"}
+9992 load: after rewriting: trace {1: "literal"}, {"a": "literal-string"}, {"foo": "literal-string"}
 9999 parse: recipe run_1000 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1000
 9991 transform: --- rewrite 'stash' instructions in recipe run_1000
-9993 transform: trace 1, [a], [foo]
+9993 transform: trace {1: "literal"}, {"a": "literal-string"}, {"foo": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe run_1000
 9991 transform: --- deduce types for recipe run_1000
 9991 transform: --- check for invalid types in recipe run_1000
@@ -76,10 +70,10 @@
 9991 transform: --- checking reply instructions against header for run_1000
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: trace 1, [a], [foo]
+ 103 run: trace {1: "literal"}, {"a": "literal-string"}, {"foo": "literal-string"}
    1 a: foo 
  103 run: reply 
 9999 trace: reply: decrementing callstack depth from 2
- 102 run: check-trace-count-for-label 1, [a]
+ 102 run: check-trace-count-for-label {1: "literal"}, {"a": "literal-string"}
  102 run: reply 
 9999 trace: reply: decrementing callstack depth from 1

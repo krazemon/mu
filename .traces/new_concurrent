@@ -1,53 +1,53 @@
 9991 parse: --- defining f1
 9993 parse: instruction: start-running
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: f2: ()
-9992 load: after rewriting: start-running f2
+9993 parse:   ingredient: {f2: ()}
+9992 load: after rewriting: start-running {f2: ()}
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: number: "type"
-9993 parse:   product: 1: ("address" "shared" "number"), {"raw": ()}
-9992 load: after rewriting: 1:address:shared:number/raw <- new number:type
+9993 parse:   ingredient: {number: "type"}
+9993 parse:   product: {1: ("address" "shared" "number"), "raw": ()}
+9992 load: after rewriting: {1: ("address" "shared" "number"), "raw": ()} <- new {number: "type"}
 9993 parse: label: {
 9992 load: after rewriting: {
 9993 parse: instruction: loop-unless
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: 4: "number", {"raw": ()}
-9992 load: after rewriting: loop-unless 4:number/raw
+9993 parse:   ingredient: {4: "number", "raw": ()}
+9992 load: after rewriting: loop-unless {4: "number", "raw": ()}
 9993 parse: label: }
 9992 load: after rewriting: }
 9999 parse: recipe f1 has a header
 9991 parse: --- defining f2
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: number: "type"
-9993 parse:   product: 2: ("address" "shared" "number"), {"raw": ()}
-9992 load: after rewriting: 2:address:shared:number/raw <- new number:type
+9993 parse:   ingredient: {number: "type"}
+9993 parse:   product: {2: ("address" "shared" "number"), "raw": ()}
+9992 load: after rewriting: {2: ("address" "shared" "number"), "raw": ()} <- new {number: "type"}
 9993 parse: instruction: equal
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 1: ("address" "shared" "number"), {"raw": ()}
-9993 parse:   ingredient: 2: ("address" "shared" "number"), {"raw": ()}
-9993 parse:   product: 3: "boolean", {"raw": ()}
-9992 load: after rewriting: 3:boolean/raw <- equal 1:address:shared:number/raw, 2:address:shared:number/raw
+9993 parse:   ingredient: {1: ("address" "shared" "number"), "raw": ()}
+9993 parse:   ingredient: {2: ("address" "shared" "number"), "raw": ()}
+9993 parse:   product: {3: "boolean", "raw": ()}
+9992 load: after rewriting: {3: "boolean", "raw": ()} <- equal {1: ("address" "shared" "number"), "raw": ()}, {2: ("address" "shared" "number"), "raw": ()}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: 1: "literal"
-9993 parse:   product: 4: "number", {"raw": ()}
-9992 load: after rewriting: 4:number/raw <- copy 1
+9993 parse:   ingredient: {1: "literal"}
+9993 parse:   product: {4: "number", "raw": ()}
+9992 load: after rewriting: {4: "number", "raw": ()} <- copy {1: "literal"}
 9999 parse: recipe f2 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe f1
 9991 transform: --- rewrite literal strings in recipe f2
 9991 transform: --- rewrite 'stash' instructions in recipe f1
-9993 transform: start-running f2
-9993 transform: 1:address:shared:number/raw <- new number:type
+9993 transform: start-running {f2: ()}
+9993 transform: {1: ("address" "shared" "number"), "raw": ()} <- new {number: "type"}
 9993 transform: {
-9993 transform: loop-unless 4:number/raw
+9993 transform: loop-unless {4: "number", "raw": ()}
 9993 transform: }
 9991 transform: --- rewrite 'stash' instructions in recipe f2
-9993 transform: 2:address:shared:number/raw <- new number:type
-9993 transform: 3:boolean/raw <- equal 1:address:shared:number/raw, 2:address:shared:number/raw
-9993 transform: 4:number/raw <- copy 1
+9993 transform: {2: ("address" "shared" "number"), "raw": ()} <- new {number: "type"}
+9993 transform: {3: "boolean", "raw": ()} <- equal {1: ("address" "shared" "number"), "raw": ()}, {2: ("address" "shared" "number"), "raw": ()}
+9993 transform: {4: "number", "raw": ()} <- copy {1: "literal"}
 9991 transform: --- fill in reply ingredients from header for recipe f1
 9991 transform: --- fill in reply ingredients from header for recipe f2
 9991 transform: --- deduce types for recipe f1
@@ -60,12 +60,12 @@
 9991 transform: --- transform names for recipe f2
 9991 transform: --- resolve ambiguous calls for recipe f1
 9991 transform: --- resolve ambiguous calls for recipe f2
-9992 transform: instruction 3:boolean/raw <- equal 1:address:shared:number/raw, 2:address:shared:number/raw
-9992 transform: checking variant (strict) 0: recipe equal_2 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: "boolean"
+9992 transform: instruction {3: "boolean", "raw": ()} <- equal {1: ("address" "shared" "number"), "raw": ()}, {2: ("address" "shared" "number"), "raw": ()}
+9992 transform: checking variant (strict) 0: recipe equal_2 {a: ("address" "shared" "array" "character")} {b: ("address" "shared" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literals-against-booleans) 0: recipe equal_2 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: "boolean"
+9992 transform: checking variant (strict except literals-against-booleans) 0: recipe equal_2 {a: ("address" "shared" "array" "character")} {b: ("address" "shared" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe equal_2 a: ("address" "shared" "array" "character") b: ("address" "shared" "array" "character") -> result: "boolean"
+9992 transform: checking variant 0: recipe equal_2 {a: ("address" "shared" "array" "character")} {b: ("address" "shared" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9991 transform: --- compute instruction operations for recipe f1
 9991 transform: --- compute instruction operations for recipe f2
@@ -103,1521 +103,1521 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: f1
- 102 run: start-running f2
+ 102 run: start-running {f2: "recipe-literal"}
 9999 trace: new routine; incrementing callstack depth to 2
 9999 new: routine allocated memory from 101000 to 201000
- 103 run: 1:address:shared:number/raw <- new number:type
+ 103 run: {1: ("address" "shared" "number"), "raw": ()} <- new {number: "type"}
 9999 mem: allocating size 2
 9999 mem: new alloc: 1000
 9999 mem: storing 1000 in location 1
 9999 mem: incrementing refcount of 1000: 0 -> 1
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
- 103 run: jump-unless 4:number/raw, 
+ 103 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 0
 9998 run: jumping to instruction 3
 9990 schedule: f2
- 103 run: 2:address:shared:number/raw <- new number:type
+ 103 run: {2: ("address" "shared" "number"), "raw": ()} <- new {number: "type"}
 9999 mem: allocating size 2
 9999 mem: new alloc: 101000
 9999 mem: storing 101000 in location 2
 9999 mem: incrementing refcount of 101000: 0 -> 1
- 103 run: 3:boolean/raw <- equal 1:address:shared:number/raw, 2:address:shared:number/raw
+ 103 run: {3: "boolean", "raw": ()} <- equal {1: ("address" "shared" "number"), "raw": ()}, {2: ("address" "shared" "number"), "raw": ()}
 9999 mem: location 1 is 1000
 9999 mem: location 2 is 101000
 9999 mem: storing 0 in location 3
- 103 run: 4:number/raw <- copy 1
+ 103 run: {4: "number", "raw": ()} <- copy {1: "literal"}
 9999 mem: storing 1 in location 4
  103 run: reply 
 9999 trace: reply: decrementing callstack depth from 2
 9990 schedule: f1
- 102 run: jump-unless 4:number/raw, 
+ 102 run: jump-unless {4: "number", "raw": ()}, {: "offset"}
 9999 mem: location 4 is 1
 9998 run: jump-unless fell through
  102 run: reply 

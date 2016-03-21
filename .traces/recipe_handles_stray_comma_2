@@ -6,18 +6,18 @@
 9991 parse: --- defining foo
 9993 parse: instruction: add
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 2: "literal"
-9993 parse:   ingredient: 2: "literal"
-9993 parse:   product: 1: "number", {"raw": ()}
-9992 load: after rewriting: 1:number/raw <- add 2, 2
+9993 parse:   ingredient: {2: "literal"}
+9993 parse:   ingredient: {2: "literal"}
+9993 parse:   product: {1: "number", "raw": ()}
+9992 load: after rewriting: {1: "number", "raw": ()} <- add {2: "literal"}, {2: "literal"}
 9999 parse: recipe foo has a header
 9991 parse: --- defining bar
 9993 parse: instruction: add
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 2: "literal"
-9993 parse:   ingredient: 3: "literal"
-9993 parse:   product: 1: "number", {"raw": ()}
-9992 load: after rewriting: 1:number/raw <- add 2, 3
+9993 parse:   ingredient: {2: "literal"}
+9993 parse:   ingredient: {3: "literal"}
+9993 parse:   product: {1: "number", "raw": ()}
+9992 load: after rewriting: {1: "number", "raw": ()} <- add {2: "literal"}, {3: "literal"}
 9999 parse: recipe bar has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe main
@@ -26,9 +26,9 @@
 9991 transform: --- rewrite 'stash' instructions in recipe main
 9993 transform: foo 
 9991 transform: --- rewrite 'stash' instructions in recipe foo
-9993 transform: 1:number/raw <- add 2, 2
+9993 transform: {1: "number", "raw": ()} <- add {2: "literal"}, {2: "literal"}
 9991 transform: --- rewrite 'stash' instructions in recipe bar
-9993 transform: 1:number/raw <- add 2, 3
+9993 transform: {1: "number", "raw": ()} <- add {2: "literal"}, {3: "literal"}
 9991 transform: --- fill in reply ingredients from header for recipe main
 9991 transform: --- fill in reply ingredients from header for recipe foo
 9991 transform: --- fill in reply ingredients from header for recipe bar
@@ -89,7 +89,7 @@
 9990 schedule: main
  102 run: foo 
 9999 trace: incrementing callstack depth to 2
- 103 run: 1:number/raw <- add 2, 2
+ 103 run: {1: "number", "raw": ()} <- add {2: "literal"}, {2: "literal"}
 9999 mem: storing 4 in location 1
  103 run: reply 
 9999 trace: reply: decrementing callstack depth from 2

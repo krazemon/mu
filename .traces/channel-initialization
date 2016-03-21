@@ -1,34 +1,18 @@
 9991 parse: --- defining scenario_channel-initialization
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "\n    1:address:shared:source:number <- new-channel 3/capacity\n    2:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset\n    3:number <- get *2:address:shared:channel:number, first-full:offset\n    4:number <- get *2:address:shared:channel:number, first-free:offset\n  ": "literal-string"
-9992 load: after rewriting: run [
-    1:address:shared:source:number <- new-channel 3/capacity
-    2:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset
-    3:number <- get *2:address:shared:channel:number, first-full:offset
-    4:number <- get *2:address:shared:channel:number, first-free:offset
-  ]
+9993 parse:   ingredient: {"\n    1:address:shared:source:number <- new-channel 3/capacity\n    2:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset\n    3:number <- get *2:address:shared:channel:number, first-full:offset\n    4:number <- get *2:address:shared:channel:number, first-free:offset\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    1:address:shared:source:number <- new-channel 3/capacity\n    2:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset\n    3:number <- get *2:address:shared:channel:number, first-full:offset\n    4:number <- get *2:address:shared:channel:number, first-free:offset\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "\n    3 <- 0  # first-full\n    4 <- 0  # first-free\n  ": "literal-string"
-9992 load: after rewriting: memory-should-contain [
-    3 <- 0  # first-full
-    4 <- 0  # first-free
-  ]
+9993 parse:   ingredient: {"\n    3 <- 0  # first-full\n    4 <- 0  # first-free\n  ": "literal-string"}
+9992 load: after rewriting: memory-should-contain {"\n    3 <- 0  # first-full\n    4 <- 0  # first-free\n  ": "literal-string"}
 9999 parse: recipe scenario_channel-initialization has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_channel-initialization
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_channel-initialization
-9993 transform: run [
-    1:address:shared:source:number <- new-channel 3/capacity
-    2:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset
-    3:number <- get *2:address:shared:channel:number, first-full:offset
-    4:number <- get *2:address:shared:channel:number, first-free:offset
-  ]
-9993 transform: memory-should-contain [
-    3 <- 0  # first-full
-    4 <- 0  # first-free
-  ]
+9993 transform: run {"\n    1:address:shared:source:number <- new-channel 3/capacity\n    2:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset\n    3:number <- get *2:address:shared:channel:number, first-full:offset\n    4:number <- get *2:address:shared:channel:number, first-free:offset\n  ": "literal-string"}
+9993 transform: memory-should-contain {"\n    3 <- 0  # first-full\n    4 <- 0  # first-free\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_channel-initialization
 9991 transform: --- deduce types for recipe scenario_channel-initialization
 9991 transform: --- check for invalid types in recipe scenario_channel-initialization
@@ -52,36 +36,31 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_channel-initialization
- 102 run: run [
-    1:address:shared:source:number <- new-channel 3/capacity
-    2:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset
-    3:number <- get *2:address:shared:channel:number, first-full:offset
-    4:number <- get *2:address:shared:channel:number, first-free:offset
-  ]
+ 102 run: run {"\n    1:address:shared:source:number <- new-channel 3/capacity\n    2:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset\n    3:number <- get *2:address:shared:channel:number, first-full:offset\n    4:number <- get *2:address:shared:channel:number, first-free:offset\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: new-channel
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: 3: "literal", {"capacity": ()}
-9993 parse:   product: 1: ("address" "shared" "source" "number")
-9992 load: after rewriting: 1:address:shared:source:number <- new-channel 3/capacity
+9993 parse:   ingredient: {3: "literal", "capacity": ()}
+9993 parse:   product: {1: ("address" "shared" "source" "number")}
+9992 load: after rewriting: {1: ("address" "shared" "source" "number")} <- new-channel {3: "literal", "capacity": ()}
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 1: ("address" "shared" "source" "number"), {"lookup": ()}
-9993 parse:   ingredient: chan: "offset"
-9993 parse:   product: 2: ("address" "shared" "channel" "number")
-9992 load: after rewriting: 2:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset
+9993 parse:   ingredient: {1: ("address" "shared" "source" "number"), "lookup": ()}
+9993 parse:   ingredient: {chan: "offset"}
+9993 parse:   product: {2: ("address" "shared" "channel" "number")}
+9992 load: after rewriting: {2: ("address" "shared" "channel" "number")} <- get {1: ("address" "shared" "source" "number"), "lookup": ()}, {chan: "offset"}
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 2: ("address" "shared" "channel" "number"), {"lookup": ()}
-9993 parse:   ingredient: first-full: "offset"
-9993 parse:   product: 3: "number"
-9992 load: after rewriting: 3:number <- get *2:address:shared:channel:number, first-full:offset
+9993 parse:   ingredient: {2: ("address" "shared" "channel" "number"), "lookup": ()}
+9993 parse:   ingredient: {first-full: "offset"}
+9993 parse:   product: {3: "number"}
+9992 load: after rewriting: {3: "number"} <- get {2: ("address" "shared" "channel" "number"), "lookup": ()}, {first-full: "offset"}
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 2: ("address" "shared" "channel" "number"), {"lookup": ()}
-9993 parse:   ingredient: first-free: "offset"
-9993 parse:   product: 4: "number"
-9992 load: after rewriting: 4:number <- get *2:address:shared:channel:number, first-free:offset
+9993 parse:   ingredient: {2: ("address" "shared" "channel" "number"), "lookup": ()}
+9993 parse:   ingredient: {first-free: "offset"}
+9993 parse:   product: {4: "number"}
+9992 load: after rewriting: {4: "number"} <- get {2: ("address" "shared" "channel" "number"), "lookup": ()}, {first-free: "offset"}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
@@ -95,105 +74,105 @@
 9993 name: element first-full of type channel is at offset 0
 9993 name: element first-free of type channel is at offset 1
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction 1:address:shared:source:number <- new-channel 3/capacity
-9992 transform: checking variant (strict) 0: recipe new-channel capacity: "number" -> in: ("address" "shared" "source" "_elem") out: ("address" "shared" "sink" "_elem")
+9992 transform: instruction {1: ("address" "shared" "source" "number")} <- new-channel {3: "literal", "capacity": ()}
+9992 transform: checking variant (strict) 0: recipe new-channel {capacity: "number"} -> {in: ("address" "shared" "source" "_elem")} {out: ("address" "shared" "sink" "_elem")}
 9993 transform: strict match failed: product 0
-9992 transform: checking variant (strict) 1: recipe new-channel_2 capacity: "number" -> in: ("address" "shared" "source" "character") out: ("address" "shared" "sink" "character")
+9992 transform: checking variant (strict) 1: recipe new-channel_2 {capacity: "number"} -> {in: ("address" "shared" "source" "character")} {out: ("address" "shared" "sink" "character")}
 9993 transform: strict match failed: product 0
 9992 transform: found variant to specialize: 226 new-channel
-9993 transform: switching new-channel to specialized recipe new-channel_3 capacity: "number" -> in: ("address" "shared" "source" "_elem") out: ("address" "shared" "sink" "_elem")
+9993 transform: switching new-channel to specialized recipe new-channel_3 {capacity: "number"} -> {in: ("address" "shared" "source" "_elem")} {out: ("address" "shared" "sink" "_elem")}
 9993 transform: compute type names: new-channel_3
-9994 transform:     checking capacity: "number": "number"
+9994 transform:     checking {capacity: "number"}: "number"
 9993 transform: type of capacity is "number"
-9994 transform:     checking in: ("address" "shared" "source" "_elem"): ("address" "shared" "source" "_elem")
+9994 transform:     checking {in: ("address" "shared" "source" "_elem")}: ("address" "shared" "source" "_elem")
 9993 transform: type of in is ("address" "shared" "source" "_elem")
-9994 transform:     checking out: ("address" "shared" "sink" "_elem"): ("address" "shared" "sink" "_elem")
+9994 transform:     checking {out: ("address" "shared" "sink" "_elem")}: ("address" "shared" "sink" "_elem")
 9993 transform: type of out is ("address" "shared" "sink" "_elem")
-9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9994 transform:     checking location: "type": "type"
+9993 transform:   instruction: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9994 transform:     checking {location: "type"}: "type"
 9993 transform: type of location is "type"
-9994 transform:     checking number-of-locals: "literal": "literal"
+9994 transform:     checking {number-of-locals: "literal"}: "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
+9994 transform:     checking {default-space: ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
 9993 transform: type of default-space is ("address" "shared" "array" "location")
-9993 transform:   instruction: capacity:number <- next-ingredient-without-typechecking 
-9994 transform:     checking capacity: "number": "number"
-9993 transform:   instruction: result:address:shared:channel:_elem <- new {(channel _elem): type}
-9994 transform:     checking (channel _elem): "type": "type"
+9993 transform:   instruction: {capacity: "number"} <- next-ingredient-without-typechecking 
+9994 transform:     checking {capacity: "number"}: "number"
+9993 transform:   instruction: {result: ("address" "shared" "channel" "_elem")} <- new {(channel _elem): "type"}
+9994 transform:     checking {(channel _elem): "type"}: "type"
 9993 transform: type of (channel _elem) is "type"
-9994 transform:     checking result: ("address" "shared" "channel" "_elem"): ("address" "shared" "channel" "_elem")
+9994 transform:     checking {result: ("address" "shared" "channel" "_elem")}: ("address" "shared" "channel" "_elem")
 9993 transform: type of result is ("address" "shared" "channel" "_elem")
-9993 transform:   instruction: full:address:number <- get-address *result, first-full:offset
-9994 transform:     checking result: (), {"lookup": ()}: ()
+9993 transform:   instruction: {full: ("address" "number")} <- get-address {result: (), "lookup": ()}, {first-full: "offset"}
+9994 transform:     checking {result: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
-9994 transform:     checking first-full: "offset": "offset"
-9994 transform:     checking full: ("address" "number"): ("address" "number")
+9994 transform:     checking {first-full: "offset"}: "offset"
+9994 transform:     checking {full: ("address" "number")}: ("address" "number")
 9993 transform: type of full is ("address" "number")
-9993 transform:   instruction: *full <- copy 0
-9994 transform:     checking 0: "literal": "literal"
+9993 transform:   instruction: {full: (), "lookup": ()} <- copy {0: "literal"}
+9994 transform:     checking {0: "literal"}: "literal"
 9993 transform: type of 0 is "literal"
-9994 transform:     checking full: (), {"lookup": ()}: ()
+9994 transform:     checking {full: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "number")
-9993 transform:   instruction: free:address:number <- get-address *result, first-free:offset
-9994 transform:     checking result: (), {"lookup": ()}: ()
+9993 transform:   instruction: {free: ("address" "number")} <- get-address {result: (), "lookup": ()}, {first-free: "offset"}
+9994 transform:     checking {result: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
-9994 transform:     checking first-free: "offset": "offset"
-9994 transform:     checking free: ("address" "number"): ("address" "number")
+9994 transform:     checking {first-free: "offset"}: "offset"
+9994 transform:     checking {free: ("address" "number")}: ("address" "number")
 9993 transform: type of free is ("address" "number")
-9993 transform:   instruction: *free <- copy 0
-9994 transform:     checking 0: "literal": "literal"
-9994 transform:     checking free: (), {"lookup": ()}: ()
+9993 transform:   instruction: {free: (), "lookup": ()} <- copy {0: "literal"}
+9994 transform:     checking {0: "literal"}: "literal"
+9994 transform:     checking {free: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "number")
-9993 transform:   instruction: capacity <- add capacity, 1
-9994 transform:     checking capacity: (): ()
+9993 transform:   instruction: {capacity: ()} <- add {capacity: ()}, {1: "literal"}
+9994 transform:     checking {capacity: ()}: ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking 1: "literal": "literal"
+9994 transform:     checking {1: "literal"}: "literal"
 9993 transform: type of 1 is "literal"
-9994 transform:     checking capacity: (): ()
+9994 transform:     checking {capacity: ()}: ()
 9994 transform:     deducing type to "number"
-9993 transform:   instruction: dest:address:address:shared:array:_elem <- get-address *result, data:offset
-9994 transform:     checking result: (), {"lookup": ()}: ()
+9993 transform:   instruction: {dest: ("address" "address" "shared" "array" "_elem")} <- get-address {result: (), "lookup": ()}, {data: "offset"}
+9994 transform:     checking {result: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
-9994 transform:     checking data: "offset": "offset"
-9994 transform:     checking dest: ("address" "address" "shared" "array" "_elem"): ("address" "address" "shared" "array" "_elem")
+9994 transform:     checking {data: "offset"}: "offset"
+9994 transform:     checking {dest: ("address" "address" "shared" "array" "_elem")}: ("address" "address" "shared" "array" "_elem")
 9993 transform: type of dest is ("address" "address" "shared" "array" "_elem")
-9993 transform:   instruction: *dest <- new _elem:type, capacity
-9994 transform:     checking _elem: "type": "type"
+9993 transform:   instruction: {dest: (), "lookup": ()} <- new {_elem: "type"}, {capacity: ()}
+9994 transform:     checking {_elem: "type"}: "type"
 9993 transform: type of _elem is "type"
-9994 transform:     checking capacity: (): ()
+9994 transform:     checking {capacity: ()}: ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking dest: (), {"lookup": ()}: ()
+9994 transform:     checking {dest: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "address" "shared" "array" "_elem")
-9993 transform:   instruction: in <- new {(source _elem): type}
-9994 transform:     checking (source _elem): "type": "type"
+9993 transform:   instruction: {in: ()} <- new {(source _elem): "type"}
+9994 transform:     checking {(source _elem): "type"}: "type"
 9993 transform: type of (source _elem) is "type"
-9994 transform:     checking in: (): ()
+9994 transform:     checking {in: ()}: ()
 9994 transform:     deducing type to ("address" "shared" "source" "_elem")
-9993 transform:   instruction: chan:address:address:shared:channel:_elem <- get-address *in, chan:offset
-9994 transform:     checking in: (), {"lookup": ()}: ()
+9993 transform:   instruction: {chan: ("address" "address" "shared" "channel" "_elem")} <- get-address {in: (), "lookup": ()}, {chan: "offset"}
+9994 transform:     checking {in: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "source" "_elem")
-9994 transform:     checking chan: "offset": "offset"
-9994 transform:     checking chan: ("address" "address" "shared" "channel" "_elem"): ("address" "address" "shared" "channel" "_elem")
+9994 transform:     checking {chan: "offset"}: "offset"
+9994 transform:     checking {chan: ("address" "address" "shared" "channel" "_elem")}: ("address" "address" "shared" "channel" "_elem")
 9993 transform: type of chan is ("address" "address" "shared" "channel" "_elem")
-9993 transform:   instruction: *chan <- copy result
-9994 transform:     checking result: (): ()
+9993 transform:   instruction: {chan: (), "lookup": ()} <- copy {result: ()}
+9994 transform:     checking {result: ()}: ()
 9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
-9994 transform:     checking chan: (), {"lookup": ()}: ()
+9994 transform:     checking {chan: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "address" "shared" "channel" "_elem")
-9993 transform:   instruction: out <- new {(sink _elem): type}
-9994 transform:     checking (sink _elem): "type": "type"
+9993 transform:   instruction: {out: ()} <- new {(sink _elem): "type"}
+9994 transform:     checking {(sink _elem): "type"}: "type"
 9993 transform: type of (sink _elem) is "type"
-9994 transform:     checking out: (): ()
+9994 transform:     checking {out: ()}: ()
 9994 transform:     deducing type to ("address" "shared" "sink" "_elem")
-9993 transform:   instruction: chan:address:address:shared:channel:_elem <- get-address *out, chan:offset
-9994 transform:     checking out: (), {"lookup": ()}: ()
+9993 transform:   instruction: {chan: ("address" "address" "shared" "channel" "_elem")} <- get-address {out: (), "lookup": ()}, {chan: "offset"}
+9994 transform:     checking {out: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "shared" "sink" "_elem")
-9994 transform:     checking chan: "offset": "offset"
-9994 transform:     checking chan: ("address" "address" "shared" "channel" "_elem"): ("address" "address" "shared" "channel" "_elem")
-9993 transform:   instruction: *chan <- copy result
-9994 transform:     checking result: (): ()
+9994 transform:     checking {chan: "offset"}: "offset"
+9994 transform:     checking {chan: ("address" "address" "shared" "channel" "_elem")}: ("address" "address" "shared" "channel" "_elem")
+9993 transform:   instruction: {chan: (), "lookup": ()} <- copy {result: ()}
+9994 transform:     checking {result: ()}: ()
 9994 transform:     deducing type to ("address" "shared" "channel" "_elem")
-9994 transform:     checking chan: (), {"lookup": ()}: ()
+9994 transform:     checking {chan: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "address" "shared" "channel" "_elem")
 9993 transform: adding mapping from _elem to number
 9993 transform: replacing in recipe header ingredients
@@ -203,77 +182,77 @@
 9993 transform: _elem => "number"
 9993 transform: replacing in ingredient out:address:shared:sink:_elem
 9993 transform: _elem => "number"
-9993 transform: replacing in instruction 'default-space:address:shared:array:location <- new location:type, number-of-locals:literal'
+9993 transform: replacing in instruction '{default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}'
 9993 transform: replacing in ingredient location:type
 9993 transform: replacing in ingredient number-of-locals:literal
 9993 transform: replacing in ingredient default-space:address:shared:array:location
-9993 transform: replacing in instruction 'capacity:number <- next-ingredient-without-typechecking '
+9993 transform: replacing in instruction '{capacity: "number"} <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient capacity:number
-9993 transform: replacing in instruction 'result:address:shared:channel:_elem <- new {(channel _elem): type}'
+9993 transform: replacing in instruction '{result: ("address" "shared" "channel" "_elem")} <- new {(channel _elem): "type"}'
 9993 transform: replacing in ingredient {(channel _elem): type}
 9993 transform: replacing in ingredient result:address:shared:channel:_elem
 9993 transform: _elem => "number"
 9993 transform: _elem => "number"
-9993 transform: replacing in instruction 'full:address:number <- get-address *result, first-full:offset'
+9993 transform: replacing in instruction '{full: ("address" "number")} <- get-address {result: ("address" "shared" "channel" "_elem"), "lookup": ()}, {first-full: "offset"}'
 9993 transform: replacing in ingredient *result
 9993 transform: _elem => "number"
 9993 transform: replacing in ingredient first-full:offset
 9993 transform: replacing in ingredient full:address:number
-9993 transform: replacing in instruction '*full <- copy 0'
+9993 transform: replacing in instruction '{full: ("address" "number"), "lookup": ()} <- copy {0: "literal"}'
 9993 transform: replacing in ingredient 0
 9993 transform: replacing in ingredient *full
-9993 transform: replacing in instruction 'free:address:number <- get-address *result, first-free:offset'
+9993 transform: replacing in instruction '{free: ("address" "number")} <- get-address {result: ("address" "shared" "channel" "_elem"), "lookup": ()}, {first-free: "offset"}'
 9993 transform: replacing in ingredient *result
 9993 transform: _elem => "number"
 9993 transform: replacing in ingredient first-free:offset
 9993 transform: replacing in ingredient free:address:number
-9993 transform: replacing in instruction '*free <- copy 0'
+9993 transform: replacing in instruction '{free: ("address" "number"), "lookup": ()} <- copy {0: "literal"}'
 9993 transform: replacing in ingredient 0
 9993 transform: replacing in ingredient *free
-9993 transform: replacing in instruction 'capacity <- add capacity, 1'
+9993 transform: replacing in instruction '{capacity: "number"} <- add {capacity: "number"}, {1: "literal"}'
 9993 transform: replacing in ingredient capacity
 9993 transform: replacing in ingredient 1
 9993 transform: replacing in ingredient capacity
-9993 transform: replacing in instruction 'dest:address:address:shared:array:_elem <- get-address *result, data:offset'
+9993 transform: replacing in instruction '{dest: ("address" "address" "shared" "array" "_elem")} <- get-address {result: ("address" "shared" "channel" "_elem"), "lookup": ()}, {data: "offset"}'
 9993 transform: replacing in ingredient *result
 9993 transform: _elem => "number"
 9993 transform: replacing in ingredient data:offset
 9993 transform: replacing in ingredient dest:address:address:shared:array:_elem
 9993 transform: _elem => "number"
-9993 transform: replacing in instruction '*dest <- new _elem:type, capacity'
+9993 transform: replacing in instruction '{dest: ("address" "address" "shared" "array" "_elem"), "lookup": ()} <- new {_elem: "type"}, {capacity: "number"}'
 9993 transform: replacing in ingredient _elem:type
 9993 transform: replacing in ingredient capacity
 9993 transform: replacing in ingredient *dest
 9993 transform: _elem => "number"
 9993 transform: _elem => "number"
-9993 transform: replacing in instruction 'in <- new {(source _elem): type}'
+9993 transform: replacing in instruction '{in: ("address" "shared" "source" "_elem")} <- new {(source _elem): "type"}'
 9993 transform: replacing in ingredient {(source _elem): type}
 9993 transform: replacing in ingredient in
 9993 transform: _elem => "number"
 9993 transform: _elem => "number"
-9993 transform: replacing in instruction 'chan:address:address:shared:channel:_elem <- get-address *in, chan:offset'
+9993 transform: replacing in instruction '{chan: ("address" "address" "shared" "channel" "_elem")} <- get-address {in: ("address" "shared" "source" "_elem"), "lookup": ()}, {chan: "offset"}'
 9993 transform: replacing in ingredient *in
 9993 transform: _elem => "number"
 9993 transform: replacing in ingredient chan:offset
 9993 transform: replacing in ingredient chan:address:address:shared:channel:_elem
 9993 transform: _elem => "number"
-9993 transform: replacing in instruction '*chan <- copy result'
+9993 transform: replacing in instruction '{chan: ("address" "address" "shared" "channel" "_elem"), "lookup": ()} <- copy {result: ("address" "shared" "channel" "_elem")}'
 9993 transform: replacing in ingredient result
 9993 transform: _elem => "number"
 9993 transform: replacing in ingredient *chan
 9993 transform: _elem => "number"
-9993 transform: replacing in instruction 'out <- new {(sink _elem): type}'
+9993 transform: replacing in instruction '{out: ("address" "shared" "sink" "_elem")} <- new {(sink _elem): "type"}'
 9993 transform: replacing in ingredient {(sink _elem): type}
 9993 transform: replacing in ingredient out
 9993 transform: _elem => "number"
 9993 transform: _elem => "number"
-9993 transform: replacing in instruction 'chan:address:address:shared:channel:_elem <- get-address *out, chan:offset'
+9993 transform: replacing in instruction '{chan: ("address" "address" "shared" "channel" "_elem")} <- get-address {out: ("address" "shared" "sink" "_elem"), "lookup": ()}, {chan: "offset"}'
 9993 transform: replacing in ingredient *out
 9993 transform: _elem => "number"
 9993 transform: replacing in ingredient chan:offset
 9993 transform: replacing in ingredient chan:address:address:shared:channel:_elem
 9993 transform: _elem => "number"
-9993 transform: replacing in instruction '*chan <- copy result'
+9993 transform: replacing in instruction '{chan: ("address" "address" "shared" "channel" "_elem"), "lookup": ()} <- copy {result: ("address" "shared" "channel" "_elem")}'
 9993 transform: replacing in ingredient result
 9993 transform: _elem => "number"
 9993 transform: replacing in ingredient *chan
@@ -281,22 +260,22 @@
 9992 transform: transforming new specialization: new-channel_3
 9991 transform: --- rewrite literal strings in recipe new-channel_3
 9991 transform: --- rewrite 'stash' instructions in recipe new-channel_3
-9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform: capacity:number <- next-ingredient-without-typechecking 
-9993 transform: result:address:shared:channel:_elem <- new {(channel _elem): type}
-9993 transform: full:address:number <- get-address *result, first-full:offset
-9993 transform: *full <- copy 0
-9993 transform: free:address:number <- get-address *result, first-free:offset
-9993 transform: *free <- copy 0
-9993 transform: capacity <- add capacity, 1
-9993 transform: dest:address:address:shared:array:_elem <- get-address *result, data:offset
-9993 transform: *dest <- new _elem:type, capacity
-9993 transform: in <- new {(source _elem): type}
-9993 transform: chan:address:address:shared:channel:_elem <- get-address *in, chan:offset
-9993 transform: *chan <- copy result
-9993 transform: out <- new {(sink _elem): type}
-9993 transform: chan:address:address:shared:channel:_elem <- get-address *out, chan:offset
-9993 transform: *chan <- copy result
+9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {capacity: "number"} <- next-ingredient-without-typechecking 
+9993 transform: {result: ("address" "shared" "channel" "number")} <- new {(channel number): "type"}
+9993 transform: {full: ("address" "number")} <- get-address {result: ("address" "shared" "channel" "number"), "lookup": ()}, {first-full: "offset"}
+9993 transform: {full: ("address" "number"), "lookup": ()} <- copy {0: "literal"}
+9993 transform: {free: ("address" "number")} <- get-address {result: ("address" "shared" "channel" "number"), "lookup": ()}, {first-free: "offset"}
+9993 transform: {free: ("address" "number"), "lookup": ()} <- copy {0: "literal"}
+9993 transform: {capacity: "number"} <- add {capacity: "number"}, {1: "literal"}
+9993 transform: {dest: ("address" "address" "shared" "array" "number")} <- get-address {result: ("address" "shared" "channel" "number"), "lookup": ()}, {data: "offset"}
+9993 transform: {dest: ("address" "address" "shared" "array" "number"), "lookup": ()} <- new {number: "type"}, {capacity: "number"}
+9993 transform: {in: ("address" "shared" "source" "number")} <- new {(source number): "type"}
+9993 transform: {chan: ("address" "address" "shared" "channel" "number")} <- get-address {in: ("address" "shared" "source" "number"), "lookup": ()}, {chan: "offset"}
+9993 transform: {chan: ("address" "address" "shared" "channel" "number"), "lookup": ()} <- copy {result: ("address" "shared" "channel" "number")}
+9993 transform: {out: ("address" "shared" "sink" "number")} <- new {(sink number): "type"}
+9993 transform: {chan: ("address" "address" "shared" "channel" "number")} <- get-address {out: ("address" "shared" "sink" "number"), "lookup": ()}, {chan: "offset"}
+9993 transform: {chan: ("address" "address" "shared" "channel" "number"), "lookup": ()} <- copy {result: ("address" "shared" "channel" "number")}
 9991 transform: --- checking reply instructions against header for new-channel_3
 9991 transform: --- fill in reply ingredients from header for recipe new-channel_3
 9991 transform: --- deduce types for recipe new-channel_3
@@ -313,39 +292,39 @@
 9993 transform: type of capacity is "number"
 9993 transform: type of in is ("address" "shared" "source" "number")
 9993 transform: type of out is ("address" "shared" "sink" "number")
-9992 transform: instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform:   product: default-space: ("address" "shared" "array" "location")
-9992 transform: instruction: capacity:number <- next-ingredient-without-typechecking 
-9993 transform:   product: capacity: "number"
-9992 transform: instruction: result:address:shared:channel:_elem <- new {(channel _elem): type}
-9993 transform:   product: result: ("address" "shared" "channel" "number")
-9992 transform: instruction: full:address:number <- get-address *result, first-full:offset
-9993 transform:   product: full: ("address" "number")
-9992 transform: instruction: *full <- copy 0
-9993 transform:   product: full: ("address" "number"), {"lookup": ()}
-9992 transform: instruction: free:address:number <- get-address *result, first-free:offset
-9993 transform:   product: free: ("address" "number")
-9992 transform: instruction: *free <- copy 0
-9993 transform:   product: free: ("address" "number"), {"lookup": ()}
-9992 transform: instruction: capacity <- add capacity, 1
-9993 transform:   product: capacity: "number"
-9992 transform: instruction: dest:address:address:shared:array:_elem <- get-address *result, data:offset
-9993 transform:   product: dest: ("address" "address" "shared" "array" "number")
-9992 transform: instruction: *dest <- new _elem:type, capacity
-9993 transform:   product: dest: ("address" "address" "shared" "array" "number"), {"lookup": ()}
-9992 transform: instruction: in <- new {(source _elem): type}
-9993 transform:   product: in: ("address" "shared" "source" "number")
-9992 transform: instruction: chan:address:address:shared:channel:_elem <- get-address *in, chan:offset
-9993 transform:   product: chan: ("address" "address" "shared" "channel" "number")
-9992 transform: instruction: *chan <- copy result
-9993 transform:   product: chan: ("address" "address" "shared" "channel" "number"), {"lookup": ()}
-9992 transform: instruction: out <- new {(sink _elem): type}
-9993 transform:   product: out: ("address" "shared" "sink" "number")
-9992 transform: instruction: chan:address:address:shared:channel:_elem <- get-address *out, chan:offset
-9993 transform:   product: chan: ("address" "address" "shared" "channel" "number")
-9992 transform: instruction: *chan <- copy result
-9993 transform:   product: chan: ("address" "address" "shared" "channel" "number"), {"lookup": ()}
-9992 transform: instruction: reply in:address:shared:source:_elem, out:address:shared:sink:_elem
+9992 transform: instruction: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform:   product: {default-space: ("address" "shared" "array" "location")}
+9992 transform: instruction: {capacity: "number"} <- next-ingredient-without-typechecking 
+9993 transform:   product: {capacity: "number"}
+9992 transform: instruction: {result: ("address" "shared" "channel" "number")} <- new {(channel number): "type"}
+9993 transform:   product: {result: ("address" "shared" "channel" "number")}
+9992 transform: instruction: {full: ("address" "number")} <- get-address {result: ("address" "shared" "channel" "number"), "lookup": ()}, {first-full: "offset"}
+9993 transform:   product: {full: ("address" "number")}
+9992 transform: instruction: {full: ("address" "number"), "lookup": ()} <- copy {0: "literal"}
+9993 transform:   product: {full: ("address" "number"), "lookup": ()}
+9992 transform: instruction: {free: ("address" "number")} <- get-address {result: ("address" "shared" "channel" "number"), "lookup": ()}, {first-free: "offset"}
+9993 transform:   product: {free: ("address" "number")}
+9992 transform: instruction: {free: ("address" "number"), "lookup": ()} <- copy {0: "literal"}
+9993 transform:   product: {free: ("address" "number"), "lookup": ()}
+9992 transform: instruction: {capacity: "number"} <- add {capacity: "number"}, {1: "literal"}
+9993 transform:   product: {capacity: "number"}
+9992 transform: instruction: {dest: ("address" "address" "shared" "array" "number")} <- get-address {result: ("address" "shared" "channel" "number"), "lookup": ()}, {data: "offset"}
+9993 transform:   product: {dest: ("address" "address" "shared" "array" "number")}
+9992 transform: instruction: {dest: ("address" "address" "shared" "array" "number"), "lookup": ()} <- new {number: "type"}, {capacity: "number"}
+9993 transform:   product: {dest: ("address" "address" "shared" "array" "number"), "lookup": ()}
+9992 transform: instruction: {in: ("address" "shared" "source" "number")} <- new {(source number): "type"}
+9993 transform:   product: {in: ("address" "shared" "source" "number")}
+9992 transform: instruction: {chan: ("address" "address" "shared" "channel" "number")} <- get-address {in: ("address" "shared" "source" "number"), "lookup": ()}, {chan: "offset"}
+9993 transform:   product: {chan: ("address" "address" "shared" "channel" "number")}
+9992 transform: instruction: {chan: ("address" "address" "shared" "channel" "number"), "lookup": ()} <- copy {result: ("address" "shared" "channel" "number")}
+9993 transform:   product: {chan: ("address" "address" "shared" "channel" "number"), "lookup": ()}
+9992 transform: instruction: {out: ("address" "shared" "sink" "number")} <- new {(sink number): "type"}
+9993 transform:   product: {out: ("address" "shared" "sink" "number")}
+9992 transform: instruction: {chan: ("address" "address" "shared" "channel" "number")} <- get-address {out: ("address" "shared" "sink" "number"), "lookup": ()}, {chan: "offset"}
+9993 transform:   product: {chan: ("address" "address" "shared" "channel" "number")}
+9992 transform: instruction: {chan: ("address" "address" "shared" "channel" "number"), "lookup": ()} <- copy {result: ("address" "shared" "channel" "number")}
+9993 transform:   product: {chan: ("address" "address" "shared" "channel" "number"), "lookup": ()}
+9992 transform: instruction: reply {in: ("address" "shared" "source" "number")}, {out: ("address" "shared" "sink" "number")}
 9991 transform: --- check for invalid types in recipe new-channel_3
 9991 transform: --- collect surrounding spaces for recipe new-channel_3
 9991 transform: --- transform names for recipe new-channel_3
@@ -414,21 +393,21 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: 1:address:shared:source:number <- new-channel_3 3/capacity
+ 103 run: {1: ("address" "shared" "source" "number")} <- new-channel_3 {3: "literal", "capacity": ()}
 9999 trace: incrementing callstack depth to 3
- 104 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+ 104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 9
 9999 mem: allocating size 11
 9999 mem: new alloc: 1000
 9999 mem: storing 9 in location 1001
- 104 run: capacity:number <- next-ingredient-without-typechecking 
+ 104 run: {capacity: "number"} <- next-ingredient-without-typechecking 
 9999 mem: storing 3 in location 1003
- 104 run: result:address:shared:channel:_elem <- new {(channel _elem): type}
+ 104 run: {result: ("address" "shared" "channel" "number")} <- new {(channel number): "type"}
 9999 mem: allocating size 4
 9999 mem: new alloc: 1011
 9999 mem: storing 1011 in location 1004
 9999 mem: incrementing refcount of 1011: 0 -> 1
- 104 run: full:address:number <- get-address *result, first-full:offset
+ 104 run: {full: ("address" "number")} <- get-address {result: ("address" "shared" "channel" "number"), "lookup": ()}, {first-full: "offset"}
 9999 mem: location 1004 is 1011
 9999 mem: skipping refcount at 1011
 9999 mem: location 1012 is 0
@@ -438,10 +417,10 @@
 9999 mem: skipping refcount at 1011
 9998 run: address to copy is 1012
 9999 mem: storing 1012 in location 1005
- 104 run: *full <- copy 0
+ 104 run: {full: ("address" "number"), "lookup": ()} <- copy {0: "literal"}
 9999 mem: location 1005 is 1012
 9999 mem: storing 0 in location 1012
- 104 run: free:address:number <- get-address *result, first-free:offset
+ 104 run: {free: ("address" "number")} <- get-address {result: ("address" "shared" "channel" "number"), "lookup": ()}, {first-free: "offset"}
 9999 mem: location 1004 is 1011
 9999 mem: skipping refcount at 1011
 9999 mem: location 1012 is 0
@@ -451,13 +430,13 @@
 9999 mem: skipping refcount at 1011
 9998 run: address to copy is 1013
 9999 mem: storing 1013 in location 1006
- 104 run: *free <- copy 0
+ 104 run: {free: ("address" "number"), "lookup": ()} <- copy {0: "literal"}
 9999 mem: location 1006 is 1013
 9999 mem: storing 0 in location 1013
- 104 run: capacity <- add capacity, 1
+ 104 run: {capacity: "number"} <- add {capacity: "number"}, {1: "literal"}
 9999 mem: location 1003 is 3
 9999 mem: storing 4 in location 1003
- 104 run: dest:address:address:shared:array:_elem <- get-address *result, data:offset
+ 104 run: {dest: ("address" "address" "shared" "array" "number")} <- get-address {result: ("address" "shared" "channel" "number"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1004 is 1011
 9999 mem: skipping refcount at 1011
 9999 mem: location 1012 is 0
@@ -467,7 +446,7 @@
 9999 mem: skipping refcount at 1011
 9998 run: address to copy is 1014
 9999 mem: storing 1014 in location 1007
- 104 run: *dest <- new _elem:type, capacity
+ 104 run: {dest: ("address" "address" "shared" "array" "number"), "lookup": ()} <- new {number: "type"}, {capacity: "number"}
 9999 mem: location 1003 is 4
 9999 mem: array size is 4
 9999 mem: allocating size 6
@@ -476,12 +455,12 @@
 9999 mem: location 1007 is 1014
 9999 mem: storing 1015 in location 1014
 9999 mem: incrementing refcount of 1015: 0 -> 1
- 104 run: in <- new {(source _elem): type}
+ 104 run: {in: ("address" "shared" "source" "number")} <- new {(source number): "type"}
 9999 mem: allocating size 2
 9999 mem: new alloc: 1021
 9999 mem: storing 1021 in location 1008
 9999 mem: incrementing refcount of 1021: 0 -> 1
- 104 run: chan:address:address:shared:channel:_elem <- get-address *in, chan:offset
+ 104 run: {chan: ("address" "address" "shared" "channel" "number")} <- get-address {in: ("address" "shared" "source" "number"), "lookup": ()}, {chan: "offset"}
 9999 mem: location 1008 is 1021
 9999 mem: skipping refcount at 1021
 9999 mem: location 1022 is 0
@@ -489,17 +468,17 @@
 9999 mem: skipping refcount at 1021
 9998 run: address to copy is 1022
 9999 mem: storing 1022 in location 1009
- 104 run: *chan <- copy result
+ 104 run: {chan: ("address" "address" "shared" "channel" "number"), "lookup": ()} <- copy {result: ("address" "shared" "channel" "number")}
 9999 mem: location 1004 is 1011
 9999 mem: location 1009 is 1022
 9999 mem: storing 1011 in location 1022
 9999 mem: incrementing refcount of 1011: 1 -> 2
- 104 run: out <- new {(sink _elem): type}
+ 104 run: {out: ("address" "shared" "sink" "number")} <- new {(sink number): "type"}
 9999 mem: allocating size 2
 9999 mem: new alloc: 1023
 9999 mem: storing 1023 in location 1010
 9999 mem: incrementing refcount of 1023: 0 -> 1
- 104 run: chan:address:address:shared:channel:_elem <- get-address *out, chan:offset
+ 104 run: {chan: ("address" "address" "shared" "channel" "number")} <- get-address {out: ("address" "shared" "sink" "number"), "lookup": ()}, {chan: "offset"}
 9999 mem: location 1010 is 1023
 9999 mem: skipping refcount at 1023
 9999 mem: location 1024 is 0
@@ -507,12 +486,12 @@
 9999 mem: skipping refcount at 1023
 9998 run: address to copy is 1024
 9999 mem: storing 1024 in location 1009
- 104 run: *chan <- copy result
+ 104 run: {chan: ("address" "address" "shared" "channel" "number"), "lookup": ()} <- copy {result: ("address" "shared" "channel" "number")}
 9999 mem: location 1004 is 1011
 9999 mem: location 1009 is 1024
 9999 mem: storing 1011 in location 1024
 9999 mem: incrementing refcount of 1011: 2 -> 3
- 104 run: reply in:address:shared:source:_elem, out:address:shared:sink:_elem
+ 104 run: reply {in: ("address" "shared" "source" "number")}, {out: ("address" "shared" "sink" "number")}
 9999 mem: location 1008 is 1021
 9999 mem: location 1010 is 1023
 9999 mem: clearing result:address:shared:channel:_elem
@@ -533,7 +512,7 @@
 9998 run: result 0 is 1021
 9999 mem: storing 1021 in location 1
 9999 mem: incrementing refcount of 1021: 1 -> 2
- 103 run: 2:address:shared:channel:number <- get *1:address:shared:source:number, chan:offset
+ 103 run: {2: ("address" "shared" "channel" "number")} <- get {1: ("address" "shared" "source" "number"), "lookup": ()}, {chan: "offset"}
 9999 mem: location 1 is 1021
 9999 mem: skipping refcount at 1021
 9999 mem: location 1022 is 1011
@@ -544,7 +523,7 @@
 9999 mem: location 1022 is 1011
 9999 mem: storing 1011 in location 2
 9999 mem: incrementing refcount of 1011: 2 -> 3
- 103 run: 3:number <- get *2:address:shared:channel:number, first-full:offset
+ 103 run: {3: "number"} <- get {2: ("address" "shared" "channel" "number"), "lookup": ()}, {first-full: "offset"}
 9999 mem: location 2 is 1011
 9999 mem: skipping refcount at 1011
 9999 mem: location 1012 is 0
@@ -556,7 +535,7 @@
 9998 run: its type is "number"
 9999 mem: location 1012 is 0
 9999 mem: storing 0 in location 3
- 103 run: 4:number <- get *2:address:shared:channel:number, first-free:offset
+ 103 run: {4: "number"} <- get {2: ("address" "shared" "channel" "number"), "lookup": ()}, {first-free: "offset"}
 9999 mem: location 2 is 1011
 9999 mem: skipping refcount at 1011
 9999 mem: location 1012 is 0
@@ -570,10 +549,7 @@
 9999 mem: storing 0 in location 4
  103 run: reply 
 9999 trace: reply: decrementing callstack depth from 2
- 102 run: memory-should-contain [
-    3 <- 0  # first-full
-    4 <- 0  # first-free
-  ]
+ 102 run: memory-should-contain {"\n    3 <- 0  # first-full\n    4 <- 0  # first-free\n  ": "literal-string"}
 9999 run: checking location 3
 9999 run: checking location 4
  102 run: reply 

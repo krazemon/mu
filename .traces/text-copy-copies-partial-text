@@ -1,30 +1,18 @@
 9991 parse: --- defining scenario_text-copy-copies-partial-text
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "\n    1:address:shared:array:character <- new [abc]\n    2:address:shared:array:character <- copy-range 1:address:shared:array:character, 1, 3\n    3:array:character <- copy *2:address:shared:array:character\n  ": "literal-string"
-9992 load: after rewriting: run [
-    1:address:shared:array:character <- new [abc]
-    2:address:shared:array:character <- copy-range 1:address:shared:array:character, 1, 3
-    3:array:character <- copy *2:address:shared:array:character
-  ]
+9993 parse:   ingredient: {"\n    1:address:shared:array:character <- new [abc]\n    2:address:shared:array:character <- copy-range 1:address:shared:array:character, 1, 3\n    3:array:character <- copy *2:address:shared:array:character\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    1:address:shared:array:character <- new [abc]\n    2:address:shared:array:character <- copy-range 1:address:shared:array:character, 1, 3\n    3:array:character <- copy *2:address:shared:array:character\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "\n    3:array:character <- [bc]\n  ": "literal-string"
-9992 load: after rewriting: memory-should-contain [
-    3:array:character <- [bc]
-  ]
+9993 parse:   ingredient: {"\n    3:array:character <- [bc]\n  ": "literal-string"}
+9992 load: after rewriting: memory-should-contain {"\n    3:array:character <- [bc]\n  ": "literal-string"}
 9999 parse: recipe scenario_text-copy-copies-partial-text has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_text-copy-copies-partial-text
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_text-copy-copies-partial-text
-9993 transform: run [
-    1:address:shared:array:character <- new [abc]
-    2:address:shared:array:character <- copy-range 1:address:shared:array:character, 1, 3
-    3:array:character <- copy *2:address:shared:array:character
-  ]
-9993 transform: memory-should-contain [
-    3:array:character <- [bc]
-  ]
+9993 transform: run {"\n    1:address:shared:array:character <- new [abc]\n    2:address:shared:array:character <- copy-range 1:address:shared:array:character, 1, 3\n    3:array:character <- copy *2:address:shared:array:character\n  ": "literal-string"}
+9993 transform: memory-should-contain {"\n    3:array:character <- [bc]\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_text-copy-copies-partial-text
 9991 transform: --- deduce types for recipe scenario_text-copy-copies-partial-text
 9991 transform: --- check for invalid types in recipe scenario_text-copy-copies-partial-text
@@ -48,29 +36,25 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_text-copy-copies-partial-text
- 102 run: run [
-    1:address:shared:array:character <- new [abc]
-    2:address:shared:array:character <- copy-range 1:address:shared:array:character, 1, 3
-    3:array:character <- copy *2:address:shared:array:character
-  ]
+ 102 run: run {"\n    1:address:shared:array:character <- new [abc]\n    2:address:shared:array:character <- copy-range 1:address:shared:array:character, 1, 3\n    3:array:character <- copy *2:address:shared:array:character\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: "abc": "literal-string"
-9993 parse:   product: 1: ("address" "shared" "array" "character")
-9992 load: after rewriting: 1:address:shared:array:character <- new [abc]
+9993 parse:   ingredient: {"abc": "literal-string"}
+9993 parse:   product: {1: ("address" "shared" "array" "character")}
+9992 load: after rewriting: {1: ("address" "shared" "array" "character")} <- new {"abc": "literal-string"}
 9993 parse: instruction: copy-range
 9993 parse:   number of ingredients: 3
-9993 parse:   ingredient: 1: ("address" "shared" "array" "character")
-9993 parse:   ingredient: 1: "literal"
-9993 parse:   ingredient: 3: "literal"
-9993 parse:   product: 2: ("address" "shared" "array" "character")
-9992 load: after rewriting: 2:address:shared:array:character <- copy-range 1:address:shared:array:character, 1, 3
+9993 parse:   ingredient: {1: ("address" "shared" "array" "character")}
+9993 parse:   ingredient: {1: "literal"}
+9993 parse:   ingredient: {3: "literal"}
+9993 parse:   product: {2: ("address" "shared" "array" "character")}
+9992 load: after rewriting: {2: ("address" "shared" "array" "character")} <- copy-range {1: ("address" "shared" "array" "character")}, {1: "literal"}, {3: "literal"}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: 2: ("address" "shared" "array" "character"), {"lookup": ()}
-9993 parse:   product: 3: ("array" "character")
-9992 load: after rewriting: 3:array:character <- copy *2:address:shared:array:character
+9993 parse:   ingredient: {2: ("address" "shared" "array" "character"), "lookup": ()}
+9993 parse:   product: {3: ("array" "character")}
+9992 load: after rewriting: {3: ("array" "character")} <- copy {2: ("address" "shared" "array" "character"), "lookup": ()}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
@@ -81,8 +65,8 @@
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction 2:address:shared:array:character <- copy-range 1:address:shared:array:character, 1, 3
-9992 transform: checking variant (strict) 0: recipe copy-range buf: ("address" "shared" "array" "character") start: "number" end: "number" -> result: ("address" "shared" "array" "character")
+9992 transform: instruction {2: ("address" "shared" "array" "character")} <- copy-range {1: ("address" "shared" "array" "character")}, {1: "literal"}, {3: "literal"}
+9992 transform: checking variant (strict) 0: recipe copy-range {buf: ("address" "shared" "array" "character")} {start: "number"} {end: "number"} -> {result: ("address" "shared" "array" "character")}
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new ...
@@ -99,59 +83,59 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: 1:address:shared:array:character <- new [abc]
+ 103 run: {1: ("address" "shared" "array" "character")} <- new {"abc": "literal-string"}
 9999 mem: storing 1000 in location 1
 9999 mem: incrementing refcount of 1000: 0 -> 1
- 103 run: 2:address:shared:array:character <- copy-range 1:address:shared:array:character, 1, 3
+ 103 run: {2: ("address" "shared" "array" "character")} <- copy-range {1: ("address" "shared" "array" "character")}, {1: "literal"}, {3: "literal"}
 9999 mem: location 1 is 1000
 9999 trace: incrementing callstack depth to 3
- 104 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+ 104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 11
 9999 mem: allocating size 13
 9999 mem: new alloc: 1005
 9999 mem: storing 11 in location 1006
- 104 run: buf:address:shared:array:character <- next-ingredient-without-typechecking 
+ 104 run: {buf: ("address" "shared" "array" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1000 in location 1008
 9999 mem: incrementing refcount of 1000: 1 -> 2
- 104 run: start:number <- next-ingredient-without-typechecking 
+ 104 run: {start: "number"} <- next-ingredient-without-typechecking 
 9999 mem: storing 1 in location 1009
- 104 run: end:number <- next-ingredient-without-typechecking 
+ 104 run: {end: "number"} <- next-ingredient-without-typechecking 
 9999 mem: storing 3 in location 1010
- 104 run: len:number <- length *buf
+ 104 run: {len: "number"} <- length {buf: ("address" "shared" "array" "character"), "lookup": ()}
 9999 mem: location 1008 is 1000
 9999 mem: skipping refcount at 1000
 9999 mem: storing 3 in location 1011
- 104 run: end:number <- min len, end
+ 104 run: {end: "number"} <- min {len: "number"}, {end: "number"}
 9999 mem: location 1011 is 3
 9999 mem: location 1010 is 3
 9999 trace: incrementing callstack depth to 4
- 105 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+ 105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 4
 9999 mem: allocating size 6
 9999 mem: new alloc: 1018
 9999 mem: storing 4 in location 1019
- 105 run: x:number <- next-ingredient-without-typechecking 
+ 105 run: {x: "number"} <- next-ingredient-without-typechecking 
 9999 mem: storing 3 in location 1021
- 105 run: y:number <- next-ingredient-without-typechecking 
+ 105 run: {y: "number"} <- next-ingredient-without-typechecking 
 9999 mem: storing 3 in location 1022
- 105 run: return-x?:boolean <- lesser-than x, y
+ 105 run: {return-x?: "boolean"} <- lesser-than {x: "number"}, {y: "number"}
 9999 mem: location 1021 is 3
 9999 mem: location 1022 is 3
 9999 mem: storing 0 in location 1023
- 105 run: jump-if return-x?, 
+ 105 run: jump-if {return-x?: "boolean"}, {: "offset"}
 9999 mem: location 1023 is 0
 9998 run: jump-if fell through
- 105 run: return y
+ 105 run: return {y: "number"}
 9999 mem: location 1022 is 3
 9999 abandon: saving in free-list of size 6
 9999 trace: reply: decrementing callstack depth from 4
 9998 run: result 0 is 3
 9999 mem: storing 3 in location 1010
- 104 run: len <- subtract end, start
+ 104 run: {len: "number"} <- subtract {end: "number"}, {start: "number"}
 9999 mem: location 1010 is 3
 9999 mem: location 1009 is 1
 9999 mem: storing 2 in location 1011
- 104 run: result:address:shared:array:character <- new character:type, len
+ 104 run: {result: ("address" "shared" "array" "character")} <- new {character: "type"}, {len: "number"}
 9999 mem: location 1011 is 2
 9999 mem: array size is 2
 9999 mem: allocating size 4
@@ -159,19 +143,19 @@
 9999 mem: storing 2 in location 1025
 9999 mem: storing 1024 in location 1012
 9999 mem: incrementing refcount of 1024: 0 -> 1
- 104 run: src-idx:number <- copy start
+ 104 run: {src-idx: "number"} <- copy {start: "number"}
 9999 mem: location 1009 is 1
 9999 mem: storing 1 in location 1013
- 104 run: dest-idx:number <- copy 0
+ 104 run: {dest-idx: "number"} <- copy {0: "literal"}
 9999 mem: storing 0 in location 1014
- 104 run: done?:boolean <- greater-or-equal src-idx, end
+ 104 run: {done?: "boolean"} <- greater-or-equal {src-idx: "number"}, {end: "number"}
 9999 mem: location 1013 is 1
 9999 mem: location 1010 is 3
 9999 mem: storing 0 in location 1015
- 104 run: jump-if done?, 
+ 104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1015 is 0
 9998 run: jump-if fell through
- 104 run: src:character <- index *buf, src-idx
+ 104 run: {src: "character"} <- index {buf: ("address" "shared" "array" "character"), "lookup": ()}, {src-idx: "number"}
 9999 mem: location 1008 is 1000
 9999 mem: skipping refcount at 1000
 9998 run: base address is 1001
@@ -180,31 +164,31 @@
 9998 run: its type is character
 9999 mem: location 1003 is 98
 9999 mem: storing 98 in location 1016
- 104 run: dest:address:character <- index-address *result, dest-idx
+ 104 run: {dest: ("address" "character")} <- index-address {result: ("address" "shared" "array" "character"), "lookup": ()}, {dest-idx: "number"}
 9999 mem: location 1012 is 1024
 9999 mem: skipping refcount at 1024
 9999 mem: location 1014 is 0
 9999 mem: storing 1026 in location 1017
- 104 run: *dest <- copy src
+ 104 run: {dest: ("address" "character"), "lookup": ()} <- copy {src: "character"}
 9999 mem: location 1016 is 98
 9999 mem: location 1017 is 1026
 9999 mem: storing 98 in location 1026
- 104 run: src-idx <- add src-idx, 1
+ 104 run: {src-idx: "number"} <- add {src-idx: "number"}, {1: "literal"}
 9999 mem: location 1013 is 1
 9999 mem: storing 2 in location 1013
- 104 run: dest-idx <- add dest-idx, 1
+ 104 run: {dest-idx: "number"} <- add {dest-idx: "number"}, {1: "literal"}
 9999 mem: location 1014 is 0
 9999 mem: storing 1 in location 1014
- 104 run: jump 
+ 104 run: jump {: "offset"}
 9998 run: jumping to instruction 11
- 104 run: done?:boolean <- greater-or-equal src-idx, end
+ 104 run: {done?: "boolean"} <- greater-or-equal {src-idx: "number"}, {end: "number"}
 9999 mem: location 1013 is 2
 9999 mem: location 1010 is 3
 9999 mem: storing 0 in location 1015
- 104 run: jump-if done?, 
+ 104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1015 is 0
 9998 run: jump-if fell through
- 104 run: src:character <- index *buf, src-idx
+ 104 run: {src: "character"} <- index {buf: ("address" "shared" "array" "character"), "lookup": ()}, {src-idx: "number"}
 9999 mem: location 1008 is 1000
 9999 mem: skipping refcount at 1000
 9998 run: base address is 1001
@@ -213,31 +197,31 @@
 9998 run: its type is character
 9999 mem: location 1004 is 99
 9999 mem: storing 99 in location 1016
- 104 run: dest:address:character <- index-address *result, dest-idx
+ 104 run: {dest: ("address" "character")} <- index-address {result: ("address" "shared" "array" "character"), "lookup": ()}, {dest-idx: "number"}
 9999 mem: location 1012 is 1024
 9999 mem: skipping refcount at 1024
 9999 mem: location 1014 is 1
 9999 mem: storing 1027 in location 1017
- 104 run: *dest <- copy src
+ 104 run: {dest: ("address" "character"), "lookup": ()} <- copy {src: "character"}
 9999 mem: location 1016 is 99
 9999 mem: location 1017 is 1027
 9999 mem: storing 99 in location 1027
- 104 run: src-idx <- add src-idx, 1
+ 104 run: {src-idx: "number"} <- add {src-idx: "number"}, {1: "literal"}
 9999 mem: location 1013 is 2
 9999 mem: storing 3 in location 1013
- 104 run: dest-idx <- add dest-idx, 1
+ 104 run: {dest-idx: "number"} <- add {dest-idx: "number"}, {1: "literal"}
 9999 mem: location 1014 is 1
 9999 mem: storing 2 in location 1014
- 104 run: jump 
+ 104 run: jump {: "offset"}
 9998 run: jumping to instruction 11
- 104 run: done?:boolean <- greater-or-equal src-idx, end
+ 104 run: {done?: "boolean"} <- greater-or-equal {src-idx: "number"}, {end: "number"}
 9999 mem: location 1013 is 3
 9999 mem: location 1010 is 3
 9999 mem: storing 1 in location 1015
- 104 run: jump-if done?, 
+ 104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1015 is 1
 9998 run: jumping to instruction 19
- 104 run: reply result:address:shared:array:character
+ 104 run: reply {result: ("address" "shared" "array" "character")}
 9999 mem: location 1012 is 1024
 9999 mem: clearing buf:address:shared:array:character
 9999 mem: decrementing refcount of 1000: 2 -> 1
@@ -249,7 +233,7 @@
 9998 run: result 0 is 1024
 9999 mem: storing 1024 in location 2
 9999 mem: incrementing refcount of 1024: 1 -> 2
- 103 run: 3:array:character <- copy *2:address:shared:array:character
+ 103 run: {3: ("array" "character")} <- copy {2: ("address" "shared" "array" "character"), "lookup": ()}
 9999 mem: location 2 is 1024
 9999 mem: skipping refcount at 1024
 9999 mem: location 1025 is 2
@@ -260,9 +244,7 @@
 9999 mem: storing 99 in location 5
  103 run: reply 
 9999 trace: reply: decrementing callstack depth from 2
- 102 run: memory-should-contain [
-    3:array:character <- [bc]
-  ]
+ 102 run: memory-should-contain {"\n    3:array:character <- [bc]\n  ": "literal-string"}
 9999 run: checking string length at 3
 9999 run: checking location 4
 9999 run: checking location 5

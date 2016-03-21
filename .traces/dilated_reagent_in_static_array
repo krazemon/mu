@@ -1,29 +1,29 @@
 9991 parse: --- defining main
 9993 parse: instruction: create-array
 9993 parse:   number of ingredients: 0
-9993 parse:   product: 1: ("array" ("address" "shared" "number") "3")
-9992 load: after rewriting: {1: (array (address shared number) 3)} <- create-array 
+9993 parse:   product: {1: ("array" ("address" "shared" "number") "3")}
+9992 load: after rewriting: {1: ("array" ("address" "shared" "number") "3")} <- create-array 
 9993 parse: instruction: index-address
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 1: ("array" ("address" "shared" "number") "3")
-9993 parse:   ingredient: 0: "literal"
-9993 parse:   product: 5: ("address" "address" "shared" "number")
-9992 load: after rewriting: 5:address:address:shared:number <- index-address {1: (array (address shared number) 3)}, 0
+9993 parse:   ingredient: {1: ("array" ("address" "shared" "number") "3")}
+9993 parse:   ingredient: {0: "literal"}
+9993 parse:   product: {5: ("address" "address" "shared" "number")}
+9992 load: after rewriting: {5: ("address" "address" "shared" "number")} <- index-address {1: ("array" ("address" "shared" "number") "3")}, {0: "literal"}
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: number: "type"
-9993 parse:   product: 5: ("address" "address" "shared" "number"), {"lookup": ()}
-9992 load: after rewriting: *5:address:address:shared:number <- new number:type
+9993 parse:   ingredient: {number: "type"}
+9993 parse:   product: {5: ("address" "address" "shared" "number"), "lookup": ()}
+9992 load: after rewriting: {5: ("address" "address" "shared" "number"), "lookup": ()} <- new {number: "type"}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: 34: "literal"
-9993 parse:   product: 5: ("address" "address" "shared" "number"), {"lookup": (), "lookup": ()}
-9992 load: after rewriting: **5:address:address:shared:number <- copy 34
+9993 parse:   ingredient: {34: "literal"}
+9993 parse:   product: {5: ("address" "address" "shared" "number"), "lookup": (), "lookup": ()}
+9992 load: after rewriting: {5: ("address" "address" "shared" "number"), "lookup": (), "lookup": ()} <- copy {34: "literal"}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: 5: ("address" "address" "shared" "number"), {"lookup": (), "lookup": ()}
-9993 parse:   product: 6: "number"
-9992 load: after rewriting: 6:number <- copy **5:address:address:shared:number
+9993 parse:   ingredient: {5: ("address" "address" "shared" "number"), "lookup": (), "lookup": ()}
+9993 parse:   product: {6: "number"}
+9992 load: after rewriting: {6: "number"} <- copy {5: ("address" "address" "shared" "number"), "lookup": (), "lookup": ()}
 9999 parse: recipe main has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe main
@@ -55,24 +55,24 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: main
- 102 run: {1: (array (address shared number) 3)} <- create-array 
+ 102 run: {1: ("array" ("address" "shared" "number") "3")} <- create-array 
 9998 run: creating array of size 4
 
 9999 mem: storing 3 in location 1
- 102 run: 5:address:address:shared:number <- index-address {1: (array (address shared number) 3)}, 0
+ 102 run: {5: ("address" "address" "shared" "number")} <- index-address {1: ("array" ("address" "shared" "number") "3")}, {0: "literal"}
 9999 mem: storing 2 in location 5
- 102 run: *5:address:address:shared:number <- new number:type
+ 102 run: {5: ("address" "address" "shared" "number"), "lookup": ()} <- new {number: "type"}
 9999 mem: allocating size 2
 9999 mem: new alloc: 1000
 9999 mem: location 5 is 2
 9999 mem: storing 1000 in location 2
 9999 mem: incrementing refcount of 1000: 0 -> 1
- 102 run: **5:address:address:shared:number <- copy 34
+ 102 run: {5: ("address" "address" "shared" "number"), "lookup": (), "lookup": ()} <- copy {34: "literal"}
 9999 mem: location 5 is 2
 9999 mem: location 2 is 1000
 9999 mem: skipping refcount at 1000
 9999 mem: storing 34 in location 1001
- 102 run: 6:number <- copy **5:address:address:shared:number
+ 102 run: {6: "number"} <- copy {5: ("address" "address" "shared" "number"), "lookup": (), "lookup": ()}
 9999 mem: location 5 is 2
 9999 mem: location 2 is 1000
 9999 mem: skipping refcount at 1000

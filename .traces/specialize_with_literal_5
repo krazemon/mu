@@ -1,9 +1,9 @@
 9991 parse: --- defining main
 9993 parse: instruction: foo
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: 3: "literal"
-9993 parse:   ingredient: 4: "literal"
-9992 load: after rewriting: foo 3, 4
+9993 parse:   ingredient: {3: "literal"}
+9993 parse:   ingredient: {4: "literal"}
+9992 load: after rewriting: foo {3: "literal"}, {4: "literal"}
 9999 parse: recipe main has a header
 9999 parse: recipe has a header; parsing
 9999 parse: header ingredient: x:_elem
@@ -11,54 +11,54 @@
 9991 parse: --- defining foo
 9993 parse: instruction: local-scope
 9993 parse:   number of ingredients: 0
-9992 load: after rewriting: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+9992 load: after rewriting: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 parse: instruction: load-ingredients
 9993 parse:   number of ingredients: 0
 9992 load: after rewriting:  
 9993 parse: instruction: add
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: x: ()
-9993 parse:   ingredient: y: ()
-9993 parse:   product: 1: "number", {"raw": ()}
-9992 load: after rewriting: 1:number/raw <- add x, y
+9993 parse:   ingredient: {x: ()}
+9993 parse:   ingredient: {y: ()}
+9993 parse:   product: {1: "number", "raw": ()}
+9992 load: after rewriting: {1: "number", "raw": ()} <- add {x: ()}, {y: ()}
 9999 parse: recipe foo has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe main
 9991 transform: --- rewrite 'stash' instructions in recipe main
-9993 transform: foo 3, 4
+9993 transform: foo {3: "literal"}, {4: "literal"}
 9991 transform: --- fill in reply ingredients from header for recipe main
 9991 transform: --- deduce types for recipe main
 9991 transform: --- check for invalid types in recipe main
 9991 transform: --- collect surrounding spaces for recipe main
 9991 transform: --- transform names for recipe main
 9991 transform: --- resolve ambiguous calls for recipe main
-9992 transform: instruction foo 3, 4
-9992 transform: checking variant (strict) 0: recipe foo x: "_elem" y: "_elem"
+9992 transform: instruction foo {3: "literal"}, {4: "literal"}
+9992 transform: checking variant (strict) 0: recipe foo {x: "_elem"} {y: "_elem"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: found variant to specialize: 1000 foo
-9993 transform: switching foo to specialized recipe foo_2 x: "_elem" y: "_elem"
+9993 transform: switching foo to specialized recipe foo_2 {x: "_elem"} {y: "_elem"}
 9993 transform: compute type names: foo_2
-9994 transform:     checking x: "_elem": "_elem"
+9994 transform:     checking {x: "_elem"}: "_elem"
 9993 transform: type of x is "_elem"
-9994 transform:     checking y: "_elem": "_elem"
+9994 transform:     checking {y: "_elem"}: "_elem"
 9993 transform: type of y is "_elem"
-9993 transform:   instruction: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9994 transform:     checking location: "type": "type"
+9993 transform:   instruction: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9994 transform:     checking {location: "type"}: "type"
 9993 transform: type of location is "type"
-9994 transform:     checking number-of-locals: "literal": "literal"
+9994 transform:     checking {number-of-locals: "literal"}: "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking default-space: ("address" "shared" "array" "location"): ("address" "shared" "array" "location")
+9994 transform:     checking {default-space: ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
 9993 transform: type of default-space is ("address" "shared" "array" "location")
-9993 transform:   instruction: x:_elem <- next-ingredient-without-typechecking 
-9994 transform:     checking x: "_elem": "_elem"
-9993 transform:   instruction: y:_elem <- next-ingredient-without-typechecking 
-9994 transform:     checking y: "_elem": "_elem"
-9993 transform:   instruction: 1:number/raw <- add x, y
-9994 transform:     checking x: (): ()
+9993 transform:   instruction: {x: "_elem"} <- next-ingredient-without-typechecking 
+9994 transform:     checking {x: "_elem"}: "_elem"
+9993 transform:   instruction: {y: "_elem"} <- next-ingredient-without-typechecking 
+9994 transform:     checking {y: "_elem"}: "_elem"
+9993 transform:   instruction: {1: "number", "raw": ()} <- add {x: ()}, {y: ()}
+9994 transform:     checking {x: ()}: ()
 9994 transform:     deducing type to "_elem"
-9994 transform:     checking y: (): ()
+9994 transform:     checking {y: ()}: ()
 9994 transform:     deducing type to "_elem"
-9994 transform:     checking 1: "number", {"raw": ()}: "number"
+9994 transform:     checking {1: "number", "raw": ()}: "number"
 9993 transform: type of 1 is "number"
 9993 transform: adding mapping from _elem to ?0
 9993 transform: replacing in recipe header ingredients
@@ -67,17 +67,17 @@
 9993 transform: replacing in ingredient y:_elem
 9993 transform: _elem => "literal"
 9993 transform: replacing in recipe header products
-9993 transform: replacing in instruction 'default-space:address:shared:array:location <- new location:type, number-of-locals:literal'
+9993 transform: replacing in instruction '{default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}'
 9993 transform: replacing in ingredient location:type
 9993 transform: replacing in ingredient number-of-locals:literal
 9993 transform: replacing in ingredient default-space:address:shared:array:location
-9993 transform: replacing in instruction 'x:_elem <- next-ingredient-without-typechecking '
+9993 transform: replacing in instruction '{x: "_elem"} <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient x:_elem
 9993 transform: _elem => "literal"
-9993 transform: replacing in instruction 'y:_elem <- next-ingredient-without-typechecking '
+9993 transform: replacing in instruction '{y: "_elem"} <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient y:_elem
 9993 transform: _elem => "literal"
-9993 transform: replacing in instruction '1:number/raw <- add x, y'
+9993 transform: replacing in instruction '{1: "number", "raw": ()} <- add {x: "_elem"}, {y: "_elem"}'
 9993 transform: replacing in ingredient x
 9993 transform: _elem => "literal"
 9993 transform: replacing in ingredient y
@@ -86,10 +86,10 @@
 9992 transform: transforming new specialization: foo_2
 9991 transform: --- rewrite literal strings in recipe foo_2
 9991 transform: --- rewrite 'stash' instructions in recipe foo_2
-9993 transform: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
-9993 transform: x:_elem <- next-ingredient-without-typechecking 
-9993 transform: y:_elem <- next-ingredient-without-typechecking 
-9993 transform: 1:number/raw <- add x, y
+9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {x: "number"} <- next-ingredient-without-typechecking 
+9993 transform: {y: "number"} <- next-ingredient-without-typechecking 
+9993 transform: {1: "number", "raw": ()} <- add {x: "number"}, {y: "number"}
 9991 transform: --- fill in reply ingredients from header for recipe foo_2
 9991 transform: --- deduce types for recipe foo_2
 9992 transform: default-space => ("address" "shared" "array" "location")
@@ -134,18 +134,18 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: main
- 102 run: foo_2 3, 4
+ 102 run: foo_2 {3: "literal"}, {4: "literal"}
 9999 trace: incrementing callstack depth to 2
- 103 run: default-space:address:shared:array:location <- new location:type, number-of-locals:literal
+ 103 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 3
 9999 mem: allocating size 5
 9999 mem: new alloc: 1000
 9999 mem: storing 3 in location 1001
- 103 run: x:_elem <- next-ingredient-without-typechecking 
+ 103 run: {x: "number"} <- next-ingredient-without-typechecking 
 9999 mem: storing 3 in location 1003
- 103 run: y:_elem <- next-ingredient-without-typechecking 
+ 103 run: {y: "number"} <- next-ingredient-without-typechecking 
 9999 mem: storing 4 in location 1004
- 103 run: 1:number/raw <- add x, y
+ 103 run: {1: "number", "raw": ()} <- add {x: "number"}, {y: "number"}
 9999 mem: location 1003 is 3
 9999 mem: location 1004 is 4
 9999 mem: storing 7 in location 1

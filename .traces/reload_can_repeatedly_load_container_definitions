@@ -4,18 +4,19 @@
 9992 load: after rewriting: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"recipe foo [\n  get 1234:number, foo:offset\n]": "literal-string"}
+9993 parse:   ingredient: {"\n    container foo [\n      x:number\n      y:number\n    ]\n    recipe bar [\n      local-scope\n      x:foo <- merge 34, 35\n    ]\n  ": "literal-string"}
 9993 parse:   product: {x: ("address" "shared" "array" "character")}
-9992 load: after rewriting: {x: ("address" "shared" "array" "character")} <- new {"recipe foo [\n  get 1234:number, foo:offset\n]": "literal-string"}
+9992 load: after rewriting: {x: ("address" "shared" "array" "character")} <- new {"\n    container foo [\n      x:number\n      y:number\n    ]\n    recipe bar [\n      local-scope\n      x:foo <- merge 34, 35\n    ]\n  ": "literal-string"}
 9993 parse: instruction: reload
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {x: ()}
-9992 load: after rewriting: reload {x: ()}
-9993 parse: instruction: copy
-9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {34: "literal"}
 9993 parse:   product: {1: "number", "raw": ()}
-9992 load: after rewriting: {1: "number", "raw": ()} <- copy {34: "literal"}
+9992 load: after rewriting: {1: "number", "raw": ()} <- reload {x: ()}
+9993 parse: instruction: reload
+9993 parse:   number of ingredients: 1
+9993 parse:   ingredient: {x: ()}
+9993 parse:   product: {2: "number", "raw": ()}
+9992 load: after rewriting: {2: "number", "raw": ()} <- reload {x: ()}
 9999 parse: recipe main has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe main
@@ -24,10 +25,11 @@
 9992 transform: default-space => ("address" "shared" "array" "location")
 9992 transform: x => ("address" "shared" "array" "character")
 9992 transform: x <= ("address" "shared" "array" "character")
+9992 transform: x <= ("address" "shared" "array" "character")
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9993 transform: {x: ("address" "shared" "array" "character")} <- new {"recipe foo [\n  get 1234:number, foo:offset\n]": "literal-string"}
-9993 transform: reload {x: ("address" "shared" "array" "character")}
-9993 transform: {1: "number", "raw": ()} <- copy {34: "literal"}
+9993 transform: {x: ("address" "shared" "array" "character")} <- new {"\n    container foo [\n      x:number\n      y:number\n    ]\n    recipe bar [\n      local-scope\n      x:foo <- merge 34, 35\n    ]\n  ": "literal-string"}
+9993 transform: {1: "number", "raw": ()} <- reload {x: ("address" "shared" "array" "character")}
+9993 transform: {2: "number", "raw": ()} <- reload {x: ("address" "shared" "array" "character")}
 9991 transform: --- fill in reply ingredients from header for recipe main
 9991 transform: --- deduce types for recipe main
 9992 transform: default-space => ("address" "shared" "array" "location")
@@ -42,7 +44,7 @@
 9992 transform: local-scope ...
 9992 transform: new ...
 9992 transform: reload ...
-9992 transform: copy ...
+9992 transform: reload ...
 9992 transform:  ...
 9991 transform: --- check mutability of ingredients in recipe main
 9991 transform: --- perform checks for recipe main
@@ -62,19 +64,21 @@
 9999 mem: allocating size 4
 9999 mem: new alloc: 1000
 9999 mem: storing 2 in location 1001
- 102 run: {x: ("address" "shared" "array" "character")} <- new {"recipe foo [\n  get 1234:number, foo:offset\n]": "literal-string"}
+ 102 run: {x: ("address" "shared" "array" "character")} <- new {"\n    container foo [\n      x:number\n      y:number\n    ]\n    recipe bar [\n      local-scope\n      x:foo <- merge 34, 35\n    ]\n  ": "literal-string"}
 9999 mem: storing 1004 in location 1003
 9999 mem: incrementing refcount of 1004: 0 -> 1
- 102 run: reload {x: ("address" "shared" "array" "character")}
+ 102 run: {1: "number", "raw": ()} <- reload {x: ("address" "shared" "array" "character")}
 9999 mem: location 1003 is 1004
- 102 run: {1: "number", "raw": ()} <- copy {34: "literal"}
-9999 mem: storing 34 in location 1
+9999 mem: storing 0 in location 1
+ 102 run: {2: "number", "raw": ()} <- reload {x: ("address" "shared" "array" "character")}
+9999 mem: location 1003 is 1004
+9999 mem: storing 0 in location 2
  102 run: reply 
 9999 mem: clearing x:address:shared:array:character
 9999 mem: decrementing refcount of 1004: 1 -> 0
 9999 mem: storing 0 in location 1003
 9999 mem: automatically abandoning 1004
 9999 mem: computing size to abandon at 1003
-9999 abandon: saving in free-list of size 46
+9999 abandon: saving in free-list of size 130
 9999 abandon: saving in free-list of size 2
 9999 trace: reply: decrementing callstack depth from 1

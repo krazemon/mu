@@ -17,9 +17,9 @@
 9991 transform: --- fill in reply ingredients from header for recipe scenario_buffer-append-works
 9991 transform: --- deduce types for recipe scenario_buffer-append-works
 9991 transform: --- check for invalid types in recipe scenario_buffer-append-works
+9991 transform: --- resolve ambiguous calls for recipe scenario_buffer-append-works
 9991 transform: --- collect surrounding spaces for recipe scenario_buffer-append-works
 9991 transform: --- transform names for recipe scenario_buffer-append-works
-9991 transform: --- resolve ambiguous calls for recipe scenario_buffer-append-works
 9991 transform: --- compute instruction operations for recipe scenario_buffer-append-works
 9991 transform: --- transform braces for recipe scenario_buffer-append-works
 9992 transform: run ...
@@ -200,17 +200,6 @@
 9992 transform: s2 => ("address" "shared" "array" "character")
 9992 transform: s3 => ("address" "shared" "array" "character")
 9991 transform: --- check for invalid types in recipe run_1001
-9991 transform: --- collect surrounding spaces for recipe run_1001
-9991 transform: --- transform names for recipe run_1001
-9993 name: assign x 1
-9993 name: element data of type buffer is at offset 1
-9993 name: assign s1 2
-9993 name: assign c 3
-9993 name: element data of type buffer is at offset 1
-9993 name: assign s2 4
-9993 name: element data of type buffer is at offset 1
-9993 name: assign s3 5
-9993 name: element length of type buffer is at offset 0
 9991 transform: --- resolve ambiguous calls for recipe run_1001
 9992 transform: instruction {x: ("address" "shared" "buffer")} <- new-buffer {3: "literal"}
 9992 transform: checking variant (strict) 0: recipe new-buffer {capacity: "number"} -> {result: ("address" "shared" "buffer")}
@@ -258,6 +247,17 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: instruction {10: "boolean", "raw": ()} <- equal {s1: ()}, {s3: ()}
 9992 transform: checking variant (strict) 0: recipe equal_2 {a: ("address" "shared" "array" "character")} {b: ("address" "shared" "array" "character")} -> {result: "boolean"}
+9991 transform: --- collect surrounding spaces for recipe run_1001
+9991 transform: --- transform names for recipe run_1001
+9993 name: assign x 1
+9993 name: element data of type buffer is at offset 1
+9993 name: assign s1 2
+9993 name: assign c 3
+9993 name: element data of type buffer is at offset 1
+9993 name: assign s2 4
+9993 name: element data of type buffer is at offset 1
+9993 name: assign s3 5
+9993 name: element length of type buffer is at offset 0
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: local-scope ...
@@ -298,582 +298,606 @@
  103 run: {x: ("address" "shared" "buffer")} <- new-buffer {3: "literal"}
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 5
-9999 mem: allocating size 7
+9999 mem: array size is 4
+9999 mem: allocating size 6
 9999 mem: new alloc: 1008
-9999 mem: storing 5 in location 1009
+9999 mem: storing 4 in location 1009
  104 run: {capacity: "number"} <- next-ingredient-without-typechecking 
 9999 mem: storing 3 in location 1011
  104 run: {result: ("address" "shared" "buffer")} <- new {buffer: "type"}
 9999 mem: allocating size 3
-9999 mem: new alloc: 1015
-9999 mem: storing 1015 in location 1012
-9999 mem: incrementing refcount of 1015: 0 -> 1
- 104 run: {len: ("address" "number")} <- get-address {result: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
-9999 mem: location 1012 is 1015
-9999 mem: skipping refcount at 1015
+9999 mem: new alloc: 1014
+9999 mem: storing 1014 in location 1012
+9999 mem: incrementing refcount of 1014: 0 -> 1
+ 104 run: {result: ("address" "shared" "buffer"), "lookup": ()} <- put {result: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}, {0: "literal"}
+9999 mem: location 1012 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 0
 9999 mem: location 1016 is 0
-9999 mem: location 1017 is 0
-9999 mem: location 1012 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1016
-9999 mem: storing 1016 in location 1013
- 104 run: {len: ("address" "number"), "lookup": ()} <- copy {0: "literal"}
-9999 mem: location 1013 is 1016
-9999 mem: storing 0 in location 1016
- 104 run: {s: ("address" "address" "shared" "array" "character")} <- get-address {result: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1012 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 0
-9999 mem: location 1017 is 0
-9999 mem: location 1012 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
-9999 mem: storing 1017 in location 1014
- 104 run: {s: ("address" "address" "shared" "array" "character"), "lookup": ()} <- new {character: "type"}, {capacity: "number"}
+9999 mem: location 1012 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy to is 1015
+9999 mem: storing 0 in location 1015
+ 104 run: {data: ("address" "shared" "array" "character")} <- new {character: "type"}, {capacity: "number"}
 9999 mem: location 1011 is 3
 9999 mem: array size is 3
 9999 mem: allocating size 5
-9999 mem: new alloc: 1018
-9999 mem: storing 3 in location 1019
-9999 mem: location 1014 is 1017
-9999 mem: storing 1018 in location 1017
-9999 mem: incrementing refcount of 1018: 0 -> 1
- 104 run: return {result: ("address" "shared" "buffer")}
-9999 mem: location 1012 is 1015
-9999 abandon: saving in free-list of size 7
-9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1015
-9999 mem: storing 1015 in location 1003
-9999 mem: incrementing refcount of 1015: 1 -> 2
- 103 run: {s1: ("address" "shared" "array" "character")} <- get {x: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1003 is 1015
-9999 mem: skipping refcount at 1015
+9999 mem: new alloc: 1017
+9999 mem: storing 3 in location 1018
+9999 mem: storing 1017 in location 1013
+9999 mem: incrementing refcount of 1017: 0 -> 1
+ 104 run: {result: ("address" "shared" "buffer"), "lookup": ()} <- put {result: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}, {data: ("address" "shared" "array" "character")}
+9999 mem: location 1012 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 0
 9999 mem: location 1016 is 0
-9999 mem: location 1017 is 1018
-9999 mem: location 1003 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
+9999 mem: location 1013 is 1017
+9999 mem: location 1012 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy to is 1016
+9999 mem: storing 1017 in location 1016
+ 104 run: return {result: ("address" "shared" "buffer")}
+9999 mem: location 1012 is 1014
+9999 abandon: saving in free-list of size 6
+9999 trace: reply: decrementing callstack depth from 3
+9998 run: result 0 is 1014
+9999 mem: storing 1014 in location 1003
+9999 mem: incrementing refcount of 1014: 1 -> 2
+ 103 run: {s1: ("address" "shared" "array" "character")} <- get {x: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
+9999 mem: location 1003 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 0
+9999 mem: location 1016 is 1017
+9999 mem: location 1003 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
 9998 run: its type is ("address" "shared" "array" "character")
-9999 mem: location 1017 is 1018
-9999 mem: storing 1018 in location 1004
-9999 mem: incrementing refcount of 1018: 1 -> 2
+9999 mem: location 1016 is 1017
+9999 mem: storing 1017 in location 1004
+9999 mem: incrementing refcount of 1017: 1 -> 2
  103 run: {c: "character"} <- copy {97: "literal", "a": ()}
 9999 mem: storing 97 in location 1005
  103 run: {x: ("address" "shared" "buffer")} <- append_2 {x: ("address" "shared" "buffer")}, {c: "character"}
-9999 mem: location 1003 is 1015
+9999 mem: location 1003 is 1014
 9999 mem: location 1005 is 97
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 9
 9999 mem: allocating size 11
-9999 mem: new alloc: 1023
-9999 mem: storing 9 in location 1024
+9999 mem: new alloc: 1022
+9999 mem: storing 9 in location 1023
  104 run: {in: ("address" "shared" "buffer")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1015 in location 1026
-9999 mem: incrementing refcount of 1015: 2 -> 3
+9999 mem: storing 1014 in location 1025
+9999 mem: incrementing refcount of 1014: 2 -> 3
  104 run: {c: "character"} <- next-ingredient-without-typechecking 
-9999 mem: storing 97 in location 1027
- 104 run: {len: ("address" "number")} <- get-address {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 0
-9999 mem: location 1017 is 1018
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1016
-9999 mem: storing 1016 in location 1028
+9999 mem: storing 97 in location 1026
+ 104 run: {len: "number"} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 0
+9999 mem: location 1016 is 1017
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1015
+9998 run: its type is "number"
+9999 mem: location 1015 is 0
+9999 mem: storing 0 in location 1027
  104 run: {backspace?: "boolean"} <- equal {c: "character"}, {8: "literal", "backspace": ()}
-9999 mem: location 1027 is 97
-9999 mem: storing 0 in location 1029
+9999 mem: location 1026 is 97
+9999 mem: storing 0 in location 1028
  104 run: jump-unless {backspace?: "boolean"}, {: "offset"}
-9999 mem: location 1029 is 0
-9998 run: jumping to instruction 12
+9999 mem: location 1028 is 0
+9998 run: jumping to instruction 13
  104 run: {full?: "boolean"} <- buffer-full? {in: ("address" "shared" "buffer")}
-9999 mem: location 1026 is 1015
+9999 mem: location 1025 is 1014
 9999 trace: incrementing callstack depth to 4
  105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 6
 9999 mem: allocating size 8
-9999 mem: new alloc: 1034
-9999 mem: storing 6 in location 1035
+9999 mem: new alloc: 1033
+9999 mem: storing 6 in location 1034
  105 run: {in: ("address" "shared" "buffer")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1015 in location 1037
-9999 mem: incrementing refcount of 1015: 3 -> 4
+9999 mem: storing 1014 in location 1036
+9999 mem: incrementing refcount of 1014: 3 -> 4
  105 run: {len: "number"} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 0
-9999 mem: location 1017 is 1018
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1016
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 0
+9999 mem: location 1016 is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1015
 9998 run: its type is "number"
-9999 mem: location 1016 is 0
-9999 mem: storing 0 in location 1038
+9999 mem: location 1015 is 0
+9999 mem: storing 0 in location 1037
  105 run: {s: ("address" "shared" "array" "character")} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 0
-9999 mem: location 1017 is 1018
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 0
+9999 mem: location 1016 is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
 9998 run: its type is ("address" "shared" "array" "character")
-9999 mem: location 1017 is 1018
-9999 mem: storing 1018 in location 1039
-9999 mem: incrementing refcount of 1018: 2 -> 3
+9999 mem: location 1016 is 1017
+9999 mem: storing 1017 in location 1038
+9999 mem: incrementing refcount of 1017: 2 -> 3
  105 run: {capacity: "number"} <- length {s: ("address" "shared" "array" "character"), "lookup": ()}
-9999 mem: location 1039 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: storing 3 in location 1040
+9999 mem: location 1038 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: storing 3 in location 1039
  105 run: {result: "boolean"} <- greater-or-equal {len: "number"}, {capacity: "number"}
-9999 mem: location 1038 is 0
-9999 mem: location 1040 is 3
-9999 mem: storing 0 in location 1041
+9999 mem: location 1037 is 0
+9999 mem: location 1039 is 3
+9999 mem: storing 0 in location 1040
  105 run: reply {result: "boolean"}
-9999 mem: location 1041 is 0
+9999 mem: location 1040 is 0
 9999 abandon: saving in free-list of size 8
 9999 trace: reply: decrementing callstack depth from 4
 9998 run: result 0 is 0
-9999 mem: storing 0 in location 1031
+9999 mem: storing 0 in location 1030
  104 run: jump-unless {full?: "boolean"}, {: "offset"}
-9999 mem: location 1031 is 0
-9998 run: jumping to instruction 17
+9999 mem: location 1030 is 0
+9998 run: jumping to instruction 18
  104 run: {s: ("address" "shared" "array" "character")} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 0
-9999 mem: location 1017 is 1018
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 0
+9999 mem: location 1016 is 1017
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
 9998 run: its type is ("address" "shared" "array" "character")
-9999 mem: location 1017 is 1018
-9999 mem: storing 1018 in location 1032
-9999 mem: incrementing refcount of 1018: 3 -> 4
- 104 run: {dest: ("address" "character")} <- index-address {s: ("address" "shared" "array" "character"), "lookup": ()}, {len: ("address" "number"), "lookup": ()}
-9999 mem: location 1032 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: location 1028 is 1016
-9999 mem: location 1016 is 0
-9999 mem: storing 1020 in location 1033
+9999 mem: location 1016 is 1017
+9999 mem: storing 1017 in location 1031
+9999 mem: incrementing refcount of 1017: 3 -> 4
+ 104 run: {dest: ("address" "character")} <- index-address {s: ("address" "shared" "array" "character"), "lookup": ()}, {len: "number"}
+9999 mem: location 1031 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: location 1027 is 0
+9999 mem: storing 1019 in location 1032
  104 run: {dest: ("address" "character"), "lookup": ()} <- copy {c: "character"}
-9999 mem: location 1027 is 97
-9999 mem: location 1033 is 1020
-9999 mem: storing 97 in location 1020
- 104 run: {len: ("address" "number"), "lookup": ()} <- add {len: ("address" "number"), "lookup": ()}, {1: "literal"}
-9999 mem: location 1028 is 1016
-9999 mem: location 1016 is 0
-9999 mem: location 1028 is 1016
-9999 mem: storing 1 in location 1016
+9999 mem: location 1026 is 97
+9999 mem: location 1032 is 1019
+9999 mem: storing 97 in location 1019
+ 104 run: {len: "number"} <- add {len: "number"}, {1: "literal"}
+9999 mem: location 1027 is 0
+9999 mem: storing 1 in location 1027
+ 104 run: put {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}, {len: "number"}
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 0
+9999 mem: location 1016 is 1017
+9999 mem: location 1027 is 1
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy to is 1015
+9999 mem: storing 1 in location 1015
  104 run: reply {in: ("address" "shared" "buffer"), "same-as-ingredient": "0"}
-9999 mem: location 1026 is 1015
+9999 mem: location 1025 is 1014
 9999 abandon: saving in free-list of size 11
 9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1015
-9999 mem: decrementing refcount of 1015: 4 -> 3
-9999 mem: storing 1015 in location 1003
-9999 mem: incrementing refcount of 1015: 3 -> 4
+9998 run: result 0 is 1014
+9999 mem: decrementing refcount of 1014: 4 -> 3
+9999 mem: storing 1014 in location 1003
+9999 mem: incrementing refcount of 1014: 3 -> 4
  103 run: {c: "character"} <- copy {98: "literal", "b": ()}
 9999 mem: storing 98 in location 1005
  103 run: {x: ("address" "shared" "buffer")} <- append_2 {x: ("address" "shared" "buffer")}, {c: "character"}
-9999 mem: location 1003 is 1015
+9999 mem: location 1003 is 1014
 9999 mem: location 1005 is 98
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 9
 9999 mem: allocating size 11
 9999 abandon: picking up space from free-list of size 11
-9999 mem: new alloc from free list: 1023
+9999 mem: new alloc from free list: 1022
  104 run: {in: ("address" "shared" "buffer")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1015 in location 1026
-9999 mem: incrementing refcount of 1015: 4 -> 5
+9999 mem: storing 1014 in location 1025
+9999 mem: incrementing refcount of 1014: 4 -> 5
  104 run: {c: "character"} <- next-ingredient-without-typechecking 
-9999 mem: storing 98 in location 1027
- 104 run: {len: ("address" "number")} <- get-address {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 1
-9999 mem: location 1017 is 1018
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1016
-9999 mem: storing 1016 in location 1028
+9999 mem: storing 98 in location 1026
+ 104 run: {len: "number"} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 1
+9999 mem: location 1016 is 1017
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1015
+9998 run: its type is "number"
+9999 mem: location 1015 is 1
+9999 mem: storing 1 in location 1027
  104 run: {backspace?: "boolean"} <- equal {c: "character"}, {8: "literal", "backspace": ()}
-9999 mem: location 1027 is 98
-9999 mem: storing 0 in location 1029
+9999 mem: location 1026 is 98
+9999 mem: storing 0 in location 1028
  104 run: jump-unless {backspace?: "boolean"}, {: "offset"}
-9999 mem: location 1029 is 0
-9998 run: jumping to instruction 12
+9999 mem: location 1028 is 0
+9998 run: jumping to instruction 13
  104 run: {full?: "boolean"} <- buffer-full? {in: ("address" "shared" "buffer")}
-9999 mem: location 1026 is 1015
+9999 mem: location 1025 is 1014
 9999 trace: incrementing callstack depth to 4
  105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 6
 9999 mem: allocating size 8
 9999 abandon: picking up space from free-list of size 8
-9999 mem: new alloc from free list: 1034
+9999 mem: new alloc from free list: 1033
  105 run: {in: ("address" "shared" "buffer")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1015 in location 1037
-9999 mem: incrementing refcount of 1015: 5 -> 6
+9999 mem: storing 1014 in location 1036
+9999 mem: incrementing refcount of 1014: 5 -> 6
  105 run: {len: "number"} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 1
-9999 mem: location 1017 is 1018
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1016
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 1
+9999 mem: location 1016 is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1015
 9998 run: its type is "number"
-9999 mem: location 1016 is 1
-9999 mem: storing 1 in location 1038
+9999 mem: location 1015 is 1
+9999 mem: storing 1 in location 1037
  105 run: {s: ("address" "shared" "array" "character")} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 1
-9999 mem: location 1017 is 1018
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 1
+9999 mem: location 1016 is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
 9998 run: its type is ("address" "shared" "array" "character")
-9999 mem: location 1017 is 1018
-9999 mem: storing 1018 in location 1039
-9999 mem: incrementing refcount of 1018: 4 -> 5
+9999 mem: location 1016 is 1017
+9999 mem: storing 1017 in location 1038
+9999 mem: incrementing refcount of 1017: 4 -> 5
  105 run: {capacity: "number"} <- length {s: ("address" "shared" "array" "character"), "lookup": ()}
-9999 mem: location 1039 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: storing 3 in location 1040
+9999 mem: location 1038 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: storing 3 in location 1039
  105 run: {result: "boolean"} <- greater-or-equal {len: "number"}, {capacity: "number"}
-9999 mem: location 1038 is 1
-9999 mem: location 1040 is 3
-9999 mem: storing 0 in location 1041
+9999 mem: location 1037 is 1
+9999 mem: location 1039 is 3
+9999 mem: storing 0 in location 1040
  105 run: reply {result: "boolean"}
-9999 mem: location 1041 is 0
+9999 mem: location 1040 is 0
 9999 abandon: saving in free-list of size 8
 9999 trace: reply: decrementing callstack depth from 4
 9998 run: result 0 is 0
-9999 mem: storing 0 in location 1031
+9999 mem: storing 0 in location 1030
  104 run: jump-unless {full?: "boolean"}, {: "offset"}
-9999 mem: location 1031 is 0
-9998 run: jumping to instruction 17
+9999 mem: location 1030 is 0
+9998 run: jumping to instruction 18
  104 run: {s: ("address" "shared" "array" "character")} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 1
-9999 mem: location 1017 is 1018
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 1
+9999 mem: location 1016 is 1017
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
 9998 run: its type is ("address" "shared" "array" "character")
-9999 mem: location 1017 is 1018
-9999 mem: storing 1018 in location 1032
-9999 mem: incrementing refcount of 1018: 5 -> 6
- 104 run: {dest: ("address" "character")} <- index-address {s: ("address" "shared" "array" "character"), "lookup": ()}, {len: ("address" "number"), "lookup": ()}
-9999 mem: location 1032 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: location 1028 is 1016
-9999 mem: location 1016 is 1
-9999 mem: storing 1021 in location 1033
+9999 mem: location 1016 is 1017
+9999 mem: storing 1017 in location 1031
+9999 mem: incrementing refcount of 1017: 5 -> 6
+ 104 run: {dest: ("address" "character")} <- index-address {s: ("address" "shared" "array" "character"), "lookup": ()}, {len: "number"}
+9999 mem: location 1031 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: location 1027 is 1
+9999 mem: storing 1020 in location 1032
  104 run: {dest: ("address" "character"), "lookup": ()} <- copy {c: "character"}
-9999 mem: location 1027 is 98
-9999 mem: location 1033 is 1021
-9999 mem: storing 98 in location 1021
- 104 run: {len: ("address" "number"), "lookup": ()} <- add {len: ("address" "number"), "lookup": ()}, {1: "literal"}
-9999 mem: location 1028 is 1016
-9999 mem: location 1016 is 1
-9999 mem: location 1028 is 1016
-9999 mem: storing 2 in location 1016
+9999 mem: location 1026 is 98
+9999 mem: location 1032 is 1020
+9999 mem: storing 98 in location 1020
+ 104 run: {len: "number"} <- add {len: "number"}, {1: "literal"}
+9999 mem: location 1027 is 1
+9999 mem: storing 2 in location 1027
+ 104 run: put {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}, {len: "number"}
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 1
+9999 mem: location 1016 is 1017
+9999 mem: location 1027 is 2
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy to is 1015
+9999 mem: storing 2 in location 1015
  104 run: reply {in: ("address" "shared" "buffer"), "same-as-ingredient": "0"}
-9999 mem: location 1026 is 1015
+9999 mem: location 1025 is 1014
 9999 abandon: saving in free-list of size 11
 9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1015
-9999 mem: decrementing refcount of 1015: 6 -> 5
-9999 mem: storing 1015 in location 1003
-9999 mem: incrementing refcount of 1015: 5 -> 6
+9998 run: result 0 is 1014
+9999 mem: decrementing refcount of 1014: 6 -> 5
+9999 mem: storing 1014 in location 1003
+9999 mem: incrementing refcount of 1014: 5 -> 6
  103 run: {c: "character"} <- copy {99: "literal", "c": ()}
 9999 mem: storing 99 in location 1005
  103 run: {x: ("address" "shared" "buffer")} <- append_2 {x: ("address" "shared" "buffer")}, {c: "character"}
-9999 mem: location 1003 is 1015
+9999 mem: location 1003 is 1014
 9999 mem: location 1005 is 99
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 9
 9999 mem: allocating size 11
 9999 abandon: picking up space from free-list of size 11
-9999 mem: new alloc from free list: 1023
+9999 mem: new alloc from free list: 1022
  104 run: {in: ("address" "shared" "buffer")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1015 in location 1026
-9999 mem: incrementing refcount of 1015: 6 -> 7
+9999 mem: storing 1014 in location 1025
+9999 mem: incrementing refcount of 1014: 6 -> 7
  104 run: {c: "character"} <- next-ingredient-without-typechecking 
-9999 mem: storing 99 in location 1027
- 104 run: {len: ("address" "number")} <- get-address {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 2
-9999 mem: location 1017 is 1018
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1016
-9999 mem: storing 1016 in location 1028
+9999 mem: storing 99 in location 1026
+ 104 run: {len: "number"} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 2
+9999 mem: location 1016 is 1017
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1015
+9998 run: its type is "number"
+9999 mem: location 1015 is 2
+9999 mem: storing 2 in location 1027
  104 run: {backspace?: "boolean"} <- equal {c: "character"}, {8: "literal", "backspace": ()}
-9999 mem: location 1027 is 99
-9999 mem: storing 0 in location 1029
+9999 mem: location 1026 is 99
+9999 mem: storing 0 in location 1028
  104 run: jump-unless {backspace?: "boolean"}, {: "offset"}
-9999 mem: location 1029 is 0
-9998 run: jumping to instruction 12
+9999 mem: location 1028 is 0
+9998 run: jumping to instruction 13
  104 run: {full?: "boolean"} <- buffer-full? {in: ("address" "shared" "buffer")}
-9999 mem: location 1026 is 1015
+9999 mem: location 1025 is 1014
 9999 trace: incrementing callstack depth to 4
  105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 6
 9999 mem: allocating size 8
 9999 abandon: picking up space from free-list of size 8
-9999 mem: new alloc from free list: 1034
+9999 mem: new alloc from free list: 1033
  105 run: {in: ("address" "shared" "buffer")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1015 in location 1037
-9999 mem: incrementing refcount of 1015: 7 -> 8
+9999 mem: storing 1014 in location 1036
+9999 mem: incrementing refcount of 1014: 7 -> 8
  105 run: {len: "number"} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 2
-9999 mem: location 1017 is 1018
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1016
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 2
+9999 mem: location 1016 is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1015
 9998 run: its type is "number"
-9999 mem: location 1016 is 2
-9999 mem: storing 2 in location 1038
+9999 mem: location 1015 is 2
+9999 mem: storing 2 in location 1037
  105 run: {s: ("address" "shared" "array" "character")} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 2
-9999 mem: location 1017 is 1018
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 2
+9999 mem: location 1016 is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
 9998 run: its type is ("address" "shared" "array" "character")
-9999 mem: location 1017 is 1018
-9999 mem: storing 1018 in location 1039
-9999 mem: incrementing refcount of 1018: 6 -> 7
+9999 mem: location 1016 is 1017
+9999 mem: storing 1017 in location 1038
+9999 mem: incrementing refcount of 1017: 6 -> 7
  105 run: {capacity: "number"} <- length {s: ("address" "shared" "array" "character"), "lookup": ()}
-9999 mem: location 1039 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: storing 3 in location 1040
+9999 mem: location 1038 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: storing 3 in location 1039
  105 run: {result: "boolean"} <- greater-or-equal {len: "number"}, {capacity: "number"}
-9999 mem: location 1038 is 2
-9999 mem: location 1040 is 3
-9999 mem: storing 0 in location 1041
+9999 mem: location 1037 is 2
+9999 mem: location 1039 is 3
+9999 mem: storing 0 in location 1040
  105 run: reply {result: "boolean"}
-9999 mem: location 1041 is 0
+9999 mem: location 1040 is 0
 9999 abandon: saving in free-list of size 8
 9999 trace: reply: decrementing callstack depth from 4
 9998 run: result 0 is 0
-9999 mem: storing 0 in location 1031
+9999 mem: storing 0 in location 1030
  104 run: jump-unless {full?: "boolean"}, {: "offset"}
-9999 mem: location 1031 is 0
-9998 run: jumping to instruction 17
+9999 mem: location 1030 is 0
+9998 run: jumping to instruction 18
  104 run: {s: ("address" "shared" "array" "character")} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 2
-9999 mem: location 1017 is 1018
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 2
+9999 mem: location 1016 is 1017
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
 9998 run: its type is ("address" "shared" "array" "character")
-9999 mem: location 1017 is 1018
-9999 mem: storing 1018 in location 1032
-9999 mem: incrementing refcount of 1018: 7 -> 8
- 104 run: {dest: ("address" "character")} <- index-address {s: ("address" "shared" "array" "character"), "lookup": ()}, {len: ("address" "number"), "lookup": ()}
-9999 mem: location 1032 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: location 1028 is 1016
-9999 mem: location 1016 is 2
-9999 mem: storing 1022 in location 1033
+9999 mem: location 1016 is 1017
+9999 mem: storing 1017 in location 1031
+9999 mem: incrementing refcount of 1017: 7 -> 8
+ 104 run: {dest: ("address" "character")} <- index-address {s: ("address" "shared" "array" "character"), "lookup": ()}, {len: "number"}
+9999 mem: location 1031 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: location 1027 is 2
+9999 mem: storing 1021 in location 1032
  104 run: {dest: ("address" "character"), "lookup": ()} <- copy {c: "character"}
-9999 mem: location 1027 is 99
-9999 mem: location 1033 is 1022
-9999 mem: storing 99 in location 1022
- 104 run: {len: ("address" "number"), "lookup": ()} <- add {len: ("address" "number"), "lookup": ()}, {1: "literal"}
-9999 mem: location 1028 is 1016
-9999 mem: location 1016 is 2
-9999 mem: location 1028 is 1016
-9999 mem: storing 3 in location 1016
+9999 mem: location 1026 is 99
+9999 mem: location 1032 is 1021
+9999 mem: storing 99 in location 1021
+ 104 run: {len: "number"} <- add {len: "number"}, {1: "literal"}
+9999 mem: location 1027 is 2
+9999 mem: storing 3 in location 1027
+ 104 run: put {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}, {len: "number"}
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 2
+9999 mem: location 1016 is 1017
+9999 mem: location 1027 is 3
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy to is 1015
+9999 mem: storing 3 in location 1015
  104 run: reply {in: ("address" "shared" "buffer"), "same-as-ingredient": "0"}
-9999 mem: location 1026 is 1015
+9999 mem: location 1025 is 1014
 9999 abandon: saving in free-list of size 11
 9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1015
-9999 mem: decrementing refcount of 1015: 8 -> 7
-9999 mem: storing 1015 in location 1003
-9999 mem: incrementing refcount of 1015: 7 -> 8
+9998 run: result 0 is 1014
+9999 mem: decrementing refcount of 1014: 8 -> 7
+9999 mem: storing 1014 in location 1003
+9999 mem: incrementing refcount of 1014: 7 -> 8
  103 run: {s2: ("address" "shared" "array" "character")} <- get {x: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1003 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 3
-9999 mem: location 1017 is 1018
-9999 mem: location 1003 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
+9999 mem: location 1003 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 3
+9999 mem: location 1016 is 1017
+9999 mem: location 1003 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
 9998 run: its type is ("address" "shared" "array" "character")
-9999 mem: location 1017 is 1018
-9999 mem: storing 1018 in location 1006
-9999 mem: incrementing refcount of 1018: 8 -> 9
+9999 mem: location 1016 is 1017
+9999 mem: storing 1017 in location 1006
+9999 mem: incrementing refcount of 1017: 8 -> 9
  103 run: {1: "boolean", "raw": ()} <- equal_2 {s1: ("address" "shared" "array" "character")}, {s2: ("address" "shared" "array" "character")}
-9999 mem: location 1004 is 1018
-9999 mem: location 1006 is 1018
+9999 mem: location 1004 is 1017
+9999 mem: location 1006 is 1017
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 11
 9999 mem: allocating size 13
-9999 mem: new alloc: 1042
-9999 mem: storing 11 in location 1043
+9999 mem: new alloc: 1041
+9999 mem: storing 11 in location 1042
  104 run: {a: ("address" "shared" "array" "character")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1018 in location 1045
-9999 mem: incrementing refcount of 1018: 9 -> 10
+9999 mem: storing 1017 in location 1044
+9999 mem: incrementing refcount of 1017: 9 -> 10
  104 run: {b: ("address" "shared" "array" "character")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1018 in location 1046
-9999 mem: incrementing refcount of 1018: 10 -> 11
+9999 mem: storing 1017 in location 1045
+9999 mem: incrementing refcount of 1017: 10 -> 11
  104 run: {a-len: "number"} <- length {a: ("address" "shared" "array" "character"), "lookup": ()}
-9999 mem: location 1045 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: storing 3 in location 1047
+9999 mem: location 1044 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: storing 3 in location 1046
  104 run: {b-len: "number"} <- length {b: ("address" "shared" "array" "character"), "lookup": ()}
-9999 mem: location 1046 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: storing 3 in location 1048
+9999 mem: location 1045 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: storing 3 in location 1047
  104 run: trace {99: "literal"}, {"text-equal": "literal-string"}, {"comparing lengths": "literal-string"}
   99 text-equal: comparing lengths 
  104 run: {length-equal?: "boolean"} <- equal {a-len: "number"}, {b-len: "number"}
+9999 mem: location 1046 is 3
 9999 mem: location 1047 is 3
-9999 mem: location 1048 is 3
-9999 mem: storing 1 in location 1049
+9999 mem: storing 1 in location 1048
  104 run: jump-if {length-equal?: "boolean"}, {: "offset"}
-9999 mem: location 1049 is 1
+9999 mem: location 1048 is 1
 9998 run: jumping to instruction 10
  104 run: trace {99: "literal"}, {"text-equal": "literal-string"}, {"comparing characters": "literal-string"}
   99 text-equal: comparing characters 
  104 run: {i: "number"} <- copy {0: "literal"}
+9999 mem: storing 0 in location 1049
+ 104 run: {done?: "boolean"} <- greater-or-equal {i: "number"}, {a-len: "number"}
+9999 mem: location 1049 is 0
+9999 mem: location 1046 is 3
 9999 mem: storing 0 in location 1050
- 104 run: {done?: "boolean"} <- greater-or-equal {i: "number"}, {a-len: "number"}
-9999 mem: location 1050 is 0
-9999 mem: location 1047 is 3
-9999 mem: storing 0 in location 1051
  104 run: jump-if {done?: "boolean"}, {: "offset"}
-9999 mem: location 1051 is 0
+9999 mem: location 1050 is 0
 9998 run: jump-if fell through
  104 run: {a2: "character"} <- index {a: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
-9999 mem: location 1045 is 1018
-9999 mem: skipping refcount at 1018
-9998 run: base address is 1019
-9999 mem: location 1050 is 0
-9998 run: address to copy is 1020
+9999 mem: location 1044 is 1017
+9999 mem: skipping refcount at 1017
+9998 run: base address is 1018
+9999 mem: location 1049 is 0
+9998 run: address to copy is 1019
 9998 run: its type is character
-9999 mem: location 1020 is 97
+9999 mem: location 1019 is 97
+9999 mem: storing 97 in location 1051
+ 104 run: {b2: "character"} <- index {b: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+9999 mem: location 1045 is 1017
+9999 mem: skipping refcount at 1017
+9998 run: base address is 1018
+9999 mem: location 1049 is 0
+9998 run: address to copy is 1019
+9998 run: its type is character
+9999 mem: location 1019 is 97
 9999 mem: storing 97 in location 1052
- 104 run: {b2: "character"} <- index {b: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
-9999 mem: location 1046 is 1018
-9999 mem: skipping refcount at 1018
-9998 run: base address is 1019
+ 104 run: {chars-match?: "boolean"} <- equal {a2: "character"}, {b2: "character"}
+9999 mem: location 1051 is 97
+9999 mem: location 1052 is 97
+9999 mem: storing 1 in location 1053
+ 104 run: jump-if {chars-match?: "boolean"}, {: "offset"}
+9999 mem: location 1053 is 1
+9998 run: jumping to instruction 22
+ 104 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
+9999 mem: location 1049 is 0
+9999 mem: storing 1 in location 1049
+ 104 run: jump {: "offset"}
+9998 run: jumping to instruction 14
+ 104 run: {done?: "boolean"} <- greater-or-equal {i: "number"}, {a-len: "number"}
+9999 mem: location 1049 is 1
+9999 mem: location 1046 is 3
+9999 mem: storing 0 in location 1050
+ 104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1050 is 0
+9998 run: jump-if fell through
+ 104 run: {a2: "character"} <- index {a: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+9999 mem: location 1044 is 1017
+9999 mem: skipping refcount at 1017
+9998 run: base address is 1018
+9999 mem: location 1049 is 1
 9998 run: address to copy is 1020
 9998 run: its type is character
-9999 mem: location 1020 is 97
-9999 mem: storing 97 in location 1053
- 104 run: {chars-match?: "boolean"} <- equal {a2: "character"}, {b2: "character"}
-9999 mem: location 1052 is 97
-9999 mem: location 1053 is 97
-9999 mem: storing 1 in location 1054
- 104 run: jump-if {chars-match?: "boolean"}, {: "offset"}
-9999 mem: location 1054 is 1
-9998 run: jumping to instruction 22
- 104 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
-9999 mem: location 1050 is 0
-9999 mem: storing 1 in location 1050
- 104 run: jump {: "offset"}
-9998 run: jumping to instruction 14
- 104 run: {done?: "boolean"} <- greater-or-equal {i: "number"}, {a-len: "number"}
-9999 mem: location 1050 is 1
-9999 mem: location 1047 is 3
-9999 mem: storing 0 in location 1051
- 104 run: jump-if {done?: "boolean"}, {: "offset"}
-9999 mem: location 1051 is 0
-9998 run: jump-if fell through
- 104 run: {a2: "character"} <- index {a: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
-9999 mem: location 1045 is 1018
-9999 mem: skipping refcount at 1018
-9998 run: base address is 1019
-9999 mem: location 1050 is 1
-9998 run: address to copy is 1021
+9999 mem: location 1020 is 98
+9999 mem: storing 98 in location 1051
+ 104 run: {b2: "character"} <- index {b: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+9999 mem: location 1045 is 1017
+9999 mem: skipping refcount at 1017
+9998 run: base address is 1018
+9999 mem: location 1049 is 1
+9998 run: address to copy is 1020
 9998 run: its type is character
-9999 mem: location 1021 is 98
+9999 mem: location 1020 is 98
 9999 mem: storing 98 in location 1052
- 104 run: {b2: "character"} <- index {b: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
-9999 mem: location 1046 is 1018
-9999 mem: skipping refcount at 1018
-9998 run: base address is 1019
-9999 mem: location 1050 is 1
-9998 run: address to copy is 1021
-9998 run: its type is character
-9999 mem: location 1021 is 98
-9999 mem: storing 98 in location 1053
  104 run: {chars-match?: "boolean"} <- equal {a2: "character"}, {b2: "character"}
+9999 mem: location 1051 is 98
 9999 mem: location 1052 is 98
-9999 mem: location 1053 is 98
-9999 mem: storing 1 in location 1054
+9999 mem: storing 1 in location 1053
  104 run: jump-if {chars-match?: "boolean"}, {: "offset"}
-9999 mem: location 1054 is 1
+9999 mem: location 1053 is 1
 9998 run: jumping to instruction 22
  104 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
-9999 mem: location 1050 is 1
-9999 mem: storing 2 in location 1050
+9999 mem: location 1049 is 1
+9999 mem: storing 2 in location 1049
  104 run: jump {: "offset"}
 9998 run: jumping to instruction 14
  104 run: {done?: "boolean"} <- greater-or-equal {i: "number"}, {a-len: "number"}
-9999 mem: location 1050 is 2
-9999 mem: location 1047 is 3
-9999 mem: storing 0 in location 1051
+9999 mem: location 1049 is 2
+9999 mem: location 1046 is 3
+9999 mem: storing 0 in location 1050
  104 run: jump-if {done?: "boolean"}, {: "offset"}
-9999 mem: location 1051 is 0
+9999 mem: location 1050 is 0
 9998 run: jump-if fell through
  104 run: {a2: "character"} <- index {a: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
-9999 mem: location 1045 is 1018
-9999 mem: skipping refcount at 1018
-9998 run: base address is 1019
-9999 mem: location 1050 is 2
-9998 run: address to copy is 1022
+9999 mem: location 1044 is 1017
+9999 mem: skipping refcount at 1017
+9998 run: base address is 1018
+9999 mem: location 1049 is 2
+9998 run: address to copy is 1021
 9998 run: its type is character
-9999 mem: location 1022 is 99
-9999 mem: storing 99 in location 1052
+9999 mem: location 1021 is 99
+9999 mem: storing 99 in location 1051
  104 run: {b2: "character"} <- index {b: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
-9999 mem: location 1046 is 1018
-9999 mem: skipping refcount at 1018
-9998 run: base address is 1019
-9999 mem: location 1050 is 2
-9998 run: address to copy is 1022
+9999 mem: location 1045 is 1017
+9999 mem: skipping refcount at 1017
+9998 run: base address is 1018
+9999 mem: location 1049 is 2
+9998 run: address to copy is 1021
 9998 run: its type is character
-9999 mem: location 1022 is 99
-9999 mem: storing 99 in location 1053
+9999 mem: location 1021 is 99
+9999 mem: storing 99 in location 1052
  104 run: {chars-match?: "boolean"} <- equal {a2: "character"}, {b2: "character"}
+9999 mem: location 1051 is 99
 9999 mem: location 1052 is 99
-9999 mem: location 1053 is 99
-9999 mem: storing 1 in location 1054
+9999 mem: storing 1 in location 1053
  104 run: jump-if {chars-match?: "boolean"}, {: "offset"}
-9999 mem: location 1054 is 1
+9999 mem: location 1053 is 1
 9998 run: jumping to instruction 22
  104 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
-9999 mem: location 1050 is 2
-9999 mem: storing 3 in location 1050
+9999 mem: location 1049 is 2
+9999 mem: storing 3 in location 1049
  104 run: jump {: "offset"}
 9998 run: jumping to instruction 14
  104 run: {done?: "boolean"} <- greater-or-equal {i: "number"}, {a-len: "number"}
-9999 mem: location 1050 is 3
-9999 mem: location 1047 is 3
-9999 mem: storing 1 in location 1051
+9999 mem: location 1049 is 3
+9999 mem: location 1046 is 3
+9999 mem: storing 1 in location 1050
  104 run: jump-if {done?: "boolean"}, {: "offset"}
-9999 mem: location 1051 is 1
+9999 mem: location 1050 is 1
 9998 run: jumping to instruction 25
  104 run: return {1: "literal"}
 9999 abandon: saving in free-list of size 13
@@ -881,12 +905,12 @@
 9998 run: result 0 is 1
 9999 mem: storing 1 in location 1
  103 run: {2: ("array" "character"), "raw": ()} <- copy {s2: ("address" "shared" "array" "character"), "lookup": ()}
-9999 mem: location 1006 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: location 1019 is 3
-9999 mem: location 1020 is 97
-9999 mem: location 1021 is 98
-9999 mem: location 1022 is 99
+9999 mem: location 1006 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: location 1018 is 3
+9999 mem: location 1019 is 97
+9999 mem: location 1020 is 98
+9999 mem: location 1021 is 99
 9999 mem: storing 3 in location 2
 9999 mem: storing 97 in location 3
 9999 mem: storing 98 in location 4
@@ -894,316 +918,327 @@
  103 run: {c: "character"} <- copy {100: "literal", "d": ()}
 9999 mem: storing 100 in location 1005
  103 run: {x: ("address" "shared" "buffer")} <- append_2 {x: ("address" "shared" "buffer")}, {c: "character"}
-9999 mem: location 1003 is 1015
+9999 mem: location 1003 is 1014
 9999 mem: location 1005 is 100
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 9
 9999 mem: allocating size 11
 9999 abandon: picking up space from free-list of size 11
-9999 mem: new alloc from free list: 1023
+9999 mem: new alloc from free list: 1022
  104 run: {in: ("address" "shared" "buffer")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1015 in location 1026
-9999 mem: incrementing refcount of 1015: 8 -> 9
+9999 mem: storing 1014 in location 1025
+9999 mem: incrementing refcount of 1014: 8 -> 9
  104 run: {c: "character"} <- next-ingredient-without-typechecking 
-9999 mem: storing 100 in location 1027
- 104 run: {len: ("address" "number")} <- get-address {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 3
-9999 mem: location 1017 is 1018
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1016
-9999 mem: storing 1016 in location 1028
+9999 mem: storing 100 in location 1026
+ 104 run: {len: "number"} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 3
+9999 mem: location 1016 is 1017
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1015
+9998 run: its type is "number"
+9999 mem: location 1015 is 3
+9999 mem: storing 3 in location 1027
  104 run: {backspace?: "boolean"} <- equal {c: "character"}, {8: "literal", "backspace": ()}
-9999 mem: location 1027 is 100
-9999 mem: storing 0 in location 1029
+9999 mem: location 1026 is 100
+9999 mem: storing 0 in location 1028
  104 run: jump-unless {backspace?: "boolean"}, {: "offset"}
-9999 mem: location 1029 is 0
-9998 run: jumping to instruction 12
+9999 mem: location 1028 is 0
+9998 run: jumping to instruction 13
  104 run: {full?: "boolean"} <- buffer-full? {in: ("address" "shared" "buffer")}
-9999 mem: location 1026 is 1015
+9999 mem: location 1025 is 1014
 9999 trace: incrementing callstack depth to 4
  105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 6
 9999 mem: allocating size 8
 9999 abandon: picking up space from free-list of size 8
-9999 mem: new alloc from free list: 1034
+9999 mem: new alloc from free list: 1033
  105 run: {in: ("address" "shared" "buffer")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1015 in location 1037
-9999 mem: incrementing refcount of 1015: 9 -> 10
+9999 mem: storing 1014 in location 1036
+9999 mem: incrementing refcount of 1014: 9 -> 10
  105 run: {len: "number"} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 3
-9999 mem: location 1017 is 1018
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1016
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 3
+9999 mem: location 1016 is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1015
 9998 run: its type is "number"
-9999 mem: location 1016 is 3
-9999 mem: storing 3 in location 1038
+9999 mem: location 1015 is 3
+9999 mem: storing 3 in location 1037
  105 run: {s: ("address" "shared" "array" "character")} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 3
-9999 mem: location 1017 is 1018
-9999 mem: location 1037 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 3
+9999 mem: location 1016 is 1017
+9999 mem: location 1036 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
 9998 run: its type is ("address" "shared" "array" "character")
-9999 mem: location 1017 is 1018
-9999 mem: storing 1018 in location 1039
-9999 mem: incrementing refcount of 1018: 11 -> 12
+9999 mem: location 1016 is 1017
+9999 mem: storing 1017 in location 1038
+9999 mem: incrementing refcount of 1017: 11 -> 12
  105 run: {capacity: "number"} <- length {s: ("address" "shared" "array" "character"), "lookup": ()}
-9999 mem: location 1039 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: storing 3 in location 1040
+9999 mem: location 1038 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: storing 3 in location 1039
  105 run: {result: "boolean"} <- greater-or-equal {len: "number"}, {capacity: "number"}
-9999 mem: location 1038 is 3
-9999 mem: location 1040 is 3
-9999 mem: storing 1 in location 1041
+9999 mem: location 1037 is 3
+9999 mem: location 1039 is 3
+9999 mem: storing 1 in location 1040
  105 run: reply {result: "boolean"}
-9999 mem: location 1041 is 1
+9999 mem: location 1040 is 1
 9999 abandon: saving in free-list of size 8
 9999 trace: reply: decrementing callstack depth from 4
 9998 run: result 0 is 1
-9999 mem: storing 1 in location 1031
+9999 mem: storing 1 in location 1030
  104 run: jump-unless {full?: "boolean"}, {: "offset"}
-9999 mem: location 1031 is 1
+9999 mem: location 1030 is 1
 9998 run: jump-unless fell through
  104 run: {in: ("address" "shared" "buffer")} <- grow-buffer {in: ("address" "shared" "buffer")}
-9999 mem: location 1026 is 1015
+9999 mem: location 1025 is 1014
 9999 trace: incrementing callstack depth to 4
  105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 10
 9999 mem: allocating size 12
-9999 mem: new alloc: 1055
-9999 mem: storing 10 in location 1056
+9999 mem: new alloc: 1054
+9999 mem: storing 10 in location 1055
  105 run: {in: ("address" "shared" "buffer")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1015 in location 1058
-9999 mem: incrementing refcount of 1015: 10 -> 11
- 105 run: {x: ("address" "address" "shared" "array" "character")} <- get-address {in: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1058 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 3
-9999 mem: location 1017 is 1018
-9999 mem: location 1058 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
-9999 mem: storing 1017 in location 1059
- 105 run: {oldlen: "number"} <- length {x: ("address" "address" "shared" "array" "character"), "lookup": (), "lookup": ()}
-9999 mem: location 1059 is 1017
-9999 mem: location 1017 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: storing 3 in location 1060
+9999 mem: storing 1014 in location 1057
+9999 mem: incrementing refcount of 1014: 10 -> 11
+ 105 run: {olddata: ("address" "shared" "array" "character")} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
+9999 mem: location 1057 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 3
+9999 mem: location 1016 is 1017
+9999 mem: location 1057 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
+9998 run: its type is ("address" "shared" "array" "character")
+9999 mem: location 1016 is 1017
+9999 mem: storing 1017 in location 1058
+9999 mem: incrementing refcount of 1017: 12 -> 13
+ 105 run: {oldlen: "number"} <- length {olddata: ("address" "shared" "array" "character"), "lookup": ()}
+9999 mem: location 1058 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: storing 3 in location 1059
  105 run: {newlen: "number"} <- multiply {oldlen: "number"}, {2: "literal"}
-9999 mem: location 1060 is 3
-9999 mem: storing 6 in location 1061
- 105 run: {olddata: ("address" "shared" "array" "character")} <- copy {x: ("address" "address" "shared" "array" "character"), "lookup": ()}
-9999 mem: location 1059 is 1017
-9999 mem: location 1017 is 1018
-9999 mem: storing 1018 in location 1062
-9999 mem: incrementing refcount of 1018: 12 -> 13
- 105 run: {x: ("address" "address" "shared" "array" "character"), "lookup": ()} <- new {character: "type"}, {newlen: "number"}
-9999 mem: location 1061 is 6
+9999 mem: location 1059 is 3
+9999 mem: storing 6 in location 1060
+ 105 run: {newdata: ("address" "shared" "array" "character")} <- new {character: "type"}, {newlen: "number"}
+9999 mem: location 1060 is 6
 9999 mem: array size is 6
 9999 mem: allocating size 8
 9999 abandon: picking up space from free-list of size 8
-9999 mem: new alloc from free list: 1034
-9999 mem: location 1059 is 1017
-9999 mem: decrementing refcount of 1018: 13 -> 12
-9999 mem: storing 1034 in location 1017
-9999 mem: incrementing refcount of 1034: 0 -> 1
+9999 mem: new alloc from free list: 1033
+9999 mem: storing 1033 in location 1061
+9999 mem: incrementing refcount of 1033: 0 -> 1
+ 105 run: {in: ("address" "shared" "buffer"), "lookup": ()} <- put {in: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}, {newdata: ("address" "shared" "array" "character")}
+9999 mem: location 1057 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 3
+9999 mem: location 1016 is 1017
+9999 mem: location 1061 is 1033
+9999 mem: location 1057 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy to is 1016
+9999 mem: storing 1033 in location 1016
  105 run: {i: "number"} <- copy {0: "literal"}
-9999 mem: storing 0 in location 1063
+9999 mem: storing 0 in location 1062
  105 run: {done?: "boolean"} <- greater-or-equal {i: "number"}, {oldlen: "number"}
-9999 mem: location 1063 is 0
-9999 mem: location 1060 is 3
-9999 mem: storing 0 in location 1064
+9999 mem: location 1062 is 0
+9999 mem: location 1059 is 3
+9999 mem: storing 0 in location 1063
  105 run: jump-if {done?: "boolean"}, {: "offset"}
-9999 mem: location 1064 is 0
+9999 mem: location 1063 is 0
 9998 run: jump-if fell through
  105 run: {src: "character"} <- index {olddata: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
-9999 mem: location 1062 is 1018
-9999 mem: skipping refcount at 1018
-9998 run: base address is 1019
+9999 mem: location 1058 is 1017
+9999 mem: skipping refcount at 1017
+9998 run: base address is 1018
+9999 mem: location 1062 is 0
+9998 run: address to copy is 1019
+9998 run: its type is character
+9999 mem: location 1019 is 97
+9999 mem: storing 97 in location 1064
+ 105 run: {dest: ("address" "character")} <- index-address {newdata: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+9999 mem: location 1061 is 1033
+9999 mem: skipping refcount at 1033
+9999 mem: location 1062 is 0
+9999 mem: storing 1035 in location 1065
+ 105 run: {dest: ("address" "character"), "lookup": ()} <- copy {src: "character"}
+9999 mem: location 1064 is 97
+9999 mem: location 1065 is 1035
+9999 mem: storing 97 in location 1035
+ 105 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
+9999 mem: location 1062 is 0
+9999 mem: storing 1 in location 1062
+ 105 run: jump {: "offset"}
+9998 run: jumping to instruction 9
+ 105 run: {done?: "boolean"} <- greater-or-equal {i: "number"}, {oldlen: "number"}
+9999 mem: location 1062 is 1
+9999 mem: location 1059 is 3
+9999 mem: storing 0 in location 1063
+ 105 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1063 is 0
+9998 run: jump-if fell through
+ 105 run: {src: "character"} <- index {olddata: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+9999 mem: location 1058 is 1017
+9999 mem: skipping refcount at 1017
+9998 run: base address is 1018
+9999 mem: location 1062 is 1
 9998 run: address to copy is 1020
 9998 run: its type is character
-9999 mem: location 1020 is 97
-9999 mem: storing 97 in location 1065
- 105 run: {dest: ("address" "character")} <- index-address {x: ("address" "address" "shared" "array" "character"), "lookup": (), "lookup": ()}, {i: "number"}
-9999 mem: location 1059 is 1017
-9999 mem: location 1017 is 1034
-9999 mem: skipping refcount at 1034
-9999 mem: location 1063 is 0
-9999 mem: storing 1036 in location 1066
+9999 mem: location 1020 is 98
+9999 mem: storing 98 in location 1064
+ 105 run: {dest: ("address" "character")} <- index-address {newdata: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+9999 mem: location 1061 is 1033
+9999 mem: skipping refcount at 1033
+9999 mem: location 1062 is 1
+9999 mem: storing 1036 in location 1065
  105 run: {dest: ("address" "character"), "lookup": ()} <- copy {src: "character"}
-9999 mem: location 1065 is 97
-9999 mem: location 1066 is 1036
-9999 mem: storing 97 in location 1036
+9999 mem: location 1064 is 98
+9999 mem: location 1065 is 1036
+9999 mem: storing 98 in location 1036
  105 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
-9999 mem: location 1063 is 0
-9999 mem: storing 1 in location 1063
+9999 mem: location 1062 is 1
+9999 mem: storing 2 in location 1062
  105 run: jump {: "offset"}
 9998 run: jumping to instruction 9
  105 run: {done?: "boolean"} <- greater-or-equal {i: "number"}, {oldlen: "number"}
-9999 mem: location 1063 is 1
-9999 mem: location 1060 is 3
-9999 mem: storing 0 in location 1064
+9999 mem: location 1062 is 2
+9999 mem: location 1059 is 3
+9999 mem: storing 0 in location 1063
  105 run: jump-if {done?: "boolean"}, {: "offset"}
-9999 mem: location 1064 is 0
+9999 mem: location 1063 is 0
 9998 run: jump-if fell through
  105 run: {src: "character"} <- index {olddata: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
-9999 mem: location 1062 is 1018
-9999 mem: skipping refcount at 1018
-9998 run: base address is 1019
-9999 mem: location 1063 is 1
+9999 mem: location 1058 is 1017
+9999 mem: skipping refcount at 1017
+9998 run: base address is 1018
+9999 mem: location 1062 is 2
 9998 run: address to copy is 1021
 9998 run: its type is character
-9999 mem: location 1021 is 98
-9999 mem: storing 98 in location 1065
- 105 run: {dest: ("address" "character")} <- index-address {x: ("address" "address" "shared" "array" "character"), "lookup": (), "lookup": ()}, {i: "number"}
-9999 mem: location 1059 is 1017
-9999 mem: location 1017 is 1034
-9999 mem: skipping refcount at 1034
-9999 mem: location 1063 is 1
-9999 mem: storing 1037 in location 1066
+9999 mem: location 1021 is 99
+9999 mem: storing 99 in location 1064
+ 105 run: {dest: ("address" "character")} <- index-address {newdata: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+9999 mem: location 1061 is 1033
+9999 mem: skipping refcount at 1033
+9999 mem: location 1062 is 2
+9999 mem: storing 1037 in location 1065
  105 run: {dest: ("address" "character"), "lookup": ()} <- copy {src: "character"}
-9999 mem: location 1065 is 98
-9999 mem: location 1066 is 1037
-9999 mem: storing 98 in location 1037
+9999 mem: location 1064 is 99
+9999 mem: location 1065 is 1037
+9999 mem: storing 99 in location 1037
  105 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
-9999 mem: location 1063 is 1
-9999 mem: storing 2 in location 1063
+9999 mem: location 1062 is 2
+9999 mem: storing 3 in location 1062
  105 run: jump {: "offset"}
 9998 run: jumping to instruction 9
  105 run: {done?: "boolean"} <- greater-or-equal {i: "number"}, {oldlen: "number"}
-9999 mem: location 1063 is 2
-9999 mem: location 1060 is 3
-9999 mem: storing 0 in location 1064
+9999 mem: location 1062 is 3
+9999 mem: location 1059 is 3
+9999 mem: storing 1 in location 1063
  105 run: jump-if {done?: "boolean"}, {: "offset"}
-9999 mem: location 1064 is 0
-9998 run: jump-if fell through
- 105 run: {src: "character"} <- index {olddata: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
-9999 mem: location 1062 is 1018
-9999 mem: skipping refcount at 1018
-9998 run: base address is 1019
-9999 mem: location 1063 is 2
-9998 run: address to copy is 1022
-9998 run: its type is character
-9999 mem: location 1022 is 99
-9999 mem: storing 99 in location 1065
- 105 run: {dest: ("address" "character")} <- index-address {x: ("address" "address" "shared" "array" "character"), "lookup": (), "lookup": ()}, {i: "number"}
-9999 mem: location 1059 is 1017
-9999 mem: location 1017 is 1034
-9999 mem: skipping refcount at 1034
-9999 mem: location 1063 is 2
-9999 mem: storing 1038 in location 1066
- 105 run: {dest: ("address" "character"), "lookup": ()} <- copy {src: "character"}
-9999 mem: location 1065 is 99
-9999 mem: location 1066 is 1038
-9999 mem: storing 99 in location 1038
- 105 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
-9999 mem: location 1063 is 2
-9999 mem: storing 3 in location 1063
- 105 run: jump {: "offset"}
-9998 run: jumping to instruction 9
- 105 run: {done?: "boolean"} <- greater-or-equal {i: "number"}, {oldlen: "number"}
-9999 mem: location 1063 is 3
-9999 mem: location 1060 is 3
-9999 mem: storing 1 in location 1064
- 105 run: jump-if {done?: "boolean"}, {: "offset"}
-9999 mem: location 1064 is 1
+9999 mem: location 1063 is 1
 9998 run: jumping to instruction 16
  105 run: reply {in: ("address" "shared" "buffer"), "same-as-ingredient": "0"}
-9999 mem: location 1058 is 1015
+9999 mem: location 1057 is 1014
 9999 abandon: saving in free-list of size 12
 9999 trace: reply: decrementing callstack depth from 4
-9998 run: result 0 is 1015
-9999 mem: decrementing refcount of 1015: 11 -> 10
-9999 mem: storing 1015 in location 1026
-9999 mem: incrementing refcount of 1015: 10 -> 11
+9998 run: result 0 is 1014
+9999 mem: decrementing refcount of 1014: 11 -> 10
+9999 mem: storing 1014 in location 1025
+9999 mem: incrementing refcount of 1014: 10 -> 11
  104 run: {s: ("address" "shared" "array" "character")} <- get {in: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 3
-9999 mem: location 1017 is 1034
-9999 mem: location 1026 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 3
+9999 mem: location 1016 is 1033
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
 9998 run: its type is ("address" "shared" "array" "character")
-9999 mem: location 1017 is 1034
-9999 mem: storing 1034 in location 1032
-9999 mem: incrementing refcount of 1034: 1 -> 2
- 104 run: {dest: ("address" "character")} <- index-address {s: ("address" "shared" "array" "character"), "lookup": ()}, {len: ("address" "number"), "lookup": ()}
-9999 mem: location 1032 is 1034
-9999 mem: skipping refcount at 1034
-9999 mem: location 1028 is 1016
-9999 mem: location 1016 is 3
-9999 mem: storing 1039 in location 1033
+9999 mem: location 1016 is 1033
+9999 mem: storing 1033 in location 1031
+9999 mem: incrementing refcount of 1033: 1 -> 2
+ 104 run: {dest: ("address" "character")} <- index-address {s: ("address" "shared" "array" "character"), "lookup": ()}, {len: "number"}
+9999 mem: location 1031 is 1033
+9999 mem: skipping refcount at 1033
+9999 mem: location 1027 is 3
+9999 mem: storing 1038 in location 1032
  104 run: {dest: ("address" "character"), "lookup": ()} <- copy {c: "character"}
-9999 mem: location 1027 is 100
-9999 mem: location 1033 is 1039
-9999 mem: storing 100 in location 1039
- 104 run: {len: ("address" "number"), "lookup": ()} <- add {len: ("address" "number"), "lookup": ()}, {1: "literal"}
-9999 mem: location 1028 is 1016
-9999 mem: location 1016 is 3
-9999 mem: location 1028 is 1016
-9999 mem: storing 4 in location 1016
+9999 mem: location 1026 is 100
+9999 mem: location 1032 is 1038
+9999 mem: storing 100 in location 1038
+ 104 run: {len: "number"} <- add {len: "number"}, {1: "literal"}
+9999 mem: location 1027 is 3
+9999 mem: storing 4 in location 1027
+ 104 run: put {in: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}, {len: "number"}
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 3
+9999 mem: location 1016 is 1033
+9999 mem: location 1027 is 4
+9999 mem: location 1025 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy to is 1015
+9999 mem: storing 4 in location 1015
  104 run: reply {in: ("address" "shared" "buffer"), "same-as-ingredient": "0"}
-9999 mem: location 1026 is 1015
+9999 mem: location 1025 is 1014
 9999 abandon: saving in free-list of size 11
 9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1015
-9999 mem: decrementing refcount of 1015: 11 -> 10
-9999 mem: storing 1015 in location 1003
-9999 mem: incrementing refcount of 1015: 10 -> 11
+9998 run: result 0 is 1014
+9999 mem: decrementing refcount of 1014: 11 -> 10
+9999 mem: storing 1014 in location 1003
+9999 mem: incrementing refcount of 1014: 10 -> 11
  103 run: {s3: ("address" "shared" "array" "character")} <- get {x: ("address" "shared" "buffer"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1003 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 4
-9999 mem: location 1017 is 1034
-9999 mem: location 1003 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1017
+9999 mem: location 1003 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 4
+9999 mem: location 1016 is 1033
+9999 mem: location 1003 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1016
 9998 run: its type is ("address" "shared" "array" "character")
-9999 mem: location 1017 is 1034
-9999 mem: storing 1034 in location 1007
-9999 mem: incrementing refcount of 1034: 2 -> 3
+9999 mem: location 1016 is 1033
+9999 mem: storing 1033 in location 1007
+9999 mem: incrementing refcount of 1033: 2 -> 3
  103 run: {10: "boolean", "raw": ()} <- equal_2 {s1: ("address" "shared" "array" "character")}, {s3: ("address" "shared" "array" "character")}
-9999 mem: location 1004 is 1018
-9999 mem: location 1007 is 1034
+9999 mem: location 1004 is 1017
+9999 mem: location 1007 is 1033
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 11
 9999 mem: allocating size 13
 9999 abandon: picking up space from free-list of size 13
-9999 mem: new alloc from free list: 1042
+9999 mem: new alloc from free list: 1041
  104 run: {a: ("address" "shared" "array" "character")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1018 in location 1045
-9999 mem: incrementing refcount of 1018: 12 -> 13
+9999 mem: storing 1017 in location 1044
+9999 mem: incrementing refcount of 1017: 13 -> 14
  104 run: {b: ("address" "shared" "array" "character")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1034 in location 1046
-9999 mem: incrementing refcount of 1034: 3 -> 4
+9999 mem: storing 1033 in location 1045
+9999 mem: incrementing refcount of 1033: 3 -> 4
  104 run: {a-len: "number"} <- length {a: ("address" "shared" "array" "character"), "lookup": ()}
-9999 mem: location 1045 is 1018
-9999 mem: skipping refcount at 1018
-9999 mem: storing 3 in location 1047
+9999 mem: location 1044 is 1017
+9999 mem: skipping refcount at 1017
+9999 mem: storing 3 in location 1046
  104 run: {b-len: "number"} <- length {b: ("address" "shared" "array" "character"), "lookup": ()}
-9999 mem: location 1046 is 1034
-9999 mem: skipping refcount at 1034
-9999 mem: storing 6 in location 1048
+9999 mem: location 1045 is 1033
+9999 mem: skipping refcount at 1033
+9999 mem: storing 6 in location 1047
  104 run: trace {99: "literal"}, {"text-equal": "literal-string"}, {"comparing lengths": "literal-string"}
   99 text-equal: comparing lengths 
  104 run: {length-equal?: "boolean"} <- equal {a-len: "number"}, {b-len: "number"}
-9999 mem: location 1047 is 3
-9999 mem: location 1048 is 6
-9999 mem: storing 0 in location 1049
+9999 mem: location 1046 is 3
+9999 mem: location 1047 is 6
+9999 mem: storing 0 in location 1048
  104 run: jump-if {length-equal?: "boolean"}, {: "offset"}
-9999 mem: location 1049 is 0
+9999 mem: location 1048 is 0
 9998 run: jump-if fell through
  104 run: return {0: "literal"}
 9999 abandon: saving in free-list of size 13
@@ -1211,26 +1246,26 @@
 9998 run: result 0 is 0
 9999 mem: storing 0 in location 10
  103 run: {11: "number", "raw": ()} <- get {x: ("address" "shared" "buffer"), "lookup": ()}, {length: "offset"}
-9999 mem: location 1003 is 1015
-9999 mem: skipping refcount at 1015
-9999 mem: location 1016 is 4
-9999 mem: location 1017 is 1034
-9999 mem: location 1003 is 1015
-9999 mem: skipping refcount at 1015
-9998 run: address to copy is 1016
+9999 mem: location 1003 is 1014
+9999 mem: skipping refcount at 1014
+9999 mem: location 1015 is 4
+9999 mem: location 1016 is 1033
+9999 mem: location 1003 is 1014
+9999 mem: skipping refcount at 1014
+9998 run: address to copy is 1015
 9998 run: its type is "number"
-9999 mem: location 1016 is 4
+9999 mem: location 1015 is 4
 9999 mem: storing 4 in location 11
  103 run: {12: ("array" "character"), "raw": ()} <- copy {s3: ("address" "shared" "array" "character"), "lookup": ()}
-9999 mem: location 1007 is 1034
-9999 mem: skipping refcount at 1034
-9999 mem: location 1035 is 6
-9999 mem: location 1036 is 97
-9999 mem: location 1037 is 98
-9999 mem: location 1038 is 99
-9999 mem: location 1039 is 100
+9999 mem: location 1007 is 1033
+9999 mem: skipping refcount at 1033
+9999 mem: location 1034 is 6
+9999 mem: location 1035 is 97
+9999 mem: location 1036 is 98
+9999 mem: location 1037 is 99
+9999 mem: location 1038 is 100
+9999 mem: location 1039 is 0
 9999 mem: location 1040 is 0
-9999 mem: location 1041 is 0
 9999 mem: storing 6 in location 12
 9999 mem: storing 97 in location 13
 9999 mem: storing 98 in location 14

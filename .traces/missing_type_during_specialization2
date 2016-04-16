@@ -23,12 +23,12 @@
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {34: "literal"}
-9993 parse:   product: {z: "number"}
-9992 load: after rewriting: {z: "number"} <- copy {34: "literal"}
+9993 parse:   product: {z: ("address" "number")}
+9992 load: after rewriting: {z: ("address" "number")} <- copy {34: "literal"}
 9993 parse: instruction: foo
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {z: ()}
-9992 load: after rewriting: foo {z: ()}
+9993 parse:   ingredient: {z: (), "lookup": ()}
+9992 load: after rewriting: foo {z: (), "lookup": ()}
 9999 parse: recipe main has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe main
@@ -45,8 +45,8 @@
 9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {x: "foo2"} <- merge {34: "literal"}
 9993 transform: {y: "number"} <- get {x: "foo2"}, {z: "offse"}
-9993 transform: {z: "number"} <- copy {34: "literal"}
-9993 transform: foo {z: "offse"}
+9993 transform: {z: ("address" "number")} <- copy {34: "literal"}
+9993 transform: foo {z: "offse", "lookup": ()}
 9991 transform: --- fill in reply ingredients from header for recipe main
 9991 transform: --- deduce types for recipe main
 9992 transform: default-space => ("address" "shared" "array" "location")
@@ -58,20 +58,26 @@
 9991 transform: --- check for invalid types in recipe main
    0 error: main: unknown type offse in 'y:number <- get x, z:offse'
 
-   0 error: main: unknown type offse in 'foo z'
+   0 error: main: unknown type offse in 'foo *z'
 
 9991 transform: --- collect surrounding spaces for recipe main
 9991 transform: --- transform names for recipe main
 9993 name: assign x 1
 9991 transform: --- resolve ambiguous calls for recipe main
-9992 transform: instruction foo {z: ()}
+9992 transform: instruction foo {z: (), "lookup": ()}
 9992 transform: checking variant (strict) 0: recipe foo {a: "_elem"}
+   0 error: can't lookup non-address: {z: "offse", "lookup": ()}: ?-1
+
 9993 transform: strict match failed: ingredient 0
+   0 error: can't lookup non-address: {z: "offse", "lookup": ()}: ?-1
+
 9992 transform: found variant to specialize: 1000 foo
 9993 transform: switching foo to specialized recipe foo_2 {a: "_elem"}
 9993 transform: compute type names: foo_2
 9994 transform:     checking {a: "_elem"}: "_elem"
 9993 transform: type of a is "_elem"
+   0 error: can't lookup non-address: {z: "offse", "lookup": ()}: ?-1
+
 9993 transform: adding mapping from _elem to ?-1
 9993 transform: replacing in recipe header ingredients
 9993 transform: replacing in ingredient a:_elem
@@ -94,11 +100,23 @@
 9991 transform: --- perform checks for recipe main
    0 error: main: second ingredient of 'get' should have type 'offset', but got z:offse
 
+   0 error: main: can't copy 34 to z:address:number; types don't match
+
    0 error: main: undefined operation in 'reply '
 
 9991 transform: --- type-check 'call' instructions inside recipe main
 9991 transform: --- type-check calls inside recipe main
-   0 error: main: ingredient 0 has the wrong type at 'foo_2 z'
+   0 error: can't lookup non-address: {z: "offse", "lookup": ()}: ?-1
+
+   0 error: can't lookup non-address: {z: "offse", "lookup": ()}: ?-1
+
+   0 error: can't lookup non-address: {z: "offse", "lookup": ()}: ?-1
+
+   0 error: can't lookup non-address: {z: "offse", "lookup": ()}: ?-1
+
+   0 error: main: ingredient 0 has the wrong type at 'foo_2 *z'
+
+   0 error: can't lookup non-address: {z: "offse", "lookup": ()}: ?-1
 
 9991 transform: --- convert 'new' to 'allocate' for recipe main
 9992 new: size of "location" is 1

@@ -424,10 +424,10 @@
 9999 mem: location 1050 is 0
 9999 trace: incrementing callstack depth to 4
  105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 25
-9999 mem: allocating size 27
+9999 mem: array size is 23
+9999 mem: allocating size 25
 9999 mem: new alloc: 1056
-9999 mem: storing 25 in location 1057
+9999 mem: storing 23 in location 1057
  105 run: {screen: ("address" "shared" "screen")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1008 in location 1059
 9999 mem: incrementing refcount of 1008: 4 -> 5
@@ -506,7 +506,7 @@
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1068 is 1
 9998 run: jumping to instruction 25
- 105 run: {column: ("address" "number")} <- get-address {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
+ 105 run: {column: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
 9999 mem: location 1059 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -517,17 +517,17 @@
 9999 mem: location 1059 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1012
-9999 mem: storing 1012 in location 1069
- 105 run: {legal?: "boolean"} <- greater-or-equal {column: ("address" "number"), "lookup": ()}, {0: "literal"}
-9999 mem: location 1069 is 1012
+9998 run: its type is "number"
 9999 mem: location 1012 is 0
+9999 mem: storing 0 in location 1069
+ 105 run: {legal?: "boolean"} <- greater-or-equal {column: "number"}, {0: "literal"}
+9999 mem: location 1069 is 0
 9999 mem: storing 1 in location 1068
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1068 is 1
 9998 run: jumping to instruction 29
- 105 run: {legal?: "boolean"} <- lesser-than {column: ("address" "number"), "lookup": ()}, {width: "number"}
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 0
+ 105 run: {legal?: "boolean"} <- lesser-than {column: "number"}, {width: "number"}
+9999 mem: location 1069 is 0
 9999 mem: location 1065 is 3
 9999 mem: storing 1 in location 1068
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
@@ -538,15 +538,14 @@
 9999 mem: storing 0 in location 1070
  105 run: jump-unless {newline?: "boolean"}, {: "offset"}
 9999 mem: location 1070 is 0
-9998 run: jumping to instruction 44
+9998 run: jumping to instruction 45
  105 run: {index: "number"} <- multiply {row: "number"}, {width: "number"}
 9999 mem: location 1067 is 0
 9999 mem: location 1065 is 3
 9999 mem: storing 0 in location 1073
- 105 run: {index: "number"} <- add {index: "number"}, {column: ("address" "number"), "lookup": ()}
+ 105 run: {index: "number"} <- add {index: "number"}, {column: "number"}
 9999 mem: location 1073 is 0
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 0
+9999 mem: location 1069 is 0
 9999 mem: storing 0 in location 1073
  105 run: {buf: ("address" "shared" "array" "screen-cell")} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1059 is 1008
@@ -572,53 +571,48 @@
 9999 mem: storing 0 in location 1076
  105 run: jump-unless {backspace?: "boolean"}, {: "offset"}
 9999 mem: location 1076 is 0
-9998 run: jumping to instruction 64
+9998 run: jumping to instruction 63
  105 run: {cursor: ("address" "screen-cell")} <- index-address {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {index: "number"}
 9999 mem: location 1074 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1073 is 0
 9999 mem: storing 1016 in location 1078
- 105 run: {cursor-contents: ("address" "character")} <- get-address {cursor: ("address" "screen-cell"), "lookup": ()}, {contents: "offset"}
-9999 mem: location 1078 is 1016
-9999 mem: location 1016 is 0
-9999 mem: location 1017 is 7
-9999 mem: location 1078 is 1016
-9998 run: address to copy is 1016
-9999 mem: storing 1016 in location 1079
- 105 run: {cursor-contents: ("address" "character"), "lookup": ()} <- copy {c: "character"}
+ 105 run: {cursor: ("address" "screen-cell"), "lookup": ()} <- merge {c: "character"}, {color: "number"}
 9999 mem: location 1060 is 97
-9999 mem: location 1079 is 1016
-9999 mem: storing 97 in location 1016
- 105 run: {cursor-color: ("address" "number")} <- get-address {cursor: ("address" "screen-cell"), "lookup": ()}, {color: "offset"}
-9999 mem: location 1078 is 1016
-9999 mem: location 1016 is 97
-9999 mem: location 1017 is 7
-9999 mem: location 1078 is 1016
-9998 run: address to copy is 1017
-9999 mem: storing 1017 in location 1080
- 105 run: {cursor-color: ("address" "number"), "lookup": ()} <- copy {color: "number"}
 9999 mem: location 1061 is 7
-9999 mem: location 1080 is 1017
+9999 mem: location 1078 is 1016
+9999 mem: location 1078 is 1016
+9999 mem: storing 97 in location 1016
 9999 mem: storing 7 in location 1017
  105 run: {right: "number"} <- subtract {width: "number"}, {1: "literal"}
 9999 mem: location 1065 is 3
-9999 mem: storing 2 in location 1081
- 105 run: {at-right?: "boolean"} <- greater-or-equal {column: ("address" "number"), "lookup": ()}, {right: "number"}
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 0
-9999 mem: location 1081 is 2
-9999 mem: storing 0 in location 1082
+9999 mem: storing 2 in location 1079
+ 105 run: {at-right?: "boolean"} <- greater-or-equal {column: "number"}, {right: "number"}
+9999 mem: location 1069 is 0
+9999 mem: location 1079 is 2
+9999 mem: storing 0 in location 1080
  105 run: jump-if {at-right?: "boolean"}, {: "offset"}
-9999 mem: location 1082 is 0
+9999 mem: location 1080 is 0
 9998 run: jump-if fell through
- 105 run: {column: ("address" "number"), "lookup": ()} <- add {column: ("address" "number"), "lookup": ()}, {1: "literal"}
-9999 mem: location 1069 is 1012
+ 105 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
+9999 mem: location 1069 is 0
+9999 mem: storing 1 in location 1069
+ 105 run: {screen: ("address" "shared" "screen"), "lookup": ()} <- put {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}, {column: "number"}
+9999 mem: location 1059 is 1008
+9999 mem: skipping refcount at 1008
+9999 mem: location 1009 is 2
+9999 mem: location 1010 is 3
+9999 mem: location 1011 is 0
 9999 mem: location 1012 is 0
-9999 mem: location 1069 is 1012
+9999 mem: location 1013 is 1014
+9999 mem: location 1069 is 1
+9999 mem: location 1059 is 1008
+9999 mem: skipping refcount at 1008
+9998 run: address to copy to is 1012
 9999 mem: storing 1 in location 1012
  105 run: return {screen: ("address" "shared" "screen"), "same-as-ingredient": "0"}
 9999 mem: location 1059 is 1008
-9999 abandon: saving in free-list of size 27
+9999 abandon: saving in free-list of size 25
 9999 trace: reply: decrementing callstack depth from 4
  104 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
 9999 mem: location 1053 is 0
@@ -648,9 +642,9 @@
 9999 mem: location 1050 is 0
 9999 trace: incrementing callstack depth to 4
  105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 25
-9999 mem: allocating size 27
-9999 abandon: picking up space from free-list of size 27
+9999 mem: array size is 23
+9999 mem: allocating size 25
+9999 abandon: picking up space from free-list of size 25
 9999 mem: new alloc from free list: 1056
  105 run: {screen: ("address" "shared" "screen")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1008 in location 1059
@@ -730,7 +724,7 @@
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1068 is 1
 9998 run: jumping to instruction 25
- 105 run: {column: ("address" "number")} <- get-address {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
+ 105 run: {column: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
 9999 mem: location 1059 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -741,17 +735,17 @@
 9999 mem: location 1059 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1012
-9999 mem: storing 1012 in location 1069
- 105 run: {legal?: "boolean"} <- greater-or-equal {column: ("address" "number"), "lookup": ()}, {0: "literal"}
-9999 mem: location 1069 is 1012
+9998 run: its type is "number"
 9999 mem: location 1012 is 1
+9999 mem: storing 1 in location 1069
+ 105 run: {legal?: "boolean"} <- greater-or-equal {column: "number"}, {0: "literal"}
+9999 mem: location 1069 is 1
 9999 mem: storing 1 in location 1068
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1068 is 1
 9998 run: jumping to instruction 29
- 105 run: {legal?: "boolean"} <- lesser-than {column: ("address" "number"), "lookup": ()}, {width: "number"}
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 1
+ 105 run: {legal?: "boolean"} <- lesser-than {column: "number"}, {width: "number"}
+9999 mem: location 1069 is 1
 9999 mem: location 1065 is 3
 9999 mem: storing 1 in location 1068
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
@@ -762,15 +756,14 @@
 9999 mem: storing 0 in location 1070
  105 run: jump-unless {newline?: "boolean"}, {: "offset"}
 9999 mem: location 1070 is 0
-9998 run: jumping to instruction 44
+9998 run: jumping to instruction 45
  105 run: {index: "number"} <- multiply {row: "number"}, {width: "number"}
 9999 mem: location 1067 is 0
 9999 mem: location 1065 is 3
 9999 mem: storing 0 in location 1073
- 105 run: {index: "number"} <- add {index: "number"}, {column: ("address" "number"), "lookup": ()}
+ 105 run: {index: "number"} <- add {index: "number"}, {column: "number"}
 9999 mem: location 1073 is 0
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 1
+9999 mem: location 1069 is 1
 9999 mem: storing 1 in location 1073
  105 run: {buf: ("address" "shared" "array" "screen-cell")} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1059 is 1008
@@ -796,53 +789,48 @@
 9999 mem: storing 0 in location 1076
  105 run: jump-unless {backspace?: "boolean"}, {: "offset"}
 9999 mem: location 1076 is 0
-9998 run: jumping to instruction 64
+9998 run: jumping to instruction 63
  105 run: {cursor: ("address" "screen-cell")} <- index-address {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {index: "number"}
 9999 mem: location 1074 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1073 is 1
 9999 mem: storing 1018 in location 1078
- 105 run: {cursor-contents: ("address" "character")} <- get-address {cursor: ("address" "screen-cell"), "lookup": ()}, {contents: "offset"}
-9999 mem: location 1078 is 1018
-9999 mem: location 1018 is 0
-9999 mem: location 1019 is 7
-9999 mem: location 1078 is 1018
-9998 run: address to copy is 1018
-9999 mem: storing 1018 in location 1079
- 105 run: {cursor-contents: ("address" "character"), "lookup": ()} <- copy {c: "character"}
+ 105 run: {cursor: ("address" "screen-cell"), "lookup": ()} <- merge {c: "character"}, {color: "number"}
 9999 mem: location 1060 is 98
-9999 mem: location 1079 is 1018
-9999 mem: storing 98 in location 1018
- 105 run: {cursor-color: ("address" "number")} <- get-address {cursor: ("address" "screen-cell"), "lookup": ()}, {color: "offset"}
-9999 mem: location 1078 is 1018
-9999 mem: location 1018 is 98
-9999 mem: location 1019 is 7
-9999 mem: location 1078 is 1018
-9998 run: address to copy is 1019
-9999 mem: storing 1019 in location 1080
- 105 run: {cursor-color: ("address" "number"), "lookup": ()} <- copy {color: "number"}
 9999 mem: location 1061 is 7
-9999 mem: location 1080 is 1019
+9999 mem: location 1078 is 1018
+9999 mem: location 1078 is 1018
+9999 mem: storing 98 in location 1018
 9999 mem: storing 7 in location 1019
  105 run: {right: "number"} <- subtract {width: "number"}, {1: "literal"}
 9999 mem: location 1065 is 3
-9999 mem: storing 2 in location 1081
- 105 run: {at-right?: "boolean"} <- greater-or-equal {column: ("address" "number"), "lookup": ()}, {right: "number"}
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 1
-9999 mem: location 1081 is 2
-9999 mem: storing 0 in location 1082
+9999 mem: storing 2 in location 1079
+ 105 run: {at-right?: "boolean"} <- greater-or-equal {column: "number"}, {right: "number"}
+9999 mem: location 1069 is 1
+9999 mem: location 1079 is 2
+9999 mem: storing 0 in location 1080
  105 run: jump-if {at-right?: "boolean"}, {: "offset"}
-9999 mem: location 1082 is 0
+9999 mem: location 1080 is 0
 9998 run: jump-if fell through
- 105 run: {column: ("address" "number"), "lookup": ()} <- add {column: ("address" "number"), "lookup": ()}, {1: "literal"}
-9999 mem: location 1069 is 1012
+ 105 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
+9999 mem: location 1069 is 1
+9999 mem: storing 2 in location 1069
+ 105 run: {screen: ("address" "shared" "screen"), "lookup": ()} <- put {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}, {column: "number"}
+9999 mem: location 1059 is 1008
+9999 mem: skipping refcount at 1008
+9999 mem: location 1009 is 2
+9999 mem: location 1010 is 3
+9999 mem: location 1011 is 0
 9999 mem: location 1012 is 1
-9999 mem: location 1069 is 1012
+9999 mem: location 1013 is 1014
+9999 mem: location 1069 is 2
+9999 mem: location 1059 is 1008
+9999 mem: skipping refcount at 1008
+9998 run: address to copy to is 1012
 9999 mem: storing 2 in location 1012
  105 run: return {screen: ("address" "shared" "screen"), "same-as-ingredient": "0"}
 9999 mem: location 1059 is 1008
-9999 abandon: saving in free-list of size 27
+9999 abandon: saving in free-list of size 25
 9999 trace: reply: decrementing callstack depth from 4
  104 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
 9999 mem: location 1053 is 1
@@ -872,9 +860,9 @@
 9999 mem: location 1050 is 0
 9999 trace: incrementing callstack depth to 4
  105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 25
-9999 mem: allocating size 27
-9999 abandon: picking up space from free-list of size 27
+9999 mem: array size is 23
+9999 mem: allocating size 25
+9999 abandon: picking up space from free-list of size 25
 9999 mem: new alloc from free list: 1056
  105 run: {screen: ("address" "shared" "screen")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1008 in location 1059
@@ -954,7 +942,7 @@
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1068 is 1
 9998 run: jumping to instruction 25
- 105 run: {column: ("address" "number")} <- get-address {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
+ 105 run: {column: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
 9999 mem: location 1059 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -965,17 +953,17 @@
 9999 mem: location 1059 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1012
-9999 mem: storing 1012 in location 1069
- 105 run: {legal?: "boolean"} <- greater-or-equal {column: ("address" "number"), "lookup": ()}, {0: "literal"}
-9999 mem: location 1069 is 1012
+9998 run: its type is "number"
 9999 mem: location 1012 is 2
+9999 mem: storing 2 in location 1069
+ 105 run: {legal?: "boolean"} <- greater-or-equal {column: "number"}, {0: "literal"}
+9999 mem: location 1069 is 2
 9999 mem: storing 1 in location 1068
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1068 is 1
 9998 run: jumping to instruction 29
- 105 run: {legal?: "boolean"} <- lesser-than {column: ("address" "number"), "lookup": ()}, {width: "number"}
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 2
+ 105 run: {legal?: "boolean"} <- lesser-than {column: "number"}, {width: "number"}
+9999 mem: location 1069 is 2
 9999 mem: location 1065 is 3
 9999 mem: storing 1 in location 1068
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
@@ -986,15 +974,14 @@
 9999 mem: storing 0 in location 1070
  105 run: jump-unless {newline?: "boolean"}, {: "offset"}
 9999 mem: location 1070 is 0
-9998 run: jumping to instruction 44
+9998 run: jumping to instruction 45
  105 run: {index: "number"} <- multiply {row: "number"}, {width: "number"}
 9999 mem: location 1067 is 0
 9999 mem: location 1065 is 3
 9999 mem: storing 0 in location 1073
- 105 run: {index: "number"} <- add {index: "number"}, {column: ("address" "number"), "lookup": ()}
+ 105 run: {index: "number"} <- add {index: "number"}, {column: "number"}
 9999 mem: location 1073 is 0
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 2
+9999 mem: location 1069 is 2
 9999 mem: storing 2 in location 1073
  105 run: {buf: ("address" "shared" "array" "screen-cell")} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1059 is 1008
@@ -1020,48 +1007,32 @@
 9999 mem: storing 0 in location 1076
  105 run: jump-unless {backspace?: "boolean"}, {: "offset"}
 9999 mem: location 1076 is 0
-9998 run: jumping to instruction 64
+9998 run: jumping to instruction 63
  105 run: {cursor: ("address" "screen-cell")} <- index-address {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {index: "number"}
 9999 mem: location 1074 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1073 is 2
 9999 mem: storing 1020 in location 1078
- 105 run: {cursor-contents: ("address" "character")} <- get-address {cursor: ("address" "screen-cell"), "lookup": ()}, {contents: "offset"}
-9999 mem: location 1078 is 1020
-9999 mem: location 1020 is 0
-9999 mem: location 1021 is 7
-9999 mem: location 1078 is 1020
-9998 run: address to copy is 1020
-9999 mem: storing 1020 in location 1079
- 105 run: {cursor-contents: ("address" "character"), "lookup": ()} <- copy {c: "character"}
+ 105 run: {cursor: ("address" "screen-cell"), "lookup": ()} <- merge {c: "character"}, {color: "number"}
 9999 mem: location 1060 is 99
-9999 mem: location 1079 is 1020
-9999 mem: storing 99 in location 1020
- 105 run: {cursor-color: ("address" "number")} <- get-address {cursor: ("address" "screen-cell"), "lookup": ()}, {color: "offset"}
-9999 mem: location 1078 is 1020
-9999 mem: location 1020 is 99
-9999 mem: location 1021 is 7
-9999 mem: location 1078 is 1020
-9998 run: address to copy is 1021
-9999 mem: storing 1021 in location 1080
- 105 run: {cursor-color: ("address" "number"), "lookup": ()} <- copy {color: "number"}
 9999 mem: location 1061 is 7
-9999 mem: location 1080 is 1021
+9999 mem: location 1078 is 1020
+9999 mem: location 1078 is 1020
+9999 mem: storing 99 in location 1020
 9999 mem: storing 7 in location 1021
  105 run: {right: "number"} <- subtract {width: "number"}, {1: "literal"}
 9999 mem: location 1065 is 3
-9999 mem: storing 2 in location 1081
- 105 run: {at-right?: "boolean"} <- greater-or-equal {column: ("address" "number"), "lookup": ()}, {right: "number"}
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 2
-9999 mem: location 1081 is 2
-9999 mem: storing 1 in location 1082
+9999 mem: storing 2 in location 1079
+ 105 run: {at-right?: "boolean"} <- greater-or-equal {column: "number"}, {right: "number"}
+9999 mem: location 1069 is 2
+9999 mem: location 1079 is 2
+9999 mem: storing 1 in location 1080
  105 run: jump-if {at-right?: "boolean"}, {: "offset"}
-9999 mem: location 1082 is 1
-9998 run: jumping to instruction 75
+9999 mem: location 1080 is 1
+9998 run: jumping to instruction 72
  105 run: return {screen: ("address" "shared" "screen"), "same-as-ingredient": "0"}
 9999 mem: location 1059 is 1008
-9999 abandon: saving in free-list of size 27
+9999 abandon: saving in free-list of size 25
 9999 trace: reply: decrementing callstack depth from 4
  104 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
 9999 mem: location 1053 is 2
@@ -1091,9 +1062,9 @@
 9999 mem: location 1050 is 0
 9999 trace: incrementing callstack depth to 4
  105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 25
-9999 mem: allocating size 27
-9999 abandon: picking up space from free-list of size 27
+9999 mem: array size is 23
+9999 mem: allocating size 25
+9999 abandon: picking up space from free-list of size 25
 9999 mem: new alloc from free list: 1056
  105 run: {screen: ("address" "shared" "screen")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1008 in location 1059
@@ -1173,7 +1144,7 @@
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1068 is 1
 9998 run: jumping to instruction 25
- 105 run: {column: ("address" "number")} <- get-address {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
+ 105 run: {column: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
 9999 mem: location 1059 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -1184,17 +1155,17 @@
 9999 mem: location 1059 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1012
-9999 mem: storing 1012 in location 1069
- 105 run: {legal?: "boolean"} <- greater-or-equal {column: ("address" "number"), "lookup": ()}, {0: "literal"}
-9999 mem: location 1069 is 1012
+9998 run: its type is "number"
 9999 mem: location 1012 is 2
+9999 mem: storing 2 in location 1069
+ 105 run: {legal?: "boolean"} <- greater-or-equal {column: "number"}, {0: "literal"}
+9999 mem: location 1069 is 2
 9999 mem: storing 1 in location 1068
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1068 is 1
 9998 run: jumping to instruction 29
- 105 run: {legal?: "boolean"} <- lesser-than {column: ("address" "number"), "lookup": ()}, {width: "number"}
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 2
+ 105 run: {legal?: "boolean"} <- lesser-than {column: "number"}, {width: "number"}
+9999 mem: location 1069 is 2
 9999 mem: location 1065 is 3
 9999 mem: storing 1 in location 1068
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
@@ -1205,15 +1176,14 @@
 9999 mem: storing 0 in location 1070
  105 run: jump-unless {newline?: "boolean"}, {: "offset"}
 9999 mem: location 1070 is 0
-9998 run: jumping to instruction 44
+9998 run: jumping to instruction 45
  105 run: {index: "number"} <- multiply {row: "number"}, {width: "number"}
 9999 mem: location 1067 is 0
 9999 mem: location 1065 is 3
 9999 mem: storing 0 in location 1073
- 105 run: {index: "number"} <- add {index: "number"}, {column: ("address" "number"), "lookup": ()}
+ 105 run: {index: "number"} <- add {index: "number"}, {column: "number"}
 9999 mem: location 1073 is 0
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 2
+9999 mem: location 1069 is 2
 9999 mem: storing 2 in location 1073
  105 run: {buf: ("address" "shared" "array" "screen-cell")} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1059 is 1008
@@ -1239,48 +1209,32 @@
 9999 mem: storing 0 in location 1076
  105 run: jump-unless {backspace?: "boolean"}, {: "offset"}
 9999 mem: location 1076 is 0
-9998 run: jumping to instruction 64
+9998 run: jumping to instruction 63
  105 run: {cursor: ("address" "screen-cell")} <- index-address {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {index: "number"}
 9999 mem: location 1074 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1073 is 2
 9999 mem: storing 1020 in location 1078
- 105 run: {cursor-contents: ("address" "character")} <- get-address {cursor: ("address" "screen-cell"), "lookup": ()}, {contents: "offset"}
-9999 mem: location 1078 is 1020
-9999 mem: location 1020 is 99
-9999 mem: location 1021 is 7
-9999 mem: location 1078 is 1020
-9998 run: address to copy is 1020
-9999 mem: storing 1020 in location 1079
- 105 run: {cursor-contents: ("address" "character"), "lookup": ()} <- copy {c: "character"}
+ 105 run: {cursor: ("address" "screen-cell"), "lookup": ()} <- merge {c: "character"}, {color: "number"}
 9999 mem: location 1060 is 100
-9999 mem: location 1079 is 1020
-9999 mem: storing 100 in location 1020
- 105 run: {cursor-color: ("address" "number")} <- get-address {cursor: ("address" "screen-cell"), "lookup": ()}, {color: "offset"}
-9999 mem: location 1078 is 1020
-9999 mem: location 1020 is 100
-9999 mem: location 1021 is 7
-9999 mem: location 1078 is 1020
-9998 run: address to copy is 1021
-9999 mem: storing 1021 in location 1080
- 105 run: {cursor-color: ("address" "number"), "lookup": ()} <- copy {color: "number"}
 9999 mem: location 1061 is 7
-9999 mem: location 1080 is 1021
+9999 mem: location 1078 is 1020
+9999 mem: location 1078 is 1020
+9999 mem: storing 100 in location 1020
 9999 mem: storing 7 in location 1021
  105 run: {right: "number"} <- subtract {width: "number"}, {1: "literal"}
 9999 mem: location 1065 is 3
-9999 mem: storing 2 in location 1081
- 105 run: {at-right?: "boolean"} <- greater-or-equal {column: ("address" "number"), "lookup": ()}, {right: "number"}
-9999 mem: location 1069 is 1012
-9999 mem: location 1012 is 2
-9999 mem: location 1081 is 2
-9999 mem: storing 1 in location 1082
+9999 mem: storing 2 in location 1079
+ 105 run: {at-right?: "boolean"} <- greater-or-equal {column: "number"}, {right: "number"}
+9999 mem: location 1069 is 2
+9999 mem: location 1079 is 2
+9999 mem: storing 1 in location 1080
  105 run: jump-if {at-right?: "boolean"}, {: "offset"}
-9999 mem: location 1082 is 1
-9998 run: jumping to instruction 75
+9999 mem: location 1080 is 1
+9998 run: jumping to instruction 72
  105 run: return {screen: ("address" "shared" "screen"), "same-as-ingredient": "0"}
 9999 mem: location 1059 is 1008
-9999 abandon: saving in free-list of size 27
+9999 abandon: saving in free-list of size 25
 9999 trace: reply: decrementing callstack depth from 4
  104 run: {i: "number"} <- add {i: "number"}, {1: "literal"}
 9999 mem: location 1053 is 3

@@ -4,17 +4,13 @@
 9993 parse:   ingredient: {point: "type"}
 9993 parse:   product: {1: ("address" "shared" "point")}
 9992 load: after rewriting: {1: ("address" "shared" "point")} <- new {point: "type"}
-9993 parse: instruction: get-address
-9993 parse:   number of ingredients: 2
+9993 parse: instruction: put
+9993 parse:   number of ingredients: 3
 9993 parse:   ingredient: {1: ("address" "shared" "point"), "lookup": ()}
 9993 parse:   ingredient: {y: "offset"}
-9993 parse:   product: {2: ("address" "number")}
-9992 load: after rewriting: {2: ("address" "number")} <- get-address {1: ("address" "shared" "point"), "lookup": ()}, {y: "offset"}
-9993 parse: instruction: copy
-9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {34: "literal"}
-9993 parse:   product: {2: ("address" "number"), "lookup": ()}
-9992 load: after rewriting: {2: ("address" "number"), "lookup": ()} <- copy {34: "literal"}
+9993 parse:   product: {1: ("address" "shared" "point"), "lookup": ()}
+9992 load: after rewriting: {1: ("address" "shared" "point"), "lookup": ()} <- put {1: ("address" "shared" "point"), "lookup": ()}, {y: "offset"}, {34: "literal"}
 9993 parse: instruction: bar
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {1: ("address" "shared" "point")}
@@ -52,6 +48,14 @@
 9991 transform: --- transform names for recipe main
 9993 name: element y of type point is at offset 1
 9991 transform: --- resolve ambiguous calls for recipe main
+9992 transform: instruction {1: ("address" "shared" "point"), "lookup": ()} <- put {1: ("address" "shared" "point"), "lookup": ()}, {y: "offset"}, {34: "literal"}
+9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "shared" "table" "_key" "_value")}
+9993 transform: strict match failed: ingredient 0
+9993 transform: concrete-type match failed: ingredient 0
+9992 transform: checking variant (strict except literals-against-booleans) 0: recipe put_2 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "shared" "table" "_key" "_value")}
+9993 transform: strict match failed: ingredient 0
+9992 transform: checking variant 0: recipe put_2 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "shared" "table" "_key" "_value")}
+9993 transform: strict match failed: ingredient 0
 9992 transform: instruction {3: ("address" "shared" "point")} <- bar {1: ("address" "shared" "point")}
 9992 transform: checking variant (strict) 0: recipe bar {a: "_t"} -> {result: "_t"}
 9993 transform: strict match failed: ingredient 0
@@ -146,8 +150,7 @@
 9991 transform: --- compute instruction operations for recipe main
 9991 transform: --- transform braces for recipe main
 9992 transform: new ...
-9992 transform: get-address ...
-9992 transform: copy ...
+9992 transform: put ...
 9992 transform: bar ...
 9992 transform: copy ...
 9992 transform:  ...
@@ -169,17 +172,14 @@
 9999 mem: new alloc: 1000
 9999 mem: storing 1000 in location 1
 9999 mem: incrementing refcount of 1000: 0 -> 1
- 102 run: {2: ("address" "number")} <- get-address {1: ("address" "shared" "point"), "lookup": ()}, {y: "offset"}
+ 102 run: {1: ("address" "shared" "point"), "lookup": ()} <- put {1: ("address" "shared" "point"), "lookup": ()}, {y: "offset"}, {34: "literal"}
 9999 mem: location 1 is 1000
 9999 mem: skipping refcount at 1000
 9999 mem: location 1001 is 0
 9999 mem: location 1002 is 0
 9999 mem: location 1 is 1000
 9999 mem: skipping refcount at 1000
-9998 run: address to copy is 1002
-9999 mem: storing 1002 in location 2
- 102 run: {2: ("address" "number"), "lookup": ()} <- copy {34: "literal"}
-9999 mem: location 2 is 1002
+9998 run: address to copy to is 1002
 9999 mem: storing 34 in location 1002
  102 run: {3: ("address" "shared" "point")} <- bar_2 {1: ("address" "shared" "point")}
 9999 mem: location 1 is 1000

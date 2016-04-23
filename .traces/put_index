@@ -1,8 +1,8 @@
 9991 parse: --- defining main
 9993 parse: instruction: create-array
 9993 parse:   number of ingredients: 0
-9993 parse:   product: {1: ("array" "point" "3")}
-9992 load: after rewriting: {1: ("array" "point" "3")} <- create-array 
+9993 parse:   product: {1: ("array" "number" "3")}
+9992 load: after rewriting: {1: ("array" "number" "3")} <- create-array 
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {14: "literal"}
@@ -18,32 +18,13 @@
 9993 parse:   ingredient: {16: "literal"}
 9993 parse:   product: {4: "number"}
 9992 load: after rewriting: {4: "number"} <- copy {16: "literal"}
-9993 parse: instruction: copy
-9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {14: "literal"}
-9993 parse:   product: {5: "number"}
-9992 load: after rewriting: {5: "number"} <- copy {14: "literal"}
-9993 parse: instruction: copy
-9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {15: "literal"}
-9993 parse:   product: {6: "number"}
-9992 load: after rewriting: {6: "number"} <- copy {15: "literal"}
-9993 parse: instruction: copy
-9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {16: "literal"}
-9993 parse:   product: {7: "number"}
-9992 load: after rewriting: {7: "number"} <- copy {16: "literal"}
-9993 parse: instruction: copy
-9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {1: "literal", "unsafe": ()}
-9993 parse:   product: {8: ("address" "array" "point")}
-9992 load: after rewriting: {8: ("address" "array" "point")} <- copy {1: "literal", "unsafe": ()}
-9993 parse: instruction: index-address
-9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {8: ("address" "array" "point"), "lookup": ()}
-9993 parse:   ingredient: {0: "literal"}
-9993 parse:   product: {9: ("address" "number")}
-9992 load: after rewriting: {9: ("address" "number")} <- index-address {8: ("address" "array" "point"), "lookup": ()}, {0: "literal"}
+9993 parse: instruction: put-index
+9993 parse:   number of ingredients: 3
+9993 parse:   ingredient: {1: ("array" "number")}
+9993 parse:   ingredient: {1: "literal"}
+9993 parse:   ingredient: {34: "literal"}
+9993 parse:   product: {1: ("array" "number")}
+9992 load: after rewriting: {1: ("array" "number")} <- put-index {1: ("array" "number")}, {1: "literal"}, {34: "literal"}
 9999 parse: recipe main has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe main
@@ -60,15 +41,9 @@
 9992 transform: copy ...
 9992 transform: copy ...
 9992 transform: copy ...
-9992 transform: copy ...
-9992 transform: copy ...
-9992 transform: copy ...
-9992 transform: copy ...
-9992 transform: index-address ...
+9992 transform: put-index ...
 9992 transform:  ...
 9991 transform: --- perform checks for recipe main
-   0 error: main: 'index' on *8:address:array:point can't be saved in 9:address:number; type should be (address point)
-
 9991 transform: --- type-check 'call' instructions inside recipe main
 9991 transform: --- type-check calls inside recipe main
 9991 transform: --- convert 'new' to 'allocate' for recipe main
@@ -76,3 +51,20 @@
 9991 transform: --- check types of reply instructions in recipe main
 9991 transform: --- checking reply instructions against header for main
 9991 transform: --- parsing any uninitialized reagents as integers
+9999 trace: new routine; incrementing callstack depth to 1
+9999 new: routine allocated memory from 1000 to 101000
+9990 schedule: main
+ 102 run: {1: ("array" "number" "3")} <- create-array 
+9998 run: creating array of size 4
+
+ 102 run: {2: "number"} <- copy {14: "literal"}
+9999 mem: storing 14 in location 2
+ 102 run: {3: "number"} <- copy {15: "literal"}
+9999 mem: storing 15 in location 3
+ 102 run: {4: "number"} <- copy {16: "literal"}
+9999 mem: storing 16 in location 4
+ 102 run: {1: ("array" "number")} <- put-index {1: ("array" "number")}, {1: "literal"}, {34: "literal"}
+9998 run: address to copy to is 3
+9999 mem: storing 34 in location 3
+ 102 run: reply 
+9999 trace: reply: decrementing callstack depth from 1

@@ -1,8 +1,8 @@
 9991 parse: --- defining scenario_text-find-next-invalid-index
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:shared:array:character <- new [abc]\n    2:number <- find-next 1:address:shared:array:character, 47/slash, 4/start-index\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    1:address:shared:array:character <- new [abc]\n    2:number <- find-next 1:address:shared:array:character, 47/slash, 4/start-index\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    1:address:array:character <- new [abc]\n    2:number <- find-next 1:address:array:character, 47/slash, 4/start-index\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    1:address:array:character <- new [abc]\n    2:number <- find-next 1:address:array:character, 47/slash, 4/start-index\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"\n    2 <- 4  # no change\n  ": "literal-string"}
@@ -12,7 +12,7 @@
 9991 transform: --- rewrite literal strings in recipe scenario_text-find-next-invalid-index
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_text-find-next-invalid-index
 9991 transform: --- deduce types for recipe scenario_text-find-next-invalid-index
-9993 transform: run {"\n    1:address:shared:array:character <- new [abc]\n    2:number <- find-next 1:address:shared:array:character, 47/slash, 4/start-index\n  ": "literal-string"}
+9993 transform: run {"\n    1:address:array:character <- new [abc]\n    2:number <- find-next 1:address:array:character, 47/slash, 4/start-index\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    2 <- 4  # no change\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_text-find-next-invalid-index
 9991 transform: --- deduce types for recipe scenario_text-find-next-invalid-index
@@ -36,20 +36,20 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_text-find-next-invalid-index
- 102 run: run {"\n    1:address:shared:array:character <- new [abc]\n    2:number <- find-next 1:address:shared:array:character, 47/slash, 4/start-index\n  ": "literal-string"}
+ 102 run: run {"\n    1:address:array:character <- new [abc]\n    2:number <- find-next 1:address:array:character, 47/slash, 4/start-index\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"abc": "literal-string"}
-9993 parse:   product: {1: ("address" "shared" "array" "character")}
-9992 load: after rewriting: {1: ("address" "shared" "array" "character")} <- new {"abc": "literal-string"}
+9993 parse:   product: {1: ("address" "array" "character")}
+9992 load: after rewriting: {1: ("address" "array" "character")} <- new {"abc": "literal-string"}
 9993 parse: instruction: find-next
 9993 parse:   number of ingredients: 3
-9993 parse:   ingredient: {1: ("address" "shared" "array" "character")}
+9993 parse:   ingredient: {1: ("address" "array" "character")}
 9993 parse:   ingredient: {47: "literal", "slash": ()}
 9993 parse:   ingredient: {4: "literal", "start-index": ()}
 9993 parse:   product: {2: "number"}
-9992 load: after rewriting: {2: "number"} <- find-next {1: ("address" "shared" "array" "character")}, {47: "literal", "slash": ()}, {4: "literal", "start-index": ()}
+9992 load: after rewriting: {2: "number"} <- find-next {1: ("address" "array" "character")}, {47: "literal", "slash": ()}, {4: "literal", "start-index": ()}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
@@ -60,17 +60,17 @@
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction {2: "number"} <- find-next {1: ("address" "shared" "array" "character")}, {47: "literal", "slash": ()}, {4: "literal", "start-index": ()}
-9992 transform: checking variant (strict) 0: recipe find-next {text: ("address" "shared" "array" "character")} {pattern: "character"} {idx: "number"} -> {next-index: "number"}
+9992 transform: instruction {2: "number"} <- find-next {1: ("address" "array" "character")}, {47: "literal", "slash": ()}, {4: "literal", "start-index": ()}
+9992 transform: checking variant (strict) 0: recipe find-next {text: ("address" "array" "character")} {pattern: "character"} {idx: "number"} -> {next-index: "number"}
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 1: recipe find-next_2 {text: ("address" "shared" "array" "character")} {pattern: ("address" "shared" "array" "character")} {idx: "number"} -> {next-index: "number"}
+9992 transform: checking variant (strict) 1: recipe find-next_2 {text: ("address" "array" "character")} {pattern: ("address" "array" "character")} {idx: "number"} -> {next-index: "number"}
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict except literals-against-booleans) 0: recipe find-next {text: ("address" "shared" "array" "character")} {pattern: "character"} {idx: "number"} -> {next-index: "number"}
+9992 transform: checking variant (strict except literals-against-booleans) 0: recipe find-next {text: ("address" "array" "character")} {pattern: "character"} {idx: "number"} -> {next-index: "number"}
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict except literals-against-booleans) 1: recipe find-next_2 {text: ("address" "shared" "array" "character")} {pattern: ("address" "shared" "array" "character")} {idx: "number"} -> {next-index: "number"}
+9992 transform: checking variant (strict except literals-against-booleans) 1: recipe find-next_2 {text: ("address" "array" "character")} {pattern: ("address" "array" "character")} {idx: "number"} -> {next-index: "number"}
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant 0: recipe find-next {text: ("address" "shared" "array" "character")} {pattern: "character"} {idx: "number"} -> {next-index: "number"}
-9992 transform: checking variant 1: recipe find-next_2 {text: ("address" "shared" "array" "character")} {pattern: ("address" "shared" "array" "character")} {idx: "number"} -> {next-index: "number"}
+9992 transform: checking variant 0: recipe find-next {text: ("address" "array" "character")} {pattern: "character"} {idx: "number"} -> {next-index: "number"}
+9992 transform: checking variant 1: recipe find-next_2 {text: ("address" "array" "character")} {pattern: ("address" "array" "character")} {idx: "number"} -> {next-index: "number"}
 9993 transform: strict match failed: ingredient 1
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
@@ -86,26 +86,26 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: {1: ("address" "shared" "array" "character")} <- new {"abc": "literal-string"}
+ 103 run: {1: ("address" "array" "character")} <- new {"abc": "literal-string"}
 9999 mem: new string alloc: 1000
 9999 mem: storing 1000 in location 1
 9999 mem: incrementing refcount of 1000: 0 -> 1
- 103 run: {2: "number"} <- find-next {1: ("address" "shared" "array" "character")}, {47: "literal", "slash": ()}, {4: "literal", "start-index": ()}
+ 103 run: {2: "number"} <- find-next {1: ("address" "array" "character")}, {47: "literal", "slash": ()}, {4: "literal", "start-index": ()}
 9999 mem: location 1 is 1000
 9999 trace: incrementing callstack depth to 3
- 104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 8
 9999 mem: allocating size 10
 9999 mem: new alloc: 1005
 9999 mem: storing 8 in location 1006
- 104 run: {text: ("address" "shared" "array" "character")} <- next-ingredient-without-typechecking 
+ 104 run: {text: ("address" "array" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1000 in location 1008
 9999 mem: incrementing refcount of 1000: 1 -> 2
  104 run: {pattern: "character"} <- next-ingredient-without-typechecking 
 9999 mem: storing 47 in location 1009
  104 run: {idx: "number"} <- next-ingredient-without-typechecking 
 9999 mem: storing 4 in location 1010
- 104 run: {len: "number"} <- length {text: ("address" "shared" "array" "character"), "lookup": ()}
+ 104 run: {len: "number"} <- length {text: ("address" "array" "character"), "lookup": ()}
 9999 mem: location 1008 is 1000
 9999 mem: skipping refcount at 1000
 9999 mem: storing 3 in location 1011

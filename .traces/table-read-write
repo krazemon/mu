@@ -1,8 +1,8 @@
 9991 parse: --- defining scenario_table-read-write
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:shared:table:number:number <- new-table 30\n    put 1:address:shared:table:number:number, 12, 34\n    2:number <- index 1:address:shared:table:number:number, 12\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    1:address:shared:table:number:number <- new-table 30\n    put 1:address:shared:table:number:number, 12, 34\n    2:number <- index 1:address:shared:table:number:number, 12\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    1:address:table:number:number <- new-table 30\n    put 1:address:table:number:number, 12, 34\n    2:number <- index 1:address:table:number:number, 12\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    1:address:table:number:number <- new-table 30\n    put 1:address:table:number:number, 12, 34\n    2:number <- index 1:address:table:number:number, 12\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"\n    2 <- 34\n  ": "literal-string"}
@@ -12,7 +12,7 @@
 9991 transform: --- rewrite literal strings in recipe scenario_table-read-write
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_table-read-write
 9991 transform: --- deduce types for recipe scenario_table-read-write
-9993 transform: run {"\n    1:address:shared:table:number:number <- new-table 30\n    put 1:address:shared:table:number:number, 12, 34\n    2:number <- index 1:address:shared:table:number:number, 12\n  ": "literal-string"}
+9993 transform: run {"\n    1:address:table:number:number <- new-table 30\n    put 1:address:table:number:number, 12, 34\n    2:number <- index 1:address:table:number:number, 12\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    2 <- 34\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_table-read-write
 9991 transform: --- deduce types for recipe scenario_table-read-write
@@ -36,25 +36,25 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_table-read-write
- 102 run: run {"\n    1:address:shared:table:number:number <- new-table 30\n    put 1:address:shared:table:number:number, 12, 34\n    2:number <- index 1:address:shared:table:number:number, 12\n  ": "literal-string"}
+ 102 run: run {"\n    1:address:table:number:number <- new-table 30\n    put 1:address:table:number:number, 12, 34\n    2:number <- index 1:address:table:number:number, 12\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: new-table
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {30: "literal"}
-9993 parse:   product: {1: ("address" "shared" "table" "number" "number")}
-9992 load: after rewriting: {1: ("address" "shared" "table" "number" "number")} <- new-table {30: "literal"}
+9993 parse:   product: {1: ("address" "table" "number" "number")}
+9992 load: after rewriting: {1: ("address" "table" "number" "number")} <- new-table {30: "literal"}
 9993 parse: instruction: put
 9993 parse:   number of ingredients: 3
-9993 parse:   ingredient: {1: ("address" "shared" "table" "number" "number")}
+9993 parse:   ingredient: {1: ("address" "table" "number" "number")}
 9993 parse:   ingredient: {12: "literal"}
 9993 parse:   ingredient: {34: "literal"}
-9992 load: after rewriting: put {1: ("address" "shared" "table" "number" "number")}, {12: "literal"}, {34: "literal"}
+9992 load: after rewriting: put {1: ("address" "table" "number" "number")}, {12: "literal"}, {34: "literal"}
 9993 parse: instruction: index
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {1: ("address" "shared" "table" "number" "number")}
+9993 parse:   ingredient: {1: ("address" "table" "number" "number")}
 9993 parse:   ingredient: {12: "literal"}
 9993 parse:   product: {2: "number"}
-9992 load: after rewriting: {2: "number"} <- index {1: ("address" "shared" "table" "number" "number")}, {12: "literal"}
+9992 load: after rewriting: {2: "number"} <- index {1: ("address" "table" "number" "number")}, {12: "literal"}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
@@ -65,76 +65,76 @@
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction {1: ("address" "shared" "table" "number" "number")} <- new-table {30: "literal"}
-9992 transform: checking variant (strict) 0: recipe new-table {capacity: "number"} -> {result: ("address" "shared" "table" "_key" "_value")}
+9992 transform: instruction {1: ("address" "table" "number" "number")} <- new-table {30: "literal"}
+9992 transform: checking variant (strict) 0: recipe new-table {capacity: "number"} -> {result: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: product 0
 9992 transform: found variant to specialize: 257 new-table
-9993 transform: switching new-table to specialized recipe new-table_2 {capacity: "number"} -> {result: ("address" "shared" "table" "_key" "_value")}
+9993 transform: switching new-table to specialized recipe new-table_2 {capacity: "number"} -> {result: ("address" "table" "_key" "_value")}
 9993 transform: compute type names: new-table_2
 9994 transform:     checking {capacity: "number"}: "number"
 9993 transform: type of capacity is "number"
-9994 transform:     checking {result: ("address" "shared" "table" "_key" "_value")}: ("address" "shared" "table" "_key" "_value")
-9993 transform: type of result is ("address" "shared" "table" "_key" "_value")
-9993 transform:   instruction: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9994 transform:     checking {result: ("address" "table" "_key" "_value")}: ("address" "table" "_key" "_value")
+9993 transform: type of result is ("address" "table" "_key" "_value")
+9993 transform:   instruction: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9994 transform:     checking {location: "type"}: "type"
 9993 transform: type of location is "type"
 9994 transform:     checking {number-of-locals: "literal"}: "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking {default-space: ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
-9993 transform: type of default-space is ("address" "shared" "array" "location")
+9994 transform:     checking {default-space: ("address" "array" "location")}: ("address" "array" "location")
+9993 transform: type of default-space is ("address" "array" "location")
 9993 transform:   instruction: {capacity: "number"} <- next-ingredient-without-typechecking 
 9994 transform:     checking {capacity: "number"}: "number"
 9993 transform:   instruction: {result: ()} <- new {(table _key _value): "type"}
 9994 transform:     checking {(table _key _value): "type"}: "type"
 9993 transform: type of (table _key _value) is "type"
 9994 transform:     checking {result: ()}: ()
-9994 transform:     deducing type to ("address" "shared" "table" "_key" "_value")
-9993 transform:   instruction: {data: ("address" "shared" "array" "table_row" "_key" "_value")} <- new {(table_row _key _value): "type"}, {capacity: ()}
+9994 transform:     deducing type to ("address" "table" "_key" "_value")
+9993 transform:   instruction: {data: ("address" "array" "table_row" "_key" "_value")} <- new {(table_row _key _value): "type"}, {capacity: ()}
 9994 transform:     checking {(table_row _key _value): "type"}: "type"
 9993 transform: type of (table_row _key _value) is "type"
 9994 transform:     checking {capacity: ()}: ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {data: ("address" "shared" "array" "table_row" "_key" "_value")}: ("address" "shared" "array" "table_row" "_key" "_value")
-9993 transform: type of data is ("address" "shared" "array" "table_row" "_key" "_value")
+9994 transform:     checking {data: ("address" "array" "table_row" "_key" "_value")}: ("address" "array" "table_row" "_key" "_value")
+9993 transform: type of data is ("address" "array" "table_row" "_key" "_value")
 9993 transform:   instruction: {result: (), "lookup": ()} <- merge {0: "literal", "length": ()}, {capacity: ()}, {data: ()}
 9994 transform:     checking {0: "literal", "length": ()}: "literal"
 9993 transform: type of 0 is "literal"
 9994 transform:     checking {capacity: ()}: ()
 9994 transform:     deducing type to "number"
 9994 transform:     checking {data: ()}: ()
-9994 transform:     deducing type to ("address" "shared" "array" "table_row" "_key" "_value")
+9994 transform:     deducing type to ("address" "array" "table_row" "_key" "_value")
 9994 transform:     checking {result: (), "lookup": ()}: ()
-9994 transform:     deducing type to ("address" "shared" "table" "_key" "_value")
+9994 transform:     deducing type to ("address" "table" "_key" "_value")
 9993 transform: adding mapping from _key to number
 9993 transform: adding mapping from _value to number
 9993 transform: replacing in recipe header ingredients
 9993 transform: replacing in ingredient capacity:number
 9993 transform: replacing in recipe header products
-9993 transform: replacing in ingredient result:address:shared:table:_key:_value
+9993 transform: replacing in ingredient result:address:table:_key:_value
 9993 transform: _key => "number"
 9993 transform: _value => "number"
-9993 transform: replacing in instruction '{default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}'
+9993 transform: replacing in instruction '{default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}'
 9993 transform: replacing in ingredient location:type
 9993 transform: replacing in ingredient number-of-locals:literal
-9993 transform: replacing in ingredient default-space:address:shared:array:location
+9993 transform: replacing in ingredient default-space:address:array:location
 9993 transform: replacing in instruction '{capacity: "number"} <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient capacity:number
-9993 transform: replacing in instruction '{result: ("address" "shared" "table" "_key" "_value")} <- new {(table _key _value): "type"}'
+9993 transform: replacing in instruction '{result: ("address" "table" "_key" "_value")} <- new {(table _key _value): "type"}'
 9993 transform: replacing in ingredient {(table _key _value): type}
 9993 transform: replacing in ingredient result
 9993 transform: _key => "number"
 9993 transform: _value => "number"
 9993 transform: _key => "number"
 9993 transform: _value => "number"
-9993 transform: replacing in instruction '{data: ("address" "shared" "array" "table_row" "_key" "_value")} <- new {(table_row _key _value): "type"}, {capacity: "number"}'
+9993 transform: replacing in instruction '{data: ("address" "array" "table_row" "_key" "_value")} <- new {(table_row _key _value): "type"}, {capacity: "number"}'
 9993 transform: replacing in ingredient {(table_row _key _value): type}
 9993 transform: replacing in ingredient capacity
-9993 transform: replacing in ingredient data:address:shared:array:table_row:_key:_value
+9993 transform: replacing in ingredient data:address:array:table_row:_key:_value
 9993 transform: _key => "number"
 9993 transform: _value => "number"
 9993 transform: _key => "number"
 9993 transform: _value => "number"
-9993 transform: replacing in instruction '{result: ("address" "shared" "table" "_key" "_value"), "lookup": ()} <- merge {0: "literal", "length": ()}, {capacity: "number"}, {data: ("address" "shared" "array" "table_row" "_key" "_value")}'
+9993 transform: replacing in instruction '{result: ("address" "table" "_key" "_value"), "lookup": ()} <- merge {0: "literal", "length": ()}, {capacity: "number"}, {data: ("address" "array" "table_row" "_key" "_value")}'
 9993 transform: replacing in ingredient 0/length
 9993 transform: replacing in ingredient capacity
 9993 transform: replacing in ingredient data
@@ -147,36 +147,36 @@
 9991 transform: --- rewrite literal strings in recipe new-table_2
 9991 transform: --- rewrite 'stash' instructions in recipe new-table_2
 9991 transform: --- deduce types for recipe new-table_2
-9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: default-space => ("address" "array" "location")
 9992 transform: capacity => "number"
-9992 transform: result => ("address" "shared" "table" "number" "number")
-9992 transform: data => ("address" "shared" "array" "table_row" "number" "number")
-9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9992 transform: result => ("address" "table" "number" "number")
+9992 transform: data => ("address" "array" "table_row" "number" "number")
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {capacity: "number"} <- next-ingredient-without-typechecking 
-9993 transform: {result: ("address" "shared" "table" "number" "number")} <- new {(table number number): "type"}
-9993 transform: {data: ("address" "shared" "array" "table_row" "number" "number")} <- new {(table_row number number): "type"}, {capacity: "number"}
-9993 transform: {result: ("address" "shared" "table" "number" "number"), "lookup": ()} <- merge {0: "literal", "length": ()}, {capacity: "number"}, {data: ("address" "shared" "array" "table_row" "number" "number")}
+9993 transform: {result: ("address" "table" "number" "number")} <- new {(table number number): "type"}
+9993 transform: {data: ("address" "array" "table_row" "number" "number")} <- new {(table_row number number): "type"}, {capacity: "number"}
+9993 transform: {result: ("address" "table" "number" "number"), "lookup": ()} <- merge {0: "literal", "length": ()}, {capacity: "number"}, {data: ("address" "array" "table_row" "number" "number")}
 9991 transform: --- checking reply instructions against header for new-table_2
 9991 transform: --- fill in reply ingredients from header for recipe new-table_2
 9991 transform: --- deduce types for recipe new-table_2
-9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: default-space => ("address" "array" "location")
 9992 transform: capacity => "number"
-9992 transform: result => ("address" "shared" "table" "number" "number")
-9992 transform: data => ("address" "shared" "array" "table_row" "number" "number")
+9992 transform: result => ("address" "table" "number" "number")
+9992 transform: data => ("address" "array" "table_row" "number" "number")
 9991 transform: --- deduce types from header for new-table_2
 9993 transform: type of capacity is "number"
-9993 transform: type of result is ("address" "shared" "table" "number" "number")
-9992 transform: instruction: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9993 transform:   product: {default-space: ("address" "shared" "array" "location")}
+9993 transform: type of result is ("address" "table" "number" "number")
+9992 transform: instruction: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform:   product: {default-space: ("address" "array" "location")}
 9992 transform: instruction: {capacity: "number"} <- next-ingredient-without-typechecking 
 9993 transform:   product: {capacity: "number"}
-9992 transform: instruction: {result: ("address" "shared" "table" "number" "number")} <- new {(table number number): "type"}
-9993 transform:   product: {result: ("address" "shared" "table" "number" "number")}
-9992 transform: instruction: {data: ("address" "shared" "array" "table_row" "number" "number")} <- new {(table_row number number): "type"}, {capacity: "number"}
-9993 transform:   product: {data: ("address" "shared" "array" "table_row" "number" "number")}
-9992 transform: instruction: {result: ("address" "shared" "table" "number" "number"), "lookup": ()} <- merge {0: "literal", "length": ()}, {capacity: "number"}, {data: ("address" "shared" "array" "table_row" "number" "number")}
-9993 transform:   product: {result: ("address" "shared" "table" "number" "number"), "lookup": ()}
-9992 transform: instruction: reply {result: ("address" "shared" "table" "number" "number")}
+9992 transform: instruction: {result: ("address" "table" "number" "number")} <- new {(table number number): "type"}
+9993 transform:   product: {result: ("address" "table" "number" "number")}
+9992 transform: instruction: {data: ("address" "array" "table_row" "number" "number")} <- new {(table_row number number): "type"}, {capacity: "number"}
+9993 transform:   product: {data: ("address" "array" "table_row" "number" "number")}
+9992 transform: instruction: {result: ("address" "table" "number" "number"), "lookup": ()} <- merge {0: "literal", "length": ()}, {capacity: "number"}, {data: ("address" "array" "table_row" "number" "number")}
+9993 transform:   product: {result: ("address" "table" "number" "number"), "lookup": ()}
+9992 transform: instruction: reply {result: ("address" "table" "number" "number")}
 9991 transform: --- check for invalid types in recipe new-table_2
 9991 transform: --- collect surrounding spaces for recipe new-table_2
 9991 transform: --- transform names for recipe new-table_2
@@ -206,32 +206,32 @@
 9999 transform: 1 vs 3
 9999 transform: checking container {result: ("table" "number" "number")} || {capacity: "number"} vs ingredient 1
 9999 transform: 2 vs 3
-9999 transform: checking container {result: ("table" "number" "number")} || {data: ("address" "shared" "array" "table_row" "number" "number")} vs ingredient 2
+9999 transform: checking container {result: ("table" "number" "number")} || {data: ("address" "array" "table_row" "number" "number")} vs ingredient 2
 9991 transform: --- check that recipe new-table_2 sets default-space
 9991 transform: --- checking reply instructions against header for new-table_2
 9992 transform: new specialization: new-table_2
-9992 transform: instruction put {1: ("address" "shared" "table" "number" "number")}, {12: "literal"}, {34: "literal"}
-9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "shared" "table" "_key" "_value")}
+9992 transform: instruction put {1: ("address" "table" "number" "number")}, {12: "literal"}, {34: "literal"}
+9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: found variant to specialize: 258 put_2
-9993 transform: switching put to specialized recipe put_3 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "shared" "table" "_key" "_value")}
+9993 transform: switching put to specialized recipe put_3 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: compute type names: put_3
-9994 transform:     checking {table: ("address" "shared" "table" "_key" "_value")}: ("address" "shared" "table" "_key" "_value")
-9993 transform: type of table is ("address" "shared" "table" "_key" "_value")
+9994 transform:     checking {table: ("address" "table" "_key" "_value")}: ("address" "table" "_key" "_value")
+9993 transform: type of table is ("address" "table" "_key" "_value")
 9994 transform:     checking {key: "_key"}: "_key"
 9993 transform: type of key is "_key"
 9994 transform:     checking {value: "_value"}: "_value"
 9993 transform: type of value is "_value"
-9994 transform:     checking {table: ("address" "shared" "table" "_key" "_value")}: ("address" "shared" "table" "_key" "_value")
-9993 transform:   instruction: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9994 transform:     checking {table: ("address" "table" "_key" "_value")}: ("address" "table" "_key" "_value")
+9993 transform:   instruction: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9994 transform:     checking {location: "type"}: "type"
 9993 transform: type of location is "type"
 9994 transform:     checking {number-of-locals: "literal"}: "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking {default-space: ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
-9993 transform: type of default-space is ("address" "shared" "array" "location")
-9993 transform:   instruction: {table: ("address" "shared" "table" "_key" "_value")} <- next-ingredient-without-typechecking 
-9994 transform:     checking {table: ("address" "shared" "table" "_key" "_value")}: ("address" "shared" "table" "_key" "_value")
+9994 transform:     checking {default-space: ("address" "array" "location")}: ("address" "array" "location")
+9993 transform: type of default-space is ("address" "array" "location")
+9993 transform:   instruction: {table: ("address" "table" "_key" "_value")} <- next-ingredient-without-typechecking 
+9994 transform:     checking {table: ("address" "table" "_key" "_value")}: ("address" "table" "_key" "_value")
 9993 transform:   instruction: {key: "_key"} <- next-ingredient-without-typechecking 
 9994 transform:     checking {key: "_key"}: "_key"
 9993 transform:   instruction: {value: "_value"} <- next-ingredient-without-typechecking 
@@ -248,7 +248,7 @@
 9994 transform:     deducing type to "number"
 9993 transform:   instruction: {capacity: "number"} <- get {table: (), "lookup": ()}, {capacity: "offset"}
 9994 transform:     checking {table: (), "lookup": ()}: ()
-9994 transform:     deducing type to ("address" "shared" "table" "_key" "_value")
+9994 transform:     deducing type to ("address" "table" "_key" "_value")
 9994 transform:     checking {capacity: "offset"}: "offset"
 9994 transform:     checking {capacity: "number"}: "number"
 9993 transform: type of capacity is "number"
@@ -266,15 +266,15 @@
 9994 transform:     deducing type to "number"
 9994 transform:     checking {hash: ()}: ()
 9994 transform:     deducing type to "number"
-9993 transform:   instruction: {table-data: ("address" "shared" "array" "table_row" "_key" "_value")} <- get {table: (), "lookup": ()}, {data: "offset"}
+9993 transform:   instruction: {table-data: ("address" "array" "table_row" "_key" "_value")} <- get {table: (), "lookup": ()}, {data: "offset"}
 9994 transform:     checking {table: (), "lookup": ()}: ()
-9994 transform:     deducing type to ("address" "shared" "table" "_key" "_value")
+9994 transform:     deducing type to ("address" "table" "_key" "_value")
 9994 transform:     checking {data: "offset"}: "offset"
-9994 transform:     checking {table-data: ("address" "shared" "array" "table_row" "_key" "_value")}: ("address" "shared" "array" "table_row" "_key" "_value")
-9993 transform: type of table-data is ("address" "shared" "array" "table_row" "_key" "_value")
+9994 transform:     checking {table-data: ("address" "array" "table_row" "_key" "_value")}: ("address" "array" "table_row" "_key" "_value")
+9993 transform: type of table-data is ("address" "array" "table_row" "_key" "_value")
 9993 transform:   instruction: {x: ("table_row" "_key" "_value")} <- index {table-data: (), "lookup": ()}, {hash: ()}
 9994 transform:     checking {table-data: (), "lookup": ()}: ()
-9994 transform:     deducing type to ("address" "shared" "array" "table_row" "_key" "_value")
+9994 transform:     deducing type to ("address" "array" "table_row" "_key" "_value")
 9994 transform:     checking {hash: ()}: ()
 9994 transform:     deducing type to "number"
 9994 transform:     checking {x: ("table_row" "_key" "_value")}: ("table_row" "_key" "_value")
@@ -305,17 +305,17 @@
 9993 transform: type of new-row is ("table_row" "_key" "_value")
 9993 transform:   instruction: {table-data: (), "lookup": ()} <- put-index {table-data: (), "lookup": ()}, {hash: ()}, {new-row: ()}
 9994 transform:     checking {table-data: (), "lookup": ()}: ()
-9994 transform:     deducing type to ("address" "shared" "array" "table_row" "_key" "_value")
+9994 transform:     deducing type to ("address" "array" "table_row" "_key" "_value")
 9994 transform:     checking {hash: ()}: ()
 9994 transform:     deducing type to "number"
 9994 transform:     checking {new-row: ()}: ()
 9994 transform:     deducing type to ("table_row" "_key" "_value")
 9994 transform:     checking {table-data: (), "lookup": ()}: ()
-9994 transform:     deducing type to ("address" "shared" "array" "table_row" "_key" "_value")
+9994 transform:     deducing type to ("address" "array" "table_row" "_key" "_value")
 9993 transform: adding mapping from _key to number
 9993 transform: adding mapping from _value to number
 9993 transform: replacing in recipe header ingredients
-9993 transform: replacing in ingredient table:address:shared:table:_key:_value
+9993 transform: replacing in ingredient table:address:table:_key:_value
 9993 transform: _key => "number"
 9993 transform: _value => "number"
 9993 transform: replacing in ingredient key:_key
@@ -323,15 +323,15 @@
 9993 transform: replacing in ingredient value:_value
 9993 transform: _value => "number"
 9993 transform: replacing in recipe header products
-9993 transform: replacing in ingredient table:address:shared:table:_key:_value
+9993 transform: replacing in ingredient table:address:table:_key:_value
 9993 transform: _key => "number"
 9993 transform: _value => "number"
-9993 transform: replacing in instruction '{default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}'
+9993 transform: replacing in instruction '{default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}'
 9993 transform: replacing in ingredient location:type
 9993 transform: replacing in ingredient number-of-locals:literal
-9993 transform: replacing in ingredient default-space:address:shared:array:location
-9993 transform: replacing in instruction '{table: ("address" "shared" "table" "_key" "_value")} <- next-ingredient-without-typechecking '
-9993 transform: replacing in ingredient table:address:shared:table:_key:_value
+9993 transform: replacing in ingredient default-space:address:array:location
+9993 transform: replacing in instruction '{table: ("address" "table" "_key" "_value")} <- next-ingredient-without-typechecking '
+9993 transform: replacing in ingredient table:address:table:_key:_value
 9993 transform: _key => "number"
 9993 transform: _value => "number"
 9993 transform: replacing in instruction '{key: "_key"} <- next-ingredient-without-typechecking '
@@ -347,7 +347,7 @@
 9993 transform: replacing in instruction '{hash: "number"} <- abs {hash: "number"}'
 9993 transform: replacing in ingredient hash
 9993 transform: replacing in ingredient hash
-9993 transform: replacing in instruction '{capacity: "number"} <- get {table: ("address" "shared" "table" "_key" "_value"), "lookup": ()}, {capacity: "offset"}'
+9993 transform: replacing in instruction '{capacity: "number"} <- get {table: ("address" "table" "_key" "_value"), "lookup": ()}, {capacity: "offset"}'
 9993 transform: replacing in ingredient *table
 9993 transform: _key => "number"
 9993 transform: _value => "number"
@@ -361,15 +361,15 @@
 9993 transform: replacing in instruction '{hash: "number"} <- abs {hash: "number"}'
 9993 transform: replacing in ingredient hash
 9993 transform: replacing in ingredient hash
-9993 transform: replacing in instruction '{table-data: ("address" "shared" "array" "table_row" "_key" "_value")} <- get {table: ("address" "shared" "table" "_key" "_value"), "lookup": ()}, {data: "offset"}'
+9993 transform: replacing in instruction '{table-data: ("address" "array" "table_row" "_key" "_value")} <- get {table: ("address" "table" "_key" "_value"), "lookup": ()}, {data: "offset"}'
 9993 transform: replacing in ingredient *table
 9993 transform: _key => "number"
 9993 transform: _value => "number"
 9993 transform: replacing in ingredient data:offset
-9993 transform: replacing in ingredient table-data:address:shared:array:table_row:_key:_value
+9993 transform: replacing in ingredient table-data:address:array:table_row:_key:_value
 9993 transform: _key => "number"
 9993 transform: _value => "number"
-9993 transform: replacing in instruction '{x: ("table_row" "_key" "_value")} <- index {table-data: ("address" "shared" "array" "table_row" "_key" "_value"), "lookup": ()}, {hash: "number"}'
+9993 transform: replacing in instruction '{x: ("table_row" "_key" "_value")} <- index {table-data: ("address" "array" "table_row" "_key" "_value"), "lookup": ()}, {hash: "number"}'
 9993 transform: replacing in ingredient *table-data
 9993 transform: _key => "number"
 9993 transform: _value => "number"
@@ -398,7 +398,7 @@
 9993 transform: replacing in ingredient new-row:table_row:_key:_value
 9993 transform: _key => "number"
 9993 transform: _value => "number"
-9993 transform: replacing in instruction '{table-data: ("address" "shared" "array" "table_row" "_key" "_value"), "lookup": ()} <- put-index {table-data: ("address" "shared" "array" "table_row" "_key" "_value"), "lookup": ()}, {hash: "number"}, {new-row: ("table_row" "_key" "_value")}'
+9993 transform: replacing in instruction '{table-data: ("address" "array" "table_row" "_key" "_value"), "lookup": ()} <- put-index {table-data: ("address" "array" "table_row" "_key" "_value"), "lookup": ()}, {hash: "number"}, {new-row: ("table_row" "_key" "_value")}'
 9993 transform: replacing in ingredient *table-data
 9993 transform: _key => "number"
 9993 transform: _value => "number"
@@ -413,56 +413,56 @@
 9991 transform: --- rewrite literal strings in recipe put_3
 9991 transform: --- rewrite 'stash' instructions in recipe put_3
 9991 transform: --- deduce types for recipe put_3
-9992 transform: default-space => ("address" "shared" "array" "location")
-9992 transform: table => ("address" "shared" "table" "number" "number")
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: table => ("address" "table" "number" "number")
 9992 transform: key => "number"
 9992 transform: value => "number"
 9992 transform: hash => "number"
 9992 transform: capacity => "number"
-9992 transform: table-data => ("address" "shared" "array" "table_row" "number" "number")
+9992 transform: table-data => ("address" "array" "table_row" "number" "number")
 9992 transform: x => ("table_row" "number" "number")
 9992 transform: occupied? => "boolean"
 9992 transform: not-occupied? => "boolean"
 9992 transform: new-row => ("table_row" "number" "number")
-9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9993 transform: {table: ("address" "shared" "table" "number" "number")} <- next-ingredient-without-typechecking 
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {table: ("address" "table" "number" "number")} <- next-ingredient-without-typechecking 
 9993 transform: {key: "number"} <- next-ingredient-without-typechecking 
 9993 transform: {value: "number"} <- next-ingredient-without-typechecking 
 9993 transform: {hash: "number"} <- hash {key: "number"}
 9993 transform: {hash: "number"} <- abs {hash: "number"}
-9993 transform: {capacity: "number"} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
+9993 transform: {capacity: "number"} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
 9993 transform: _, {hash: "number"} <- divide-with-remainder {hash: "number"}, {capacity: "number"}
 9993 transform: {hash: "number"} <- abs {hash: "number"}
-9993 transform: {table-data: ("address" "shared" "array" "table_row" "number" "number")} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {data: "offset"}
-9993 transform: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
+9993 transform: {table-data: ("address" "array" "table_row" "number" "number")} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {data: "offset"}
+9993 transform: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
 9993 transform: {occupied?: "boolean"} <- get {x: ("table_row" "number" "number")}, {occupied?: "offset"}
 9993 transform: {not-occupied?: "boolean"} <- not {occupied?: "boolean"}
 9993 transform: assert {not-occupied?: "boolean"}, {"can't handle collisions yet": "literal-string"}
 9993 transform: {new-row: ("table_row" "number" "number")} <- merge {1: "literal", "true": ()}, {key: "number"}, {value: "number"}
-9993 transform: {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()} <- put-index {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}, {new-row: ("table_row" "number" "number")}
+9993 transform: {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()} <- put-index {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}, {new-row: ("table_row" "number" "number")}
 9991 transform: --- checking reply instructions against header for put_3
 9991 transform: --- fill in reply ingredients from header for recipe put_3
 9991 transform: --- deduce types for recipe put_3
-9992 transform: default-space => ("address" "shared" "array" "location")
-9992 transform: table => ("address" "shared" "table" "number" "number")
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: table => ("address" "table" "number" "number")
 9992 transform: key => "number"
 9992 transform: value => "number"
 9992 transform: hash => "number"
 9992 transform: capacity => "number"
-9992 transform: table-data => ("address" "shared" "array" "table_row" "number" "number")
+9992 transform: table-data => ("address" "array" "table_row" "number" "number")
 9992 transform: x => ("table_row" "number" "number")
 9992 transform: occupied? => "boolean"
 9992 transform: not-occupied? => "boolean"
 9992 transform: new-row => ("table_row" "number" "number")
 9991 transform: --- deduce types from header for put_3
-9993 transform: type of table is ("address" "shared" "table" "number" "number")
+9993 transform: type of table is ("address" "table" "number" "number")
 9993 transform: type of key is "number"
 9993 transform: type of value is "number"
-9993 transform: type of table is ("address" "shared" "table" "number" "number")
-9992 transform: instruction: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9993 transform:   product: {default-space: ("address" "shared" "array" "location")}
-9992 transform: instruction: {table: ("address" "shared" "table" "number" "number")} <- next-ingredient-without-typechecking 
-9993 transform:   product: {table: ("address" "shared" "table" "number" "number")}
+9993 transform: type of table is ("address" "table" "number" "number")
+9992 transform: instruction: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform:   product: {default-space: ("address" "array" "location")}
+9992 transform: instruction: {table: ("address" "table" "number" "number")} <- next-ingredient-without-typechecking 
+9993 transform:   product: {table: ("address" "table" "number" "number")}
 9992 transform: instruction: {key: "number"} <- next-ingredient-without-typechecking 
 9993 transform:   product: {key: "number"}
 9992 transform: instruction: {value: "number"} <- next-ingredient-without-typechecking 
@@ -471,16 +471,16 @@
 9993 transform:   product: {hash: "number"}
 9992 transform: instruction: {hash: "number"} <- abs {hash: "number"}
 9993 transform:   product: {hash: "number"}
-9992 transform: instruction: {capacity: "number"} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
+9992 transform: instruction: {capacity: "number"} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
 9993 transform:   product: {capacity: "number"}
 9992 transform: instruction: _, {hash: "number"} <- divide-with-remainder {hash: "number"}, {capacity: "number"}
 9993 transform:   product: _
 9993 transform:   product: {hash: "number"}
 9992 transform: instruction: {hash: "number"} <- abs {hash: "number"}
 9993 transform:   product: {hash: "number"}
-9992 transform: instruction: {table-data: ("address" "shared" "array" "table_row" "number" "number")} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {data: "offset"}
-9993 transform:   product: {table-data: ("address" "shared" "array" "table_row" "number" "number")}
-9992 transform: instruction: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
+9992 transform: instruction: {table-data: ("address" "array" "table_row" "number" "number")} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {data: "offset"}
+9993 transform:   product: {table-data: ("address" "array" "table_row" "number" "number")}
+9992 transform: instruction: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
 9993 transform:   product: {x: ("table_row" "number" "number")}
 9992 transform: instruction: {occupied?: "boolean"} <- get {x: ("table_row" "number" "number")}, {occupied?: "offset"}
 9993 transform:   product: {occupied?: "boolean"}
@@ -489,9 +489,9 @@
 9992 transform: instruction: assert {not-occupied?: "boolean"}, {"can't handle collisions yet": "literal-string"}
 9992 transform: instruction: {new-row: ("table_row" "number" "number")} <- merge {1: "literal", "true": ()}, {key: "number"}, {value: "number"}
 9993 transform:   product: {new-row: ("table_row" "number" "number")}
-9992 transform: instruction: {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()} <- put-index {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}, {new-row: ("table_row" "number" "number")}
-9993 transform:   product: {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()}
-9992 transform: instruction: reply {table: ("address" "shared" "table" "number" "number"), "same-as-ingredient": "0"}
+9992 transform: instruction: {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()} <- put-index {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}, {new-row: ("table_row" "number" "number")}
+9993 transform:   product: {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()}
+9992 transform: instruction: reply {table: ("address" "table" "number" "number"), "same-as-ingredient": "0"}
 9991 transform: --- check for invalid types in recipe put_3
 9991 transform: --- collect surrounding spaces for recipe put_3
 9991 transform: --- transform names for recipe put_3
@@ -514,12 +514,12 @@
 9992 transform: instruction {hash: ()} <- abs {hash: ()}
 9992 transform: checking variant (strict) 0: recipe abs {n: "number"} -> {result: "number"}
 9992 transform: instruction {x: ("table_row" "_key" "_value")} <- index {table-data: (), "lookup": ()}, {hash: ()}
-9992 transform: checking variant (strict) 0: recipe index_2 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
+9992 transform: checking variant (strict) 0: recipe index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
 9993 transform: strict match failed: ingredient 0
 9993 transform: concrete-type match failed: ingredient 0
-9992 transform: checking variant (strict except literals-against-booleans) 0: recipe index_2 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
+9992 transform: checking variant (strict except literals-against-booleans) 0: recipe index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe index_2 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
+9992 transform: checking variant 0: recipe index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
 9993 transform: strict match failed: ingredient 0
 9991 transform: --- compute instruction operations for recipe put_3
 9991 transform: --- transform braces for recipe put_3
@@ -556,27 +556,27 @@
 9991 transform: --- check that recipe put_3 sets default-space
 9991 transform: --- checking reply instructions against header for put_3
 9992 transform: new specialization: put_3
-9992 transform: instruction {2: "number"} <- index {1: ("address" "shared" "table" "number" "number")}, {12: "literal"}
-9992 transform: checking variant (strict) 0: recipe index_2 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
+9992 transform: instruction {2: "number"} <- index {1: ("address" "table" "number" "number")}, {12: "literal"}
+9992 transform: checking variant (strict) 0: recipe index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: found variant to specialize: 260 index_2
-9993 transform: switching index to specialized recipe index_3 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
+9993 transform: switching index to specialized recipe index_3 {table: ("address" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
 9993 transform: compute type names: index_3
-9994 transform:     checking {table: ("address" "shared" "table" "_key" "_value")}: ("address" "shared" "table" "_key" "_value")
-9993 transform: type of table is ("address" "shared" "table" "_key" "_value")
+9994 transform:     checking {table: ("address" "table" "_key" "_value")}: ("address" "table" "_key" "_value")
+9993 transform: type of table is ("address" "table" "_key" "_value")
 9994 transform:     checking {key: "_key"}: "_key"
 9993 transform: type of key is "_key"
 9994 transform:     checking {result: "_value"}: "_value"
 9993 transform: type of result is "_value"
-9993 transform:   instruction: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform:   instruction: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9994 transform:     checking {location: "type"}: "type"
 9993 transform: type of location is "type"
 9994 transform:     checking {number-of-locals: "literal"}: "literal"
 9993 transform: type of number-of-locals is "literal"
-9994 transform:     checking {default-space: ("address" "shared" "array" "location")}: ("address" "shared" "array" "location")
-9993 transform: type of default-space is ("address" "shared" "array" "location")
-9993 transform:   instruction: {table: ("address" "shared" "table" "_key" "_value")} <- next-ingredient-without-typechecking 
-9994 transform:     checking {table: ("address" "shared" "table" "_key" "_value")}: ("address" "shared" "table" "_key" "_value")
+9994 transform:     checking {default-space: ("address" "array" "location")}: ("address" "array" "location")
+9993 transform: type of default-space is ("address" "array" "location")
+9993 transform:   instruction: {table: ("address" "table" "_key" "_value")} <- next-ingredient-without-typechecking 
+9994 transform:     checking {table: ("address" "table" "_key" "_value")}: ("address" "table" "_key" "_value")
 9993 transform:   instruction: {key: "_key"} <- next-ingredient-without-typechecking 
 9994 transform:     checking {key: "_key"}: "_key"
 9993 transform:   instruction: {hash: "number"} <- hash {key: ()}
@@ -591,7 +591,7 @@
 9994 transform:     deducing type to "number"
 9993 transform:   instruction: {capacity: "number"} <- get {table: (), "lookup": ()}, {capacity: "offset"}
 9994 transform:     checking {table: (), "lookup": ()}: ()
-9994 transform:     deducing type to ("address" "shared" "table" "_key" "_value")
+9994 transform:     deducing type to ("address" "table" "_key" "_value")
 9994 transform:     checking {capacity: "offset"}: "offset"
 9994 transform:     checking {capacity: "number"}: "number"
 9993 transform: type of capacity is "number"
@@ -609,15 +609,15 @@
 9994 transform:     deducing type to "number"
 9994 transform:     checking {hash: ()}: ()
 9994 transform:     deducing type to "number"
-9993 transform:   instruction: {table-data: ("address" "shared" "array" "table_row" "_key" "_value")} <- get {table: (), "lookup": ()}, {data: "offset"}
+9993 transform:   instruction: {table-data: ("address" "array" "table_row" "_key" "_value")} <- get {table: (), "lookup": ()}, {data: "offset"}
 9994 transform:     checking {table: (), "lookup": ()}: ()
-9994 transform:     deducing type to ("address" "shared" "table" "_key" "_value")
+9994 transform:     deducing type to ("address" "table" "_key" "_value")
 9994 transform:     checking {data: "offset"}: "offset"
-9994 transform:     checking {table-data: ("address" "shared" "array" "table_row" "_key" "_value")}: ("address" "shared" "array" "table_row" "_key" "_value")
-9993 transform: type of table-data is ("address" "shared" "array" "table_row" "_key" "_value")
+9994 transform:     checking {table-data: ("address" "array" "table_row" "_key" "_value")}: ("address" "array" "table_row" "_key" "_value")
+9993 transform: type of table-data is ("address" "array" "table_row" "_key" "_value")
 9993 transform:   instruction: {x: ("table_row" "_key" "_value")} <- index {table-data: (), "lookup": ()}, {hash: ()}
 9994 transform:     checking {table-data: (), "lookup": ()}: ()
-9994 transform:     deducing type to ("address" "shared" "array" "table_row" "_key" "_value")
+9994 transform:     deducing type to ("address" "array" "table_row" "_key" "_value")
 9994 transform:     checking {hash: ()}: ()
 9994 transform:     deducing type to "number"
 9994 transform:     checking {x: ("table_row" "_key" "_value")}: ("table_row" "_key" "_value")
@@ -642,7 +642,7 @@
 9993 transform: adding mapping from _key to number
 9993 transform: adding mapping from _value to number
 9993 transform: replacing in recipe header ingredients
-9993 transform: replacing in ingredient table:address:shared:table:_key:_value
+9993 transform: replacing in ingredient table:address:table:_key:_value
 9993 transform: _key => "number"
 9993 transform: _value => "number"
 9993 transform: replacing in ingredient key:_key
@@ -650,12 +650,12 @@
 9993 transform: replacing in recipe header products
 9993 transform: replacing in ingredient result:_value
 9993 transform: _value => "number"
-9993 transform: replacing in instruction '{default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}'
+9993 transform: replacing in instruction '{default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}'
 9993 transform: replacing in ingredient location:type
 9993 transform: replacing in ingredient number-of-locals:literal
-9993 transform: replacing in ingredient default-space:address:shared:array:location
-9993 transform: replacing in instruction '{table: ("address" "shared" "table" "_key" "_value")} <- next-ingredient-without-typechecking '
-9993 transform: replacing in ingredient table:address:shared:table:_key:_value
+9993 transform: replacing in ingredient default-space:address:array:location
+9993 transform: replacing in instruction '{table: ("address" "table" "_key" "_value")} <- next-ingredient-without-typechecking '
+9993 transform: replacing in ingredient table:address:table:_key:_value
 9993 transform: _key => "number"
 9993 transform: _value => "number"
 9993 transform: replacing in instruction '{key: "_key"} <- next-ingredient-without-typechecking '
@@ -668,7 +668,7 @@
 9993 transform: replacing in instruction '{hash: "number"} <- abs {hash: "number"}'
 9993 transform: replacing in ingredient hash
 9993 transform: replacing in ingredient hash
-9993 transform: replacing in instruction '{capacity: "number"} <- get {table: ("address" "shared" "table" "_key" "_value"), "lookup": ()}, {capacity: "offset"}'
+9993 transform: replacing in instruction '{capacity: "number"} <- get {table: ("address" "table" "_key" "_value"), "lookup": ()}, {capacity: "offset"}'
 9993 transform: replacing in ingredient *table
 9993 transform: _key => "number"
 9993 transform: _value => "number"
@@ -682,15 +682,15 @@
 9993 transform: replacing in instruction '{hash: "number"} <- abs {hash: "number"}'
 9993 transform: replacing in ingredient hash
 9993 transform: replacing in ingredient hash
-9993 transform: replacing in instruction '{table-data: ("address" "shared" "array" "table_row" "_key" "_value")} <- get {table: ("address" "shared" "table" "_key" "_value"), "lookup": ()}, {data: "offset"}'
+9993 transform: replacing in instruction '{table-data: ("address" "array" "table_row" "_key" "_value")} <- get {table: ("address" "table" "_key" "_value"), "lookup": ()}, {data: "offset"}'
 9993 transform: replacing in ingredient *table
 9993 transform: _key => "number"
 9993 transform: _value => "number"
 9993 transform: replacing in ingredient data:offset
-9993 transform: replacing in ingredient table-data:address:shared:array:table_row:_key:_value
+9993 transform: replacing in ingredient table-data:address:array:table_row:_key:_value
 9993 transform: _key => "number"
 9993 transform: _value => "number"
-9993 transform: replacing in instruction '{x: ("table_row" "_key" "_value")} <- index {table-data: ("address" "shared" "array" "table_row" "_key" "_value"), "lookup": ()}, {hash: "number"}'
+9993 transform: replacing in instruction '{x: ("table_row" "_key" "_value")} <- index {table-data: ("address" "array" "table_row" "_key" "_value"), "lookup": ()}, {hash: "number"}'
 9993 transform: replacing in ingredient *table-data
 9993 transform: _key => "number"
 9993 transform: _value => "number"
@@ -718,64 +718,64 @@
 9991 transform: --- rewrite literal strings in recipe index_3
 9991 transform: --- rewrite 'stash' instructions in recipe index_3
 9991 transform: --- deduce types for recipe index_3
-9992 transform: default-space => ("address" "shared" "array" "location")
-9992 transform: table => ("address" "shared" "table" "number" "number")
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: table => ("address" "table" "number" "number")
 9992 transform: key => "number"
 9992 transform: hash => "number"
 9992 transform: capacity => "number"
-9992 transform: table-data => ("address" "shared" "array" "table_row" "number" "number")
+9992 transform: table-data => ("address" "array" "table_row" "number" "number")
 9992 transform: x => ("table_row" "number" "number")
 9992 transform: occupied? => "boolean"
 9992 transform: result => "number"
-9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9993 transform: {table: ("address" "shared" "table" "number" "number")} <- next-ingredient-without-typechecking 
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {table: ("address" "table" "number" "number")} <- next-ingredient-without-typechecking 
 9993 transform: {key: "number"} <- next-ingredient-without-typechecking 
 9993 transform: {hash: "number"} <- hash {key: "number"}
 9993 transform: {hash: "number"} <- abs {hash: "number"}
-9993 transform: {capacity: "number"} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
+9993 transform: {capacity: "number"} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
 9993 transform: _, {hash: "number"} <- divide-with-remainder {hash: "number"}, {capacity: "number"}
 9993 transform: {hash: "number"} <- abs {hash: "number"}
-9993 transform: {table-data: ("address" "shared" "array" "table_row" "number" "number")} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {data: "offset"}
-9993 transform: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
+9993 transform: {table-data: ("address" "array" "table_row" "number" "number")} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {data: "offset"}
+9993 transform: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
 9993 transform: {occupied?: "boolean"} <- get {x: ("table_row" "number" "number")}, {occupied?: "offset"}
 9993 transform: assert {occupied?: "boolean"}, {"can't handle missing elements yet": "literal-string"}
 9993 transform: {result: "number"} <- get {x: ("table_row" "number" "number")}, {value: "offset"}
 9991 transform: --- checking reply instructions against header for index_3
 9991 transform: --- fill in reply ingredients from header for recipe index_3
 9991 transform: --- deduce types for recipe index_3
-9992 transform: default-space => ("address" "shared" "array" "location")
-9992 transform: table => ("address" "shared" "table" "number" "number")
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: table => ("address" "table" "number" "number")
 9992 transform: key => "number"
 9992 transform: hash => "number"
 9992 transform: capacity => "number"
-9992 transform: table-data => ("address" "shared" "array" "table_row" "number" "number")
+9992 transform: table-data => ("address" "array" "table_row" "number" "number")
 9992 transform: x => ("table_row" "number" "number")
 9992 transform: occupied? => "boolean"
 9992 transform: result => "number"
 9991 transform: --- deduce types from header for index_3
-9993 transform: type of table is ("address" "shared" "table" "number" "number")
+9993 transform: type of table is ("address" "table" "number" "number")
 9993 transform: type of key is "number"
 9993 transform: type of result is "number"
-9992 transform: instruction: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9993 transform:   product: {default-space: ("address" "shared" "array" "location")}
-9992 transform: instruction: {table: ("address" "shared" "table" "number" "number")} <- next-ingredient-without-typechecking 
-9993 transform:   product: {table: ("address" "shared" "table" "number" "number")}
+9992 transform: instruction: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform:   product: {default-space: ("address" "array" "location")}
+9992 transform: instruction: {table: ("address" "table" "number" "number")} <- next-ingredient-without-typechecking 
+9993 transform:   product: {table: ("address" "table" "number" "number")}
 9992 transform: instruction: {key: "number"} <- next-ingredient-without-typechecking 
 9993 transform:   product: {key: "number"}
 9992 transform: instruction: {hash: "number"} <- hash {key: "number"}
 9993 transform:   product: {hash: "number"}
 9992 transform: instruction: {hash: "number"} <- abs {hash: "number"}
 9993 transform:   product: {hash: "number"}
-9992 transform: instruction: {capacity: "number"} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
+9992 transform: instruction: {capacity: "number"} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
 9993 transform:   product: {capacity: "number"}
 9992 transform: instruction: _, {hash: "number"} <- divide-with-remainder {hash: "number"}, {capacity: "number"}
 9993 transform:   product: _
 9993 transform:   product: {hash: "number"}
 9992 transform: instruction: {hash: "number"} <- abs {hash: "number"}
 9993 transform:   product: {hash: "number"}
-9992 transform: instruction: {table-data: ("address" "shared" "array" "table_row" "number" "number")} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {data: "offset"}
-9993 transform:   product: {table-data: ("address" "shared" "array" "table_row" "number" "number")}
-9992 transform: instruction: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
+9992 transform: instruction: {table-data: ("address" "array" "table_row" "number" "number")} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {data: "offset"}
+9993 transform:   product: {table-data: ("address" "array" "table_row" "number" "number")}
+9992 transform: instruction: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
 9993 transform:   product: {x: ("table_row" "number" "number")}
 9992 transform: instruction: {occupied?: "boolean"} <- get {x: ("table_row" "number" "number")}, {occupied?: "offset"}
 9993 transform:   product: {occupied?: "boolean"}
@@ -804,18 +804,18 @@
 9992 transform: instruction {hash: ()} <- abs {hash: ()}
 9992 transform: checking variant (strict) 0: recipe abs {n: "number"} -> {result: "number"}
 9992 transform: instruction {x: ("table_row" "_key" "_value")} <- index {table-data: (), "lookup": ()}, {hash: ()}
-9992 transform: checking variant (strict) 0: recipe index_2 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
+9992 transform: checking variant (strict) 0: recipe index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 1: recipe index_3 {table: ("address" "shared" "table" "number" "number")} {key: "number"} -> {result: "number"}
+9992 transform: checking variant (strict) 1: recipe index_3 {table: ("address" "table" "number" "number")} {key: "number"} -> {result: "number"}
 9993 transform: strict match failed: ingredient 0
 9993 transform: concrete-type match failed: ingredient 0
-9992 transform: checking variant (strict except literals-against-booleans) 0: recipe index_2 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
+9992 transform: checking variant (strict except literals-against-booleans) 0: recipe index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literals-against-booleans) 1: recipe index_3 {table: ("address" "shared" "table" "number" "number")} {key: "number"} -> {result: "number"}
+9992 transform: checking variant (strict except literals-against-booleans) 1: recipe index_3 {table: ("address" "table" "number" "number")} {key: "number"} -> {result: "number"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe index_2 {table: ("address" "shared" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
+9992 transform: checking variant 0: recipe index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 1: recipe index_3 {table: ("address" "shared" "table" "number" "number")} {key: "number"} -> {result: "number"}
+9992 transform: checking variant 1: recipe index_3 {table: ("address" "table" "number" "number")} {key: "number"} -> {result: "number"}
 9993 transform: strict match failed: ingredient 0
 9991 transform: --- compute instruction operations for recipe index_3
 9991 transform: --- transform braces for recipe index_3
@@ -858,21 +858,21 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: {1: ("address" "shared" "table" "number" "number")} <- new-table_2 {30: "literal"}
+ 103 run: {1: ("address" "table" "number" "number")} <- new-table_2 {30: "literal"}
 9999 trace: incrementing callstack depth to 3
- 104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 4
 9999 mem: allocating size 6
 9999 mem: new alloc: 1000
 9999 mem: storing 4 in location 1001
  104 run: {capacity: "number"} <- next-ingredient-without-typechecking 
 9999 mem: storing 30 in location 1003
- 104 run: {result: ("address" "shared" "table" "number" "number")} <- new {(table number number): "type"}
+ 104 run: {result: ("address" "table" "number" "number")} <- new {(table number number): "type"}
 9999 mem: allocating size 4
 9999 mem: new alloc: 1006
 9999 mem: storing 1006 in location 1004
 9999 mem: incrementing refcount of 1006: 0 -> 1
- 104 run: {data: ("address" "shared" "array" "table_row" "number" "number")} <- new {(table_row number number): "type"}, {capacity: "number"}
+ 104 run: {data: ("address" "array" "table_row" "number" "number")} <- new {(table_row number number): "type"}, {capacity: "number"}
 9999 mem: location 1003 is 30
 9999 mem: array size is 30
 9999 mem: allocating size 92
@@ -880,7 +880,7 @@
 9999 mem: storing 30 in location 1011
 9999 mem: storing 1010 in location 1005
 9999 mem: incrementing refcount of 1010: 0 -> 1
- 104 run: {result: ("address" "shared" "table" "number" "number"), "lookup": ()} <- merge {0: "literal", "length": ()}, {capacity: "number"}, {data: ("address" "shared" "array" "table_row" "number" "number")}
+ 104 run: {result: ("address" "table" "number" "number"), "lookup": ()} <- merge {0: "literal", "length": ()}, {capacity: "number"}, {data: ("address" "array" "table_row" "number" "number")}
 9999 mem: location 1003 is 30
 9999 mem: location 1005 is 1010
 9999 mem: location 1004 is 1006
@@ -890,22 +890,22 @@
 9999 mem: storing 0 in location 1007
 9999 mem: storing 30 in location 1008
 9999 mem: storing 1010 in location 1009
- 104 run: reply {result: ("address" "shared" "table" "number" "number")}
+ 104 run: reply {result: ("address" "table" "number" "number")}
 9999 mem: location 1004 is 1006
 9999 abandon: saving in free-list of size 6
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1006
 9999 mem: storing 1006 in location 1
 9999 mem: incrementing refcount of 1006: 1 -> 2
- 103 run: put_3 {1: ("address" "shared" "table" "number" "number")}, {12: "literal"}, {34: "literal"}
+ 103 run: put_3 {1: ("address" "table" "number" "number")}, {12: "literal"}, {34: "literal"}
 9999 mem: location 1 is 1006
 9999 trace: incrementing callstack depth to 3
- 104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 15
 9999 mem: allocating size 17
 9999 mem: new alloc: 1102
 9999 mem: storing 15 in location 1103
- 104 run: {table: ("address" "shared" "table" "number" "number")} <- next-ingredient-without-typechecking 
+ 104 run: {table: ("address" "table" "number" "number")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1006 in location 1105
 9999 mem: incrementing refcount of 1006: 2 -> 3
  104 run: {key: "number"} <- next-ingredient-without-typechecking 
@@ -918,7 +918,7 @@
  104 run: {hash: "number"} <- abs {hash: "number"}
 9999 mem: location 1108 is 3683563290
 9999 trace: incrementing callstack depth to 4
- 105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 105 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 4
 9999 mem: allocating size 6
 9999 abandon: picking up space from free-list of size 6
@@ -937,7 +937,7 @@
 9999 trace: reply: decrementing callstack depth from 4
 9998 run: result 0 is 3683563290
 9999 mem: storing 3683563290 in location 1108
- 104 run: {capacity: "number"} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
+ 104 run: {capacity: "number"} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
 9999 mem: location 1105 is 1006
 9999 mem: skipping refcount at 1006
 9999 mem: location 1007 is 0
@@ -956,7 +956,7 @@
  104 run: {hash: "number"} <- abs {hash: "number"}
 9999 mem: location 1108 is -8
 9999 trace: incrementing callstack depth to 4
- 105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 105 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 4
 9999 mem: allocating size 6
 9999 abandon: picking up space from free-list of size 6
@@ -978,7 +978,7 @@
 9999 trace: reply: decrementing callstack depth from 4
 9998 run: result 0 is 8
 9999 mem: storing 8 in location 1108
- 104 run: {table-data: ("address" "shared" "array" "table_row" "number" "number")} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {data: "offset"}
+ 104 run: {table-data: ("address" "array" "table_row" "number" "number")} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1105 is 1006
 9999 mem: skipping refcount at 1006
 9999 mem: location 1007 is 0
@@ -987,11 +987,11 @@
 9999 mem: location 1105 is 1006
 9999 mem: skipping refcount at 1006
 9998 run: address to copy is 1009
-9998 run: its type is ("address" "shared" "array" "table_row" "number" "number")
+9998 run: its type is ("address" "array" "table_row" "number" "number")
 9999 mem: location 1009 is 1010
 9999 mem: storing 1010 in location 1110
 9999 mem: incrementing refcount of 1010: 1 -> 2
- 104 run: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
+ 104 run: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
 9999 mem: location 1110 is 1010
 9999 mem: skipping refcount at 1010
 9998 run: base address is 1011
@@ -1023,7 +1023,7 @@
 9999 mem: storing 1 in location 1116
 9999 mem: storing 12 in location 1117
 9999 mem: storing 34 in location 1118
- 104 run: {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()} <- put-index {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}, {new-row: ("table_row" "number" "number")}
+ 104 run: {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()} <- put-index {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}, {new-row: ("table_row" "number" "number")}
 9999 mem: location 1110 is 1010
 9999 mem: skipping refcount at 1010
 9999 mem: location 1108 is 8
@@ -1034,19 +1034,19 @@
 9999 mem: storing 1 in location 1036
 9999 mem: storing 12 in location 1037
 9999 mem: storing 34 in location 1038
- 104 run: reply {table: ("address" "shared" "table" "number" "number"), "same-as-ingredient": "0"}
+ 104 run: reply {table: ("address" "table" "number" "number"), "same-as-ingredient": "0"}
 9999 mem: location 1105 is 1006
 9999 abandon: saving in free-list of size 17
 9999 trace: reply: decrementing callstack depth from 3
- 103 run: {2: "number"} <- index_3 {1: ("address" "shared" "table" "number" "number")}, {12: "literal"}
+ 103 run: {2: "number"} <- index_3 {1: ("address" "table" "number" "number")}, {12: "literal"}
 9999 mem: location 1 is 1006
 9999 trace: incrementing callstack depth to 3
- 104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 11
 9999 mem: allocating size 13
 9999 mem: new alloc: 1119
 9999 mem: storing 11 in location 1120
- 104 run: {table: ("address" "shared" "table" "number" "number")} <- next-ingredient-without-typechecking 
+ 104 run: {table: ("address" "table" "number" "number")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1006 in location 1122
 9999 mem: incrementing refcount of 1006: 3 -> 4
  104 run: {key: "number"} <- next-ingredient-without-typechecking 
@@ -1057,7 +1057,7 @@
  104 run: {hash: "number"} <- abs {hash: "number"}
 9999 mem: location 1124 is 3683563290
 9999 trace: incrementing callstack depth to 4
- 105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 105 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 4
 9999 mem: allocating size 6
 9999 abandon: picking up space from free-list of size 6
@@ -1076,7 +1076,7 @@
 9999 trace: reply: decrementing callstack depth from 4
 9998 run: result 0 is 3683563290
 9999 mem: storing 3683563290 in location 1124
- 104 run: {capacity: "number"} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
+ 104 run: {capacity: "number"} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {capacity: "offset"}
 9999 mem: location 1122 is 1006
 9999 mem: skipping refcount at 1006
 9999 mem: location 1007 is 0
@@ -1095,7 +1095,7 @@
  104 run: {hash: "number"} <- abs {hash: "number"}
 9999 mem: location 1124 is -8
 9999 trace: incrementing callstack depth to 4
- 105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 105 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 4
 9999 mem: allocating size 6
 9999 abandon: picking up space from free-list of size 6
@@ -1117,7 +1117,7 @@
 9999 trace: reply: decrementing callstack depth from 4
 9998 run: result 0 is 8
 9999 mem: storing 8 in location 1124
- 104 run: {table-data: ("address" "shared" "array" "table_row" "number" "number")} <- get {table: ("address" "shared" "table" "number" "number"), "lookup": ()}, {data: "offset"}
+ 104 run: {table-data: ("address" "array" "table_row" "number" "number")} <- get {table: ("address" "table" "number" "number"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1122 is 1006
 9999 mem: skipping refcount at 1006
 9999 mem: location 1007 is 0
@@ -1126,11 +1126,11 @@
 9999 mem: location 1122 is 1006
 9999 mem: skipping refcount at 1006
 9998 run: address to copy is 1009
-9998 run: its type is ("address" "shared" "array" "table_row" "number" "number")
+9998 run: its type is ("address" "array" "table_row" "number" "number")
 9999 mem: location 1009 is 1010
 9999 mem: storing 1010 in location 1126
 9999 mem: incrementing refcount of 1010: 2 -> 3
- 104 run: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "shared" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
+ 104 run: {x: ("table_row" "number" "number")} <- index {table-data: ("address" "array" "table_row" "number" "number"), "lookup": ()}, {hash: "number"}
 9999 mem: location 1126 is 1010
 9999 mem: skipping refcount at 1010
 9998 run: base address is 1011

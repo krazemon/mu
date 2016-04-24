@@ -2,8 +2,8 @@
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {34: "literal"}
-9993 parse:   product: {3: "number"}
-9992 load: after rewriting: {3: "number"} <- copy {34: "literal"}
+9993 parse:   product: {2001: "number"}
+9992 load: after rewriting: {2001: "number"} <- copy {34: "literal"}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {0: "literal"}
@@ -17,13 +17,13 @@
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {1000: "literal", "unsafe": ()}
-9993 parse:   product: {default-space: ("address" "shared" "array" "location")}
-9992 load: after rewriting: {default-space: ("address" "shared" "array" "location")} <- copy {1000: "literal", "unsafe": ()}
+9993 parse:   product: {default-space: ("address" "array" "location")}
+9992 load: after rewriting: {default-space: ("address" "array" "location")} <- copy {1000: "literal", "unsafe": ()}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {3: "literal", "unsafe": ()}
+9993 parse:   ingredient: {2000: "literal", "unsafe": ()}
 9993 parse:   product: {1: ("address" "number")}
-9992 load: after rewriting: {1: ("address" "number")} <- copy {3: "literal", "unsafe": ()}
+9992 load: after rewriting: {1: ("address" "number")} <- copy {2000: "literal", "unsafe": ()}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {1: ("address" "number"), "lookup": ()}
@@ -35,7 +35,7 @@
 9991 transform: --- rewrite 'stash' instructions in recipe main
 9991 transform: --- fill in reply ingredients from header for recipe main
 9991 transform: --- deduce types for recipe main
-9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: default-space => ("address" "array" "location")
 9991 transform: --- check for invalid types in recipe main
 9991 transform: --- collect surrounding spaces for recipe main
 9991 transform: --- transform names for recipe main
@@ -60,18 +60,20 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: main
- 102 run: {3: "number"} <- copy {34: "literal"}
-9999 mem: storing 34 in location 3
+ 102 run: {2001: "number"} <- copy {34: "literal"}
+9999 mem: storing 34 in location 2001
  102 run: {1000: "number"} <- copy {0: "literal"}
 9999 mem: storing 0 in location 1000
  102 run: {1001: "number"} <- copy {5: "literal"}
 9999 mem: storing 5 in location 1001
- 102 run: {default-space: ("address" "shared" "array" "location")} <- copy {1000: "literal", "unsafe": ()}
- 102 run: {1: ("address" "number")} <- copy {3: "literal", "unsafe": ()}
-9999 mem: storing 3 in location 1003
+ 102 run: {default-space: ("address" "array" "location")} <- copy {1000: "literal", "unsafe": ()}
+ 102 run: {1: ("address" "number")} <- copy {2000: "literal", "unsafe": ()}
+9999 mem: storing 2000 in location 1003
+9999 mem: incrementing refcount of 2000: 0 -> 1
  102 run: {8: "number", "raw": ()} <- copy {1: ("address" "number"), "lookup": ()}
-9999 mem: location 1003 is 3
-9999 mem: location 3 is 34
+9999 mem: location 1003 is 2000
+9999 mem: skipping refcount at 2000
+9999 mem: location 2001 is 34
 9999 mem: storing 34 in location 8
  102 run: reply 
 9999 trace: reply: decrementing callstack depth from 1

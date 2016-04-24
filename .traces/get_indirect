@@ -1,25 +1,25 @@
 9991 parse: --- defining main
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {2: "literal"}
-9993 parse:   product: {1: "number"}
-9992 load: after rewriting: {1: "number"} <- copy {2: "literal"}
+9993 parse:   ingredient: {10: "literal", "unsafe": ()}
+9993 parse:   product: {1: ("address" "point")}
+9992 load: after rewriting: {1: ("address" "point")} <- copy {10: "literal", "unsafe": ()}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {34: "literal"}
-9993 parse:   product: {2: "number"}
-9992 load: after rewriting: {2: "number"} <- copy {34: "literal"}
+9993 parse:   product: {11: "number"}
+9992 load: after rewriting: {11: "number"} <- copy {34: "literal"}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {35: "literal"}
-9993 parse:   product: {3: "number"}
-9992 load: after rewriting: {3: "number"} <- copy {35: "literal"}
+9993 parse:   product: {12: "number"}
+9992 load: after rewriting: {12: "number"} <- copy {35: "literal"}
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {1: ("address" "point"), "lookup": ()}
 9993 parse:   ingredient: {0: "offset"}
-9993 parse:   product: {4: "number"}
-9992 load: after rewriting: {4: "number"} <- get {1: ("address" "point"), "lookup": ()}, {0: "offset"}
+9993 parse:   product: {2: "number"}
+9992 load: after rewriting: {2: "number"} <- get {1: ("address" "point"), "lookup": ()}, {0: "offset"}
 9999 parse: recipe main has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe main
@@ -48,20 +48,23 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: main
- 102 run: {1: "number"} <- copy {2: "literal"}
-9999 mem: storing 2 in location 1
- 102 run: {2: "number"} <- copy {34: "literal"}
-9999 mem: storing 34 in location 2
- 102 run: {3: "number"} <- copy {35: "literal"}
-9999 mem: storing 35 in location 3
- 102 run: {4: "number"} <- get {1: ("address" "point"), "lookup": ()}, {0: "offset"}
-9999 mem: location 1 is 2
-9999 mem: location 2 is 34
-9999 mem: location 3 is 35
-9999 mem: location 1 is 2
-9998 run: address to copy is 2
+ 102 run: {1: ("address" "point")} <- copy {10: "literal", "unsafe": ()}
+9999 mem: storing 10 in location 1
+9999 mem: incrementing refcount of 10: 0 -> 1
+ 102 run: {11: "number"} <- copy {34: "literal"}
+9999 mem: storing 34 in location 11
+ 102 run: {12: "number"} <- copy {35: "literal"}
+9999 mem: storing 35 in location 12
+ 102 run: {2: "number"} <- get {1: ("address" "point"), "lookup": ()}, {0: "offset"}
+9999 mem: location 1 is 10
+9999 mem: skipping refcount at 10
+9999 mem: location 11 is 34
+9999 mem: location 12 is 35
+9999 mem: location 1 is 10
+9999 mem: skipping refcount at 10
+9998 run: address to copy is 11
 9998 run: its type is "number"
-9999 mem: location 2 is 34
-9999 mem: storing 34 in location 4
+9999 mem: location 11 is 34
+9999 mem: storing 34 in location 2
  102 run: reply 
 9999 trace: reply: decrementing callstack depth from 1

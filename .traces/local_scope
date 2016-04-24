@@ -17,7 +17,7 @@
 9991 parse: --- defining foo
 9993 parse: instruction: local-scope
 9993 parse:   number of ingredients: 0
-9992 load: after rewriting: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9992 load: after rewriting: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {34: "literal"}
@@ -25,23 +25,23 @@
 9992 load: after rewriting: {x: "number"} <- copy {34: "literal"}
 9993 parse: instruction: return
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {default-space: ("address" "shared" "array" "location")}
-9992 load: after rewriting: return {default-space: ("address" "shared" "array" "location")}
+9993 parse:   ingredient: {default-space: ("address" "array" "location")}
+9992 load: after rewriting: return {default-space: ("address" "array" "location")}
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe main
 9991 transform: --- rewrite literal strings in recipe foo
 9991 transform: --- rewrite 'stash' instructions in recipe main
 9991 transform: --- rewrite 'stash' instructions in recipe foo
 9991 transform: --- deduce types for recipe foo
-9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: default-space => ("address" "array" "location")
 9992 transform: x => "number"
-9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {x: "number"} <- copy {34: "literal"}
-9993 transform: return {default-space: ("address" "shared" "array" "location")}
+9993 transform: return {default-space: ("address" "array" "location")}
 9991 transform: --- fill in reply ingredients from header for recipe main
 9991 transform: --- deduce types for recipe main
 9991 transform: --- deduce types for recipe foo
-9992 transform: default-space => ("address" "shared" "array" "location")
+9992 transform: default-space => ("address" "array" "location")
 9992 transform: x => "number"
 9991 transform: --- check for invalid types in recipe main
 9991 transform: --- check for invalid types in recipe foo
@@ -52,11 +52,11 @@
 9993 name: assign x 1
 9991 transform: --- resolve ambiguous calls for recipe main
 9992 transform: instruction {3: "boolean"} <- equal {1: "address"}, {2: "address"}
-9992 transform: checking variant (strict) 0: recipe equal_2 {a: ("address" "shared" "array" "character")} {b: ("address" "shared" "array" "character")} -> {result: "boolean"}
+9992 transform: checking variant (strict) 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literals-against-booleans) 0: recipe equal_2 {a: ("address" "shared" "array" "character")} {b: ("address" "shared" "array" "character")} -> {result: "boolean"}
+9992 transform: checking variant (strict except literals-against-booleans) 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe equal_2 {a: ("address" "shared" "array" "character")} {b: ("address" "shared" "array" "character")} -> {result: "boolean"}
+9992 transform: checking variant 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9991 transform: --- resolve ambiguous calls for recipe foo
 9991 transform: --- compute instruction operations for recipe main
@@ -90,32 +90,34 @@
 9990 schedule: main
  102 run: {1: "address"} <- foo 
 9999 trace: incrementing callstack depth to 2
- 103 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 103 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 2
 9999 mem: allocating size 4
 9999 mem: new alloc: 1000
 9999 mem: storing 2 in location 1001
  103 run: {x: "number"} <- copy {34: "literal"}
 9999 mem: storing 34 in location 1003
- 103 run: return {default-space: ("address" "shared" "array" "location")}
+ 103 run: return {default-space: ("address" "array" "location")}
 9999 abandon: saving in free-list of size 4
 9999 trace: reply: decrementing callstack depth from 2
 9998 run: result 0 is 1000
 9999 mem: storing 1000 in location 1
+9999 mem: incrementing refcount of 1000: 0 -> 1
  102 run: {2: "address"} <- foo 
 9999 trace: incrementing callstack depth to 2
- 103 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 103 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 2
 9999 mem: allocating size 4
 9999 abandon: picking up space from free-list of size 4
 9999 mem: new alloc from free list: 1000
  103 run: {x: "number"} <- copy {34: "literal"}
 9999 mem: storing 34 in location 1003
- 103 run: return {default-space: ("address" "shared" "array" "location")}
+ 103 run: return {default-space: ("address" "array" "location")}
 9999 abandon: saving in free-list of size 4
 9999 trace: reply: decrementing callstack depth from 2
 9998 run: result 0 is 1000
 9999 mem: storing 1000 in location 2
+9999 mem: incrementing refcount of 1000: 1 -> 2
  102 run: {3: "boolean"} <- equal {1: "address"}, {2: "address"}
 9999 mem: location 1 is 1000
 9999 mem: location 2 is 1000

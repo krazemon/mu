@@ -1,8 +1,8 @@
 9991 parse: --- defining scenario_interpolate-at-start
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:shared:array:character/raw <- new [_, hello!]\n    2:address:shared:array:character/raw <- new [abc]\n    3:address:shared:array:character/raw <- interpolate 1:address:shared:array:character/raw, 2:address:shared:array:character/raw\n    4:array:character/raw <- copy *3:address:shared:array:character/raw\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    1:address:shared:array:character/raw <- new [_, hello!]\n    2:address:shared:array:character/raw <- new [abc]\n    3:address:shared:array:character/raw <- interpolate 1:address:shared:array:character/raw, 2:address:shared:array:character/raw\n    4:array:character/raw <- copy *3:address:shared:array:character/raw\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    1:address:array:character/raw <- new [_, hello!]\n    2:address:array:character/raw <- new [abc]\n    3:address:array:character/raw <- interpolate 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    1:address:array:character/raw <- new [_, hello!]\n    2:address:array:character/raw <- new [abc]\n    3:address:array:character/raw <- interpolate 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"\n    4:array:character <- [abc, hello!]\n    16 <- 0  # out of bounds\n  ": "literal-string"}
@@ -12,7 +12,7 @@
 9991 transform: --- rewrite literal strings in recipe scenario_interpolate-at-start
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_interpolate-at-start
 9991 transform: --- deduce types for recipe scenario_interpolate-at-start
-9993 transform: run {"\n    1:address:shared:array:character/raw <- new [_, hello!]\n    2:address:shared:array:character/raw <- new [abc]\n    3:address:shared:array:character/raw <- interpolate 1:address:shared:array:character/raw, 2:address:shared:array:character/raw\n    4:array:character/raw <- copy *3:address:shared:array:character/raw\n  ": "literal-string"}
+9993 transform: run {"\n    1:address:array:character/raw <- new [_, hello!]\n    2:address:array:character/raw <- new [abc]\n    3:address:array:character/raw <- interpolate 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    4:array:character <- [abc, hello!]\n    16 <- 0  # out of bounds\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_interpolate-at-start
 9991 transform: --- deduce types for recipe scenario_interpolate-at-start
@@ -36,46 +36,46 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_interpolate-at-start
- 102 run: run {"\n    1:address:shared:array:character/raw <- new [_, hello!]\n    2:address:shared:array:character/raw <- new [abc]\n    3:address:shared:array:character/raw <- interpolate 1:address:shared:array:character/raw, 2:address:shared:array:character/raw\n    4:array:character/raw <- copy *3:address:shared:array:character/raw\n  ": "literal-string"}
+ 102 run: run {"\n    1:address:array:character/raw <- new [_, hello!]\n    2:address:array:character/raw <- new [abc]\n    3:address:array:character/raw <- interpolate 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"_, hello!": "literal-string"}
-9993 parse:   product: {1: ("address" "shared" "array" "character"), "raw": ()}
-9992 load: after rewriting: {1: ("address" "shared" "array" "character"), "raw": ()} <- new {"_, hello!": "literal-string"}
+9993 parse:   product: {1: ("address" "array" "character"), "raw": ()}
+9992 load: after rewriting: {1: ("address" "array" "character"), "raw": ()} <- new {"_, hello!": "literal-string"}
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"abc": "literal-string"}
-9993 parse:   product: {2: ("address" "shared" "array" "character"), "raw": ()}
-9992 load: after rewriting: {2: ("address" "shared" "array" "character"), "raw": ()} <- new {"abc": "literal-string"}
+9993 parse:   product: {2: ("address" "array" "character"), "raw": ()}
+9992 load: after rewriting: {2: ("address" "array" "character"), "raw": ()} <- new {"abc": "literal-string"}
 9993 parse: instruction: interpolate
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {1: ("address" "shared" "array" "character"), "raw": ()}
-9993 parse:   ingredient: {2: ("address" "shared" "array" "character"), "raw": ()}
-9993 parse:   product: {3: ("address" "shared" "array" "character"), "raw": ()}
-9992 load: after rewriting: {3: ("address" "shared" "array" "character"), "raw": ()} <- interpolate {1: ("address" "shared" "array" "character"), "raw": ()}, {2: ("address" "shared" "array" "character"), "raw": ()}
+9993 parse:   ingredient: {1: ("address" "array" "character"), "raw": ()}
+9993 parse:   ingredient: {2: ("address" "array" "character"), "raw": ()}
+9993 parse:   product: {3: ("address" "array" "character"), "raw": ()}
+9992 load: after rewriting: {3: ("address" "array" "character"), "raw": ()} <- interpolate {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {3: ("address" "shared" "array" "character"), "raw": (), "lookup": ()}
+9993 parse:   ingredient: {3: ("address" "array" "character"), "raw": (), "lookup": ()}
 9993 parse:   product: {4: ("array" "character"), "raw": ()}
-9992 load: after rewriting: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "shared" "array" "character"), "raw": (), "lookup": ()}
+9992 load: after rewriting: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "array" "character"), "raw": (), "lookup": ()}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
-9993 transform: {1: ("address" "shared" "array" "character"), "raw": ()} <- new {"_, hello!": "literal-string"}
-9993 transform: {2: ("address" "shared" "array" "character"), "raw": ()} <- new {"abc": "literal-string"}
-9993 transform: {3: ("address" "shared" "array" "character"), "raw": ()} <- interpolate {1: ("address" "shared" "array" "character"), "raw": ()}, {2: ("address" "shared" "array" "character"), "raw": ()}
-9993 transform: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "shared" "array" "character"), "raw": (), "lookup": ()}
+9993 transform: {1: ("address" "array" "character"), "raw": ()} <- new {"_, hello!": "literal-string"}
+9993 transform: {2: ("address" "array" "character"), "raw": ()} <- new {"abc": "literal-string"}
+9993 transform: {3: ("address" "array" "character"), "raw": ()} <- interpolate {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
+9993 transform: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "array" "character"), "raw": (), "lookup": ()}
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction {3: ("address" "shared" "array" "character"), "raw": ()} <- interpolate {1: ("address" "shared" "array" "character"), "raw": ()}, {2: ("address" "shared" "array" "character"), "raw": ()}
-9992 transform: checking variant (strict) 0: recipe interpolate {template: ("address" "shared" "array" "character")} -> {result: ("address" "shared" "array" "character")}
+9992 transform: instruction {3: ("address" "array" "character"), "raw": ()} <- interpolate {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
+9992 transform: checking variant (strict) 0: recipe interpolate {template: ("address" "array" "character")} -> {result: ("address" "array" "character")}
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new ...
@@ -92,41 +92,41 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: {1: ("address" "shared" "array" "character"), "raw": ()} <- new {"_, hello!": "literal-string"}
+ 103 run: {1: ("address" "array" "character"), "raw": ()} <- new {"_, hello!": "literal-string"}
 9999 mem: new string alloc: 1000
 9999 mem: storing 1000 in location 1
 9999 mem: incrementing refcount of 1000: 0 -> 1
- 103 run: {2: ("address" "shared" "array" "character"), "raw": ()} <- new {"abc": "literal-string"}
+ 103 run: {2: ("address" "array" "character"), "raw": ()} <- new {"abc": "literal-string"}
 9999 mem: new string alloc: 1011
 9999 mem: storing 1011 in location 2
 9999 mem: incrementing refcount of 1011: 0 -> 1
- 103 run: {3: ("address" "shared" "array" "character"), "raw": ()} <- interpolate {1: ("address" "shared" "array" "character"), "raw": ()}, {2: ("address" "shared" "array" "character"), "raw": ()}
+ 103 run: {3: ("address" "array" "character"), "raw": ()} <- interpolate {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
 9999 mem: location 1 is 1000
 9999 mem: location 2 is 1011
 9999 trace: incrementing callstack depth to 3
- 104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 15
 9999 mem: allocating size 17
 9999 mem: new alloc: 1016
 9999 mem: storing 15 in location 1017
- 104 run: {template: ("address" "shared" "array" "character")} <- next-ingredient-without-typechecking 
+ 104 run: {template: ("address" "array" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1000 in location 1019
 9999 mem: incrementing refcount of 1000: 1 -> 2
- 104 run: {tem-len: "number"} <- length {template: ("address" "shared" "array" "character"), "lookup": ()}
+ 104 run: {tem-len: "number"} <- length {template: ("address" "array" "character"), "lookup": ()}
 9999 mem: location 1019 is 1000
 9999 mem: skipping refcount at 1000
 9999 mem: storing 9 in location 1020
  104 run: {result-len: "number"} <- copy {tem-len: "number"}
 9999 mem: location 1020 is 9
 9999 mem: storing 9 in location 1021
- 104 run: {a: ("address" "shared" "array" "character")}, {arg-received?: "boolean"} <- next-ingredient 
+ 104 run: {a: ("address" "array" "character")}, {arg-received?: "boolean"} <- next-ingredient 
 9999 mem: storing 1011 in location 1022
 9999 mem: incrementing refcount of 1011: 1 -> 2
 9999 mem: storing 1 in location 1023
  104 run: jump-unless {arg-received?: "boolean"}, {: "offset"}
 9999 mem: location 1023 is 1
 9998 run: jump-unless fell through
- 104 run: {a-len: "number"} <- length {a: ("address" "shared" "array" "character"), "lookup": ()}
+ 104 run: {a-len: "number"} <- length {a: ("address" "array" "character"), "lookup": ()}
 9999 mem: location 1022 is 1011
 9999 mem: skipping refcount at 1011
 9999 mem: storing 3 in location 1024
@@ -139,7 +139,7 @@
 9999 mem: storing 11 in location 1021
  104 run: jump {: "offset"}
 9998 run: jumping to instruction 5
- 104 run: {a: ("address" "shared" "array" "character")}, {arg-received?: "boolean"} <- next-ingredient 
+ 104 run: {a: ("address" "array" "character")}, {arg-received?: "boolean"} <- next-ingredient 
 9999 mem: decrementing refcount of 1011: 2 -> 1
 9999 mem: storing 0 in location 1022
 9999 mem: storing 0 in location 1023
@@ -148,7 +148,7 @@
 9998 run: jumping to instruction 11
  104 run: rewind-ingredients 
  104 run: _ <- next-ingredient 
- 104 run: {result: ("address" "shared" "array" "character")} <- new {character: "type"}, {result-len: "number"}
+ 104 run: {result: ("address" "array" "character")} <- new {character: "type"}, {result-len: "number"}
 9999 mem: location 1021 is 11
 9999 mem: array size is 11
 9999 mem: allocating size 13
@@ -160,7 +160,7 @@
 9999 mem: storing 0 in location 1026
  104 run: {i: "number"} <- copy {0: "literal"}
 9999 mem: storing 0 in location 1027
- 104 run: {a: ("address" "shared" "array" "character")}, {arg-received?: "boolean"} <- next-ingredient 
+ 104 run: {a: ("address" "array" "character")}, {arg-received?: "boolean"} <- next-ingredient 
 9999 mem: storing 1011 in location 1022
 9999 mem: incrementing refcount of 1011: 1 -> 2
 9999 mem: storing 1 in location 1023
@@ -174,7 +174,7 @@
  104 run: jump-if {tem-done?: "boolean"}, {+done: "label"}
 9999 mem: location 1028 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {template: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {in: "character"} <- index {template: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1019 is 1000
 9999 mem: skipping refcount at 1000
 9998 run: base address is 1001
@@ -198,7 +198,7 @@
  104 run: jump-if {arg-done?: "boolean"}, {: "offset"}
 9999 mem: location 1032 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {a: ("address" "shared" "array" "character"), "lookup": ()}, {j: "number"}
+ 104 run: {in: "character"} <- index {a: ("address" "array" "character"), "lookup": ()}, {j: "number"}
 9999 mem: location 1022 is 1011
 9999 mem: skipping refcount at 1011
 9998 run: base address is 1012
@@ -207,7 +207,7 @@
 9998 run: its type is character
 9999 mem: location 1013 is 97
 9999 mem: storing 97 in location 1029
- 104 run: {result: ("address" "shared" "array" "character"), "lookup": ()} <- put-index {result: ("address" "shared" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
+ 104 run: {result: ("address" "array" "character"), "lookup": ()} <- put-index {result: ("address" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
 9999 mem: location 1025 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1026 is 0
@@ -229,7 +229,7 @@
  104 run: jump-if {arg-done?: "boolean"}, {: "offset"}
 9999 mem: location 1032 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {a: ("address" "shared" "array" "character"), "lookup": ()}, {j: "number"}
+ 104 run: {in: "character"} <- index {a: ("address" "array" "character"), "lookup": ()}, {j: "number"}
 9999 mem: location 1022 is 1011
 9999 mem: skipping refcount at 1011
 9998 run: base address is 1012
@@ -238,7 +238,7 @@
 9998 run: its type is character
 9999 mem: location 1014 is 98
 9999 mem: storing 98 in location 1029
- 104 run: {result: ("address" "shared" "array" "character"), "lookup": ()} <- put-index {result: ("address" "shared" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
+ 104 run: {result: ("address" "array" "character"), "lookup": ()} <- put-index {result: ("address" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
 9999 mem: location 1025 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1026 is 1
@@ -260,7 +260,7 @@
  104 run: jump-if {arg-done?: "boolean"}, {: "offset"}
 9999 mem: location 1032 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {a: ("address" "shared" "array" "character"), "lookup": ()}, {j: "number"}
+ 104 run: {in: "character"} <- index {a: ("address" "array" "character"), "lookup": ()}, {j: "number"}
 9999 mem: location 1022 is 1011
 9999 mem: skipping refcount at 1011
 9998 run: base address is 1012
@@ -269,7 +269,7 @@
 9998 run: its type is character
 9999 mem: location 1015 is 99
 9999 mem: storing 99 in location 1029
- 104 run: {result: ("address" "shared" "array" "character"), "lookup": ()} <- put-index {result: ("address" "shared" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
+ 104 run: {result: ("address" "array" "character"), "lookup": ()} <- put-index {result: ("address" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
 9999 mem: location 1025 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1026 is 2
@@ -296,7 +296,7 @@
 9999 mem: storing 1 in location 1027
  104 run: jump {: "offset"}
 9998 run: jumping to instruction 18
- 104 run: {a: ("address" "shared" "array" "character")}, {arg-received?: "boolean"} <- next-ingredient 
+ 104 run: {a: ("address" "array" "character")}, {arg-received?: "boolean"} <- next-ingredient 
 9999 mem: decrementing refcount of 1011: 2 -> 1
 9999 mem: storing 0 in location 1022
 9999 mem: storing 0 in location 1023
@@ -310,7 +310,7 @@
  104 run: jump-if {tem-done?: "boolean"}, {: "offset"}
 9999 mem: location 1028 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {template: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {in: "character"} <- index {template: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1019 is 1000
 9999 mem: skipping refcount at 1000
 9998 run: base address is 1001
@@ -319,7 +319,7 @@
 9998 run: its type is character
 9999 mem: location 1003 is 44
 9999 mem: storing 44 in location 1029
- 104 run: {result: ("address" "shared" "array" "character"), "lookup": ()} <- put-index {result: ("address" "shared" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
+ 104 run: {result: ("address" "array" "character"), "lookup": ()} <- put-index {result: ("address" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
 9999 mem: location 1025 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1026 is 3
@@ -341,7 +341,7 @@
  104 run: jump-if {tem-done?: "boolean"}, {: "offset"}
 9999 mem: location 1028 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {template: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {in: "character"} <- index {template: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1019 is 1000
 9999 mem: skipping refcount at 1000
 9998 run: base address is 1001
@@ -350,7 +350,7 @@
 9998 run: its type is character
 9999 mem: location 1004 is 32
 9999 mem: storing 32 in location 1029
- 104 run: {result: ("address" "shared" "array" "character"), "lookup": ()} <- put-index {result: ("address" "shared" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
+ 104 run: {result: ("address" "array" "character"), "lookup": ()} <- put-index {result: ("address" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
 9999 mem: location 1025 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1026 is 4
@@ -372,7 +372,7 @@
  104 run: jump-if {tem-done?: "boolean"}, {: "offset"}
 9999 mem: location 1028 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {template: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {in: "character"} <- index {template: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1019 is 1000
 9999 mem: skipping refcount at 1000
 9998 run: base address is 1001
@@ -381,7 +381,7 @@
 9998 run: its type is character
 9999 mem: location 1005 is 104
 9999 mem: storing 104 in location 1029
- 104 run: {result: ("address" "shared" "array" "character"), "lookup": ()} <- put-index {result: ("address" "shared" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
+ 104 run: {result: ("address" "array" "character"), "lookup": ()} <- put-index {result: ("address" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
 9999 mem: location 1025 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1026 is 5
@@ -403,7 +403,7 @@
  104 run: jump-if {tem-done?: "boolean"}, {: "offset"}
 9999 mem: location 1028 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {template: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {in: "character"} <- index {template: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1019 is 1000
 9999 mem: skipping refcount at 1000
 9998 run: base address is 1001
@@ -412,7 +412,7 @@
 9998 run: its type is character
 9999 mem: location 1006 is 101
 9999 mem: storing 101 in location 1029
- 104 run: {result: ("address" "shared" "array" "character"), "lookup": ()} <- put-index {result: ("address" "shared" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
+ 104 run: {result: ("address" "array" "character"), "lookup": ()} <- put-index {result: ("address" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
 9999 mem: location 1025 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1026 is 6
@@ -434,7 +434,7 @@
  104 run: jump-if {tem-done?: "boolean"}, {: "offset"}
 9999 mem: location 1028 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {template: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {in: "character"} <- index {template: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1019 is 1000
 9999 mem: skipping refcount at 1000
 9998 run: base address is 1001
@@ -443,7 +443,7 @@
 9998 run: its type is character
 9999 mem: location 1007 is 108
 9999 mem: storing 108 in location 1029
- 104 run: {result: ("address" "shared" "array" "character"), "lookup": ()} <- put-index {result: ("address" "shared" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
+ 104 run: {result: ("address" "array" "character"), "lookup": ()} <- put-index {result: ("address" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
 9999 mem: location 1025 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1026 is 7
@@ -465,7 +465,7 @@
  104 run: jump-if {tem-done?: "boolean"}, {: "offset"}
 9999 mem: location 1028 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {template: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {in: "character"} <- index {template: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1019 is 1000
 9999 mem: skipping refcount at 1000
 9998 run: base address is 1001
@@ -474,7 +474,7 @@
 9998 run: its type is character
 9999 mem: location 1008 is 108
 9999 mem: storing 108 in location 1029
- 104 run: {result: ("address" "shared" "array" "character"), "lookup": ()} <- put-index {result: ("address" "shared" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
+ 104 run: {result: ("address" "array" "character"), "lookup": ()} <- put-index {result: ("address" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
 9999 mem: location 1025 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1026 is 8
@@ -496,7 +496,7 @@
  104 run: jump-if {tem-done?: "boolean"}, {: "offset"}
 9999 mem: location 1028 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {template: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {in: "character"} <- index {template: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1019 is 1000
 9999 mem: skipping refcount at 1000
 9998 run: base address is 1001
@@ -505,7 +505,7 @@
 9998 run: its type is character
 9999 mem: location 1009 is 111
 9999 mem: storing 111 in location 1029
- 104 run: {result: ("address" "shared" "array" "character"), "lookup": ()} <- put-index {result: ("address" "shared" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
+ 104 run: {result: ("address" "array" "character"), "lookup": ()} <- put-index {result: ("address" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
 9999 mem: location 1025 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1026 is 9
@@ -527,7 +527,7 @@
  104 run: jump-if {tem-done?: "boolean"}, {: "offset"}
 9999 mem: location 1028 is 0
 9998 run: jump-if fell through
- 104 run: {in: "character"} <- index {template: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {in: "character"} <- index {template: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1019 is 1000
 9999 mem: skipping refcount at 1000
 9998 run: base address is 1001
@@ -536,7 +536,7 @@
 9998 run: its type is character
 9999 mem: location 1010 is 33
 9999 mem: storing 33 in location 1029
- 104 run: {result: ("address" "shared" "array" "character"), "lookup": ()} <- put-index {result: ("address" "shared" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
+ 104 run: {result: ("address" "array" "character"), "lookup": ()} <- put-index {result: ("address" "array" "character"), "lookup": ()}, {result-idx: "number"}, {in: "character"}
 9999 mem: location 1025 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1026 is 10
@@ -558,14 +558,14 @@
  104 run: jump-if {tem-done?: "boolean"}, {: "offset"}
 9999 mem: location 1028 is 1
 9998 run: jumping to instruction 53
- 104 run: reply {result: ("address" "shared" "array" "character")}
+ 104 run: reply {result: ("address" "array" "character")}
 9999 mem: location 1025 is 1033
 9999 abandon: saving in free-list of size 17
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1033
 9999 mem: storing 1033 in location 3
 9999 mem: incrementing refcount of 1033: 1 -> 2
- 103 run: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "shared" "array" "character"), "raw": (), "lookup": ()}
+ 103 run: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "array" "character"), "raw": (), "lookup": ()}
 9999 mem: location 3 is 1033
 9999 mem: skipping refcount at 1033
 9999 mem: location 1034 is 11

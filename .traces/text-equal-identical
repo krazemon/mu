@@ -1,8 +1,8 @@
 9991 parse: --- defining scenario_text-equal-identical
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    default-space:address:shared:array:location <- new location:type, 30\n    x:address:shared:array:character <- new [abc]\n    y:address:shared:array:character <- new [abc]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    default-space:address:shared:array:location <- new location:type, 30\n    x:address:shared:array:character <- new [abc]\n    y:address:shared:array:character <- new [abc]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    default-space:address:array:location <- new location:type, 30\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abc]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    default-space:address:array:location <- new location:type, 30\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abc]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"\n    3 <- 1  # abc == abc\n  ": "literal-string"}
@@ -12,7 +12,7 @@
 9991 transform: --- rewrite literal strings in recipe scenario_text-equal-identical
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_text-equal-identical
 9991 transform: --- deduce types for recipe scenario_text-equal-identical
-9993 transform: run {"\n    default-space:address:shared:array:location <- new location:type, 30\n    x:address:shared:array:character <- new [abc]\n    y:address:shared:array:character <- new [abc]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
+9993 transform: run {"\n    default-space:address:array:location <- new location:type, 30\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abc]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    3 <- 1  # abc == abc\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_text-equal-identical
 9991 transform: --- deduce types for recipe scenario_text-equal-identical
@@ -36,24 +36,24 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_text-equal-identical
- 102 run: run {"\n    default-space:address:shared:array:location <- new location:type, 30\n    x:address:shared:array:character <- new [abc]\n    y:address:shared:array:character <- new [abc]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
+ 102 run: run {"\n    default-space:address:array:location <- new location:type, 30\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abc]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {location: "type"}
 9993 parse:   ingredient: {30: "literal"}
-9993 parse:   product: {default-space: ("address" "shared" "array" "location")}
-9992 load: after rewriting: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {30: "literal"}
+9993 parse:   product: {default-space: ("address" "array" "location")}
+9992 load: after rewriting: {default-space: ("address" "array" "location")} <- new {location: "type"}, {30: "literal"}
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"abc": "literal-string"}
-9993 parse:   product: {x: ("address" "shared" "array" "character")}
-9992 load: after rewriting: {x: ("address" "shared" "array" "character")} <- new {"abc": "literal-string"}
+9993 parse:   product: {x: ("address" "array" "character")}
+9992 load: after rewriting: {x: ("address" "array" "character")} <- new {"abc": "literal-string"}
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"abc": "literal-string"}
-9993 parse:   product: {y: ("address" "shared" "array" "character")}
-9992 load: after rewriting: {y: ("address" "shared" "array" "character")} <- new {"abc": "literal-string"}
+9993 parse:   product: {y: ("address" "array" "character")}
+9992 load: after rewriting: {y: ("address" "array" "character")} <- new {"abc": "literal-string"}
 9993 parse: instruction: equal
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {x: ()}
@@ -65,20 +65,20 @@
 9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
-9992 transform: default-space => ("address" "shared" "array" "location")
-9992 transform: x => ("address" "shared" "array" "character")
-9992 transform: y => ("address" "shared" "array" "character")
-9992 transform: x <= ("address" "shared" "array" "character")
-9992 transform: y <= ("address" "shared" "array" "character")
-9993 transform: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {30: "literal"}
-9993 transform: {x: ("address" "shared" "array" "character")} <- new {"abc": "literal-string"}
-9993 transform: {y: ("address" "shared" "array" "character")} <- new {"abc": "literal-string"}
-9993 transform: {3: "boolean", "raw": ()} <- equal {x: ("address" "shared" "array" "character")}, {y: ("address" "shared" "array" "character")}
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: x => ("address" "array" "character")
+9992 transform: y => ("address" "array" "character")
+9992 transform: x <= ("address" "array" "character")
+9992 transform: y <= ("address" "array" "character")
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {30: "literal"}
+9993 transform: {x: ("address" "array" "character")} <- new {"abc": "literal-string"}
+9993 transform: {y: ("address" "array" "character")} <- new {"abc": "literal-string"}
+9993 transform: {3: "boolean", "raw": ()} <- equal {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
-9992 transform: default-space => ("address" "shared" "array" "location")
-9992 transform: x => ("address" "shared" "array" "character")
-9992 transform: y => ("address" "shared" "array" "character")
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: x => ("address" "array" "character")
+9992 transform: y => ("address" "array" "character")
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
@@ -86,7 +86,7 @@
 9993 name: assign y 2
 9991 transform: --- resolve ambiguous calls for recipe run_1001
 9992 transform: instruction {3: "boolean", "raw": ()} <- equal {x: ()}, {y: ()}
-9992 transform: checking variant (strict) 0: recipe equal_2 {a: ("address" "shared" "array" "character")} {b: ("address" "shared" "array" "character")} -> {result: "boolean"}
+9992 transform: checking variant (strict) 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new ...
@@ -104,39 +104,39 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {30: "literal"}
+ 103 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {30: "literal"}
 9999 mem: array size is 30
 9999 mem: allocating size 32
 9999 mem: new alloc: 1000
 9999 mem: storing 30 in location 1001
- 103 run: {x: ("address" "shared" "array" "character")} <- new {"abc": "literal-string"}
+ 103 run: {x: ("address" "array" "character")} <- new {"abc": "literal-string"}
 9999 mem: new string alloc: 1032
 9999 mem: storing 1032 in location 1003
 9999 mem: incrementing refcount of 1032: 0 -> 1
- 103 run: {y: ("address" "shared" "array" "character")} <- new {"abc": "literal-string"}
+ 103 run: {y: ("address" "array" "character")} <- new {"abc": "literal-string"}
 9999 mem: new string alloc: 1037
 9999 mem: storing 1037 in location 1004
 9999 mem: incrementing refcount of 1037: 0 -> 1
- 103 run: {3: "boolean", "raw": ()} <- equal_2 {x: ("address" "shared" "array" "character")}, {y: ("address" "shared" "array" "character")}
+ 103 run: {3: "boolean", "raw": ()} <- equal_2 {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
 9999 mem: location 1003 is 1032
 9999 mem: location 1004 is 1037
 9999 trace: incrementing callstack depth to 3
- 104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 11
 9999 mem: allocating size 13
 9999 mem: new alloc: 1042
 9999 mem: storing 11 in location 1043
- 104 run: {a: ("address" "shared" "array" "character")} <- next-ingredient-without-typechecking 
+ 104 run: {a: ("address" "array" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1032 in location 1045
 9999 mem: incrementing refcount of 1032: 1 -> 2
- 104 run: {b: ("address" "shared" "array" "character")} <- next-ingredient-without-typechecking 
+ 104 run: {b: ("address" "array" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1037 in location 1046
 9999 mem: incrementing refcount of 1037: 1 -> 2
- 104 run: {a-len: "number"} <- length {a: ("address" "shared" "array" "character"), "lookup": ()}
+ 104 run: {a-len: "number"} <- length {a: ("address" "array" "character"), "lookup": ()}
 9999 mem: location 1045 is 1032
 9999 mem: skipping refcount at 1032
 9999 mem: storing 3 in location 1047
- 104 run: {b-len: "number"} <- length {b: ("address" "shared" "array" "character"), "lookup": ()}
+ 104 run: {b-len: "number"} <- length {b: ("address" "array" "character"), "lookup": ()}
 9999 mem: location 1046 is 1037
 9999 mem: skipping refcount at 1037
 9999 mem: storing 3 in location 1048
@@ -160,7 +160,7 @@
  104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1051 is 0
 9998 run: jump-if fell through
- 104 run: {a2: "character"} <- index {a: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {a2: "character"} <- index {a: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1045 is 1032
 9999 mem: skipping refcount at 1032
 9998 run: base address is 1033
@@ -169,7 +169,7 @@
 9998 run: its type is character
 9999 mem: location 1034 is 97
 9999 mem: storing 97 in location 1052
- 104 run: {b2: "character"} <- index {b: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {b2: "character"} <- index {b: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1046 is 1037
 9999 mem: skipping refcount at 1037
 9998 run: base address is 1038
@@ -197,7 +197,7 @@
  104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1051 is 0
 9998 run: jump-if fell through
- 104 run: {a2: "character"} <- index {a: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {a2: "character"} <- index {a: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1045 is 1032
 9999 mem: skipping refcount at 1032
 9998 run: base address is 1033
@@ -206,7 +206,7 @@
 9998 run: its type is character
 9999 mem: location 1035 is 98
 9999 mem: storing 98 in location 1052
- 104 run: {b2: "character"} <- index {b: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {b2: "character"} <- index {b: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1046 is 1037
 9999 mem: skipping refcount at 1037
 9998 run: base address is 1038
@@ -234,7 +234,7 @@
  104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1051 is 0
 9998 run: jump-if fell through
- 104 run: {a2: "character"} <- index {a: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {a2: "character"} <- index {a: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1045 is 1032
 9999 mem: skipping refcount at 1032
 9998 run: base address is 1033
@@ -243,7 +243,7 @@
 9998 run: its type is character
 9999 mem: location 1036 is 99
 9999 mem: storing 99 in location 1052
- 104 run: {b2: "character"} <- index {b: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {b2: "character"} <- index {b: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1046 is 1037
 9999 mem: skipping refcount at 1037
 9998 run: base address is 1038

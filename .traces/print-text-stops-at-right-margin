@@ -1,8 +1,8 @@
 9991 parse: --- defining scenario_print-text-stops-at-right-margin
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:shared:screen <- new-fake-screen 3/width, 2/height\n    2:address:shared:array:character <- new [abcd]\n    1:address:shared:screen <- print 1:address:shared:screen, 2:address:shared:array:character\n    3:address:shared:array:screen-cell <- get *1:address:shared:screen, data:offset\n    4:array:screen-cell <- copy *3:address:shared:array:screen-cell\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    1:address:shared:screen <- new-fake-screen 3/width, 2/height\n    2:address:shared:array:character <- new [abcd]\n    1:address:shared:screen <- print 1:address:shared:screen, 2:address:shared:array:character\n    3:address:shared:array:screen-cell <- get *1:address:shared:screen, data:offset\n    4:array:screen-cell <- copy *3:address:shared:array:screen-cell\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    1:address:screen <- new-fake-screen 3/width, 2/height\n    2:address:array:character <- new [abcd]\n    1:address:screen <- print 1:address:screen, 2:address:array:character\n    3:address:array:screen-cell <- get *1:address:screen, data:offset\n    4:array:screen-cell <- copy *3:address:array:screen-cell\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    1:address:screen <- new-fake-screen 3/width, 2/height\n    2:address:array:character <- new [abcd]\n    1:address:screen <- print 1:address:screen, 2:address:array:character\n    3:address:array:screen-cell <- get *1:address:screen, data:offset\n    4:array:screen-cell <- copy *3:address:array:screen-cell\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"\n    4 <- 6  # width*height\n    5 <- 97  # 'a'\n    6 <- 7  # white\n    7 <- 98  # 'b'\n    8 <- 7  # white\n    9 <- 100  # 'd' overwrites 'c'\n    10 <- 7  # white\n    11 <- 0  # unused\n  ": "literal-string"}
@@ -12,7 +12,7 @@
 9991 transform: --- rewrite literal strings in recipe scenario_print-text-stops-at-right-margin
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_print-text-stops-at-right-margin
 9991 transform: --- deduce types for recipe scenario_print-text-stops-at-right-margin
-9993 transform: run {"\n    1:address:shared:screen <- new-fake-screen 3/width, 2/height\n    2:address:shared:array:character <- new [abcd]\n    1:address:shared:screen <- print 1:address:shared:screen, 2:address:shared:array:character\n    3:address:shared:array:screen-cell <- get *1:address:shared:screen, data:offset\n    4:array:screen-cell <- copy *3:address:shared:array:screen-cell\n  ": "literal-string"}
+9993 transform: run {"\n    1:address:screen <- new-fake-screen 3/width, 2/height\n    2:address:array:character <- new [abcd]\n    1:address:screen <- print 1:address:screen, 2:address:array:character\n    3:address:array:screen-cell <- get *1:address:screen, data:offset\n    4:array:screen-cell <- copy *3:address:array:screen-cell\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    4 <- 6  # width*height\n    5 <- 97  # 'a'\n    6 <- 7  # white\n    7 <- 98  # 'b'\n    8 <- 7  # white\n    9 <- 100  # 'd' overwrites 'c'\n    10 <- 7  # white\n    11 <- 0  # unused\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_print-text-stops-at-right-margin
 9991 transform: --- deduce types for recipe scenario_print-text-stops-at-right-margin
@@ -36,36 +36,36 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_print-text-stops-at-right-margin
- 102 run: run {"\n    1:address:shared:screen <- new-fake-screen 3/width, 2/height\n    2:address:shared:array:character <- new [abcd]\n    1:address:shared:screen <- print 1:address:shared:screen, 2:address:shared:array:character\n    3:address:shared:array:screen-cell <- get *1:address:shared:screen, data:offset\n    4:array:screen-cell <- copy *3:address:shared:array:screen-cell\n  ": "literal-string"}
+ 102 run: run {"\n    1:address:screen <- new-fake-screen 3/width, 2/height\n    2:address:array:character <- new [abcd]\n    1:address:screen <- print 1:address:screen, 2:address:array:character\n    3:address:array:screen-cell <- get *1:address:screen, data:offset\n    4:array:screen-cell <- copy *3:address:array:screen-cell\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: new-fake-screen
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {3: "literal", "width": ()}
 9993 parse:   ingredient: {2: "literal", "height": ()}
-9993 parse:   product: {1: ("address" "shared" "screen")}
-9992 load: after rewriting: {1: ("address" "shared" "screen")} <- new-fake-screen {3: "literal", "width": ()}, {2: "literal", "height": ()}
+9993 parse:   product: {1: ("address" "screen")}
+9992 load: after rewriting: {1: ("address" "screen")} <- new-fake-screen {3: "literal", "width": ()}, {2: "literal", "height": ()}
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"abcd": "literal-string"}
-9993 parse:   product: {2: ("address" "shared" "array" "character")}
-9992 load: after rewriting: {2: ("address" "shared" "array" "character")} <- new {"abcd": "literal-string"}
+9993 parse:   product: {2: ("address" "array" "character")}
+9992 load: after rewriting: {2: ("address" "array" "character")} <- new {"abcd": "literal-string"}
 9993 parse: instruction: print
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {1: ("address" "shared" "screen")}
-9993 parse:   ingredient: {2: ("address" "shared" "array" "character")}
-9993 parse:   product: {1: ("address" "shared" "screen")}
-9992 load: after rewriting: {1: ("address" "shared" "screen")} <- print {1: ("address" "shared" "screen")}, {2: ("address" "shared" "array" "character")}
+9993 parse:   ingredient: {1: ("address" "screen")}
+9993 parse:   ingredient: {2: ("address" "array" "character")}
+9993 parse:   product: {1: ("address" "screen")}
+9992 load: after rewriting: {1: ("address" "screen")} <- print {1: ("address" "screen")}, {2: ("address" "array" "character")}
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {1: ("address" "shared" "screen"), "lookup": ()}
+9993 parse:   ingredient: {1: ("address" "screen"), "lookup": ()}
 9993 parse:   ingredient: {data: "offset"}
-9993 parse:   product: {3: ("address" "shared" "array" "screen-cell")}
-9992 load: after rewriting: {3: ("address" "shared" "array" "screen-cell")} <- get {1: ("address" "shared" "screen"), "lookup": ()}, {data: "offset"}
+9993 parse:   product: {3: ("address" "array" "screen-cell")}
+9992 load: after rewriting: {3: ("address" "array" "screen-cell")} <- get {1: ("address" "screen"), "lookup": ()}, {data: "offset"}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {3: ("address" "shared" "array" "screen-cell"), "lookup": ()}
+9993 parse:   ingredient: {3: ("address" "array" "screen-cell"), "lookup": ()}
 9993 parse:   product: {4: ("array" "screen-cell")}
-9992 load: after rewriting: {4: ("array" "screen-cell")} <- copy {3: ("address" "shared" "array" "screen-cell"), "lookup": ()}
+9992 load: after rewriting: {4: ("array" "screen-cell")} <- copy {3: ("address" "array" "screen-cell"), "lookup": ()}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
@@ -77,15 +77,15 @@
 9991 transform: --- transform names for recipe run_1001
 9993 name: element data of type screen is at offset 4
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction {1: ("address" "shared" "screen")} <- new-fake-screen {3: "literal", "width": ()}, {2: "literal", "height": ()}
-9992 transform: checking variant (strict) 0: recipe new-fake-screen {w: "number"} {h: "number"} -> {result: ("address" "shared" "screen")}
-9992 transform: instruction {1: ("address" "shared" "screen")} <- print {1: ("address" "shared" "screen")}, {2: ("address" "shared" "array" "character")}
-9992 transform: checking variant (strict) 0: recipe print {screen: ("address" "shared" "screen")} {c: "character"} -> {screen: ("address" "shared" "screen")}
+9992 transform: instruction {1: ("address" "screen")} <- new-fake-screen {3: "literal", "width": ()}, {2: "literal", "height": ()}
+9992 transform: checking variant (strict) 0: recipe new-fake-screen {w: "number"} {h: "number"} -> {result: ("address" "screen")}
+9992 transform: instruction {1: ("address" "screen")} <- print {1: ("address" "screen")}, {2: ("address" "array" "character")}
+9992 transform: checking variant (strict) 0: recipe print {screen: ("address" "screen")} {c: "character"} -> {screen: ("address" "screen")}
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 1: recipe print_2 {screen: ("address" "shared" "screen")} {s: ("address" "shared" "array" "character")} -> {screen: ("address" "shared" "screen")}
-9992 transform: checking variant (strict) 2: recipe print_3 {screen: ("address" "shared" "screen")} {n: "number"} -> {screen: ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 1: recipe print_2 {screen: ("address" "screen")} {s: ("address" "array" "character")} -> {screen: ("address" "screen")}
+9992 transform: checking variant (strict) 2: recipe print_3 {screen: ("address" "screen")} {n: "number"} -> {screen: ("address" "screen")}
 9993 transform: strict match failed: ingredient 1
-9992 transform: checking variant (strict) 3: recipe print_4 {screen: ("address" "shared" "screen")} {n: ("address" "_elem")} -> {screen: ("address" "shared" "screen")}
+9992 transform: checking variant (strict) 3: recipe print_4 {screen: ("address" "screen")} {n: ("address" "_elem")} -> {screen: ("address" "screen")}
 9993 transform: strict match failed: ingredient 1
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
@@ -104,9 +104,9 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: {1: ("address" "shared" "screen")} <- new-fake-screen {3: "literal", "width": ()}, {2: "literal", "height": ()}
+ 103 run: {1: ("address" "screen")} <- new-fake-screen {3: "literal", "width": ()}, {2: "literal", "height": ()}
 9999 trace: incrementing callstack depth to 3
- 104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 6
 9999 mem: allocating size 8
 9999 mem: new alloc: 1000
@@ -115,7 +115,7 @@
 9999 mem: storing 3 in location 1003
  104 run: {h: "number"} <- next-ingredient-without-typechecking 
 9999 mem: storing 2 in location 1004
- 104 run: {result: ("address" "shared" "screen")} <- new {screen: "type"}
+ 104 run: {result: ("address" "screen")} <- new {screen: "type"}
 9999 mem: allocating size 6
 9999 mem: new alloc: 1008
 9999 mem: storing 1008 in location 1005
@@ -124,7 +124,7 @@
 9999 mem: location 1003 is 3
 9999 mem: location 1004 is 2
 9999 mem: storing 6 in location 1006
- 104 run: {data: ("address" "shared" "array" "screen-cell")} <- new {screen-cell: "type"}, {bufsize: "number"}
+ 104 run: {data: ("address" "array" "screen-cell")} <- new {screen-cell: "type"}, {bufsize: "number"}
 9999 mem: location 1006 is 6
 9999 mem: array size is 6
 9999 mem: allocating size 14
@@ -132,7 +132,7 @@
 9999 mem: storing 6 in location 1015
 9999 mem: storing 1014 in location 1007
 9999 mem: incrementing refcount of 1014: 0 -> 1
- 104 run: {result: ("address" "shared" "screen"), "lookup": ()} <- merge {h: "number", "num-rows": ()}, {w: "number", "num-columns": ()}, {0: "literal", "cursor-row": ()}, {0: "literal", "cursor-column": ()}, {data: ("address" "shared" "array" "screen-cell")}
+ 104 run: {result: ("address" "screen"), "lookup": ()} <- merge {h: "number", "num-rows": ()}, {w: "number", "num-columns": ()}, {0: "literal", "cursor-row": ()}, {0: "literal", "cursor-column": ()}, {data: ("address" "array" "screen-cell")}
 9999 mem: location 1004 is 2
 9999 mem: location 1003 is 3
 9999 mem: location 1007 is 1014
@@ -145,21 +145,21 @@
 9999 mem: storing 0 in location 1011
 9999 mem: storing 0 in location 1012
 9999 mem: storing 1014 in location 1013
- 104 run: {result: ("address" "shared" "screen")} <- clear-screen {result: ("address" "shared" "screen")}
+ 104 run: {result: ("address" "screen")} <- clear-screen {result: ("address" "screen")}
 9999 mem: location 1005 is 1008
 9999 trace: incrementing callstack depth to 4
- 105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 105 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 8
 9999 mem: allocating size 10
 9999 mem: new alloc: 1028
 9999 mem: storing 8 in location 1029
- 105 run: {screen: ("address" "shared" "screen")} <- next-ingredient-without-typechecking 
+ 105 run: {screen: ("address" "screen")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1008 in location 1031
 9999 mem: incrementing refcount of 1008: 1 -> 2
- 105 run: jump-unless {screen: ("address" "shared" "screen")}, {: "offset"}
+ 105 run: jump-unless {screen: ("address" "screen")}, {: "offset"}
 9999 mem: location 1031 is 1008
 9998 run: jump-unless fell through
- 105 run: {buf: ("address" "shared" "array" "screen-cell")} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {data: "offset"}
+ 105 run: {buf: ("address" "array" "screen-cell")} <- get {screen: ("address" "screen"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1031 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -170,11 +170,11 @@
 9999 mem: location 1031 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1013
-9998 run: its type is ("address" "shared" "array" "screen-cell")
+9998 run: its type is ("address" "array" "screen-cell")
 9999 mem: location 1013 is 1014
 9999 mem: storing 1014 in location 1032
 9999 mem: incrementing refcount of 1014: 1 -> 2
- 105 run: {max: "number"} <- length {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}
+ 105 run: {max: "number"} <- length {buf: ("address" "array" "screen-cell"), "lookup": ()}
 9999 mem: location 1032 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: storing 6 in location 1033
@@ -190,7 +190,7 @@
  105 run: {curr: "screen-cell"} <- merge {0: "literal", "empty": ()}, {7: "literal", "white": ()}
 9999 mem: storing 0 in location 1036
 9999 mem: storing 7 in location 1037
- 105 run: {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
+ 105 run: {buf: ("address" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
 9999 mem: location 1032 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1034 is 0
@@ -214,7 +214,7 @@
  105 run: {curr: "screen-cell"} <- merge {0: "literal", "empty": ()}, {7: "literal", "white": ()}
 9999 mem: storing 0 in location 1036
 9999 mem: storing 7 in location 1037
- 105 run: {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
+ 105 run: {buf: ("address" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
 9999 mem: location 1032 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1034 is 1
@@ -238,7 +238,7 @@
  105 run: {curr: "screen-cell"} <- merge {0: "literal", "empty": ()}, {7: "literal", "white": ()}
 9999 mem: storing 0 in location 1036
 9999 mem: storing 7 in location 1037
- 105 run: {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
+ 105 run: {buf: ("address" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
 9999 mem: location 1032 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1034 is 2
@@ -262,7 +262,7 @@
  105 run: {curr: "screen-cell"} <- merge {0: "literal", "empty": ()}, {7: "literal", "white": ()}
 9999 mem: storing 0 in location 1036
 9999 mem: storing 7 in location 1037
- 105 run: {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
+ 105 run: {buf: ("address" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
 9999 mem: location 1032 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1034 is 3
@@ -286,7 +286,7 @@
  105 run: {curr: "screen-cell"} <- merge {0: "literal", "empty": ()}, {7: "literal", "white": ()}
 9999 mem: storing 0 in location 1036
 9999 mem: storing 7 in location 1037
- 105 run: {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
+ 105 run: {buf: ("address" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
 9999 mem: location 1032 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1034 is 4
@@ -310,7 +310,7 @@
  105 run: {curr: "screen-cell"} <- merge {0: "literal", "empty": ()}, {7: "literal", "white": ()}
 9999 mem: storing 0 in location 1036
 9999 mem: storing 7 in location 1037
- 105 run: {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
+ 105 run: {buf: ("address" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "array" "screen-cell"), "lookup": ()}, {i: "number"}, {curr: "screen-cell"}
 9999 mem: location 1032 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1034 is 5
@@ -331,7 +331,7 @@
  105 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1035 is 1
 9998 run: jumping to instruction 14
- 105 run: {screen: ("address" "shared" "screen"), "lookup": ()} <- put {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-row: "offset"}, {0: "literal"}
+ 105 run: {screen: ("address" "screen"), "lookup": ()} <- put {screen: ("address" "screen"), "lookup": ()}, {cursor-row: "offset"}, {0: "literal"}
 9999 mem: location 1031 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -343,7 +343,7 @@
 9999 mem: skipping refcount at 1008
 9998 run: address to copy to is 1011
 9999 mem: storing 0 in location 1011
- 105 run: {screen: ("address" "shared" "screen"), "lookup": ()} <- put {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}, {0: "literal"}
+ 105 run: {screen: ("address" "screen"), "lookup": ()} <- put {screen: ("address" "screen"), "lookup": ()}, {cursor-column: "offset"}, {0: "literal"}
 9999 mem: location 1031 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -355,7 +355,7 @@
 9999 mem: skipping refcount at 1008
 9998 run: address to copy to is 1012
 9999 mem: storing 0 in location 1012
- 105 run: return {screen: ("address" "shared" "screen"), "same-as-ingredient": "0"}
+ 105 run: return {screen: ("address" "screen"), "same-as-ingredient": "0"}
 9999 mem: location 1031 is 1008
 9999 abandon: saving in free-list of size 10
 9999 trace: reply: decrementing callstack depth from 4
@@ -363,30 +363,30 @@
 9999 mem: decrementing refcount of 1008: 2 -> 1
 9999 mem: storing 1008 in location 1005
 9999 mem: incrementing refcount of 1008: 1 -> 2
- 104 run: reply {result: ("address" "shared" "screen")}
+ 104 run: reply {result: ("address" "screen")}
 9999 mem: location 1005 is 1008
 9999 abandon: saving in free-list of size 8
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1
 9999 mem: incrementing refcount of 1008: 2 -> 3
- 103 run: {2: ("address" "shared" "array" "character")} <- new {"abcd": "literal-string"}
+ 103 run: {2: ("address" "array" "character")} <- new {"abcd": "literal-string"}
 9999 mem: new string alloc: 1038
 9999 mem: storing 1038 in location 2
 9999 mem: incrementing refcount of 1038: 0 -> 1
- 103 run: {1: ("address" "shared" "screen")} <- print_2 {1: ("address" "shared" "screen")}, {2: ("address" "shared" "array" "character")}
+ 103 run: {1: ("address" "screen")} <- print_2 {1: ("address" "screen")}, {2: ("address" "array" "character")}
 9999 mem: location 1 is 1008
 9999 mem: location 2 is 1038
 9999 trace: incrementing callstack depth to 3
- 104 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 11
 9999 mem: allocating size 13
 9999 mem: new alloc: 1044
 9999 mem: storing 11 in location 1045
- 104 run: {screen: ("address" "shared" "screen")} <- next-ingredient-without-typechecking 
+ 104 run: {screen: ("address" "screen")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1008 in location 1047
 9999 mem: incrementing refcount of 1008: 3 -> 4
- 104 run: {s: ("address" "shared" "array" "character")} <- next-ingredient-without-typechecking 
+ 104 run: {s: ("address" "array" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1038 in location 1048
 9999 mem: incrementing refcount of 1038: 1 -> 2
  104 run: {color: "number"}, {color-found?: "boolean"} <- next-ingredient 
@@ -405,7 +405,7 @@
 9998 run: jump-if fell through
  104 run: {bg-color: "number"} <- copy {0: "literal", "black": ()}
 9999 mem: storing 0 in location 1051
- 104 run: {len: "number"} <- length {s: ("address" "shared" "array" "character"), "lookup": ()}
+ 104 run: {len: "number"} <- length {s: ("address" "array" "character"), "lookup": ()}
 9999 mem: location 1048 is 1038
 9999 mem: skipping refcount at 1038
 9999 mem: storing 4 in location 1053
@@ -418,7 +418,7 @@
  104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1055 is 0
 9998 run: jump-if fell through
- 104 run: {c: "character"} <- index {s: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {c: "character"} <- index {s: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1048 is 1038
 9999 mem: skipping refcount at 1038
 9998 run: base address is 1039
@@ -427,18 +427,18 @@
 9998 run: its type is character
 9999 mem: location 1040 is 97
 9999 mem: storing 97 in location 1056
- 104 run: print {screen: ("address" "shared" "screen")}, {c: "character"}, {color: "number"}, {bg-color: "number"}
+ 104 run: print {screen: ("address" "screen")}, {c: "character"}, {color: "number"}, {bg-color: "number"}
 9999 mem: location 1047 is 1008
 9999 mem: location 1056 is 97
 9999 mem: location 1049 is 7
 9999 mem: location 1051 is 0
 9999 trace: incrementing callstack depth to 4
- 105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 105 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 24
 9999 mem: allocating size 26
 9999 mem: new alloc: 1057
 9999 mem: storing 24 in location 1058
- 105 run: {screen: ("address" "shared" "screen")} <- next-ingredient-without-typechecking 
+ 105 run: {screen: ("address" "screen")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1008 in location 1060
 9999 mem: incrementing refcount of 1008: 4 -> 5
  105 run: {c: "character"} <- next-ingredient-without-typechecking 
@@ -458,10 +458,10 @@
  105 run: trace {90: "literal"}, {"print-character": "literal-string"}, {c: "character"}
 9999 mem: location 1061 is 97
   90 print-character: 97 
- 105 run: jump-unless {screen: ("address" "shared" "screen")}, {: "offset"}
+ 105 run: jump-unless {screen: ("address" "screen")}, {: "offset"}
 9999 mem: location 1060 is 1008
 9998 run: jump-unless fell through
- 105 run: {width: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {num-columns: "offset"}
+ 105 run: {width: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {num-columns: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -475,7 +475,7 @@
 9998 run: its type is "number"
 9999 mem: location 1010 is 3
 9999 mem: storing 3 in location 1066
- 105 run: {height: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {num-rows: "offset"}
+ 105 run: {height: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {num-rows: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -489,7 +489,7 @@
 9998 run: its type is "number"
 9999 mem: location 1009 is 2
 9999 mem: storing 2 in location 1067
- 105 run: {row: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-row: "offset"}
+ 105 run: {row: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-row: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -516,7 +516,7 @@
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1069 is 1
 9998 run: jumping to instruction 25
- 105 run: {column: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
+ 105 run: {column: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-column: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -557,7 +557,7 @@
 9999 mem: location 1074 is 0
 9999 mem: location 1070 is 0
 9999 mem: storing 0 in location 1074
- 105 run: {buf: ("address" "shared" "array" "screen-cell")} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {data: "offset"}
+ 105 run: {buf: ("address" "array" "screen-cell")} <- get {screen: ("address" "screen"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -568,11 +568,11 @@
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1013
-9998 run: its type is ("address" "shared" "array" "screen-cell")
+9998 run: its type is ("address" "array" "screen-cell")
 9999 mem: location 1013 is 1014
 9999 mem: storing 1014 in location 1075
 9999 mem: incrementing refcount of 1014: 2 -> 3
- 105 run: {len: "number"} <- length {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}
+ 105 run: {len: "number"} <- length {buf: ("address" "array" "screen-cell"), "lookup": ()}
 9999 mem: location 1075 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: storing 6 in location 1076
@@ -587,7 +587,7 @@
 9999 mem: location 1062 is 7
 9999 mem: storing 97 in location 1079
 9999 mem: storing 7 in location 1080
- 105 run: {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {index: "number"}, {cursor: "screen-cell"}
+ 105 run: {buf: ("address" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "array" "screen-cell"), "lookup": ()}, {index: "number"}, {cursor: "screen-cell"}
 9999 mem: location 1075 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1074 is 0
@@ -609,7 +609,7 @@
  105 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
 9999 mem: location 1070 is 0
 9999 mem: storing 1 in location 1070
- 105 run: {screen: ("address" "shared" "screen"), "lookup": ()} <- put {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}, {column: "number"}
+ 105 run: {screen: ("address" "screen"), "lookup": ()} <- put {screen: ("address" "screen"), "lookup": ()}, {cursor-column: "offset"}, {column: "number"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -622,7 +622,7 @@
 9999 mem: skipping refcount at 1008
 9998 run: address to copy to is 1012
 9999 mem: storing 1 in location 1012
- 105 run: return {screen: ("address" "shared" "screen"), "same-as-ingredient": "0"}
+ 105 run: return {screen: ("address" "screen"), "same-as-ingredient": "0"}
 9999 mem: location 1060 is 1008
 9999 abandon: saving in free-list of size 26
 9999 trace: reply: decrementing callstack depth from 4
@@ -638,7 +638,7 @@
  104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1055 is 0
 9998 run: jump-if fell through
- 104 run: {c: "character"} <- index {s: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {c: "character"} <- index {s: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1048 is 1038
 9999 mem: skipping refcount at 1038
 9998 run: base address is 1039
@@ -647,18 +647,18 @@
 9998 run: its type is character
 9999 mem: location 1041 is 98
 9999 mem: storing 98 in location 1056
- 104 run: print {screen: ("address" "shared" "screen")}, {c: "character"}, {color: "number"}, {bg-color: "number"}
+ 104 run: print {screen: ("address" "screen")}, {c: "character"}, {color: "number"}, {bg-color: "number"}
 9999 mem: location 1047 is 1008
 9999 mem: location 1056 is 98
 9999 mem: location 1049 is 7
 9999 mem: location 1051 is 0
 9999 trace: incrementing callstack depth to 4
- 105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 105 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 24
 9999 mem: allocating size 26
 9999 abandon: picking up space from free-list of size 26
 9999 mem: new alloc from free list: 1057
- 105 run: {screen: ("address" "shared" "screen")} <- next-ingredient-without-typechecking 
+ 105 run: {screen: ("address" "screen")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1008 in location 1060
 9999 mem: incrementing refcount of 1008: 5 -> 6
  105 run: {c: "character"} <- next-ingredient-without-typechecking 
@@ -678,10 +678,10 @@
  105 run: trace {90: "literal"}, {"print-character": "literal-string"}, {c: "character"}
 9999 mem: location 1061 is 98
   90 print-character: 98 
- 105 run: jump-unless {screen: ("address" "shared" "screen")}, {: "offset"}
+ 105 run: jump-unless {screen: ("address" "screen")}, {: "offset"}
 9999 mem: location 1060 is 1008
 9998 run: jump-unless fell through
- 105 run: {width: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {num-columns: "offset"}
+ 105 run: {width: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {num-columns: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -695,7 +695,7 @@
 9998 run: its type is "number"
 9999 mem: location 1010 is 3
 9999 mem: storing 3 in location 1066
- 105 run: {height: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {num-rows: "offset"}
+ 105 run: {height: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {num-rows: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -709,7 +709,7 @@
 9998 run: its type is "number"
 9999 mem: location 1009 is 2
 9999 mem: storing 2 in location 1067
- 105 run: {row: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-row: "offset"}
+ 105 run: {row: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-row: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -736,7 +736,7 @@
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1069 is 1
 9998 run: jumping to instruction 25
- 105 run: {column: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
+ 105 run: {column: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-column: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -777,7 +777,7 @@
 9999 mem: location 1074 is 0
 9999 mem: location 1070 is 1
 9999 mem: storing 1 in location 1074
- 105 run: {buf: ("address" "shared" "array" "screen-cell")} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {data: "offset"}
+ 105 run: {buf: ("address" "array" "screen-cell")} <- get {screen: ("address" "screen"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -788,11 +788,11 @@
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1013
-9998 run: its type is ("address" "shared" "array" "screen-cell")
+9998 run: its type is ("address" "array" "screen-cell")
 9999 mem: location 1013 is 1014
 9999 mem: storing 1014 in location 1075
 9999 mem: incrementing refcount of 1014: 3 -> 4
- 105 run: {len: "number"} <- length {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}
+ 105 run: {len: "number"} <- length {buf: ("address" "array" "screen-cell"), "lookup": ()}
 9999 mem: location 1075 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: storing 6 in location 1076
@@ -807,7 +807,7 @@
 9999 mem: location 1062 is 7
 9999 mem: storing 98 in location 1079
 9999 mem: storing 7 in location 1080
- 105 run: {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {index: "number"}, {cursor: "screen-cell"}
+ 105 run: {buf: ("address" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "array" "screen-cell"), "lookup": ()}, {index: "number"}, {cursor: "screen-cell"}
 9999 mem: location 1075 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1074 is 1
@@ -829,7 +829,7 @@
  105 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
 9999 mem: location 1070 is 1
 9999 mem: storing 2 in location 1070
- 105 run: {screen: ("address" "shared" "screen"), "lookup": ()} <- put {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}, {column: "number"}
+ 105 run: {screen: ("address" "screen"), "lookup": ()} <- put {screen: ("address" "screen"), "lookup": ()}, {cursor-column: "offset"}, {column: "number"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -842,7 +842,7 @@
 9999 mem: skipping refcount at 1008
 9998 run: address to copy to is 1012
 9999 mem: storing 2 in location 1012
- 105 run: return {screen: ("address" "shared" "screen"), "same-as-ingredient": "0"}
+ 105 run: return {screen: ("address" "screen"), "same-as-ingredient": "0"}
 9999 mem: location 1060 is 1008
 9999 abandon: saving in free-list of size 26
 9999 trace: reply: decrementing callstack depth from 4
@@ -858,7 +858,7 @@
  104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1055 is 0
 9998 run: jump-if fell through
- 104 run: {c: "character"} <- index {s: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {c: "character"} <- index {s: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1048 is 1038
 9999 mem: skipping refcount at 1038
 9998 run: base address is 1039
@@ -867,18 +867,18 @@
 9998 run: its type is character
 9999 mem: location 1042 is 99
 9999 mem: storing 99 in location 1056
- 104 run: print {screen: ("address" "shared" "screen")}, {c: "character"}, {color: "number"}, {bg-color: "number"}
+ 104 run: print {screen: ("address" "screen")}, {c: "character"}, {color: "number"}, {bg-color: "number"}
 9999 mem: location 1047 is 1008
 9999 mem: location 1056 is 99
 9999 mem: location 1049 is 7
 9999 mem: location 1051 is 0
 9999 trace: incrementing callstack depth to 4
- 105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 105 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 24
 9999 mem: allocating size 26
 9999 abandon: picking up space from free-list of size 26
 9999 mem: new alloc from free list: 1057
- 105 run: {screen: ("address" "shared" "screen")} <- next-ingredient-without-typechecking 
+ 105 run: {screen: ("address" "screen")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1008 in location 1060
 9999 mem: incrementing refcount of 1008: 6 -> 7
  105 run: {c: "character"} <- next-ingredient-without-typechecking 
@@ -898,10 +898,10 @@
  105 run: trace {90: "literal"}, {"print-character": "literal-string"}, {c: "character"}
 9999 mem: location 1061 is 99
   90 print-character: 99 
- 105 run: jump-unless {screen: ("address" "shared" "screen")}, {: "offset"}
+ 105 run: jump-unless {screen: ("address" "screen")}, {: "offset"}
 9999 mem: location 1060 is 1008
 9998 run: jump-unless fell through
- 105 run: {width: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {num-columns: "offset"}
+ 105 run: {width: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {num-columns: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -915,7 +915,7 @@
 9998 run: its type is "number"
 9999 mem: location 1010 is 3
 9999 mem: storing 3 in location 1066
- 105 run: {height: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {num-rows: "offset"}
+ 105 run: {height: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {num-rows: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -929,7 +929,7 @@
 9998 run: its type is "number"
 9999 mem: location 1009 is 2
 9999 mem: storing 2 in location 1067
- 105 run: {row: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-row: "offset"}
+ 105 run: {row: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-row: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -956,7 +956,7 @@
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1069 is 1
 9998 run: jumping to instruction 25
- 105 run: {column: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
+ 105 run: {column: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-column: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -997,7 +997,7 @@
 9999 mem: location 1074 is 0
 9999 mem: location 1070 is 2
 9999 mem: storing 2 in location 1074
- 105 run: {buf: ("address" "shared" "array" "screen-cell")} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {data: "offset"}
+ 105 run: {buf: ("address" "array" "screen-cell")} <- get {screen: ("address" "screen"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -1008,11 +1008,11 @@
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1013
-9998 run: its type is ("address" "shared" "array" "screen-cell")
+9998 run: its type is ("address" "array" "screen-cell")
 9999 mem: location 1013 is 1014
 9999 mem: storing 1014 in location 1075
 9999 mem: incrementing refcount of 1014: 4 -> 5
- 105 run: {len: "number"} <- length {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}
+ 105 run: {len: "number"} <- length {buf: ("address" "array" "screen-cell"), "lookup": ()}
 9999 mem: location 1075 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: storing 6 in location 1076
@@ -1027,7 +1027,7 @@
 9999 mem: location 1062 is 7
 9999 mem: storing 99 in location 1079
 9999 mem: storing 7 in location 1080
- 105 run: {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {index: "number"}, {cursor: "screen-cell"}
+ 105 run: {buf: ("address" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "array" "screen-cell"), "lookup": ()}, {index: "number"}, {cursor: "screen-cell"}
 9999 mem: location 1075 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1074 is 2
@@ -1046,7 +1046,7 @@
  105 run: jump-if {at-right?: "boolean"}, {: "offset"}
 9999 mem: location 1082 is 1
 9998 run: jumping to instruction 72
- 105 run: return {screen: ("address" "shared" "screen"), "same-as-ingredient": "0"}
+ 105 run: return {screen: ("address" "screen"), "same-as-ingredient": "0"}
 9999 mem: location 1060 is 1008
 9999 abandon: saving in free-list of size 26
 9999 trace: reply: decrementing callstack depth from 4
@@ -1062,7 +1062,7 @@
  104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1055 is 0
 9998 run: jump-if fell through
- 104 run: {c: "character"} <- index {s: ("address" "shared" "array" "character"), "lookup": ()}, {i: "number"}
+ 104 run: {c: "character"} <- index {s: ("address" "array" "character"), "lookup": ()}, {i: "number"}
 9999 mem: location 1048 is 1038
 9999 mem: skipping refcount at 1038
 9998 run: base address is 1039
@@ -1071,18 +1071,18 @@
 9998 run: its type is character
 9999 mem: location 1043 is 100
 9999 mem: storing 100 in location 1056
- 104 run: print {screen: ("address" "shared" "screen")}, {c: "character"}, {color: "number"}, {bg-color: "number"}
+ 104 run: print {screen: ("address" "screen")}, {c: "character"}, {color: "number"}, {bg-color: "number"}
 9999 mem: location 1047 is 1008
 9999 mem: location 1056 is 100
 9999 mem: location 1049 is 7
 9999 mem: location 1051 is 0
 9999 trace: incrementing callstack depth to 4
- 105 run: {default-space: ("address" "shared" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+ 105 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 24
 9999 mem: allocating size 26
 9999 abandon: picking up space from free-list of size 26
 9999 mem: new alloc from free list: 1057
- 105 run: {screen: ("address" "shared" "screen")} <- next-ingredient-without-typechecking 
+ 105 run: {screen: ("address" "screen")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1008 in location 1060
 9999 mem: incrementing refcount of 1008: 7 -> 8
  105 run: {c: "character"} <- next-ingredient-without-typechecking 
@@ -1102,10 +1102,10 @@
  105 run: trace {90: "literal"}, {"print-character": "literal-string"}, {c: "character"}
 9999 mem: location 1061 is 100
   90 print-character: 100 
- 105 run: jump-unless {screen: ("address" "shared" "screen")}, {: "offset"}
+ 105 run: jump-unless {screen: ("address" "screen")}, {: "offset"}
 9999 mem: location 1060 is 1008
 9998 run: jump-unless fell through
- 105 run: {width: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {num-columns: "offset"}
+ 105 run: {width: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {num-columns: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -1119,7 +1119,7 @@
 9998 run: its type is "number"
 9999 mem: location 1010 is 3
 9999 mem: storing 3 in location 1066
- 105 run: {height: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {num-rows: "offset"}
+ 105 run: {height: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {num-rows: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -1133,7 +1133,7 @@
 9998 run: its type is "number"
 9999 mem: location 1009 is 2
 9999 mem: storing 2 in location 1067
- 105 run: {row: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-row: "offset"}
+ 105 run: {row: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-row: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -1160,7 +1160,7 @@
  105 run: jump-if {legal?: "boolean"}, {1: "offset"}
 9999 mem: location 1069 is 1
 9998 run: jumping to instruction 25
- 105 run: {column: "number"} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {cursor-column: "offset"}
+ 105 run: {column: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-column: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -1201,7 +1201,7 @@
 9999 mem: location 1074 is 0
 9999 mem: location 1070 is 2
 9999 mem: storing 2 in location 1074
- 105 run: {buf: ("address" "shared" "array" "screen-cell")} <- get {screen: ("address" "shared" "screen"), "lookup": ()}, {data: "offset"}
+ 105 run: {buf: ("address" "array" "screen-cell")} <- get {screen: ("address" "screen"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -1212,11 +1212,11 @@
 9999 mem: location 1060 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1013
-9998 run: its type is ("address" "shared" "array" "screen-cell")
+9998 run: its type is ("address" "array" "screen-cell")
 9999 mem: location 1013 is 1014
 9999 mem: storing 1014 in location 1075
 9999 mem: incrementing refcount of 1014: 5 -> 6
- 105 run: {len: "number"} <- length {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}
+ 105 run: {len: "number"} <- length {buf: ("address" "array" "screen-cell"), "lookup": ()}
 9999 mem: location 1075 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: storing 6 in location 1076
@@ -1231,7 +1231,7 @@
 9999 mem: location 1062 is 7
 9999 mem: storing 100 in location 1079
 9999 mem: storing 7 in location 1080
- 105 run: {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "shared" "array" "screen-cell"), "lookup": ()}, {index: "number"}, {cursor: "screen-cell"}
+ 105 run: {buf: ("address" "array" "screen-cell"), "lookup": ()} <- put-index {buf: ("address" "array" "screen-cell"), "lookup": ()}, {index: "number"}, {cursor: "screen-cell"}
 9999 mem: location 1075 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1074 is 2
@@ -1250,7 +1250,7 @@
  105 run: jump-if {at-right?: "boolean"}, {: "offset"}
 9999 mem: location 1082 is 1
 9998 run: jumping to instruction 72
- 105 run: return {screen: ("address" "shared" "screen"), "same-as-ingredient": "0"}
+ 105 run: return {screen: ("address" "screen"), "same-as-ingredient": "0"}
 9999 mem: location 1060 is 1008
 9999 abandon: saving in free-list of size 26
 9999 trace: reply: decrementing callstack depth from 4
@@ -1266,7 +1266,7 @@
  104 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1055 is 1
 9998 run: jumping to instruction 22
- 104 run: reply {screen: ("address" "shared" "screen"), "same-as-ingredient": "0"}
+ 104 run: reply {screen: ("address" "screen"), "same-as-ingredient": "0"}
 9999 mem: location 1047 is 1008
 9999 abandon: saving in free-list of size 13
 9999 trace: reply: decrementing callstack depth from 3
@@ -1274,7 +1274,7 @@
 9999 mem: decrementing refcount of 1008: 8 -> 7
 9999 mem: storing 1008 in location 1
 9999 mem: incrementing refcount of 1008: 7 -> 8
- 103 run: {3: ("address" "shared" "array" "screen-cell")} <- get {1: ("address" "shared" "screen"), "lookup": ()}, {data: "offset"}
+ 103 run: {3: ("address" "array" "screen-cell")} <- get {1: ("address" "screen"), "lookup": ()}, {data: "offset"}
 9999 mem: location 1 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 2
@@ -1285,11 +1285,11 @@
 9999 mem: location 1 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1013
-9998 run: its type is ("address" "shared" "array" "screen-cell")
+9998 run: its type is ("address" "array" "screen-cell")
 9999 mem: location 1013 is 1014
 9999 mem: storing 1014 in location 3
 9999 mem: incrementing refcount of 1014: 6 -> 7
- 103 run: {4: ("array" "screen-cell")} <- copy {3: ("address" "shared" "array" "screen-cell"), "lookup": ()}
+ 103 run: {4: ("array" "screen-cell")} <- copy {3: ("address" "array" "screen-cell"), "lookup": ()}
 9999 mem: location 3 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1015 is 6

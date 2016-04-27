@@ -9,7 +9,7 @@
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {0: "literal"}
 9993 parse:   ingredient: {34: "literal"}
-9992 load: after rewriting: reply {34: "literal"}
+9992 load: after rewriting:  
 9993 parse: instruction: return
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {35: "literal"}
@@ -20,8 +20,10 @@
 9991 transform: --- rewrite 'stash' instructions in recipe main
 9991 transform: --- rewrite 'stash' instructions in recipe test1
 9991 transform: --- deduce types for recipe test1
-9993 transform: jump-unless {0: "literal"}, {1: "offset"}
+9993 transform: {
+9993 transform: break-unless {0: "literal"}
 9993 transform: reply {34: "literal"}
+9993 transform: }
 9993 transform: return {35: "literal"}
 9991 transform: --- fill in reply ingredients from header for recipe main
 9991 transform: --- deduce types for recipe main
@@ -40,7 +42,9 @@
 9992 transform: test1 ...
 9992 transform:  ...
 9991 transform: --- transform braces for recipe test1
-9992 transform: return-if ...
+9993 transform: test1: push (open, 0)
+9993 transform: push (close, 3)
+9992 transform: jump-unless 0, 1:offset
 9992 transform:  ...
 9992 transform: return ...
 9991 transform: --- perform checks for recipe main
@@ -62,8 +66,8 @@
 9990 schedule: main
  102 run: {1: "number"} <- test1 
 9999 trace: incrementing callstack depth to 2
- 103 run: jump-unless {0: "literal"}, {1: "offset"}
-9998 run: jumping to instruction 2
+ 103 run: jump-unless {0: "literal"}, {: "offset"}
+9998 run: jumping to instruction 3
  103 run: return {35: "literal"}
 9999 trace: reply: decrementing callstack depth from 2
 9998 run: result 0 is 35

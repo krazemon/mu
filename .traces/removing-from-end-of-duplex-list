@@ -775,13 +775,14 @@
 9993 transform: type of default-space is ("address" "array" "location")
 9993 transform:   instruction: {in: ("address" "duplex-list" "_elem")} <- next-ingredient-without-typechecking 
 9994 transform:     checking {in: ("address" "duplex-list" "_elem")}: ("address" "duplex-list" "_elem")
-9993 transform:   instruction: jump-if {in: ()}, {1: "offset"}
+9993 transform:   instruction: {
+9993 transform:   instruction: break-if {in: ()}
 9994 transform:     checking {in: ()}: ()
 9994 transform:     deducing type to ("address" "duplex-list" "_elem")
-9994 transform:     checking {1: "offset"}: "offset"
 9993 transform:   instruction: reply {0: "literal"}
 9994 transform:     checking {0: "literal"}: "literal"
 9993 transform: type of 0 is "literal"
+9993 transform:   instruction: }
 9993 transform:   instruction: {result: ()} <- get {in: (), "lookup": ()}, {value: "offset"}
 9994 transform:     checking {in: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "duplex-list" "_elem")
@@ -802,12 +803,13 @@
 9993 transform: replacing in instruction '{in: ("address" "duplex-list" "_elem")} <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient in:address:duplex-list:_elem
 9993 transform: _elem => "character"
-9993 transform: replacing in instruction 'jump-if {in: ("address" "duplex-list" "_elem")}, {1: "offset"}'
+9993 transform: replacing in instruction '{'
+9993 transform: replacing in instruction 'break-if {in: ("address" "duplex-list" "_elem")}'
 9993 transform: replacing in ingredient in
 9993 transform: _elem => "character"
-9993 transform: replacing in ingredient 1:offset
 9993 transform: replacing in instruction 'reply {0: "literal"}'
 9993 transform: replacing in ingredient 0
+9993 transform: replacing in instruction '}'
 9993 transform: replacing in instruction '{result: "_elem"} <- get {in: ("address" "duplex-list" "_elem"), "lookup": ()}, {value: "offset"}'
 9993 transform: replacing in ingredient *in
 9993 transform: _elem => "character"
@@ -823,8 +825,10 @@
 9992 transform: result => "character"
 9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9993 transform: jump-if {in: ("address" "duplex-list" "character")}, {1: "offset"}
+9993 transform: {
+9993 transform: break-if {in: ("address" "duplex-list" "character")}
 9993 transform: reply {0: "literal"}
+9993 transform: }
 9993 transform: {result: "character"} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {value: "offset"}
 9991 transform: --- checking reply instructions against header for first_4
 9991 transform: --- fill in reply ingredients from header for recipe first_4
@@ -839,8 +843,10 @@
 9993 transform:   product: {default-space: ("address" "array" "location")}
 9992 transform: instruction: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
 9993 transform:   product: {in: ("address" "duplex-list" "character")}
-9992 transform: instruction: jump-if {in: ("address" "duplex-list" "character")}, {1: "offset"}
+9992 transform: instruction: {
+9992 transform: instruction: break-if {in: ("address" "duplex-list" "character")}
 9992 transform: instruction: reply {0: "literal"}
+9992 transform: instruction: }
 9992 transform: instruction: {result: "character"} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {value: "offset"}
 9993 transform:   product: {result: "character"}
 9992 transform: instruction: reply {result: "character"}
@@ -853,9 +859,11 @@
 9991 transform: --- resolve ambiguous calls for recipe first_4
 9991 transform: --- compute instruction operations for recipe first_4
 9991 transform: --- transform braces for recipe first_4
+9993 transform: first_4: push (open, 2)
+9993 transform: push (close, 5)
 9992 transform: local-scope ...
 9992 transform:  ...
-9992 transform: return-unless ...
+9992 transform: jump-if in, 1:offset
 9992 transform:  ...
 9992 transform: get ...
 9992 transform:  ...
@@ -1078,9 +1086,9 @@
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1014 in location 1021
 9999 mem: incrementing refcount of 1014: 2 -> 3
- 104 run: jump-if {in: ("address" "duplex-list" "character")}, {1: "offset"}
+ 104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1021 is 1014
-9998 run: jumping to instruction 4
+9998 run: jumping to instruction 5
  104 run: {result: ("address" "duplex-list" "character")} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}
 9999 mem: location 1021 is 1014
 9999 mem: skipping refcount at 1014
@@ -1112,9 +1120,9 @@
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1010 in location 1021
 9999 mem: incrementing refcount of 1010: 4 -> 5
- 104 run: jump-if {in: ("address" "duplex-list" "character")}, {1: "offset"}
+ 104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1021 is 1010
-9998 run: jumping to instruction 4
+9998 run: jumping to instruction 5
  104 run: {result: ("address" "duplex-list" "character")} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}
 9999 mem: location 1021 is 1010
 9999 mem: skipping refcount at 1010
@@ -1151,9 +1159,9 @@
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1014 in location 1027
 9999 mem: incrementing refcount of 1014: 3 -> 4
- 104 run: jump-if {x: ("address" "duplex-list" "character")}, {1: "offset"}
+ 104 run: jump-if {x: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1026 is 1006
-9998 run: jumping to instruction 5
+9998 run: jumping to instruction 6
  104 run: {next-node: ("address" "duplex-list" "character")} <- get {x: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}
 9999 mem: location 1026 is 1006
 9999 mem: skipping refcount at 1006
@@ -1201,7 +1209,7 @@
 9999 mem: storing 0 in location 1009
  104 run: jump-unless {next-node: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1028 is 0
-9998 run: jumping to instruction 12
+9998 run: jumping to instruction 14
  104 run: jump-unless {prev-node: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1029 is 1010
 9998 run: jump-unless fell through
@@ -1243,9 +1251,9 @@
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1014 in location 1021
 9999 mem: incrementing refcount of 1014: 5 -> 6
- 104 run: jump-if {in: ("address" "duplex-list" "character")}, {1: "offset"}
+ 104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1021 is 1014
-9998 run: jumping to instruction 4
+9998 run: jumping to instruction 5
  104 run: {result: "character"} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {value: "offset"}
 9999 mem: location 1021 is 1014
 9999 mem: skipping refcount at 1014
@@ -1275,9 +1283,9 @@
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1014 in location 1021
 9999 mem: incrementing refcount of 1014: 6 -> 7
- 104 run: jump-if {in: ("address" "duplex-list" "character")}, {1: "offset"}
+ 104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1021 is 1014
-9998 run: jumping to instruction 4
+9998 run: jumping to instruction 5
  104 run: {result: ("address" "duplex-list" "character")} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}
 9999 mem: location 1021 is 1014
 9999 mem: skipping refcount at 1014
@@ -1310,9 +1318,9 @@
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1010 in location 1021
 9999 mem: incrementing refcount of 1010: 7 -> 8
- 104 run: jump-if {in: ("address" "duplex-list" "character")}, {1: "offset"}
+ 104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1021 is 1010
-9998 run: jumping to instruction 4
+9998 run: jumping to instruction 5
  104 run: {result: "character"} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {value: "offset"}
 9999 mem: location 1021 is 1010
 9999 mem: skipping refcount at 1010
@@ -1342,9 +1350,9 @@
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1010 in location 1021
 9999 mem: incrementing refcount of 1010: 8 -> 9
- 104 run: jump-if {in: ("address" "duplex-list" "character")}, {1: "offset"}
+ 104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1021 is 1010
-9998 run: jumping to instruction 4
+9998 run: jumping to instruction 5
  104 run: {result: ("address" "duplex-list" "character")} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}
 9999 mem: location 1021 is 1010
 9999 mem: skipping refcount at 1010
@@ -1374,9 +1382,9 @@
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1010 in location 1021
 9999 mem: incrementing refcount of 1010: 9 -> 10
- 104 run: jump-if {in: ("address" "duplex-list" "character")}, {1: "offset"}
+ 104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1021 is 1010
-9998 run: jumping to instruction 4
+9998 run: jumping to instruction 5
  104 run: {result: ("address" "duplex-list" "character")} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}
 9999 mem: location 1021 is 1010
 9999 mem: skipping refcount at 1010
@@ -1409,9 +1417,9 @@
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
 9999 mem: storing 1014 in location 1021
 9999 mem: incrementing refcount of 1014: 8 -> 9
- 104 run: jump-if {in: ("address" "duplex-list" "character")}, {1: "offset"}
+ 104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1021 is 1014
-9998 run: jumping to instruction 4
+9998 run: jumping to instruction 5
  104 run: {result: "character"} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {value: "offset"}
 9999 mem: location 1021 is 1014
 9999 mem: skipping refcount at 1014

@@ -1,19 +1,19 @@
 9991 parse: --- defining scenario_channel
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    2:address:sink:number <- write 2:address:sink:number, 34\n    3:number, 1:address:source:number <- read 1:address:source:number\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    2:address:sink:number <- write 2:address:sink:number, 34\n    3:number, 1:address:source:number <- read 1:address:source:number\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    2:address:sink:number <- write 2:address:sink:number, 34\n    3:number, 4:boolean, 1:address:source:number <- read 1:address:source:number\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    2:address:sink:number <- write 2:address:sink:number, 34\n    3:number, 4:boolean, 1:address:source:number <- read 1:address:source:number\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    3 <- 34\n  ": "literal-string"}
-9992 load: after rewriting: memory-should-contain {"\n    3 <- 34\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    3 <- 34\n    4 <- 0  # read was successful\n  ": "literal-string"}
+9992 load: after rewriting: memory-should-contain {"\n    3 <- 34\n    4 <- 0  # read was successful\n  ": "literal-string"}
 9999 parse: recipe scenario_channel has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_channel
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_channel
 9991 transform: --- deduce types for recipe scenario_channel
-9993 transform: run {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    2:address:sink:number <- write 2:address:sink:number, 34\n    3:number, 1:address:source:number <- read 1:address:source:number\n  ": "literal-string"}
-9993 transform: memory-should-contain {"\n    3 <- 34\n  ": "literal-string"}
+9993 transform: run {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    2:address:sink:number <- write 2:address:sink:number, 34\n    3:number, 4:boolean, 1:address:source:number <- read 1:address:source:number\n  ": "literal-string"}
+9993 transform: memory-should-contain {"\n    3 <- 34\n    4 <- 0  # read was successful\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_channel
 9991 transform: --- deduce types for recipe scenario_channel
 9991 transform: --- check for invalid types in recipe scenario_channel
@@ -36,7 +36,7 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_channel
- 102 run: run {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    2:address:sink:number <- write 2:address:sink:number, 34\n    3:number, 1:address:source:number <- read 1:address:source:number\n  ": "literal-string"}
+ 102 run: run {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    2:address:sink:number <- write 2:address:sink:number, 34\n    3:number, 4:boolean, 1:address:source:number <- read 1:address:source:number\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: new-channel
 9993 parse:   number of ingredients: 1
@@ -54,8 +54,9 @@
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {1: ("address" "source" "number")}
 9993 parse:   product: {3: "number"}
+9993 parse:   product: {4: "boolean"}
 9993 parse:   product: {1: ("address" "source" "number")}
-9992 load: after rewriting: {3: "number"}, {1: ("address" "source" "number")} <- read {1: ("address" "source" "number")}
+9992 load: after rewriting: {3: "number"}, {4: "boolean"}, {1: ("address" "source" "number")} <- read {1: ("address" "source" "number")}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
@@ -1049,18 +1050,20 @@
 9991 transform: --- check that recipe write_3 sets default-space
 9991 transform: --- checking reply instructions against header for write_3
 9992 transform: new specialization: write_3
-9992 transform: instruction {3: "number"}, {1: ("address" "source" "number")} <- read {1: ("address" "source" "number")}
-9992 transform: checking variant (strict) 0: recipe read {in: ("address" "source" "_elem")} -> {result: "_elem"} {in: ("address" "source" "_elem")}
+9992 transform: instruction {3: "number"}, {4: "boolean"}, {1: ("address" "source" "number")} <- read {1: ("address" "source" "number")}
+9992 transform: checking variant (strict) 0: recipe read {in: ("address" "source" "_elem")} -> {result: "_elem"} {fail?: "boolean"} {in: ("address" "source" "_elem")}
 9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict) 1: recipe read_2 {in: ("address" "source" "character")} -> {result: "character"} {in: ("address" "source" "character")}
+9992 transform: checking variant (strict) 1: recipe read_2 {in: ("address" "source" "character")} -> {result: "character"} {fail?: "boolean"} {in: ("address" "source" "character")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: found variant to specialize: 229 read
-9993 transform: switching read to specialized recipe read_3 {in: ("address" "source" "_elem")} -> {result: "_elem"} {in: ("address" "source" "_elem")}
+9993 transform: switching read to specialized recipe read_3 {in: ("address" "source" "_elem")} -> {result: "_elem"} {fail?: "boolean"} {in: ("address" "source" "_elem")}
 9993 transform: compute type names: read_3
 9994 transform:     checking {in: ("address" "source" "_elem")}: ("address" "source" "_elem")
 9993 transform: type of in is ("address" "source" "_elem")
 9994 transform:     checking {result: "_elem"}: "_elem"
 9993 transform: type of result is "_elem"
+9994 transform:     checking {fail?: "boolean"}: "boolean"
+9993 transform: type of fail? is "boolean"
 9994 transform:     checking {in: ("address" "source" "_elem")}: ("address" "source" "_elem")
 9993 transform:   instruction: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9994 transform:     checking {location: "type"}: "type"
@@ -1071,6 +1074,11 @@
 9993 transform: type of default-space is ("address" "array" "location")
 9993 transform:   instruction: {in: ("address" "source" "_elem")} <- next-ingredient-without-typechecking 
 9994 transform:     checking {in: ("address" "source" "_elem")}: ("address" "source" "_elem")
+9993 transform:   instruction: {fail?: ()} <- copy {0: "literal", "false": ()}
+9994 transform:     checking {0: "literal", "false": ()}: "literal"
+9993 transform: type of 0 is "literal"
+9994 transform:     checking {fail?: ()}: ()
+9994 transform:     deducing type to "boolean"
 9993 transform:   instruction: {chan: ("address" "channel" "_elem")} <- get {in: (), "lookup": ()}, {chan: "offset"}
 9994 transform:     checking {in: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "source" "_elem")
@@ -1116,6 +1124,20 @@
 9994 transform:     deducing type to "number"
 9994 transform:     checking {result: ()}: ()
 9994 transform:     deducing type to "_elem"
+9993 transform:   instruction: {empty: ("address" "_elem")} <- new {_elem: "type"}
+9994 transform:     checking {_elem: "type"}: "type"
+9993 transform: type of _elem is "type"
+9994 transform:     checking {empty: ("address" "_elem")}: ("address" "_elem")
+9993 transform: type of empty is ("address" "_elem")
+9993 transform:   instruction: {circular-buffer: (), "lookup": ()} <- put-index {circular-buffer: (), "lookup": ()}, {full: ()}, {empty: (), "lookup": ()}
+9994 transform:     checking {circular-buffer: (), "lookup": ()}: ()
+9994 transform:     deducing type to ("address" "array" "_elem")
+9994 transform:     checking {full: ()}: ()
+9994 transform:     deducing type to "number"
+9994 transform:     checking {empty: (), "lookup": ()}: ()
+9994 transform:     deducing type to ("address" "_elem")
+9994 transform:     checking {circular-buffer: (), "lookup": ()}: ()
+9994 transform:     deducing type to ("address" "array" "_elem")
 9993 transform:   instruction: {full: ()} <- add {full: ()}, {1: "literal"}
 9994 transform:     checking {full: ()}: ()
 9994 transform:     deducing type to "number"
@@ -1141,7 +1163,6 @@
 9994 transform:     deducing type to "boolean"
 9993 transform:   instruction: {full: ()} <- copy {0: "literal"}
 9994 transform:     checking {0: "literal"}: "literal"
-9993 transform: type of 0 is "literal"
 9994 transform:     checking {full: ()}: ()
 9994 transform:     deducing type to "number"
 9993 transform:   instruction: }
@@ -1160,6 +1181,7 @@
 9993 transform: replacing in recipe header products
 9993 transform: replacing in ingredient result:_elem
 9993 transform: _elem => "number"
+9993 transform: replacing in ingredient fail?:boolean
 9993 transform: replacing in ingredient in:address:source:_elem
 9993 transform: _elem => "number"
 9993 transform: replacing in instruction '{default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}'
@@ -1169,6 +1191,9 @@
 9993 transform: replacing in instruction '{in: ("address" "source" "_elem")} <- next-ingredient-without-typechecking '
 9993 transform: replacing in ingredient in:address:source:_elem
 9993 transform: _elem => "number"
+9993 transform: replacing in instruction '{fail?: "boolean"} <- copy {0: "literal", "false": ()}'
+9993 transform: replacing in ingredient 0/false
+9993 transform: replacing in ingredient fail?
 9993 transform: replacing in instruction '{chan: ("address" "channel" "_elem")} <- get {in: ("address" "source" "_elem"), "lookup": ()}, {chan: "offset"}'
 9993 transform: replacing in ingredient *in
 9993 transform: _elem => "number"
@@ -1208,6 +1233,19 @@
 9993 transform: replacing in ingredient full
 9993 transform: replacing in ingredient result
 9993 transform: _elem => "number"
+9993 transform: replacing in instruction '{empty: ("address" "_elem")} <- new {_elem: "type"}'
+9993 transform: replacing in ingredient _elem:type
+9993 transform: replacing in ingredient empty:address:_elem
+9993 transform: _elem => "number"
+9993 transform: _elem => "number"
+9993 transform: replacing in instruction '{circular-buffer: ("address" "array" "_elem"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "_elem"), "lookup": ()}, {full: "number"}, {empty: ("address" "_elem"), "lookup": ()}'
+9993 transform: replacing in ingredient *circular-buffer
+9993 transform: _elem => "number"
+9993 transform: replacing in ingredient full
+9993 transform: replacing in ingredient *empty
+9993 transform: _elem => "number"
+9993 transform: replacing in ingredient *circular-buffer
+9993 transform: _elem => "number"
 9993 transform: replacing in instruction '{full: "number"} <- add {full: "number"}, {1: "literal"}'
 9993 transform: replacing in ingredient full
 9993 transform: replacing in ingredient 1
@@ -1240,16 +1278,19 @@
 9991 transform: --- deduce types for recipe read_3
 9992 transform: default-space => ("address" "array" "location")
 9992 transform: in => ("address" "source" "number")
+9992 transform: fail? => "boolean"
 9992 transform: chan => ("address" "channel" "number")
 9992 transform: empty? => "boolean"
 9992 transform: free-address => "location"
 9992 transform: full => "number"
 9992 transform: circular-buffer => ("address" "array" "number")
 9992 transform: result => "number"
+9992 transform: empty => ("address" "number")
 9992 transform: len => "number"
 9992 transform: at-end? => "boolean"
 9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {in: ("address" "source" "number")} <- next-ingredient-without-typechecking 
+9993 transform: {fail?: "boolean"} <- copy {0: "literal", "false": ()}
 9993 transform: {chan: ("address" "channel" "number")} <- get {in: ("address" "source" "number"), "lookup": ()}, {chan: "offset"}
 9993 transform: {
 9993 transform: {empty?: "boolean"} <- channel-empty? {chan: ("address" "channel" "number")}
@@ -1261,6 +1302,8 @@
 9993 transform: {full: "number"} <- get {chan: ("address" "channel" "number"), "lookup": ()}, {first-full: "offset"}
 9993 transform: {circular-buffer: ("address" "array" "number")} <- get {chan: ("address" "channel" "number"), "lookup": ()}, {data: "offset"}
 9993 transform: {result: "number"} <- index {circular-buffer: ("address" "array" "number"), "lookup": ()}, {full: "number"}
+9993 transform: {empty: ("address" "number")} <- new {number: "type"}
+9993 transform: {circular-buffer: ("address" "array" "number"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "number"), "lookup": ()}, {full: "number"}, {empty: ("address" "number"), "lookup": ()}
 9993 transform: {full: "number"} <- add {full: "number"}, {1: "literal"}
 9993 transform: {
 9993 transform: {len: "number"} <- length {circular-buffer: ("address" "array" "number"), "lookup": ()}
@@ -1274,22 +1317,27 @@
 9991 transform: --- deduce types for recipe read_3
 9992 transform: default-space => ("address" "array" "location")
 9992 transform: in => ("address" "source" "number")
+9992 transform: fail? => "boolean"
 9992 transform: chan => ("address" "channel" "number")
 9992 transform: empty? => "boolean"
 9992 transform: free-address => "location"
 9992 transform: full => "number"
 9992 transform: circular-buffer => ("address" "array" "number")
 9992 transform: result => "number"
+9992 transform: empty => ("address" "number")
 9992 transform: len => "number"
 9992 transform: at-end? => "boolean"
 9991 transform: --- deduce types from header for read_3
 9993 transform: type of in is ("address" "source" "number")
 9993 transform: type of result is "number"
+9993 transform: type of fail? is "boolean"
 9993 transform: type of in is ("address" "source" "number")
 9992 transform: instruction: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform:   product: {default-space: ("address" "array" "location")}
 9992 transform: instruction: {in: ("address" "source" "number")} <- next-ingredient-without-typechecking 
 9993 transform:   product: {in: ("address" "source" "number")}
+9992 transform: instruction: {fail?: "boolean"} <- copy {0: "literal", "false": ()}
+9993 transform:   product: {fail?: "boolean"}
 9992 transform: instruction: {chan: ("address" "channel" "number")} <- get {in: ("address" "source" "number"), "lookup": ()}, {chan: "offset"}
 9993 transform:   product: {chan: ("address" "channel" "number")}
 9992 transform: instruction: {
@@ -1307,6 +1355,10 @@
 9993 transform:   product: {circular-buffer: ("address" "array" "number")}
 9992 transform: instruction: {result: "number"} <- index {circular-buffer: ("address" "array" "number"), "lookup": ()}, {full: "number"}
 9993 transform:   product: {result: "number"}
+9992 transform: instruction: {empty: ("address" "number")} <- new {number: "type"}
+9993 transform:   product: {empty: ("address" "number")}
+9992 transform: instruction: {circular-buffer: ("address" "array" "number"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "number"), "lookup": ()}, {full: "number"}, {empty: ("address" "number"), "lookup": ()}
+9993 transform:   product: {circular-buffer: ("address" "array" "number"), "lookup": ()}
 9992 transform: instruction: {full: "number"} <- add {full: "number"}, {1: "literal"}
 9993 transform:   product: {full: "number"}
 9992 transform: instruction: {
@@ -1320,23 +1372,25 @@
 9992 transform: instruction: }
 9992 transform: instruction: {chan: ("address" "channel" "number"), "lookup": ()} <- put {chan: ("address" "channel" "number"), "lookup": ()}, {first-full: "offset"}, {full: "number"}
 9993 transform:   product: {chan: ("address" "channel" "number"), "lookup": ()}
-9992 transform: instruction: reply {result: "number"}, {in: ("address" "source" "number"), "same-as-ingredient": "0"}
+9992 transform: instruction: reply {result: "number"}, {fail?: "boolean"}, {in: ("address" "source" "number"), "same-as-ingredient": "0"}
 9991 transform: --- check for invalid types in recipe read_3
 9991 transform: --- collect surrounding spaces for recipe read_3
 9991 transform: --- transform names for recipe read_3
 9993 name: assign in 1
+9993 name: assign fail? 2
 9993 name: element chan of type source is at offset 0
-9993 name: assign chan 2
-9993 name: assign empty? 3
+9993 name: assign chan 3
+9993 name: assign empty? 4
 9993 name: element first-free of type channel is at offset 1
-9993 name: assign free-address 4
+9993 name: assign free-address 5
 9993 name: element first-full of type channel is at offset 0
-9993 name: assign full 5
+9993 name: assign full 6
 9993 name: element data of type channel is at offset 2
-9993 name: assign circular-buffer 6
-9993 name: assign result 7
-9993 name: assign len 8
-9993 name: assign at-end? 9
+9993 name: assign circular-buffer 7
+9993 name: assign result 8
+9993 name: assign empty 9
+9993 name: assign len 10
+9993 name: assign at-end? 11
 9993 name: element first-full of type channel is at offset 0
 9991 transform: --- resolve ambiguous calls for recipe read_3
 9992 transform: instruction {empty?: "boolean"} <- channel-empty? {chan: ()}
@@ -1495,12 +1549,13 @@
 9993 transform: strict match failed: ingredient 0
 9991 transform: --- compute instruction operations for recipe read_3
 9991 transform: --- transform braces for recipe read_3
-9993 transform: read_3: push (open, 3)
-9993 transform: push (close, 9)
-9993 transform: read_3: push (open, 14)
-9993 transform: push (close, 19)
+9993 transform: read_3: push (open, 4)
+9993 transform: push (close, 10)
+9993 transform: read_3: push (open, 17)
+9993 transform: push (close, 22)
 9992 transform: local-scope ...
 9992 transform:  ...
+9992 transform: copy ...
 9992 transform: get ...
 9992 transform: channel-empty? ...
 9992 transform: jump-unless empty?, 3:offset
@@ -1509,6 +1564,8 @@
 9992 transform: get ...
 9992 transform: get ...
 9992 transform: index ...
+9992 transform: new ...
+9992 transform: put-index ...
 9992 transform: add ...
 9992 transform: length ...
 9992 transform: greater-or-equal ...
@@ -1521,6 +1578,7 @@
 9991 transform: --- type-check calls inside recipe read_3
 9991 transform: --- convert 'new' to 'allocate' for recipe read_3
 9992 new: size of "location" is 1
+9992 new: size of "number" is 1
 9991 transform: --- check types of reply instructions in recipe read_3
 9991 transform: --- type-check merge instructions in recipe read_3
 9991 transform: --- check that recipe read_3 sets default-space
@@ -1826,154 +1884,174 @@
 9999 mem: decrementing refcount of 1021: 3 -> 2
 9999 mem: storing 1021 in location 2
 9999 mem: incrementing refcount of 1021: 2 -> 3
- 103 run: {3: "number"}, {1: ("address" "source" "number")} <- read_3 {1: ("address" "source" "number")}
+ 103 run: {3: "number"}, {4: "boolean"}, {1: ("address" "source" "number")} <- read_3 {1: ("address" "source" "number")}
 9999 mem: location 1 is 1019
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 10
-9999 mem: allocating size 12
-9999 abandon: picking up space from free-list of size 12
-9999 mem: new alloc from free list: 1023
+9999 mem: array size is 12
+9999 mem: allocating size 14
+9999 mem: new alloc: 1050
+9999 mem: storing 12 in location 1051
  104 run: {in: ("address" "source" "number")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1019 in location 1026
+9999 mem: storing 1019 in location 1053
 9999 mem: incrementing refcount of 1019: 2 -> 3
+ 104 run: {fail?: "boolean"} <- copy {0: "literal", "false": ()}
+9999 mem: storing 0 in location 1054
  104 run: {chan: ("address" "channel" "number")} <- get {in: ("address" "source" "number"), "lookup": ()}, {chan: "offset"}
-9999 mem: location 1026 is 1019
+9999 mem: location 1053 is 1019
 9999 mem: skipping refcount at 1019
 9999 mem: location 1020 is 1008
-9999 mem: location 1026 is 1019
+9999 mem: location 1053 is 1019
 9999 mem: skipping refcount at 1019
 9998 run: address to copy is 1020
 9998 run: its type is ("address" "channel" "number")
 9999 mem: location 1020 is 1008
-9999 mem: storing 1008 in location 1027
+9999 mem: storing 1008 in location 1055
 9999 mem: incrementing refcount of 1008: 4 -> 5
  104 run: {empty?: "boolean"} <- channel-empty?_3 {chan: ("address" "channel" "number")}
-9999 mem: location 1027 is 1008
+9999 mem: location 1055 is 1008
 9999 trace: incrementing callstack depth to 4
  105 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 5
 9999 mem: allocating size 7
-9999 mem: new alloc: 1050
-9999 mem: storing 5 in location 1051
+9999 mem: new alloc: 1064
+9999 mem: storing 5 in location 1065
  105 run: {chan: ("address" "channel" "number")} <- next-ingredient-without-typechecking 
-9999 mem: storing 1008 in location 1053
+9999 mem: storing 1008 in location 1067
 9999 mem: incrementing refcount of 1008: 5 -> 6
  105 run: {full: "number"} <- get {chan: ("address" "channel" "number"), "lookup": ()}, {first-full: "offset"}
-9999 mem: location 1053 is 1008
+9999 mem: location 1067 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 0
 9999 mem: location 1010 is 1
 9999 mem: location 1011 is 1013
 9999 mem: location 1012 is 0
-9999 mem: location 1053 is 1008
+9999 mem: location 1067 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
 9998 run: its type is "number"
 9999 mem: location 1009 is 0
-9999 mem: storing 0 in location 1054
+9999 mem: storing 0 in location 1068
  105 run: {free: "number"} <- get {chan: ("address" "channel" "number"), "lookup": ()}, {first-free: "offset"}
-9999 mem: location 1053 is 1008
+9999 mem: location 1067 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 0
 9999 mem: location 1010 is 1
 9999 mem: location 1011 is 1013
 9999 mem: location 1012 is 0
-9999 mem: location 1053 is 1008
+9999 mem: location 1067 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1010
 9998 run: its type is "number"
 9999 mem: location 1010 is 1
-9999 mem: storing 1 in location 1055
+9999 mem: storing 1 in location 1069
  105 run: {result: "boolean"} <- equal {full: "number"}, {free: "number"}
-9999 mem: location 1054 is 0
-9999 mem: location 1055 is 1
-9999 mem: storing 0 in location 1056
+9999 mem: location 1068 is 0
+9999 mem: location 1069 is 1
+9999 mem: storing 0 in location 1070
  105 run: reply {result: "boolean"}
-9999 mem: location 1056 is 0
+9999 mem: location 1070 is 0
 9999 abandon: saving in free-list of size 7
 9999 trace: reply: decrementing callstack depth from 4
 9998 run: result 0 is 0
-9999 mem: storing 0 in location 1028
+9999 mem: storing 0 in location 1056
  104 run: jump-unless {empty?: "boolean"}, {: "offset"}
-9999 mem: location 1028 is 0
-9998 run: jumping to instruction 9
+9999 mem: location 1056 is 0
+9998 run: jumping to instruction 10
  104 run: {full: "number"} <- get {chan: ("address" "channel" "number"), "lookup": ()}, {first-full: "offset"}
-9999 mem: location 1027 is 1008
+9999 mem: location 1055 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 0
 9999 mem: location 1010 is 1
 9999 mem: location 1011 is 1013
 9999 mem: location 1012 is 0
-9999 mem: location 1027 is 1008
+9999 mem: location 1055 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1009
 9998 run: its type is "number"
 9999 mem: location 1009 is 0
-9999 mem: storing 0 in location 1030
+9999 mem: storing 0 in location 1058
  104 run: {circular-buffer: ("address" "array" "number")} <- get {chan: ("address" "channel" "number"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1027 is 1008
+9999 mem: location 1055 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 0
 9999 mem: location 1010 is 1
 9999 mem: location 1011 is 1013
 9999 mem: location 1012 is 0
-9999 mem: location 1027 is 1008
+9999 mem: location 1055 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy is 1011
 9998 run: its type is ("address" "array" "number")
 9999 mem: location 1011 is 1013
-9999 mem: storing 1013 in location 1031
+9999 mem: storing 1013 in location 1059
 9999 mem: incrementing refcount of 1013: 3 -> 4
  104 run: {result: "number"} <- index {circular-buffer: ("address" "array" "number"), "lookup": ()}, {full: "number"}
-9999 mem: location 1031 is 1013
+9999 mem: location 1059 is 1013
 9999 mem: skipping refcount at 1013
 9998 run: base address is 1014
-9999 mem: location 1030 is 0
+9999 mem: location 1058 is 0
 9998 run: address to copy is 1015
 9998 run: its type is number
 9999 mem: location 1015 is 34
-9999 mem: storing 34 in location 1032
- 104 run: {full: "number"} <- add {full: "number"}, {1: "literal"}
-9999 mem: location 1030 is 0
-9999 mem: storing 1 in location 1030
- 104 run: {len: "number"} <- length {circular-buffer: ("address" "array" "number"), "lookup": ()}
-9999 mem: location 1031 is 1013
+9999 mem: storing 34 in location 1060
+ 104 run: {empty: ("address" "number")} <- new {number: "type"}
+9999 mem: allocating size 2
+9999 mem: new alloc: 1071
+9999 mem: storing 1071 in location 1061
+9999 mem: incrementing refcount of 1071: 0 -> 1
+ 104 run: {circular-buffer: ("address" "array" "number"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "number"), "lookup": ()}, {full: "number"}, {empty: ("address" "number"), "lookup": ()}
+9999 mem: location 1059 is 1013
 9999 mem: skipping refcount at 1013
-9999 mem: storing 4 in location 1033
+9999 mem: location 1058 is 0
+9998 run: address to copy to is 1015
+9999 mem: location 1061 is 1071
+9999 mem: skipping refcount at 1071
+9999 mem: location 1072 is 0
+9999 mem: storing 0 in location 1015
+ 104 run: {full: "number"} <- add {full: "number"}, {1: "literal"}
+9999 mem: location 1058 is 0
+9999 mem: storing 1 in location 1058
+ 104 run: {len: "number"} <- length {circular-buffer: ("address" "array" "number"), "lookup": ()}
+9999 mem: location 1059 is 1013
+9999 mem: skipping refcount at 1013
+9999 mem: storing 4 in location 1062
  104 run: {at-end?: "boolean"} <- greater-or-equal {full: "number"}, {len: "number"}
-9999 mem: location 1030 is 1
-9999 mem: location 1033 is 4
-9999 mem: storing 0 in location 1034
+9999 mem: location 1058 is 1
+9999 mem: location 1062 is 4
+9999 mem: storing 0 in location 1063
  104 run: jump-unless {at-end?: "boolean"}, {: "offset"}
-9999 mem: location 1034 is 0
-9998 run: jumping to instruction 19
+9999 mem: location 1063 is 0
+9998 run: jumping to instruction 22
  104 run: {chan: ("address" "channel" "number"), "lookup": ()} <- put {chan: ("address" "channel" "number"), "lookup": ()}, {first-full: "offset"}, {full: "number"}
-9999 mem: location 1027 is 1008
+9999 mem: location 1055 is 1008
 9999 mem: skipping refcount at 1008
 9999 mem: location 1009 is 0
 9999 mem: location 1010 is 1
 9999 mem: location 1011 is 1013
 9999 mem: location 1012 is 0
-9999 mem: location 1030 is 1
-9999 mem: location 1027 is 1008
+9999 mem: location 1058 is 1
+9999 mem: location 1055 is 1008
 9999 mem: skipping refcount at 1008
 9998 run: address to copy to is 1009
 9999 mem: storing 1 in location 1009
- 104 run: reply {result: "number"}, {in: ("address" "source" "number"), "same-as-ingredient": "0"}
-9999 mem: location 1032 is 34
-9999 mem: location 1026 is 1019
-9999 abandon: saving in free-list of size 12
+ 104 run: reply {result: "number"}, {fail?: "boolean"}, {in: ("address" "source" "number"), "same-as-ingredient": "0"}
+9999 mem: location 1060 is 34
+9999 mem: location 1054 is 0
+9999 mem: location 1053 is 1019
+9999 abandon: saving in free-list of size 14
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 34
-9998 run: result 1 is 1019
+9998 run: result 1 is 0
+9998 run: result 2 is 1019
 9999 mem: storing 34 in location 3
+9999 mem: storing 0 in location 4
 9999 mem: decrementing refcount of 1019: 3 -> 2
 9999 mem: storing 1019 in location 1
 9999 mem: incrementing refcount of 1019: 2 -> 3
  103 run: reply 
 9999 trace: reply: decrementing callstack depth from 2
- 102 run: memory-should-contain {"\n    3 <- 34\n  ": "literal-string"}
+ 102 run: memory-should-contain {"\n    3 <- 34\n    4 <- 0  # read was successful\n  ": "literal-string"}
 9999 run: checking location 3
+9999 run: checking location 4
  102 run: reply 
 9999 trace: reply: decrementing callstack depth from 1

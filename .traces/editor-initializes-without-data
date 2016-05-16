@@ -35,6 +35,12 @@
 9991 transform: --- resolve ambiguous calls for recipe scenario_editor-initializes-without-data
 9992 transform: instruction {screen: ("address" "screen")} <- new-fake-screen {5: "literal", "width": ()}, {3: "literal", "height": ()}
 9992 transform: checking variant (strict) 0: recipe new-fake-screen {w: "number"} {h: "number"} -> {result: ("address" "screen")}
+9992 transform: --- compute address offsets for scenario_editor-initializes-without-data
+9993 transform: - compute address offsets for {screen: ("address" "screen")} <- new-fake-screen {5: "literal", "width": ()}, {3: "literal", "height": ()}
+9993 transform: - compute address offsets for run {"\n    1:address:editor-data <- new-editor 0/data, screen:address:screen, 2/left, 5/right\n    2:editor-data <- copy *1:address:editor-data\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    # 2 (data) <- just the § sentinel\n    # 3 (top of screen) <- the § sentinel\n    4 <- 0  # bottom-of-screen; null since text fits on screen\n    # 5 (before cursor) <- the § sentinel\n    6 <- 2  # left\n    7 <- 4  # right  (inclusive)\n    8 <- 1  # bottom\n    9 <- 1  # cursor row\n    10 <- 2  # cursor column\n  ": "literal-string"}
+9993 transform: - compute address offsets for screen-should-contain {"\n    .     .\n    .     .\n    .     .\n  ": "literal-string"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_editor-initializes-without-data
 9991 transform: --- transform braces for recipe scenario_editor-initializes-without-data
 9992 transform: assume-screen ...
@@ -621,6 +627,10 @@
 9992 transform: checking variant (strict) 0: recipe new-editor {s: ("address" "array" "character")} {screen: ("address" "screen")} {left: "number"} {right: "number"} -> {result: ("address" "editor-data")} {screen: ("address" "screen")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 0: recipe new-editor {s: ("address" "array" "character")} {screen: ("address" "screen")} {left: "number"} {right: "number"} -> {result: ("address" "editor-data")} {screen: ("address" "screen")}
+9992 transform: --- compute address offsets for run_1001
+9993 transform: - compute address offsets for {1: ("address" "editor-data")} <- new-editor {0: "literal", "data": ()}, {screen: ("address" "screen")}, {2: "literal", "left": ()}, {5: "literal", "right": ()}
+9993 transform: - compute address offsets for {2: "editor-data"} <- copy {1: ("address" "editor-data"), "lookup": ()}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new-editor ...

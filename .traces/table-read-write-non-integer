@@ -20,6 +20,10 @@
 9991 transform: --- collect surrounding spaces for recipe scenario_table-read-write-non-integer
 9991 transform: --- transform names for recipe scenario_table-read-write-non-integer
 9991 transform: --- resolve ambiguous calls for recipe scenario_table-read-write-non-integer
+9992 transform: --- compute address offsets for scenario_table-read-write-non-integer
+9993 transform: - compute address offsets for run {"\n    1:address:array:character <- new [abc def]\n    {2: (address table (address array character) number)} <- new-table 30\n    put {2: (address table (address array character) number)}, 1:address:array:character, 34\n    3:number <- index {2: (address table (address array character) number)}, 1:address:array:character\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    3 <- 34\n  ": "literal-string"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_table-read-write-non-integer
 9991 transform: --- transform braces for recipe scenario_table-read-write-non-integer
 9992 transform: run ...
@@ -191,16 +195,23 @@
 9993 name: assign result 2
 9993 name: assign data 3
 9991 transform: --- resolve ambiguous calls for recipe new-table_2
-9992 transform: --- compute address offsets for table
+9992 transform: --- compute address offsets for new-table_2
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {capacity: "number"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {result: ("address" "table" ("address" "array" "character") "number")} <- new {(table (address array character) number): "type"}
+9994 transform: compute address offsets for container table
 9993 transform: checking container table, element 0
 9993 transform: checking container table, element 1
 9993 transform: checking container table, element 2
-9993 transform: container table contains an address at offset 2
-9992 transform: --- compute address offsets for table_row
+9993 transform: address at offset 2
+9993 transform: - compute address offsets for {data: ("address" "array" "table_row" ("address" "array" "character") "number")} <- new {(table_row (address array character) number): "type"}, {capacity: "number"}
+9994 transform: compute address offsets for container table_row
 9993 transform: checking container table_row, element 0
 9993 transform: checking container table_row, element 1
-9993 transform: container table_row contains an address at offset 1
+9993 transform: address at offset 1
 9993 transform: checking container table_row, element 2
+9993 transform: - compute address offsets for {result: ("address" "table" ("address" "array" "character") "number"), "lookup": ()} <- merge {0: "literal", "length": ()}, {capacity: "number"}, {data: ("address" "array" "table_row" ("address" "array" "character") "number")}
+9993 transform: - compute address offsets for reply {result: ("address" "table" ("address" "array" "character") "number")}
 9991 transform: --- compute instruction operations for recipe new-table_2
 9991 transform: --- transform braces for recipe new-table_2
 9992 transform: local-scope ...
@@ -542,6 +553,24 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} -> {result: "_value"}
 9993 transform: strict match failed: ingredient 0
+9992 transform: --- compute address offsets for put_3
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {table: ("address" "table" ("address" "array" "character") "number")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {key: ("address" "array" "character")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {value: "number"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {hash: "number"} <- hash {key: ("address" "array" "character")}
+9993 transform: - compute address offsets for {hash: "number"} <- abs {hash: "number"}
+9993 transform: - compute address offsets for {capacity: "number"} <- get {table: ("address" "table" ("address" "array" "character") "number"), "lookup": ()}, {capacity: "offset"}
+9993 transform: - compute address offsets for _, {hash: "number"} <- divide-with-remainder {hash: "number"}, {capacity: "number"}
+9993 transform: - compute address offsets for {hash: "number"} <- abs {hash: "number"}
+9993 transform: - compute address offsets for {table-data: ("address" "array" "table_row" ("address" "array" "character") "number")} <- get {table: ("address" "table" ("address" "array" "character") "number"), "lookup": ()}, {data: "offset"}
+9993 transform: - compute address offsets for {x: ("table_row" ("address" "array" "character") "number")} <- index {table-data: ("address" "array" "table_row" ("address" "array" "character") "number"), "lookup": ()}, {hash: "number"}
+9993 transform: - compute address offsets for {occupied?: "boolean"} <- get {x: ("table_row" ("address" "array" "character") "number")}, {occupied?: "offset"}
+9993 transform: - compute address offsets for {not-occupied?: "boolean"} <- not {occupied?: "boolean"}
+9993 transform: - compute address offsets for assert {not-occupied?: "boolean"}, {"can't handle collisions yet": "literal-string"}
+9993 transform: - compute address offsets for {new-row: ("table_row" ("address" "array" "character") "number")} <- merge {1: "literal", "true": ()}, {key: ("address" "array" "character")}, {value: "number"}
+9993 transform: - compute address offsets for {table-data: ("address" "array" "table_row" ("address" "array" "character") "number"), "lookup": ()} <- put-index {table-data: ("address" "array" "table_row" ("address" "array" "character") "number"), "lookup": ()}, {hash: "number"}, {new-row: ("table_row" ("address" "array" "character") "number")}
+9993 transform: - compute address offsets for reply {table: ("address" "table" ("address" "array" "character") "number"), "same-as-ingredient": "0"}
 9991 transform: --- compute instruction operations for recipe put_3
 9991 transform: --- transform braces for recipe put_3
 9992 transform: local-scope ...
@@ -844,6 +873,21 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 1: recipe index_3 {table: ("address" "table" ("address" "array" "character") "number")} {key: ("address" "array" "character")} -> {result: "number"}
 9993 transform: strict match failed: ingredient 0
+9992 transform: --- compute address offsets for index_3
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {table: ("address" "table" ("address" "array" "character") "number")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {key: ("address" "array" "character")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {hash: "number"} <- hash {key: ("address" "array" "character")}
+9993 transform: - compute address offsets for {hash: "number"} <- abs {hash: "number"}
+9993 transform: - compute address offsets for {capacity: "number"} <- get {table: ("address" "table" ("address" "array" "character") "number"), "lookup": ()}, {capacity: "offset"}
+9993 transform: - compute address offsets for _, {hash: "number"} <- divide-with-remainder {hash: "number"}, {capacity: "number"}
+9993 transform: - compute address offsets for {hash: "number"} <- abs {hash: "number"}
+9993 transform: - compute address offsets for {table-data: ("address" "array" "table_row" ("address" "array" "character") "number")} <- get {table: ("address" "table" ("address" "array" "character") "number"), "lookup": ()}, {data: "offset"}
+9993 transform: - compute address offsets for {x: ("table_row" ("address" "array" "character") "number")} <- index {table-data: ("address" "array" "table_row" ("address" "array" "character") "number"), "lookup": ()}, {hash: "number"}
+9993 transform: - compute address offsets for {occupied?: "boolean"} <- get {x: ("table_row" ("address" "array" "character") "number")}, {occupied?: "offset"}
+9993 transform: - compute address offsets for assert {occupied?: "boolean"}, {"can't handle missing elements yet": "literal-string"}
+9993 transform: - compute address offsets for {result: "number"} <- get {x: ("table_row" ("address" "array" "character") "number")}, {value: "offset"}
+9993 transform: - compute address offsets for reply {result: "number"}
 9991 transform: --- compute instruction operations for recipe index_3
 9991 transform: --- transform braces for recipe index_3
 9992 transform: local-scope ...
@@ -870,6 +914,12 @@
 9991 transform: --- check that recipe index_3 sets default-space
 9991 transform: --- checking reply instructions against header for index_3
 9992 transform: new specialization: index_3
+9992 transform: --- compute address offsets for run_1001
+9993 transform: - compute address offsets for {1: ("address" "array" "character")} <- new {"abc def": "literal-string"}
+9993 transform: - compute address offsets for {2: ("address" "table" ("address" "array" "character") "number")} <- new-table_2 {30: "literal"}
+9993 transform: - compute address offsets for put_3 {2: ("address" "table" ("address" "array" "character") "number")}, {1: ("address" "array" "character")}, {34: "literal"}
+9993 transform: - compute address offsets for {3: "number"} <- index_3 {2: ("address" "table" ("address" "array" "character") "number")}, {1: ("address" "array" "character")}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new ...

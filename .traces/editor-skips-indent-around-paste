@@ -44,6 +44,14 @@
 9992 transform: checking variant (strict) 0: recipe new-fake-screen {w: "number"} {h: "number"} -> {result: ("address" "screen")}
 9992 transform: instruction {2: ("address" "editor-data")} <- new-editor {1: ("address" "array" "character")}, {screen: ("address" "screen")}, {0: "literal", "left": ()}, {10: "literal", "right": ()}
 9992 transform: checking variant (strict) 0: recipe new-editor {s: ("address" "array" "character")} {screen: ("address" "screen")} {left: "number"} {right: "number"} -> {result: ("address" "editor-data")} {screen: ("address" "screen")}
+9992 transform: --- compute address offsets for scenario_editor-skips-indent-around-paste
+9993 transform: - compute address offsets for {screen: ("address" "screen")} <- new-fake-screen {10: "literal", "width": ()}, {10: "literal", "height": ()}
+9993 transform: - compute address offsets for {1: ("address" "array" "character")} <- new {"ab\n  cd\nef": "literal-string"}
+9993 transform: - compute address offsets for {2: ("address" "editor-data")} <- new-editor {1: ("address" "array" "character")}, {screen: ("address" "screen")}, {0: "literal", "left": ()}, {10: "literal", "right": ()}
+9993 transform: - compute address offsets for assume-console {"\n    left-click 2, 8\n    press 65507  # start paste\n    press enter\n    press 65506  # end paste\n  ": "literal-string"}
+9993 transform: - compute address offsets for run {"\n    editor-event-loop screen:address:screen, console:address:console, 2:address:editor-data\n    3:number <- get *2:address:editor-data, cursor-row:offset\n    4:number <- get *2:address:editor-data, cursor-column:offset\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    3 <- 3  # cursor row\n    4 <- 0  # cursor column (not indented)\n  ": "literal-string"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_editor-skips-indent-around-paste
 9991 transform: --- transform braces for recipe scenario_editor-skips-indent-around-paste
 9992 transform: assume-screen ...
@@ -11630,6 +11638,11 @@
 9991 transform: --- resolve ambiguous calls for recipe run_1001
 9992 transform: instruction editor-event-loop {screen: ("address" "screen")}, {console: ("address" "console")}, {2: ("address" "editor-data")}
 9992 transform: checking variant (strict) 0: recipe editor-event-loop {screen: ("address" "screen")} {console: ("address" "console")} {editor: ("address" "editor-data")} -> {screen: ("address" "screen")} {console: ("address" "console")} {editor: ("address" "editor-data")}
+9992 transform: --- compute address offsets for run_1001
+9993 transform: - compute address offsets for editor-event-loop {screen: ("address" "screen")}, {console: ("address" "console")}, {2: ("address" "editor-data")}
+9993 transform: - compute address offsets for {3: "number"} <- get {2: ("address" "editor-data"), "lookup": ()}, {cursor-row: "offset"}
+9993 transform: - compute address offsets for {4: "number"} <- get {2: ("address" "editor-data"), "lookup": ()}, {cursor-column: "offset"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: editor-event-loop ...
@@ -13727,6 +13740,8 @@
 9999 mem: skipping refcount at 1350
 9999 mem: location 1464 is 1350
 9999 mem: skipping refcount at 1350
+9999 mem: incrementing refcount of 1266: 14 -> 15
+9999 mem: incrementing refcount of 1266: 15 -> 16
 9999 mem: storing 1 in location 1351
 9999 mem: storing 1 in location 1352
 9999 mem: storing 0 in location 1353
@@ -14711,11 +14726,11 @@
 9998 run: address to copy is 1249
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1249 is 1266
-9999 mem: incrementing refcount of 1266: 14 -> 15
+9999 mem: incrementing refcount of 1266: 16 -> 17
 9999 mem: storing 1266 in location 1330
  106 run: {prev: ("address" "duplex-list" "character")} <- copy {curr: ("address" "duplex-list" "character")}
 9999 mem: location 1330 is 1266
-9999 mem: incrementing refcount of 1266: 15 -> 16
+9999 mem: incrementing refcount of 1266: 17 -> 18
 9999 mem: storing 1266 in location 1331
  106 run: {curr: ("address" "duplex-list" "character")} <- next_2 {curr: ("address" "duplex-list" "character")}
 9999 mem: location 1330 is 1266
@@ -14726,7 +14741,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1266: 16 -> 17
+9999 mem: incrementing refcount of 1266: 18 -> 19
 9999 mem: storing 1266 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1266
@@ -14749,7 +14764,7 @@
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1277
-9999 mem: decrementing refcount of 1266: 17 -> 16
+9999 mem: decrementing refcount of 1266: 19 -> 18
 9999 mem: incrementing refcount of 1277: 15 -> 16
 9999 mem: storing 1277 in location 1330
  106 run: {color: "number"} <- copy {7: "literal", "white": ()}
@@ -15226,7 +15241,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1266: 16 -> 17
+9999 mem: incrementing refcount of 1266: 18 -> 19
 9999 mem: storing 1266 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1266
@@ -15249,7 +15264,7 @@
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1277
-9999 mem: decrementing refcount of 1266: 17 -> 16
+9999 mem: decrementing refcount of 1266: 19 -> 18
 9999 mem: incrementing refcount of 1277: 17 -> 18
 9999 mem: storing 1277 in location 1331
  106 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
@@ -37212,7 +37227,7 @@
 9998 run: address to copy is 1249
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1249 is 1266
-9999 mem: incrementing refcount of 1266: 16 -> 17
+9999 mem: incrementing refcount of 1266: 18 -> 19
 9999 mem: storing 1266 in location 1545
  105 run: {cursor-before: ("address" "duplex-list" "character")} <- get {editor: ("address" "editor-data"), "lookup": ()}, {before-cursor: "offset"}
 9999 mem: location 1482 is 1247
@@ -37680,7 +37695,7 @@
 9998 run: address to copy is 1249
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1249 is 1266
-9999 mem: incrementing refcount of 1266: 17 -> 18
+9999 mem: incrementing refcount of 1266: 19 -> 20
 9999 mem: storing 1266 in location 1547
  105 run: {cursor-row: "number"} <- get {editor: ("address" "editor-data"), "lookup": ()}, {cursor-row: "offset"}
 9999 mem: location 1482 is 1247
@@ -37834,6 +37849,10 @@
 9999 mem: skipping refcount at 1582
 9999 mem: location 1501 is 1582
 9999 mem: skipping refcount at 1582
+9999 mem: incrementing refcount of 1266: 20 -> 21
+9999 mem: incrementing refcount of 1266: 21 -> 22
+9999 mem: incrementing refcount of 1626: 10 -> 11
+9999 mem: incrementing refcount of 1310: 21 -> 22
 9999 mem: storing 0 in location 1583
 9999 mem: storing 2 in location 1584
 9999 mem: storing 4 in location 1585
@@ -38188,11 +38207,11 @@
 9998 run: address to copy is 1249
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1249 is 1266
-9999 mem: incrementing refcount of 1266: 18 -> 19
+9999 mem: incrementing refcount of 1266: 22 -> 23
 9999 mem: storing 1266 in location 1330
  106 run: {prev: ("address" "duplex-list" "character")} <- copy {curr: ("address" "duplex-list" "character")}
 9999 mem: location 1330 is 1266
-9999 mem: incrementing refcount of 1266: 19 -> 20
+9999 mem: incrementing refcount of 1266: 23 -> 24
 9999 mem: storing 1266 in location 1331
  106 run: {curr: ("address" "duplex-list" "character")} <- next_2 {curr: ("address" "duplex-list" "character")}
 9999 mem: location 1330 is 1266
@@ -38203,7 +38222,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1266: 20 -> 21
+9999 mem: incrementing refcount of 1266: 24 -> 25
 9999 mem: storing 1266 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1266
@@ -38226,7 +38245,7 @@
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1277
-9999 mem: decrementing refcount of 1266: 21 -> 20
+9999 mem: decrementing refcount of 1266: 25 -> 24
 9999 mem: incrementing refcount of 1277: 19 -> 20
 9999 mem: storing 1277 in location 1330
  106 run: {color: "number"} <- copy {7: "literal", "white": ()}
@@ -38298,7 +38317,7 @@
 9998 run: address to copy is 1251
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1251 is 1626
-9999 mem: incrementing refcount of 1626: 10 -> 11
+9999 mem: incrementing refcount of 1626: 11 -> 12
 9999 mem: storing 1626 in location 1337
  106 run: {screen: ("address" "screen")} <- move-cursor {screen: ("address" "screen")}, {row: "number"}, {column: "number"}
 9999 mem: location 1325 is 1008
@@ -38703,7 +38722,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1266: 20 -> 21
+9999 mem: incrementing refcount of 1266: 24 -> 25
 9999 mem: storing 1266 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1266
@@ -38726,7 +38745,7 @@
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1277
-9999 mem: decrementing refcount of 1266: 21 -> 20
+9999 mem: decrementing refcount of 1266: 25 -> 24
 9999 mem: incrementing refcount of 1277: 21 -> 22
 9999 mem: storing 1277 in location 1331
  106 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
@@ -42483,7 +42502,7 @@
 9998 run: address to copy is 1308
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1308 is 1626
-9999 mem: incrementing refcount of 1626: 11 -> 12
+9999 mem: incrementing refcount of 1626: 12 -> 13
 9999 mem: storing 1626 in location 1285
  107 run: reply {result: ("address" "duplex-list" "character"), "contained-in": "in"}
 9999 mem: location 1285 is 1626
@@ -42491,7 +42510,7 @@
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1626
 9999 mem: decrementing refcount of 1306: 28 -> 27
-9999 mem: incrementing refcount of 1626: 12 -> 13
+9999 mem: incrementing refcount of 1626: 13 -> 14
 9999 mem: storing 1626 in location 1330
  106 run: {prev: ("address" "duplex-list" "character")} <- next_2 {prev: ("address" "duplex-list" "character")}
 9999 mem: location 1331 is 1302
@@ -43996,7 +44015,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1626: 13 -> 14
+9999 mem: incrementing refcount of 1626: 14 -> 15
 9999 mem: storing 1626 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1626
@@ -44012,15 +44031,15 @@
 9998 run: address to copy is 1628
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1628 is 1310
-9999 mem: incrementing refcount of 1310: 21 -> 22
+9999 mem: incrementing refcount of 1310: 22 -> 23
 9999 mem: storing 1310 in location 1285
  107 run: reply {result: ("address" "duplex-list" "character"), "contained-in": "in"}
 9999 mem: location 1285 is 1310
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1310
-9999 mem: decrementing refcount of 1626: 14 -> 13
-9999 mem: incrementing refcount of 1310: 22 -> 23
+9999 mem: decrementing refcount of 1626: 15 -> 14
+9999 mem: incrementing refcount of 1310: 23 -> 24
 9999 mem: storing 1310 in location 1330
  106 run: {prev: ("address" "duplex-list" "character")} <- next_2 {prev: ("address" "duplex-list" "character")}
 9999 mem: location 1331 is 1306
@@ -44047,7 +44066,7 @@
 9998 run: address to copy is 1308
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1308 is 1626
-9999 mem: incrementing refcount of 1626: 13 -> 14
+9999 mem: incrementing refcount of 1626: 14 -> 15
 9999 mem: storing 1626 in location 1285
  107 run: reply {result: ("address" "duplex-list" "character"), "contained-in": "in"}
 9999 mem: location 1285 is 1626
@@ -44055,7 +44074,7 @@
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1626
 9999 mem: decrementing refcount of 1306: 30 -> 29
-9999 mem: incrementing refcount of 1626: 14 -> 15
+9999 mem: incrementing refcount of 1626: 15 -> 16
 9999 mem: storing 1626 in location 1331
  106 run: jump {+next-character: "label"}
 9998 run: jumping to instruction 23
@@ -46392,7 +46411,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1310: 23 -> 24
+9999 mem: incrementing refcount of 1310: 24 -> 25
 9999 mem: storing 1310 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1310
@@ -46415,7 +46434,7 @@
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1314
-9999 mem: decrementing refcount of 1310: 24 -> 23
+9999 mem: decrementing refcount of 1310: 25 -> 24
 9999 mem: incrementing refcount of 1314: 19 -> 20
 9999 mem: storing 1314 in location 1330
  106 run: {prev: ("address" "duplex-list" "character")} <- next_2 {prev: ("address" "duplex-list" "character")}
@@ -46427,7 +46446,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1626: 15 -> 16
+9999 mem: incrementing refcount of 1626: 16 -> 17
 9999 mem: storing 1626 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1626
@@ -46443,15 +46462,15 @@
 9998 run: address to copy is 1628
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1628 is 1310
-9999 mem: incrementing refcount of 1310: 23 -> 24
+9999 mem: incrementing refcount of 1310: 24 -> 25
 9999 mem: storing 1310 in location 1285
  107 run: reply {result: ("address" "duplex-list" "character"), "contained-in": "in"}
 9999 mem: location 1285 is 1310
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1310
-9999 mem: decrementing refcount of 1626: 16 -> 15
-9999 mem: incrementing refcount of 1310: 24 -> 25
+9999 mem: decrementing refcount of 1626: 17 -> 16
+9999 mem: incrementing refcount of 1310: 25 -> 26
 9999 mem: storing 1310 in location 1331
  106 run: jump {+next-character: "label"}
 9998 run: jumping to instruction 23
@@ -46793,7 +46812,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1310: 25 -> 26
+9999 mem: incrementing refcount of 1310: 26 -> 27
 9999 mem: storing 1310 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1310
@@ -46816,7 +46835,7 @@
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1314
-9999 mem: decrementing refcount of 1310: 26 -> 25
+9999 mem: decrementing refcount of 1310: 27 -> 26
 9999 mem: incrementing refcount of 1314: 21 -> 22
 9999 mem: storing 1314 in location 1331
  106 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
@@ -60658,7 +60677,7 @@
 9998 run: address to copy is 1251
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1251 is 1626
-9999 mem: incrementing refcount of 1626: 15 -> 16
+9999 mem: incrementing refcount of 1626: 16 -> 17
 9999 mem: storing 1626 in location 1492
  105 run: {cursor-row: "number"} <- get {editor: ("address" "editor-data"), "lookup": ()}, {cursor-row: "offset"}
 9999 mem: location 1482 is 1247
@@ -60995,11 +61014,11 @@
 9998 run: address to copy is 1249
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1249 is 1266
-9999 mem: incrementing refcount of 1266: 20 -> 21
+9999 mem: incrementing refcount of 1266: 24 -> 25
 9999 mem: storing 1266 in location 1330
  106 run: {prev: ("address" "duplex-list" "character")} <- copy {curr: ("address" "duplex-list" "character")}
 9999 mem: location 1330 is 1266
-9999 mem: incrementing refcount of 1266: 21 -> 22
+9999 mem: incrementing refcount of 1266: 25 -> 26
 9999 mem: storing 1266 in location 1331
  106 run: {curr: ("address" "duplex-list" "character")} <- next_2 {curr: ("address" "duplex-list" "character")}
 9999 mem: location 1330 is 1266
@@ -61010,7 +61029,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1266: 22 -> 23
+9999 mem: incrementing refcount of 1266: 26 -> 27
 9999 mem: storing 1266 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1266
@@ -61033,7 +61052,7 @@
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1277
-9999 mem: decrementing refcount of 1266: 23 -> 22
+9999 mem: decrementing refcount of 1266: 27 -> 26
 9999 mem: incrementing refcount of 1277: 23 -> 24
 9999 mem: storing 1277 in location 1330
  106 run: {color: "number"} <- copy {7: "literal", "white": ()}
@@ -61105,7 +61124,7 @@
 9998 run: address to copy is 1251
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1251 is 1626
-9999 mem: incrementing refcount of 1626: 16 -> 17
+9999 mem: incrementing refcount of 1626: 17 -> 18
 9999 mem: storing 1626 in location 1337
  106 run: {screen: ("address" "screen")} <- move-cursor {screen: ("address" "screen")}, {row: "number"}, {column: "number"}
 9999 mem: location 1325 is 1008
@@ -61499,7 +61518,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1266: 22 -> 23
+9999 mem: incrementing refcount of 1266: 26 -> 27
 9999 mem: storing 1266 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1266
@@ -61522,7 +61541,7 @@
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1277
-9999 mem: decrementing refcount of 1266: 23 -> 22
+9999 mem: decrementing refcount of 1266: 27 -> 26
 9999 mem: incrementing refcount of 1277: 25 -> 26
 9999 mem: storing 1277 in location 1331
  106 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
@@ -65278,7 +65297,7 @@
 9998 run: address to copy is 1308
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1308 is 1626
-9999 mem: incrementing refcount of 1626: 17 -> 18
+9999 mem: incrementing refcount of 1626: 18 -> 19
 9999 mem: storing 1626 in location 1285
  107 run: reply {result: ("address" "duplex-list" "character"), "contained-in": "in"}
 9999 mem: location 1285 is 1626
@@ -65286,7 +65305,7 @@
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1626
 9999 mem: decrementing refcount of 1306: 32 -> 31
-9999 mem: incrementing refcount of 1626: 18 -> 19
+9999 mem: incrementing refcount of 1626: 19 -> 20
 9999 mem: storing 1626 in location 1330
  106 run: {prev: ("address" "duplex-list" "character")} <- next_2 {prev: ("address" "duplex-list" "character")}
 9999 mem: location 1331 is 1302
@@ -66791,7 +66810,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1626: 19 -> 20
+9999 mem: incrementing refcount of 1626: 20 -> 21
 9999 mem: storing 1626 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1626
@@ -66807,15 +66826,15 @@
 9998 run: address to copy is 1628
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1628 is 1310
-9999 mem: incrementing refcount of 1310: 25 -> 26
+9999 mem: incrementing refcount of 1310: 26 -> 27
 9999 mem: storing 1310 in location 1285
  107 run: reply {result: ("address" "duplex-list" "character"), "contained-in": "in"}
 9999 mem: location 1285 is 1310
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1310
-9999 mem: decrementing refcount of 1626: 20 -> 19
-9999 mem: incrementing refcount of 1310: 26 -> 27
+9999 mem: decrementing refcount of 1626: 21 -> 20
+9999 mem: incrementing refcount of 1310: 27 -> 28
 9999 mem: storing 1310 in location 1330
  106 run: {prev: ("address" "duplex-list" "character")} <- next_2 {prev: ("address" "duplex-list" "character")}
 9999 mem: location 1331 is 1306
@@ -66842,7 +66861,7 @@
 9998 run: address to copy is 1308
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1308 is 1626
-9999 mem: incrementing refcount of 1626: 19 -> 20
+9999 mem: incrementing refcount of 1626: 20 -> 21
 9999 mem: storing 1626 in location 1285
  107 run: reply {result: ("address" "duplex-list" "character"), "contained-in": "in"}
 9999 mem: location 1285 is 1626
@@ -66850,7 +66869,7 @@
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1626
 9999 mem: decrementing refcount of 1306: 34 -> 33
-9999 mem: incrementing refcount of 1626: 20 -> 21
+9999 mem: incrementing refcount of 1626: 21 -> 22
 9999 mem: storing 1626 in location 1331
  106 run: jump {+next-character: "label"}
 9998 run: jumping to instruction 23
@@ -69187,7 +69206,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1310: 27 -> 28
+9999 mem: incrementing refcount of 1310: 28 -> 29
 9999 mem: storing 1310 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1310
@@ -69210,7 +69229,7 @@
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1314
-9999 mem: decrementing refcount of 1310: 28 -> 27
+9999 mem: decrementing refcount of 1310: 29 -> 28
 9999 mem: incrementing refcount of 1314: 23 -> 24
 9999 mem: storing 1314 in location 1330
  106 run: {prev: ("address" "duplex-list" "character")} <- next_2 {prev: ("address" "duplex-list" "character")}
@@ -69222,7 +69241,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1626: 21 -> 22
+9999 mem: incrementing refcount of 1626: 22 -> 23
 9999 mem: storing 1626 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1626
@@ -69238,15 +69257,15 @@
 9998 run: address to copy is 1628
 9998 run: its type is ("address" "duplex-list" "character")
 9999 mem: location 1628 is 1310
-9999 mem: incrementing refcount of 1310: 27 -> 28
+9999 mem: incrementing refcount of 1310: 28 -> 29
 9999 mem: storing 1310 in location 1285
  107 run: reply {result: ("address" "duplex-list" "character"), "contained-in": "in"}
 9999 mem: location 1285 is 1310
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1310
-9999 mem: decrementing refcount of 1626: 22 -> 21
-9999 mem: incrementing refcount of 1310: 28 -> 29
+9999 mem: decrementing refcount of 1626: 23 -> 22
+9999 mem: incrementing refcount of 1310: 29 -> 30
 9999 mem: storing 1310 in location 1331
  106 run: jump {+next-character: "label"}
 9998 run: jumping to instruction 23
@@ -69588,7 +69607,7 @@
 9999 abandon: picking up space from free-list of size 5
 9999 mem: new alloc from free list: 1281
  107 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: incrementing refcount of 1310: 29 -> 30
+9999 mem: incrementing refcount of 1310: 30 -> 31
 9999 mem: storing 1310 in location 1284
  107 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1284 is 1310
@@ -69611,7 +69630,7 @@
 9999 abandon: saving in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1314
-9999 mem: decrementing refcount of 1310: 30 -> 29
+9999 mem: decrementing refcount of 1310: 31 -> 30
 9999 mem: incrementing refcount of 1314: 25 -> 26
 9999 mem: storing 1314 in location 1331
  106 run: {column: "number"} <- add {column: "number"}, {1: "literal"}

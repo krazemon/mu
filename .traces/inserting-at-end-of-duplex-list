@@ -20,6 +20,10 @@
 9991 transform: --- collect surrounding spaces for recipe scenario_inserting-at-end-of-duplex-list
 9991 transform: --- transform names for recipe scenario_inserting-at-end-of-duplex-list
 9991 transform: --- resolve ambiguous calls for recipe scenario_inserting-at-end-of-duplex-list
+9992 transform: --- compute address offsets for scenario_inserting-at-end-of-duplex-list
+9993 transform: - compute address offsets for run {"\n    1:address:duplex-list:character <- push 3, 0\n    1:address:duplex-list:character <- push 4, 1:address:duplex-list:character\n    1:address:duplex-list:character <- push 5, 1:address:duplex-list:character\n    2:address:duplex-list:character <- next 1:address:duplex-list:character  # 2 points inside list\n    2:address:duplex-list:character <- next 2:address:duplex-list:character  # now at end of list\n    2:address:duplex-list:character <- insert 6, 2:address:duplex-list:character\n    # check structure like before\n    2:address:duplex-list:character <- copy 1:address:duplex-list:character\n    3:character <- first 2:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    4:character <- first 2:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    5:character <- first 2:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    6:character <- first 2:address:duplex-list:character\n    2:address:duplex-list:character <- prev 2:address:duplex-list:character\n    7:character <- first 2:address:duplex-list:character\n    2:address:duplex-list:character <- prev 2:address:duplex-list:character\n    8:character <- first 2:address:duplex-list:character\n    2:address:duplex-list:character <- prev 2:address:duplex-list:character\n    9:character <- first 2:address:duplex-list:character\n    10:boolean <- equal 1:address:duplex-list:character, 2:address:duplex-list:character\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    3 <- 5  # scanning next\n    4 <- 4\n    5 <- 3\n    6 <- 6  # inserted element\n    7 <- 3  # then prev\n    8 <- 4\n    9 <- 5\n    10 <- 1  # list back at start\n  ": "literal-string"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_inserting-at-end-of-duplex-list
 9991 transform: --- transform braces for recipe scenario_inserting-at-end-of-duplex-list
 9992 transform: run ...
@@ -340,6 +344,17 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
+9992 transform: --- compute address offsets for push_6
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {x: "character"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {result: ("address" "duplex-list" "character")} <- new {(duplex-list character): "type"}
+9993 transform: - compute address offsets for {result: ("address" "duplex-list" "character"), "lookup": ()} <- merge {x: "character"}, {in: ("address" "duplex-list" "character")}, {0: "literal"}
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for break-unless {in: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {in: ("address" "duplex-list" "character"), "lookup": ()} <- put {in: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {result: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for return {result: ("address" "duplex-list" "character"), "same-as-ingredient": "1"}
 9991 transform: --- compute instruction operations for recipe push_6
 9991 transform: --- transform braces for recipe push_6
 9993 transform: push_6: push (open, 5)
@@ -555,6 +570,17 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
+9992 transform: --- compute address offsets for push_7
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {x: "character"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {result: ("address" "duplex-list" "character")} <- new {(duplex-list character): "type"}
+9993 transform: - compute address offsets for {result: ("address" "duplex-list" "character"), "lookup": ()} <- merge {x: "character"}, {in: ("address" "duplex-list" "character")}, {0: "literal"}
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for break-unless {in: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {in: ("address" "duplex-list" "character"), "lookup": ()} <- put {in: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {result: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for return {result: ("address" "duplex-list" "character"), "same-as-ingredient": "1"}
 9991 transform: --- compute instruction operations for recipe push_7
 9991 transform: --- transform braces for recipe push_7
 9993 transform: push_7: push (open, 5)
@@ -774,6 +800,17 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
+9992 transform: --- compute address offsets for push_8
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {x: "character"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {result: ("address" "duplex-list" "character")} <- new {(duplex-list character): "type"}
+9993 transform: - compute address offsets for {result: ("address" "duplex-list" "character"), "lookup": ()} <- merge {x: "character"}, {in: ("address" "duplex-list" "character")}, {0: "literal"}
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for break-unless {in: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {in: ("address" "duplex-list" "character"), "lookup": ()} <- put {in: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {result: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for return {result: ("address" "duplex-list" "character"), "same-as-ingredient": "1"}
 9991 transform: --- compute instruction operations for recipe push_8
 9991 transform: --- transform braces for recipe push_8
 9993 transform: push_8: push (open, 5)
@@ -1100,6 +1137,22 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
+9992 transform: --- compute address offsets for insert_4
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {x: "character"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {new-node: ("address" "duplex-list" "character")} <- new {(duplex-list character): "type"}
+9993 transform: - compute address offsets for {new-node: ("address" "duplex-list" "character"), "lookup": ()} <- put {new-node: ("address" "duplex-list" "character"), "lookup": ()}, {value: "offset"}, {x: "character"}
+9993 transform: - compute address offsets for {next-node: ("address" "duplex-list" "character")} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}
+9993 transform: - compute address offsets for {in: ("address" "duplex-list" "character"), "lookup": ()} <- put {in: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}, {new-node: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {new-node: ("address" "duplex-list" "character"), "lookup": ()} <- put {new-node: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {in: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {new-node: ("address" "duplex-list" "character"), "lookup": ()} <- put {new-node: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}, {next-node: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for break-if {next-node: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for return {in: ("address" "duplex-list" "character"), "same-as-ingredient": "1"}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for {next-node: ("address" "duplex-list" "character"), "lookup": ()} <- put {next-node: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {new-node: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for reply {in: ("address" "duplex-list" "character"), "same-as-ingredient": "1"}
 9991 transform: --- compute instruction operations for recipe insert_4
 9991 transform: --- transform braces for recipe insert_4
 9993 transform: insert_4: push (open, 9)
@@ -1240,6 +1293,15 @@
 9993 name: element value of type duplex-list is at offset 0
 9993 name: assign result 2
 9991 transform: --- resolve ambiguous calls for recipe first_4
+9992 transform: --- compute address offsets for first_4
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for break-if {in: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for return {0: "literal"}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for {result: "character"} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {value: "offset"}
+9993 transform: - compute address offsets for reply {result: "character"}
 9991 transform: --- compute instruction operations for recipe first_4
 9991 transform: --- transform braces for recipe first_4
 9993 transform: first_4: push (open, 2)
@@ -1341,6 +1403,29 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
+9992 transform: --- compute address offsets for run_1001
+9993 transform: - compute address offsets for {1: ("address" "duplex-list" "character")} <- push_6 {3: "literal"}, {0: "literal"}
+9993 transform: - compute address offsets for {1: ("address" "duplex-list" "character")} <- push_7 {4: "literal"}, {1: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {1: ("address" "duplex-list" "character")} <- push_8 {5: "literal"}, {1: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- next_2 {1: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- next_2 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- insert_4 {6: "literal"}, {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- copy {1: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {3: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- next_2 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {4: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- next_2 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {5: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- next_2 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {6: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- prev_2 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {7: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- prev_2 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {8: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- prev_2 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {9: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {10: "boolean"} <- equal {1: ("address" "duplex-list" "character")}, {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: push ...

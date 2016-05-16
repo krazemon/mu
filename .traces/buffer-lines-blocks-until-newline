@@ -20,6 +20,10 @@
 9991 transform: --- collect surrounding spaces for recipe scenario_buffer-lines-blocks-until-newline
 9991 transform: --- transform names for recipe scenario_buffer-lines-blocks-until-newline
 9991 transform: --- resolve ambiguous calls for recipe scenario_buffer-lines-blocks-until-newline
+9992 transform: --- compute address offsets for scenario_buffer-lines-blocks-until-newline
+9993 transform: - compute address offsets for run {"\n    1:address:source:number, 2:address:sink:number <- new-channel 10/capacity\n    _, 3:address:sink:number/buffered-stdin <- new-channel 10/capacity\n    4:address:channel:number/buffered-stdin <- get *3:address:source:number, chan:offset\n    5:boolean <- channel-empty? 4:address:channel:character/buffered-stdin\n    assert 5:boolean, [ \nF buffer-lines-blocks-until-newline: channel should be empty after init]\n    # buffer stdin into buffered-stdin, try to read from buffered-stdin\n    6:number/buffer-routine <- start-running buffer-lines, 1:address:source:character/stdin, 3:address:sink:character/buffered-stdin\n    wait-for-routine 6:number/buffer-routine\n    7:boolean <- channel-empty? 4:address:channel:character/buffered-stdin\n    assert 7:boolean, [ \nF buffer-lines-blocks-until-newline: channel should be empty after buffer-lines bring-up]\n    # write 'a'\n    2:address:sink:character <- write 2:address:sink:character, 97/a\n    restart 6:number/buffer-routine\n    wait-for-routine 6:number/buffer-routine\n    8:boolean <- channel-empty? 4:address:channel:character/buffered-stdin\n    assert 8:boolean, [ \nF buffer-lines-blocks-until-newline: channel should be empty after writing 'a']\n    # write 'b'\n    2:address:sink:character <- write 2:address:sink:character, 98/b\n    restart 6:number/buffer-routine\n    wait-for-routine 6:number/buffer-routine\n    9:boolean <- channel-empty? 4:address:channel:character/buffered-stdin\n    assert 9:boolean, [ \nF buffer-lines-blocks-until-newline: channel should be empty after writing 'b']\n    # write newline\n    2:address:sink:character <- write 2:address:sink:character, 10/newline\n    restart 6:number/buffer-routine\n    wait-for-routine 6:number/buffer-routine\n    10:boolean <- channel-empty? 4:address:channel:character/buffered-stdin\n    11:boolean/completed? <- not 10:boolean\n    assert 11:boolean/completed?, [ \nF buffer-lines-blocks-until-newline: channel should contain data after writing newline]\n    trace 1, [test], [reached end]\n  ": "literal-string"}
+9993 transform: - compute address offsets for trace-should-contain {"\n    test: reached end\n  ": "literal-string"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_buffer-lines-blocks-until-newline
 9991 transform: --- transform braces for recipe scenario_buffer-lines-blocks-until-newline
 9992 transform: run ...
@@ -477,18 +481,32 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
-9992 transform: --- compute address offsets for channel
+9992 transform: --- compute address offsets for new-channel_3
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {capacity: "number"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {result: ("address" "channel" "number")} <- new {(channel number): "type"}
+9994 transform: compute address offsets for container channel
 9993 transform: checking container channel, element 0
 9993 transform: checking container channel, element 1
 9993 transform: checking container channel, element 2
-9993 transform: container channel contains an address at offset 2
+9993 transform: address at offset 2
 9993 transform: checking container channel, element 3
-9992 transform: --- compute address offsets for source
+9993 transform: - compute address offsets for {result: ("address" "channel" "number"), "lookup": ()} <- put {result: ("address" "channel" "number"), "lookup": ()}, {first-full: "offset"}, {0: "literal"}
+9993 transform: - compute address offsets for {result: ("address" "channel" "number"), "lookup": ()} <- put {result: ("address" "channel" "number"), "lookup": ()}, {first-free: "offset"}, {0: "literal"}
+9993 transform: - compute address offsets for {capacity: "number"} <- add {capacity: "number"}, {1: "literal"}
+9993 transform: - compute address offsets for {data: ("address" "array" "number")} <- new {number: "type"}, {capacity: "number"}
+9993 transform: - compute address offsets for {result: ("address" "channel" "number"), "lookup": ()} <- put {result: ("address" "channel" "number"), "lookup": ()}, {data: "offset"}, {data: ("address" "array" "number")}
+9993 transform: - compute address offsets for {in: ("address" "source" "number")} <- new {(source number): "type"}
+9994 transform: compute address offsets for container source
 9993 transform: checking container source, element 0
-9993 transform: container source contains an address at offset 0
-9992 transform: --- compute address offsets for sink
+9993 transform: address at offset 0
+9993 transform: - compute address offsets for {in: ("address" "source" "number"), "lookup": ()} <- put {in: ("address" "source" "number"), "lookup": ()}, {chan: "offset"}, {result: ("address" "channel" "number")}
+9993 transform: - compute address offsets for {out: ("address" "sink" "number")} <- new {(sink number): "type"}
+9994 transform: compute address offsets for container sink
 9993 transform: checking container sink, element 0
-9993 transform: container sink contains an address at offset 0
+9993 transform: address at offset 0
+9993 transform: - compute address offsets for {out: ("address" "sink" "number"), "lookup": ()} <- put {out: ("address" "sink" "number"), "lookup": ()}, {chan: "offset"}, {result: ("address" "channel" "number")}
+9993 transform: - compute address offsets for reply {in: ("address" "source" "number")}, {out: ("address" "sink" "number")}
 9991 transform: --- compute instruction operations for recipe new-channel_3
 9991 transform: --- transform braces for recipe new-channel_3
 9992 transform: local-scope ...
@@ -852,6 +870,30 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
+9992 transform: --- compute address offsets for write_3
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {out: ("address" "sink" "character")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {val: "character"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {chan: ("address" "channel" "character")} <- get {out: ("address" "sink" "character"), "lookup": ()}, {chan: "offset"}
+9993 transform: - compute address offsets for <channel-write-initial>
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for {full: "boolean"} <- channel-full?_2 {chan: ("address" "channel" "character")}
+9993 transform: - compute address offsets for break-unless {full: "boolean"}
+9993 transform: - compute address offsets for {full-address: "location"} <- get-location {chan: ("address" "channel" "character"), "lookup": ()}, {first-full: "offset"}
+9993 transform: - compute address offsets for wait-for-location {full-address: "location"}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character")} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {data: "offset"}
+9993 transform: - compute address offsets for {free: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
+9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+9993 transform: - compute address offsets for {free: "number"} <- add {free: "number"}, {1: "literal"}
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for {len: "number"} <- length {circular-buffer: ("address" "array" "character"), "lookup": ()}
+9993 transform: - compute address offsets for {at-end?: "boolean"} <- greater-or-equal {free: "number"}, {len: "number"}
+9993 transform: - compute address offsets for break-unless {at-end?: "boolean"}
+9993 transform: - compute address offsets for {free: "number"} <- copy {0: "literal"}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for {chan: ("address" "channel" "character"), "lookup": ()} <- put {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}, {free: "number"}
+9993 transform: - compute address offsets for reply {out: ("address" "sink" "character"), "same-as-ingredient": "0"}
 9991 transform: --- compute instruction operations for recipe write_3
 9991 transform: --- transform braces for recipe write_3
 9993 transform: write_3: push (open, 5)
@@ -1214,6 +1256,30 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
+9992 transform: --- compute address offsets for write_4
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {out: ("address" "sink" "character")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {val: "character"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {chan: ("address" "channel" "character")} <- get {out: ("address" "sink" "character"), "lookup": ()}, {chan: "offset"}
+9993 transform: - compute address offsets for <channel-write-initial>
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for {full: "boolean"} <- channel-full?_2 {chan: ("address" "channel" "character")}
+9993 transform: - compute address offsets for break-unless {full: "boolean"}
+9993 transform: - compute address offsets for {full-address: "location"} <- get-location {chan: ("address" "channel" "character"), "lookup": ()}, {first-full: "offset"}
+9993 transform: - compute address offsets for wait-for-location {full-address: "location"}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character")} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {data: "offset"}
+9993 transform: - compute address offsets for {free: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
+9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+9993 transform: - compute address offsets for {free: "number"} <- add {free: "number"}, {1: "literal"}
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for {len: "number"} <- length {circular-buffer: ("address" "array" "character"), "lookup": ()}
+9993 transform: - compute address offsets for {at-end?: "boolean"} <- greater-or-equal {free: "number"}, {len: "number"}
+9993 transform: - compute address offsets for break-unless {at-end?: "boolean"}
+9993 transform: - compute address offsets for {free: "number"} <- copy {0: "literal"}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for {chan: ("address" "channel" "character"), "lookup": ()} <- put {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}, {free: "number"}
+9993 transform: - compute address offsets for reply {out: ("address" "sink" "character"), "same-as-ingredient": "0"}
 9991 transform: --- compute instruction operations for recipe write_4
 9991 transform: --- transform braces for recipe write_4
 9993 transform: write_4: push (open, 5)
@@ -1580,6 +1646,30 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
+9992 transform: --- compute address offsets for write_5
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {out: ("address" "sink" "character")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {val: "character"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {chan: ("address" "channel" "character")} <- get {out: ("address" "sink" "character"), "lookup": ()}, {chan: "offset"}
+9993 transform: - compute address offsets for <channel-write-initial>
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for {full: "boolean"} <- channel-full?_2 {chan: ("address" "channel" "character")}
+9993 transform: - compute address offsets for break-unless {full: "boolean"}
+9993 transform: - compute address offsets for {full-address: "location"} <- get-location {chan: ("address" "channel" "character"), "lookup": ()}, {first-full: "offset"}
+9993 transform: - compute address offsets for wait-for-location {full-address: "location"}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character")} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {data: "offset"}
+9993 transform: - compute address offsets for {free: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
+9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+9993 transform: - compute address offsets for {free: "number"} <- add {free: "number"}, {1: "literal"}
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for {len: "number"} <- length {circular-buffer: ("address" "array" "character"), "lookup": ()}
+9993 transform: - compute address offsets for {at-end?: "boolean"} <- greater-or-equal {free: "number"}, {len: "number"}
+9993 transform: - compute address offsets for break-unless {at-end?: "boolean"}
+9993 transform: - compute address offsets for {free: "number"} <- copy {0: "literal"}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for {chan: ("address" "channel" "character"), "lookup": ()} <- put {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}, {free: "number"}
+9993 transform: - compute address offsets for reply {out: ("address" "sink" "character"), "same-as-ingredient": "0"}
 9991 transform: --- compute instruction operations for recipe write_5
 9991 transform: --- transform braces for recipe write_5
 9993 transform: write_5: push (open, 5)
@@ -1618,6 +1708,34 @@
 9992 transform: checking variant (strict) 0: recipe channel-empty? {chan: ("address" "channel" "_elem")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe channel-empty?_2 {chan: ("address" "channel" "character")} -> {result: "boolean"}
+9992 transform: --- compute address offsets for run_1001
+9993 transform: - compute address offsets for {1: ("address" "source" "number")}, {2: ("address" "sink" "number")} <- new-channel_3 {10: "literal", "capacity": ()}
+9993 transform: - compute address offsets for _, {3: ("address" "sink" "number"), "buffered-stdin": ()} <- new-channel_3 {10: "literal", "capacity": ()}
+9993 transform: - compute address offsets for {4: ("address" "channel" "number"), "buffered-stdin": ()} <- get {3: ("address" "source" "number"), "lookup": ()}, {chan: "offset"}
+9993 transform: - compute address offsets for {5: "boolean"} <- channel-empty?_2 {4: ("address" "channel" "character"), "buffered-stdin": ()}
+9993 transform: - compute address offsets for assert {5: "boolean"}, {" \nF buffer-lines-blocks-until-newline: channel should be empty after init": "literal-string"}
+9993 transform: - compute address offsets for {6: "number", "buffer-routine": ()} <- start-running {buffer-lines: "recipe-literal"}, {1: ("address" "source" "character"), "stdin": ()}, {3: ("address" "sink" "character"), "buffered-stdin": ()}
+9993 transform: - compute address offsets for wait-for-routine {6: "number", "buffer-routine": ()}
+9993 transform: - compute address offsets for {7: "boolean"} <- channel-empty?_2 {4: ("address" "channel" "character"), "buffered-stdin": ()}
+9993 transform: - compute address offsets for assert {7: "boolean"}, {" \nF buffer-lines-blocks-until-newline: channel should be empty after buffer-lines bring-up": "literal-string"}
+9993 transform: - compute address offsets for {2: ("address" "sink" "character")} <- write_3 {2: ("address" "sink" "character")}, {97: "literal", "a": ()}
+9993 transform: - compute address offsets for restart {6: "number", "buffer-routine": ()}
+9993 transform: - compute address offsets for wait-for-routine {6: "number", "buffer-routine": ()}
+9993 transform: - compute address offsets for {8: "boolean"} <- channel-empty?_2 {4: ("address" "channel" "character"), "buffered-stdin": ()}
+9993 transform: - compute address offsets for assert {8: "boolean"}, {" \nF buffer-lines-blocks-until-newline: channel should be empty after writing 'a'": "literal-string"}
+9993 transform: - compute address offsets for {2: ("address" "sink" "character")} <- write_4 {2: ("address" "sink" "character")}, {98: "literal", "b": ()}
+9993 transform: - compute address offsets for restart {6: "number", "buffer-routine": ()}
+9993 transform: - compute address offsets for wait-for-routine {6: "number", "buffer-routine": ()}
+9993 transform: - compute address offsets for {9: "boolean"} <- channel-empty?_2 {4: ("address" "channel" "character"), "buffered-stdin": ()}
+9993 transform: - compute address offsets for assert {9: "boolean"}, {" \nF buffer-lines-blocks-until-newline: channel should be empty after writing 'b'": "literal-string"}
+9993 transform: - compute address offsets for {2: ("address" "sink" "character")} <- write_5 {2: ("address" "sink" "character")}, {10: "literal", "newline": ()}
+9993 transform: - compute address offsets for restart {6: "number", "buffer-routine": ()}
+9993 transform: - compute address offsets for wait-for-routine {6: "number", "buffer-routine": ()}
+9993 transform: - compute address offsets for {10: "boolean"} <- channel-empty?_2 {4: ("address" "channel" "character"), "buffered-stdin": ()}
+9993 transform: - compute address offsets for {11: "boolean", "completed?": ()} <- not {10: "boolean"}
+9993 transform: - compute address offsets for assert {11: "boolean", "completed?": ()}, {" \nF buffer-lines-blocks-until-newline: channel should contain data after writing newline": "literal-string"}
+9993 transform: - compute address offsets for trace {1: "literal"}, {"test": "literal-string"}, {"reached end": "literal-string"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new-channel ...

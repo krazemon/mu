@@ -25,6 +25,11 @@
 9991 transform: --- collect surrounding spaces for recipe scenario_events-in-scenario
 9991 transform: --- transform names for recipe scenario_events-in-scenario
 9991 transform: --- resolve ambiguous calls for recipe scenario_events-in-scenario
+9992 transform: --- compute address offsets for scenario_events-in-scenario
+9993 transform: - compute address offsets for assume-console {"\n    type [abc]\n    left-click 0, 1\n    press up-arrow\n    type [d]\n  ": "literal-string"}
+9993 transform: - compute address offsets for run {"\n    # 3 keyboard events; each event occupies 4 locations\n    1:event <- read-event console:address:console\n    5:event <- read-event console:address:console\n    9:event <- read-event console:address:console\n    # mouse click\n    13:event <- read-event console:address:console\n    # non-character keycode\n    17:event <- read-event console:address:console\n    # final keyboard event\n    21:event <- read-event console:address:console\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    1 <- 0  # 'text'\n    2 <- 97  # 'a'\n    3 <- 0  # unused\n    4 <- 0  # unused\n    5 <- 0  # 'text'\n    6 <- 98  # 'b'\n    7 <- 0  # unused\n    8 <- 0  # unused\n    9 <- 0  # 'text'\n    10 <- 99  # 'c'\n    11 <- 0  # unused\n    12 <- 0  # unused\n    13 <- 2  # 'mouse'\n    14 <- 65513  # mouse click\n    15 <- 0  # row\n    16 <- 1  # column\n    17 <- 1  # 'keycode'\n    18 <- 65517  # up arrow\n    19 <- 0  # unused\n    20 <- 0  # unused\n    21 <- 0  # 'text'\n    22 <- 100  # 'd'\n    23 <- 0  # unused\n    24 <- 0  # unused\n    25 <- 0\n  ": "literal-string"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_events-in-scenario
 9991 transform: --- transform braces for recipe scenario_events-in-scenario
 9992 transform: assume-console ...
@@ -129,6 +134,14 @@
 9992 transform: checking variant (strict) 0: recipe read-event {console: ("address" "console")} -> {result: "event"} {console: ("address" "console")} {found?: "boolean"} {quit?: "boolean"}
 9992 transform: instruction {21: "event"} <- read-event {console: ("address" "console")}
 9992 transform: checking variant (strict) 0: recipe read-event {console: ("address" "console")} -> {result: "event"} {console: ("address" "console")} {found?: "boolean"} {quit?: "boolean"}
+9992 transform: --- compute address offsets for run_1001
+9993 transform: - compute address offsets for {1: "event"} <- read-event {console: ("address" "console")}
+9993 transform: - compute address offsets for {5: "event"} <- read-event {console: ("address" "console")}
+9993 transform: - compute address offsets for {9: "event"} <- read-event {console: ("address" "console")}
+9993 transform: - compute address offsets for {13: "event"} <- read-event {console: ("address" "console")}
+9993 transform: - compute address offsets for {17: "event"} <- read-event {console: ("address" "console")}
+9993 transform: - compute address offsets for {21: "event"} <- read-event {console: ("address" "console")}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: read-event ...

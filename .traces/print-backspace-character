@@ -20,6 +20,10 @@
 9991 transform: --- collect surrounding spaces for recipe scenario_print-backspace-character
 9991 transform: --- transform names for recipe scenario_print-backspace-character
 9991 transform: --- resolve ambiguous calls for recipe scenario_print-backspace-character
+9992 transform: --- compute address offsets for scenario_print-backspace-character
+9993 transform: - compute address offsets for run {"\n    1:address:screen <- new-fake-screen 3/width, 2/height\n    11:character <- copy 97/a\n    1:address:screen <- print 1:address:screen, 11:character/a\n    12:character <- copy 8/backspace\n    1:address:screen <- print 1:address:screen, 12:character/backspace\n    2:number <- get *1:address:screen, cursor-column:offset\n    3:address:array:screen-cell <- get *1:address:screen, data:offset\n    4:array:screen-cell <- copy *3:address:array:screen-cell\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    2 <- 0  # cursor column\n    4 <- 6  # width*height\n    5 <- 32  # space, not 'a'\n    6 <- 7  # white\n    7 <- 0\n  ": "literal-string"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_print-backspace-character
 9991 transform: --- transform braces for recipe scenario_print-backspace-character
 9992 transform: run ...
@@ -113,15 +117,25 @@
 9993 transform: strict match failed: ingredient 1
 9992 transform: checking variant (strict) 3: recipe print_4 {screen: ("address" "screen")} {n: ("address" "_elem")} -> {screen: ("address" "screen")}
 9993 transform: strict match failed: ingredient 1
-9992 transform: --- compute address offsets for screen-cell
+9992 transform: --- compute address offsets for run_1001
+9993 transform: - compute address offsets for {1: ("address" "screen")} <- new-fake-screen {3: "literal", "width": ()}, {2: "literal", "height": ()}
+9993 transform: - compute address offsets for {11: "character"} <- copy {97: "literal", "a": ()}
+9993 transform: - compute address offsets for {1: ("address" "screen")} <- print {1: ("address" "screen")}, {11: "character", "a": ()}
+9993 transform: - compute address offsets for {12: "character"} <- copy {8: "literal", "backspace": ()}
+9993 transform: - compute address offsets for {1: ("address" "screen")} <- print {1: ("address" "screen")}, {12: "character", "backspace": ()}
+9993 transform: - compute address offsets for {2: "number"} <- get {1: ("address" "screen"), "lookup": ()}, {cursor-column: "offset"}
+9993 transform: - compute address offsets for {3: ("address" "array" "screen-cell")} <- get {1: ("address" "screen"), "lookup": ()}, {data: "offset"}
+9994 transform: compute address offsets for container screen-cell
 9993 transform: checking container screen-cell, element 0
 9993 transform: checking container screen-cell, element 1
-9992 transform: --- compute address offsets for screen-cell
+9993 transform: - compute address offsets for {4: ("array" "screen-cell")} <- copy {3: ("address" "array" "screen-cell"), "lookup": ()}
+9994 transform: compute address offsets for container screen-cell
 9993 transform: checking container screen-cell, element 0
 9993 transform: checking container screen-cell, element 1
-9992 transform: --- compute address offsets for screen-cell
+9994 transform: compute address offsets for container screen-cell
 9993 transform: checking container screen-cell, element 0
 9993 transform: checking container screen-cell, element 1
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new-fake-screen ...

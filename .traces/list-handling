@@ -20,6 +20,10 @@
 9991 transform: --- collect surrounding spaces for recipe scenario_list-handling
 9991 transform: --- transform names for recipe scenario_list-handling
 9991 transform: --- resolve ambiguous calls for recipe scenario_list-handling
+9992 transform: --- compute address offsets for scenario_list-handling
+9993 transform: - compute address offsets for run {"\n    1:address:list:number <- push 3, 0\n    1:address:list:number <- push 4, 1:address:list:number\n    1:address:list:number <- push 5, 1:address:list:number\n    2:number <- first 1:address:list:number\n    1:address:list:number <- rest 1:address:list:number\n    3:number <- first 1:address:list:number\n    1:address:list:number <- rest 1:address:list:number\n    4:number <- first 1:address:list:number\n    1:address:list:number <- rest 1:address:list:number\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    1 <- 0  # empty to empty, dust to dust..\n    2 <- 5\n    3 <- 4\n    4 <- 3\n  ": "literal-string"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_list-handling
 9991 transform: --- transform braces for recipe scenario_list-handling
 9992 transform: run ...
@@ -229,10 +233,17 @@
 9993 name: assign in 2
 9993 name: assign result 3
 9991 transform: --- resolve ambiguous calls for recipe push_6
-9992 transform: --- compute address offsets for list
+9992 transform: --- compute address offsets for push_6
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {x: "number"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {in: ("address" "list" "number")} <- next-ingredient-without-typechecking 
+9994 transform: compute address offsets for container list
 9993 transform: checking container list, element 0
 9993 transform: checking container list, element 1
-9993 transform: container list contains an address at offset 1
+9993 transform: address at offset 1
+9993 transform: - compute address offsets for {result: ("address" "list" "number")} <- new {(list number): "type"}
+9993 transform: - compute address offsets for {result: ("address" "list" "number"), "lookup": ()} <- merge {x: "number"}, {in: ("address" "list" "number")}
+9993 transform: - compute address offsets for return {result: ("address" "list" "number"), "same-as-ingredient": "1"}
 9991 transform: --- compute instruction operations for recipe push_6
 9991 transform: --- transform braces for recipe push_6
 9992 transform: local-scope ...
@@ -369,6 +380,11 @@
 9993 name: element value of type list is at offset 0
 9993 name: assign result 2
 9991 transform: --- resolve ambiguous calls for recipe first_4
+9992 transform: --- compute address offsets for first_4
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {in: ("address" "list" "number")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {result: "number"} <- get {in: ("address" "list" "number"), "lookup": ()}, {value: "offset"}
+9993 transform: - compute address offsets for reply {result: "number"}
 9991 transform: --- compute instruction operations for recipe first_4
 9991 transform: --- transform braces for recipe first_4
 9992 transform: local-scope ...
@@ -469,6 +485,11 @@
 9993 name: element next of type list is at offset 1
 9993 name: assign result 2
 9991 transform: --- resolve ambiguous calls for recipe rest_3
+9992 transform: --- compute address offsets for rest_3
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {in: ("address" "list" "number")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {result: ("address" "list" "number")} <- get {in: ("address" "list" "number"), "lookup": ()}, {next: "offset"}
+9993 transform: - compute address offsets for reply {result: ("address" "list" "number"), "contained-in": "in"}
 9991 transform: --- compute instruction operations for recipe rest_3
 9991 transform: --- transform braces for recipe rest_3
 9992 transform: local-scope ...
@@ -513,6 +534,17 @@
 9992 transform: checking variant (strict) 1: recipe rest_2 {in: ("address" "list" "address" "operation")} -> {result: ("address" "list" "address" "operation"), "contained-in": "in"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 2: recipe rest_3 {in: ("address" "list" "number")} -> {result: ("address" "list" "number"), "contained-in": "in"}
+9992 transform: --- compute address offsets for run_1001
+9993 transform: - compute address offsets for {1: ("address" "list" "number")} <- push_6 {3: "literal"}, {0: "literal"}
+9993 transform: - compute address offsets for {1: ("address" "list" "number")} <- push_6 {4: "literal"}, {1: ("address" "list" "number")}
+9993 transform: - compute address offsets for {1: ("address" "list" "number")} <- push_6 {5: "literal"}, {1: ("address" "list" "number")}
+9993 transform: - compute address offsets for {2: "number"} <- first_4 {1: ("address" "list" "number")}
+9993 transform: - compute address offsets for {1: ("address" "list" "number")} <- rest_3 {1: ("address" "list" "number")}
+9993 transform: - compute address offsets for {3: "number"} <- first_4 {1: ("address" "list" "number")}
+9993 transform: - compute address offsets for {1: ("address" "list" "number")} <- rest_3 {1: ("address" "list" "number")}
+9993 transform: - compute address offsets for {4: "number"} <- first_4 {1: ("address" "list" "number")}
+9993 transform: - compute address offsets for {1: ("address" "list" "number")} <- rest_3 {1: ("address" "list" "number")}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: push ...

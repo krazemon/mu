@@ -30,6 +30,11 @@
 9991 transform: --- resolve ambiguous calls for recipe scenario_read-move-illegal-file
 9992 transform: instruction {screen: ("address" "screen")} <- new-fake-screen {20: "literal", "width": ()}, {2: "literal", "height": ()}
 9992 transform: checking variant (strict) 0: recipe new-fake-screen {w: "number"} {h: "number"} -> {result: ("address" "screen")}
+9992 transform: --- compute address offsets for scenario_read-move-illegal-file
+9993 transform: - compute address offsets for {screen: ("address" "screen")} <- new-fake-screen {20: "literal", "width": ()}, {2: "literal", "height": ()}
+9993 transform: - compute address offsets for run {"\n    1:address:source:character, 2:address:sink:character <- new-channel 2/capacity\n    3:number/routine <- start-running read-move, 1:address:source:character, screen:address:screen\n    # 'read-move' is waiting for input\n    wait-for-routine 3:number\n    4:number <- routine-state 3:number/id\n    5:boolean/waiting? <- equal 4:number/routine-state, 3/waiting\n    assert 5:boolean/waiting?, [ \nF read-move-file: routine failed to pause after coming up (before any keys were pressed)]\n    1:address:sink:character <- write 1:address:sink:character, 50/'2'\n    restart 3:number/routine\n    wait-for-routine 3:number\n  ": "literal-string"}
+9993 transform: - compute address offsets for screen-should-contain {"\n    .file too low: 2     .\n    .                    .\n  ": "literal-string"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_read-move-illegal-file
 9991 transform: --- transform braces for recipe scenario_read-move-illegal-file
 9992 transform: assume-screen ...
@@ -1628,6 +1633,30 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
+9992 transform: --- compute address offsets for write_3
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {out: ("address" "sink" "character")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {val: "character"} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {chan: ("address" "channel" "character")} <- get {out: ("address" "sink" "character"), "lookup": ()}, {chan: "offset"}
+9993 transform: - compute address offsets for <channel-write-initial>
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for {full: "boolean"} <- channel-full?_2 {chan: ("address" "channel" "character")}
+9993 transform: - compute address offsets for break-unless {full: "boolean"}
+9993 transform: - compute address offsets for {full-address: "location"} <- get-location {chan: ("address" "channel" "character"), "lookup": ()}, {first-full: "offset"}
+9993 transform: - compute address offsets for wait-for-location {full-address: "location"}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character")} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {data: "offset"}
+9993 transform: - compute address offsets for {free: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
+9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+9993 transform: - compute address offsets for {free: "number"} <- add {free: "number"}, {1: "literal"}
+9993 transform: - compute address offsets for {
+9993 transform: - compute address offsets for {len: "number"} <- length {circular-buffer: ("address" "array" "character"), "lookup": ()}
+9993 transform: - compute address offsets for {at-end?: "boolean"} <- greater-or-equal {free: "number"}, {len: "number"}
+9993 transform: - compute address offsets for break-unless {at-end?: "boolean"}
+9993 transform: - compute address offsets for {free: "number"} <- copy {0: "literal"}
+9993 transform: - compute address offsets for }
+9993 transform: - compute address offsets for {chan: ("address" "channel" "character"), "lookup": ()} <- put {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}, {free: "number"}
+9993 transform: - compute address offsets for reply {out: ("address" "sink" "character"), "same-as-ingredient": "0"}
 9991 transform: --- compute instruction operations for recipe write_3
 9991 transform: --- transform braces for recipe write_3
 9993 transform: write_3: push (open, 5)
@@ -1662,6 +1691,17 @@
 9991 transform: --- check that recipe write_3 sets default-space
 9991 transform: --- checking reply instructions against header for write_3
 9992 transform: new specialization: write_3
+9992 transform: --- compute address offsets for run_1001
+9993 transform: - compute address offsets for {1: ("address" "source" "character")}, {2: ("address" "sink" "character")} <- new-channel_2 {2: "literal", "capacity": ()}
+9993 transform: - compute address offsets for {3: "number", "routine": ()} <- start-running {read-move: "recipe-literal"}, {1: ("address" "source" "character")}, {screen: ("address" "screen")}
+9993 transform: - compute address offsets for wait-for-routine {3: "number"}
+9993 transform: - compute address offsets for {4: "number"} <- routine-state {3: "number", "id": ()}
+9993 transform: - compute address offsets for {5: "boolean", "waiting?": ()} <- equal {4: "number", "routine-state": ()}, {3: "literal", "waiting": ()}
+9993 transform: - compute address offsets for assert {5: "boolean", "waiting?": ()}, {" \nF read-move-file: routine failed to pause after coming up (before any keys were pressed)": "literal-string"}
+9993 transform: - compute address offsets for {1: ("address" "sink" "character")} <- write_3 {1: ("address" "sink" "character")}, {50: "literal", "'2'": ()}
+9993 transform: - compute address offsets for restart {3: "number", "routine": ()}
+9993 transform: - compute address offsets for wait-for-routine {3: "number"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
 9992 transform: new-channel ...

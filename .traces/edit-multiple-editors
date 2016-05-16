@@ -72,6 +72,20 @@
 9992 transform: checking variant (strict) 0: recipe new-programming-environment {screen: ("address" "screen")} {initial-recipe-contents: ("address" "array" "character")} {initial-sandbox-contents: ("address" "array" "character")} -> {result: ("address" "programming-environment-data")} {screen: ("address" "screen")}
 9992 transform: instruction render-all {screen: ()}, {3: ("address" "programming-environment-data")}
 9992 transform: checking variant (strict) 0: recipe render-all {screen: ("address" "screen")} {env: ("address" "programming-environment-data")} -> {screen: ("address" "screen")} {env: ("address" "programming-environment-data")}
+9992 transform: --- compute address offsets for scenario_edit-multiple-editors
+9993 transform: - compute address offsets for trace-until {100: "literal", "app": ()}
+9993 transform: - compute address offsets for {screen: ("address" "screen")} <- new-fake-screen {30: "literal", "width": ()}, {5: "literal", "height": ()}
+9993 transform: - compute address offsets for {1: ("address" "array" "character")} <- new {"abc": "literal-string"}
+9993 transform: - compute address offsets for {2: ("address" "array" "character")} <- new {"def": "literal-string"}
+9993 transform: - compute address offsets for {3: ("address" "programming-environment-data")} <- new-programming-environment {screen: ("address" "screen")}, {1: ("address" "array" "character")}, {2: ("address" "array" "character")}
+9993 transform: - compute address offsets for render-all {screen: ("address" "screen")}, {3: ("address" "programming-environment-data")}
+9993 transform: - compute address offsets for assume-console {"\n    left-click 1, 1\n    type [0]\n    left-click 1, 17\n    type [1]\n  ": "literal-string"}
+9993 transform: - compute address offsets for run {"\n    event-loop screen:address:screen, console:address:console, 3:address:programming-environment-data\n    4:address:editor-data <- get *3:address:programming-environment-data, recipes:offset\n    5:number <- get *4:address:editor-data, cursor-column:offset\n    6:address:editor-data <- get *3:address:programming-environment-data, current-sandbox:offset\n    7:number <- get *6:address:editor-data, cursor-column:offset\n  ": "literal-string"}
+9993 transform: - compute address offsets for screen-should-contain {"\n    .           run (F4)           .  # this line has a different background, but we don't test that yet\n    .a0bc           ┊d1ef          .\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊━━━━━━━━━━━━━━.\n    .               ┊              .\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    5 <- 2  # cursor column of recipe editor\n    7 <- 18  # cursor column of sandbox editor\n  ": "literal-string"}
+9993 transform: - compute address offsets for run {"\n    8:character/cursor <- copy 9251/␣\n    print screen:address:screen, 8:character/cursor\n  ": "literal-string"}
+9993 transform: - compute address offsets for screen-should-contain {"\n    .           run (F4)           .\n    .a0bc           ┊d1␣f          .\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊━━━━━━━━━━━━━━.\n    .               ┊              .\n  ": "literal-string"}
+9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_edit-multiple-editors
 9991 transform: --- transform braces for recipe scenario_edit-multiple-editors
 9992 transform: trace-until ...

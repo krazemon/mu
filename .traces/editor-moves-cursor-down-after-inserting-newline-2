@@ -14538,9 +14538,8 @@
  106 run: jump-unless {at-cursor-row?: "boolean"}, {: "offset"}
 9999 mem: location 1204 is 0
 9998 run: jumping to instruction 46
- 106 run: clear-line-delimited {screen: ("address" "screen")}, {column: "number"}, {right: "number"}
+ 106 run: clear-line-until {screen: ("address" "screen")}, {right: "number"}
 9999 mem: location 1190 is 1008
-9999 mem: location 1199 is 2
 9999 mem: location 1194 is 9
 9999 trace: incrementing callstack depth to 6
  107 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -14552,10 +14551,70 @@
 9999 mem: location 1119 is 0
 9999 mem: incrementing refcount of 1008: 13 -> 14
 9999 mem: storing 1008 in location 1119
- 107 run: {column: "number"} <- next-ingredient-without-typechecking 
-9999 mem: storing 2 in location 1120
  107 run: {right: "number"} <- next-ingredient-without-typechecking 
-9999 mem: storing 9 in location 1121
+9999 mem: storing 9 in location 1120
+ 107 run: _, {column: "number"} <- cursor-position {screen: ("address" "screen")}
+9999 mem: location 1119 is 1008
+9999 trace: incrementing callstack depth to 7
+ 108 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9999 mem: array size is 4
+9999 mem: allocating size 6
+9999 abandon: picking up space from free-list of size 6
+9999 mem: new alloc from free list: 1153
+ 108 run: {screen: ("address" "screen")} <- next-ingredient-without-typechecking 
+9999 mem: location 1156 is 0
+9999 mem: incrementing refcount of 1008: 14 -> 15
+9999 mem: storing 1008 in location 1156
+ 108 run: jump-unless {screen: ("address" "screen")}, {: "offset"}
+9999 mem: location 1156 is 1008
+9998 run: jump-unless fell through
+ 108 run: {row: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-row: "offset"}
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9999 mem: location 1009 is 5
+9999 mem: location 1010 is 10
+9999 mem: location 1011 is 1
+9999 mem: location 1012 is 2
+9999 mem: location 1013 is 1014
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9998 run: address to copy is 1011
+9998 run: its type is "number"
+9999 mem: location 1011 is 1
+9999 mem: storing 1 in location 1157
+ 108 run: {column: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-column: "offset"}
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9999 mem: location 1009 is 5
+9999 mem: location 1010 is 10
+9999 mem: location 1011 is 1
+9999 mem: location 1012 is 2
+9999 mem: location 1013 is 1014
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9998 run: address to copy is 1012
+9998 run: its type is "number"
+9999 mem: location 1012 is 2
+9999 mem: storing 2 in location 1158
+ 108 run: return {row: "number"}, {column: "number"}
+9999 mem: location 1157 is 1
+9999 mem: location 1158 is 2
+9999 mem: clearing screen:address:screen
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9999 mem: decrementing refcount of 1008: 15 -> 14
+9999 mem: storing 0 in location 1156
+9999 mem: clearing row:number
+9999 mem: storing 0 in location 1157
+9999 mem: clearing row
+9999 mem: storing 0 in location 1157
+9999 mem: automatically abandoning 1153
+9999 abandon: updating refcounts inside 1153: (array number)
+9999 abandon: saving 1153 in free-list of size 6
+9999 trace: reply: decrementing callstack depth from 7
+9998 run: result 0 is 1
+9998 run: result 1 is 2
+9999 mem: storing 2 in location 1121
  107 run: {space: "character"} <- copy {32: "literal", "space": ()}
 9999 mem: storing 32 in location 1122
  107 run: {bg-color: "number"}, {bg-color-found?: "boolean"} <- next-ingredient 
@@ -14567,8 +14626,8 @@
  107 run: {bg-color: "number"} <- copy {0: "literal", "black": ()}
 9999 mem: storing 0 in location 1123
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 2
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 2
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -14726,6 +14785,7 @@
  108 run: {backspace?: "boolean"} <- equal {c: "character"}, {8: "literal"}
 9999 mem: location 1231 is 32
 9999 mem: storing 0 in location 1247
+9990 schedule: print/clear-line-until/render/editor-render/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  108 run: jump-unless {backspace?: "boolean"}, {: "offset"}
 9999 mem: location 1247 is 0
 9998 run: jumping to instruction 71
@@ -14750,7 +14810,6 @@
 9999 mem: location 1240 is 2
 9999 mem: location 1251 is 9
 9999 mem: storing 0 in location 1252
-9990 schedule: print/clear-line-delimited/render/editor-render/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  108 run: jump-if {at-right?: "boolean"}, {: "offset"}
 9999 mem: location 1252 is 0
 9998 run: jump-if fell through
@@ -14850,13 +14909,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 2
-9999 mem: storing 3 in location 1120
+9999 mem: location 1121 is 2
+9999 mem: storing 3 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 3
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 3
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -15137,13 +15196,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 3
-9999 mem: storing 4 in location 1120
+9999 mem: location 1121 is 3
+9999 mem: storing 4 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 4
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 4
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -15424,13 +15483,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 4
-9999 mem: storing 5 in location 1120
+9999 mem: location 1121 is 4
+9999 mem: storing 5 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 5
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 5
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -15711,13 +15770,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 5
-9999 mem: storing 6 in location 1120
+9999 mem: location 1121 is 5
+9999 mem: storing 6 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 6
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 6
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -15998,13 +16057,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 6
-9999 mem: storing 7 in location 1120
+9999 mem: location 1121 is 6
+9999 mem: storing 7 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 7
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 7
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -16285,13 +16344,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 7
-9999 mem: storing 8 in location 1120
+9999 mem: location 1121 is 7
+9999 mem: storing 8 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 8
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 8
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -16572,13 +16631,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 8
-9999 mem: storing 9 in location 1120
+9999 mem: location 1121 is 8
+9999 mem: storing 9 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 9
 9999 mem: location 1121 is 9
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -16843,13 +16902,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 9
-9999 mem: storing 10 in location 1120
+9999 mem: location 1121 is 9
+9999 mem: storing 10 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 10
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 10
+9999 mem: location 1120 is 9
 9999 mem: storing 1 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 1
@@ -16861,9 +16920,10 @@
 9999 mem: skipping refcount at 1008
 9999 mem: decrementing refcount of 1008: 22 -> 21
 9999 mem: storing 0 in location 1119
-9999 mem: clearing column:number
-9999 mem: storing 0 in location 1120
 9999 mem: clearing right:number
+9999 mem: storing 0 in location 1120
+9999 mem: clearing _
+9999 mem: clearing column:number
 9999 mem: storing 0 in location 1121
 9999 mem: clearing space:character
 9999 mem: storing 0 in location 1122
@@ -16880,7 +16940,7 @@
 9999 mem: copying address to itself; refcount unchanged
 9999 mem: storing 0 in location 1119
 9999 mem: clearing column
-9999 mem: storing 0 in location 1120
+9999 mem: storing 0 in location 1121
 9999 mem: automatically abandoning 1116
 9999 abandon: updating refcounts inside 1116: (array number)
 9999 abandon: saving 1116 in free-list of size 10
@@ -17112,6 +17172,7 @@
  107 run: jump-unless {color-is-white?: "boolean"}, {: "offset"}
 9999 mem: location 1494 is 1
 9998 run: jump-unless fell through
+9990 schedule: get-color/render/editor-render/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  107 run: {starting-assignment?: "boolean"} <- equal {c: "character"}, {60: "literal", "<": ()}
 9999 mem: location 1493 is 97
 9999 mem: storing 0 in location 1498
@@ -17124,7 +17185,6 @@
  107 run: jump-unless {color-is-red?: "boolean"}, {: "offset"}
 9999 mem: location 1499 is 0
 9998 run: jumping to instruction 35
-9990 schedule: get-color/render/editor-render/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  107 run: return {color: "number", "same-as-ingredient": "0"}
 9999 mem: location 1492 is 7
 9999 mem: clearing c:character
@@ -18767,9 +18827,8 @@
 9998 run: result 1 is 4
 9999 mem: storing 2 in location 1138
 9999 mem: storing 4 in location 1139
- 105 run: clear-line-delimited {screen: ("address" "screen")}, {column: "number"}, {right: "number"}
+ 105 run: clear-line-until {screen: ("address" "screen")}, {right: "number"}
 9999 mem: location 1134 is 1008
-9999 mem: location 1139 is 4
 9999 mem: location 1137 is 9
 9999 trace: incrementing callstack depth to 5
  106 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -18781,10 +18840,70 @@
 9999 mem: location 1119 is 0
 9999 mem: incrementing refcount of 1008: 21 -> 22
 9999 mem: storing 1008 in location 1119
- 106 run: {column: "number"} <- next-ingredient-without-typechecking 
-9999 mem: storing 4 in location 1120
  106 run: {right: "number"} <- next-ingredient-without-typechecking 
-9999 mem: storing 9 in location 1121
+9999 mem: storing 9 in location 1120
+ 106 run: _, {column: "number"} <- cursor-position {screen: ("address" "screen")}
+9999 mem: location 1119 is 1008
+9999 trace: incrementing callstack depth to 6
+ 107 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9999 mem: array size is 4
+9999 mem: allocating size 6
+9999 abandon: picking up space from free-list of size 6
+9999 mem: new alloc from free list: 1153
+ 107 run: {screen: ("address" "screen")} <- next-ingredient-without-typechecking 
+9999 mem: location 1156 is 0
+9999 mem: incrementing refcount of 1008: 22 -> 23
+9999 mem: storing 1008 in location 1156
+ 107 run: jump-unless {screen: ("address" "screen")}, {: "offset"}
+9999 mem: location 1156 is 1008
+9998 run: jump-unless fell through
+ 107 run: {row: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-row: "offset"}
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9999 mem: location 1009 is 5
+9999 mem: location 1010 is 10
+9999 mem: location 1011 is 2
+9999 mem: location 1012 is 4
+9999 mem: location 1013 is 1014
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9998 run: address to copy is 1011
+9998 run: its type is "number"
+9999 mem: location 1011 is 2
+9999 mem: storing 2 in location 1157
+ 107 run: {column: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-column: "offset"}
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9999 mem: location 1009 is 5
+9999 mem: location 1010 is 10
+9999 mem: location 1011 is 2
+9999 mem: location 1012 is 4
+9999 mem: location 1013 is 1014
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9998 run: address to copy is 1012
+9998 run: its type is "number"
+9999 mem: location 1012 is 4
+9999 mem: storing 4 in location 1158
+ 107 run: return {row: "number"}, {column: "number"}
+9999 mem: location 1157 is 2
+9999 mem: location 1158 is 4
+9999 mem: clearing screen:address:screen
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9999 mem: decrementing refcount of 1008: 23 -> 22
+9999 mem: storing 0 in location 1156
+9999 mem: clearing row:number
+9999 mem: storing 0 in location 1157
+9999 mem: clearing row
+9999 mem: storing 0 in location 1157
+9999 mem: automatically abandoning 1153
+9999 abandon: updating refcounts inside 1153: (array number)
+9999 abandon: saving 1153 in free-list of size 6
+9999 trace: reply: decrementing callstack depth from 6
+9998 run: result 0 is 2
+9998 run: result 1 is 4
+9999 mem: storing 4 in location 1121
  106 run: {space: "character"} <- copy {32: "literal", "space": ()}
 9999 mem: storing 32 in location 1122
  106 run: {bg-color: "number"}, {bg-color-found?: "boolean"} <- next-ingredient 
@@ -18796,8 +18915,8 @@
  106 run: {bg-color: "number"} <- copy {0: "literal", "black": ()}
 9999 mem: storing 0 in location 1123
  106 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 4
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 4
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  106 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -19078,13 +19197,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  106 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 4
-9999 mem: storing 5 in location 1120
+9999 mem: location 1121 is 4
+9999 mem: storing 5 in location 1121
  106 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  106 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 5
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 5
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  106 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -19365,13 +19484,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  106 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 5
-9999 mem: storing 6 in location 1120
+9999 mem: location 1121 is 5
+9999 mem: storing 6 in location 1121
  106 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  106 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 6
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 6
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  106 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -19395,6 +19514,7 @@
  107 run: {color: "number"}, {color-found?: "boolean"} <- next-ingredient 
 9999 mem: storing 7 in location 1232
 9999 mem: storing 1 in location 1233
+9990 schedule: print/clear-line-until/editor-render/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  107 run: jump-if {color-found?: "boolean"}, {: "offset"}
 9999 mem: location 1233 is 1
 9998 run: jumping to instruction 7
@@ -19455,7 +19575,6 @@
  107 run: {legal?: "boolean"} <- greater-or-equal {row: "number"}, {0: "literal"}
 9999 mem: location 1238 is 2
 9999 mem: storing 1 in location 1239
-9990 schedule: print/clear-line-delimited/editor-render/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  107 run: jump-if {legal?: "boolean"}, {: "offset"}
 9999 mem: location 1239 is 1
 9998 run: jumping to instruction 23
@@ -19653,13 +19772,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  106 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 6
-9999 mem: storing 7 in location 1120
+9999 mem: location 1121 is 6
+9999 mem: storing 7 in location 1121
  106 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  106 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 7
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 7
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  106 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -19940,13 +20059,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  106 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 7
-9999 mem: storing 8 in location 1120
+9999 mem: location 1121 is 7
+9999 mem: storing 8 in location 1121
  106 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  106 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 8
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 8
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  106 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -20227,13 +20346,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  106 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 8
-9999 mem: storing 9 in location 1120
+9999 mem: location 1121 is 8
+9999 mem: storing 9 in location 1121
  106 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  106 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 9
 9999 mem: location 1121 is 9
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  106 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -20498,13 +20617,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  106 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 9
-9999 mem: storing 10 in location 1120
+9999 mem: location 1121 is 9
+9999 mem: storing 10 in location 1121
  106 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  106 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 10
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 10
+9999 mem: location 1120 is 9
 9999 mem: storing 1 in location 1125
  106 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 1
@@ -20516,9 +20635,10 @@
 9999 mem: skipping refcount at 1008
 9999 mem: decrementing refcount of 1008: 28 -> 27
 9999 mem: storing 0 in location 1119
-9999 mem: clearing column:number
-9999 mem: storing 0 in location 1120
 9999 mem: clearing right:number
+9999 mem: storing 0 in location 1120
+9999 mem: clearing _
+9999 mem: clearing column:number
 9999 mem: storing 0 in location 1121
 9999 mem: clearing space:character
 9999 mem: storing 0 in location 1122
@@ -20535,7 +20655,7 @@
 9999 mem: copying address to itself; refcount unchanged
 9999 mem: storing 0 in location 1119
 9999 mem: clearing column
-9999 mem: storing 0 in location 1120
+9999 mem: storing 0 in location 1121
 9999 mem: automatically abandoning 1116
 9999 abandon: updating refcounts inside 1116: (array number)
 9999 abandon: saving 1116 in free-list of size 10
@@ -21676,6 +21796,7 @@
 9999 mem: location 1245 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: storing 50 in location 1246
+9990 schedule: print/draw-horizontal/editor-render/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  107 run: {backspace?: "boolean"} <- equal {c: "character"}, {8: "literal"}
 9999 mem: location 1231 is 9480
 9999 mem: storing 0 in location 1247
@@ -21807,7 +21928,6 @@
  106 run: {x: "number"} <- add {x: "number"}, {1: "literal"}
 9999 mem: location 1294 is 4
 9999 mem: storing 5 in location 1294
-9990 schedule: draw-horizontal/editor-render/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  106 run: jump {: "offset"}
 9998 run: jumping to instruction 22
  106 run: {continue?: "boolean"} <- lesser-or-equal {x: "number"}, {right: "number"}
@@ -23388,9 +23508,8 @@
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1003
- 106 run: clear-line-delimited {screen: ("address" "screen")}, {column: "number"}, {right: "number"}
+ 106 run: clear-line-until {screen: ("address" "screen")}, {right: "number"}
 9999 mem: location 1003 is 1008
-9999 mem: location 1005 is 1
 9999 mem: location 1007 is 9
 9999 trace: incrementing callstack depth to 6
  107 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -23402,10 +23521,70 @@
 9999 mem: location 1119 is 0
 9999 mem: incrementing refcount of 1008: 30 -> 31
 9999 mem: storing 1008 in location 1119
- 107 run: {column: "number"} <- next-ingredient-without-typechecking 
-9999 mem: storing 1 in location 1120
  107 run: {right: "number"} <- next-ingredient-without-typechecking 
-9999 mem: storing 9 in location 1121
+9999 mem: storing 9 in location 1120
+ 107 run: _, {column: "number"} <- cursor-position {screen: ("address" "screen")}
+9999 mem: location 1119 is 1008
+9999 trace: incrementing callstack depth to 7
+ 108 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9999 mem: array size is 4
+9999 mem: allocating size 6
+9999 abandon: picking up space from free-list of size 6
+9999 mem: new alloc from free list: 1153
+ 108 run: {screen: ("address" "screen")} <- next-ingredient-without-typechecking 
+9999 mem: location 1156 is 0
+9999 mem: incrementing refcount of 1008: 31 -> 32
+9999 mem: storing 1008 in location 1156
+ 108 run: jump-unless {screen: ("address" "screen")}, {: "offset"}
+9999 mem: location 1156 is 1008
+9998 run: jump-unless fell through
+ 108 run: {row: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-row: "offset"}
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9999 mem: location 1009 is 5
+9999 mem: location 1010 is 10
+9999 mem: location 1011 is 4
+9999 mem: location 1012 is 1
+9999 mem: location 1013 is 1014
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9998 run: address to copy is 1011
+9998 run: its type is "number"
+9999 mem: location 1011 is 4
+9999 mem: storing 4 in location 1157
+ 108 run: {column: "number"} <- get {screen: ("address" "screen"), "lookup": ()}, {cursor-column: "offset"}
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9999 mem: location 1009 is 5
+9999 mem: location 1010 is 10
+9999 mem: location 1011 is 4
+9999 mem: location 1012 is 1
+9999 mem: location 1013 is 1014
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9998 run: address to copy is 1012
+9998 run: its type is "number"
+9999 mem: location 1012 is 1
+9999 mem: storing 1 in location 1158
+ 108 run: return {row: "number"}, {column: "number"}
+9999 mem: location 1157 is 4
+9999 mem: location 1158 is 1
+9999 mem: clearing screen:address:screen
+9999 mem: location 1156 is 1008
+9999 mem: skipping refcount at 1008
+9999 mem: decrementing refcount of 1008: 32 -> 31
+9999 mem: storing 0 in location 1156
+9999 mem: clearing row:number
+9999 mem: storing 0 in location 1157
+9999 mem: clearing row
+9999 mem: storing 0 in location 1157
+9999 mem: automatically abandoning 1153
+9999 abandon: updating refcounts inside 1153: (array number)
+9999 abandon: saving 1153 in free-list of size 6
+9999 trace: reply: decrementing callstack depth from 7
+9998 run: result 0 is 4
+9998 run: result 1 is 1
+9999 mem: storing 1 in location 1121
  107 run: {space: "character"} <- copy {32: "literal", "space": ()}
 9999 mem: storing 32 in location 1122
  107 run: {bg-color: "number"}, {bg-color-found?: "boolean"} <- next-ingredient 
@@ -23417,8 +23596,8 @@
  107 run: {bg-color: "number"} <- copy {0: "literal", "black": ()}
 9999 mem: storing 0 in location 1123
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 1
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 1
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -23699,13 +23878,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 1
-9999 mem: storing 2 in location 1120
+9999 mem: location 1121 is 1
+9999 mem: storing 2 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 2
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 2
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -23986,13 +24165,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 2
-9999 mem: storing 3 in location 1120
+9999 mem: location 1121 is 2
+9999 mem: storing 3 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 3
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 3
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -24028,6 +24207,7 @@
  108 run: trace {90: "literal"}, {"print-character": "literal-string"}, {c: "character"}
 9999 mem: location 1231 is 32
   90 print-character: 32 
+9990 schedule: print/clear-line-until/clear-screen-from/editor-render/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  108 run: jump-unless {screen: ("address" "screen")}, {: "offset"}
 9999 mem: location 1230 is 1008
 9998 run: jump-unless fell through
@@ -24113,7 +24293,6 @@
  108 run: jump-if {legal?: "boolean"}, {: "offset"}
 9999 mem: location 1239 is 1
 9998 run: jumping to instruction 39
-9990 schedule: print/clear-line-delimited/clear-screen-from/editor-render/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  108 run: {newline?: "boolean"} <- equal {c: "character"}, {10: "literal", "newline": ()}
 9999 mem: location 1231 is 32
 9999 mem: storing 0 in location 1241
@@ -24274,13 +24453,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 3
-9999 mem: storing 4 in location 1120
+9999 mem: location 1121 is 3
+9999 mem: storing 4 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 4
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 4
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -24561,13 +24740,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 4
-9999 mem: storing 5 in location 1120
+9999 mem: location 1121 is 4
+9999 mem: storing 5 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 5
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 5
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -24848,13 +25027,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 5
-9999 mem: storing 6 in location 1120
+9999 mem: location 1121 is 5
+9999 mem: storing 6 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 6
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 6
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -25135,13 +25314,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 6
-9999 mem: storing 7 in location 1120
+9999 mem: location 1121 is 6
+9999 mem: storing 7 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 7
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 7
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -25422,13 +25601,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 7
-9999 mem: storing 8 in location 1120
+9999 mem: location 1121 is 7
+9999 mem: storing 8 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 8
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 8
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -25709,13 +25888,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 8
-9999 mem: storing 9 in location 1120
+9999 mem: location 1121 is 8
+9999 mem: storing 9 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 9
 9999 mem: location 1121 is 9
+9999 mem: location 1120 is 9
 9999 mem: storing 0 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 0
@@ -25980,13 +26159,13 @@
 9998 run: result 0 is 1008
 9999 mem: storing 1008 in location 1119
  107 run: {column: "number"} <- add {column: "number"}, {1: "literal"}
-9999 mem: location 1120 is 9
-9999 mem: storing 10 in location 1120
+9999 mem: location 1121 is 9
+9999 mem: storing 10 in location 1121
  107 run: jump {: "offset"}
 9998 run: jumping to instruction 11
  107 run: {done?: "boolean"} <- greater-than {column: "number"}, {right: "number"}
-9999 mem: location 1120 is 10
-9999 mem: location 1121 is 9
+9999 mem: location 1121 is 10
+9999 mem: location 1120 is 9
 9999 mem: storing 1 in location 1125
  107 run: jump-if {done?: "boolean"}, {: "offset"}
 9999 mem: location 1125 is 1
@@ -25998,9 +26177,10 @@
 9999 mem: skipping refcount at 1008
 9999 mem: decrementing refcount of 1008: 40 -> 39
 9999 mem: storing 0 in location 1119
-9999 mem: clearing column:number
-9999 mem: storing 0 in location 1120
 9999 mem: clearing right:number
+9999 mem: storing 0 in location 1120
+9999 mem: clearing _
+9999 mem: clearing column:number
 9999 mem: storing 0 in location 1121
 9999 mem: clearing space:character
 9999 mem: storing 0 in location 1122
@@ -26017,7 +26197,7 @@
 9999 mem: copying address to itself; refcount unchanged
 9999 mem: storing 0 in location 1119
 9999 mem: clearing column
-9999 mem: storing 0 in location 1120
+9999 mem: storing 0 in location 1121
 9999 mem: automatically abandoning 1116
 9999 abandon: updating refcounts inside 1116: (array number)
 9999 abandon: saving 1116 in free-list of size 10
@@ -26546,6 +26726,7 @@
 9998 run: its type is "number"
 9999 mem: location 1010 is 10
 9999 mem: storing 10 in location 1178
+9990 schedule: screen-width/handle-keyboard-event/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  106 run: return {width: "number"}
 9999 mem: location 1178 is 10
 9999 mem: clearing screen:address:screen
@@ -26726,7 +26907,6 @@
 9998 run: jump-unless fell through
  105 run: trace {10: "literal"}, {"app": "literal-string"}, {"handle-keyboard-event: special character": "literal-string"}
   10 app: handle-keyboard-event: special character 
-9990 schedule: handle-keyboard-event/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  105 run: {redo?: "boolean"} <- equal {c: "character"}, {25: "literal", "ctrl-y": ()}
 9999 mem: location 1322 is 49
 9999 mem: storing 0 in location 1324
@@ -29170,6 +29350,7 @@
 9999 mem: location 1177 is 0
 9999 mem: incrementing refcount of 1470: 9 -> 10
 9999 mem: storing 1470 in location 1177
+9990 schedule: next_2/handle-keyboard-event/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  106 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
 9999 mem: location 1177 is 1470
 9998 run: jumping to instruction 5
@@ -29327,7 +29508,6 @@
 9999 mem: allocating size 6
 9999 abandon: picking up space from free-list of size 6
 9999 mem: new alloc from free list: 1153
-9990 schedule: push_4/add-operation/handle-keyboard-event/editor-event-loop/run_1001/scenario_editor-moves-cursor-down-after-inserting-newline-2
  107 run: {x: ("address" "operation")} <- next-ingredient-without-typechecking 
 9999 mem: location 1156 is 0
 9999 mem: incrementing refcount of 1489: 2 -> 3

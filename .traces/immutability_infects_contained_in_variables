@@ -1,0 +1,218 @@
+9991 parse: --- defining container test-list
+9999 parse: type number: 1000
+9993 parse:   element: {value: "number"}
+9993 parse:   element: {next: ("address" "test-list")}
+9991 parse: --- defining main
+9993 parse: instruction: local-scope
+9993 parse:   number of ingredients: 0
+9992 load: after rewriting: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 parse: instruction: new
+9993 parse:   number of ingredients: 1
+9993 parse:   ingredient: {test-list: "type"}
+9993 parse:   product: {p: ("address" "test-list")}
+9992 load: after rewriting: {p: ("address" "test-list")} <- new {test-list: "type"}
+9993 parse: instruction: foo
+9993 parse:   number of ingredients: 1
+9993 parse:   ingredient: {p: ()}
+9992 load: after rewriting: foo {p: ()}
+9999 parse: recipe main has a header
+9999 parse: recipe has a header; parsing
+9999 parse: header ingredient: p:address:test-list
+9991 parse: --- defining foo
+9993 parse: instruction: local-scope
+9993 parse:   number of ingredients: 0
+9992 load: after rewriting: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 parse: instruction: load-ingredients
+9993 parse:   number of ingredients: 0
+9992 load: after rewriting:  
+9993 parse: instruction: test-next
+9993 parse:   number of ingredients: 1
+9993 parse:   ingredient: {p: ()}
+9993 parse:   product: {p2: ("address" "test-list")}
+9992 load: after rewriting: {p2: ("address" "test-list")} <- test-next {p: ()}
+9993 parse: instruction: put
+9993 parse:   number of ingredients: 3
+9993 parse:   ingredient: {p2: (), "lookup": ()}
+9993 parse:   ingredient: {value: "offset"}
+9993 parse:   ingredient: {34: "literal"}
+9993 parse:   product: {p2: (), "lookup": ()}
+9992 load: after rewriting: {p2: (), "lookup": ()} <- put {p2: (), "lookup": ()}, {value: "offset"}, {34: "literal"}
+9999 parse: recipe foo has a header
+9999 parse: recipe has a header; parsing
+9999 parse: header ingredient: x:address:test-list
+9999 parse: header product: y:address:test-list/contained-in:x
+9991 parse: --- defining test-next
+9993 parse: instruction: local-scope
+9993 parse:   number of ingredients: 0
+9992 load: after rewriting: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 parse: instruction: load-ingredients
+9993 parse:   number of ingredients: 0
+9992 load: after rewriting:  
+9993 parse: instruction: get
+9993 parse:   number of ingredients: 2
+9993 parse:   ingredient: {x: (), "lookup": ()}
+9993 parse:   ingredient: {next: "offset"}
+9993 parse:   product: {y: ()}
+9992 load: after rewriting: {y: ()} <- get {x: (), "lookup": ()}, {next: "offset"}
+9999 parse: recipe test-next has a header
+9990 transform: === transform_all()
+9991 transform: --- rewrite literal strings in recipe main
+9991 transform: --- rewrite literal strings in recipe foo
+9991 transform: --- rewrite literal strings in recipe test-next
+9991 transform: --- rewrite 'stash' instructions in recipe main
+9991 transform: --- deduce types for recipe main
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: p => ("address" "test-list")
+9992 transform: p <= ("address" "test-list")
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {p: ("address" "test-list")} <- new {test-list: "type"}
+9993 transform: foo {p: ("address" "test-list")}
+9991 transform: --- rewrite 'stash' instructions in recipe foo
+9991 transform: --- deduce types for recipe foo
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: p => ("address" "test-list")
+9992 transform: p <= ("address" "test-list")
+9992 transform: p2 => ("address" "test-list")
+9992 transform: p2 <= ("address" "test-list")
+9992 transform: p2 <= ("address" "test-list")
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {p: ("address" "test-list")} <- next-ingredient-without-typechecking 
+9993 transform: {p2: ("address" "test-list")} <- test-next {p: ("address" "test-list")}
+9993 transform: {p2: ("address" "test-list"), "lookup": ()} <- put {p2: ("address" "test-list"), "lookup": ()}, {value: "offset"}, {34: "literal"}
+9991 transform: --- rewrite 'stash' instructions in recipe test-next
+9991 transform: --- deduce types for recipe test-next
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: x => ("address" "test-list")
+9992 transform: x <= ("address" "test-list")
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {x: ("address" "test-list")} <- next-ingredient-without-typechecking 
+9993 transform: {y: ()} <- get {x: ("address" "test-list"), "lookup": ()}, {next: "offset"}
+9991 transform: --- checking reply instructions against header for test-next
+9991 transform: --- fill in reply ingredients from header for recipe main
+9991 transform: --- fill in reply ingredients from header for recipe foo
+9991 transform: --- fill in reply ingredients from header for recipe test-next
+9991 transform: --- deduce types for recipe main
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: p => ("address" "test-list")
+9991 transform: --- deduce types for recipe foo
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: p => ("address" "test-list")
+9992 transform: p2 => ("address" "test-list")
+9991 transform: --- deduce types for recipe test-next
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: x => ("address" "test-list")
+9992 transform: y => ("address" "test-list")
+9991 transform: --- deduce types from header for test-next
+9993 transform: type of x is ("address" "test-list")
+9993 transform: type of y is ("address" "test-list")
+9992 transform: instruction: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform:   product: {default-space: ("address" "array" "location")}
+9992 transform: instruction: {x: ("address" "test-list")} <- next-ingredient-without-typechecking 
+9993 transform:   product: {x: ("address" "test-list")}
+9992 transform: instruction: {y: ()} <- get {x: ("address" "test-list"), "lookup": ()}, {next: "offset"}
+9993 transform:   product: {y: ()}
+9993 transform: type of y is ("address" "test-list")
+9992 transform: instruction: reply {y: ("address" "test-list"), "contained-in": "x"}
+9991 transform: --- check for invalid types in recipe main
+9991 transform: --- check for invalid types in recipe foo
+9991 transform: --- check for invalid types in recipe test-next
+9991 transform: --- collect surrounding spaces for recipe main
+9991 transform: --- collect surrounding spaces for recipe foo
+9991 transform: --- collect surrounding spaces for recipe test-next
+9991 transform: --- transform names for recipe main
+9993 name: assign p 1
+9991 transform: --- transform names for recipe foo
+9993 name: assign p 1
+9993 name: assign p2 2
+9993 name: element value of type test-list is at offset 0
+9991 transform: --- transform names for recipe test-next
+9993 name: assign x 1
+9993 name: element next of type test-list is at offset 1
+9993 name: assign y 2
+9991 transform: --- resolve ambiguous calls for recipe main
+9992 transform: instruction foo {p: ()}
+9992 transform: checking variant (strict) 0: recipe foo {p: ("address" "test-list")}
+9991 transform: --- resolve ambiguous calls for recipe foo
+9992 transform: instruction {p2: ("address" "test-list")} <- test-next {p: ()}
+9992 transform: checking variant (strict) 0: recipe test-next {x: ("address" "test-list")} -> {y: ("address" "test-list"), "contained-in": "x"}
+9992 transform: instruction {p2: (), "lookup": ()} <- put {p2: (), "lookup": ()}, {value: "offset"}, {34: "literal"}
+9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
+9993 transform: strict match failed: ingredient 0
+9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
+9993 transform: strict match failed: ingredient 0
+9993 transform: concrete-type match failed: ingredient 0
+9992 transform: checking variant (strict except literals-against-booleans) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
+9993 transform: strict match failed: ingredient 0
+9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
+9993 transform: strict match failed: ingredient 0
+9991 transform: --- resolve ambiguous calls for recipe test-next
+9992 transform: --- compute address offsets for main
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {p: ("address" "test-list")} <- new {test-list: "type"}
+9994 transform: compute address offsets for container test-list
+9993 transform: checking container test-list, element 0
+9993 transform: checking container test-list, element 1
+9993 transform: address at offset 1
+9993 transform: - compute address offsets for foo {p: ("address" "test-list")}
+9993 transform: - compute address offsets for reply 
+9992 transform: --- compute address offsets for foo
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {p: ("address" "test-list")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {p2: ("address" "test-list")} <- test-next {p: ("address" "test-list")}
+9993 transform: - compute address offsets for {p2: ("address" "test-list"), "lookup": ()} <- put {p2: ("address" "test-list"), "lookup": ()}, {value: "offset"}, {34: "literal"}
+9993 transform: - compute address offsets for reply 
+9992 transform: --- compute address offsets for test-next
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {x: ("address" "test-list")} <- next-ingredient-without-typechecking 
+9993 transform: - compute address offsets for {y: ("address" "test-list")} <- get {x: ("address" "test-list"), "lookup": ()}, {next: "offset"}
+9993 transform: - compute address offsets for reply {y: ("address" "test-list"), "contained-in": "x"}
+9991 transform: --- compute instruction operations for recipe main
+9991 transform: --- compute instruction operations for recipe foo
+9991 transform: --- compute instruction operations for recipe test-next
+9991 transform: --- transform braces for recipe main
+9992 transform: local-scope ...
+9992 transform: new ...
+9992 transform: foo ...
+9992 transform:  ...
+9991 transform: --- transform braces for recipe foo
+9992 transform: local-scope ...
+9992 transform:  ...
+9992 transform: test-next ...
+9992 transform: put ...
+9992 transform:  ...
+9991 transform: --- transform braces for recipe test-next
+9992 transform: local-scope ...
+9992 transform:  ...
+9992 transform: get ...
+9992 transform:  ...
+9991 transform: --- check mutability of ingredients in recipe main
+9991 transform: --- check mutability of ingredients in recipe foo
+   0 error: foo: cannot modify p2 in instruction '*p2 <- put *p2, value:offset, 34' because that would modify p which is an ingredient of recipe foo but not also a product
+
+9991 transform: --- check mutability of ingredients in recipe test-next
+9991 transform: --- perform checks for recipe main
+9991 transform: --- perform checks for recipe foo
+9991 transform: --- perform checks for recipe test-next
+9991 transform: --- type-check 'call' instructions inside recipe main
+9991 transform: --- type-check 'call' instructions inside recipe foo
+9991 transform: --- type-check 'call' instructions inside recipe test-next
+9991 transform: --- type-check calls inside recipe main
+9991 transform: --- type-check calls inside recipe foo
+9991 transform: --- type-check calls inside recipe test-next
+9991 transform: --- convert 'new' to 'allocate' for recipe main
+9992 new: size of "location" is 1
+9992 new: size of "test-list" is 2
+9991 transform: --- convert 'new' to 'allocate' for recipe foo
+9992 new: size of "location" is 1
+9991 transform: --- convert 'new' to 'allocate' for recipe test-next
+9992 new: size of "location" is 1
+9991 transform: --- check types of reply instructions in recipe main
+9991 transform: --- check types of reply instructions in recipe foo
+9991 transform: --- check types of reply instructions in recipe test-next
+9991 transform: --- type-check merge instructions in recipe main
+9991 transform: --- type-check merge instructions in recipe foo
+9991 transform: --- type-check merge instructions in recipe test-next
+9991 transform: --- checking reply instructions against header for main
+9991 transform: --- checking reply instructions against header for foo
+9991 transform: --- checking reply instructions against header for test-next
+9991 transform: --- parsing any uninitialized reagents as integers

@@ -1,8 +1,8 @@
 9991 parse: --- defining scenario_text-equal-distinct-lengths
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    default-space:address:array:location <- new location:type, 30\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abcd]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    default-space:address:array:location <- new location:type, 30\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abcd]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    local-scope\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abcd]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    local-scope\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abcd]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"\n    3 <- 0  # abc != abcd\n  ": "literal-string"}
@@ -20,7 +20,7 @@
 9991 transform: --- rewrite literal strings in recipe scenario_text-equal-distinct-lengths
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_text-equal-distinct-lengths
 9991 transform: --- deduce types for recipe scenario_text-equal-distinct-lengths
-9993 transform: run {"\n    default-space:address:array:location <- new location:type, 30\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abcd]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
+9993 transform: run {"\n    local-scope\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abcd]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    3 <- 0  # abc != abcd\n  ": "literal-string"}
 9993 transform: trace-should-contain {"\n    text-equal: comparing lengths\n  ": "literal-string"}
 9993 transform: trace-should-not-contain {"\n    text-equal: comparing characters\n  ": "literal-string"}
@@ -31,7 +31,7 @@
 9991 transform: --- transform names for recipe scenario_text-equal-distinct-lengths
 9991 transform: --- resolve ambiguous calls for recipe scenario_text-equal-distinct-lengths
 9992 transform: --- compute address offsets for scenario_text-equal-distinct-lengths
-9993 transform: - compute address offsets for run {"\n    default-space:address:array:location <- new location:type, 30\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abcd]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
+9993 transform: - compute address offsets for run {"\n    local-scope\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abcd]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
 9993 transform: - compute address offsets for memory-should-contain {"\n    3 <- 0  # abc != abcd\n  ": "literal-string"}
 9993 transform: - compute address offsets for trace-should-contain {"\n    text-equal: comparing lengths\n  ": "literal-string"}
 9993 transform: - compute address offsets for trace-should-not-contain {"\n    text-equal: comparing characters\n  ": "literal-string"}
@@ -55,14 +55,11 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_text-equal-distinct-lengths
- 102 run: run {"\n    default-space:address:array:location <- new location:type, 30\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abcd]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
+ 102 run: run {"\n    local-scope\n    x:address:array:character <- new [abc]\n    y:address:array:character <- new [abcd]\n    3:boolean/raw <- equal x, y\n  ": "literal-string"}
 9991 parse: --- defining run_1001
-9993 parse: instruction: new
-9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {location: "type"}
-9993 parse:   ingredient: {30: "literal"}
-9993 parse:   product: {default-space: ("address" "array" "location")}
-9992 load: after rewriting: {default-space: ("address" "array" "location")} <- new {location: "type"}, {30: "literal"}
+9993 parse: instruction: local-scope
+9993 parse:   number of ingredients: 0
+9992 load: after rewriting: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"abc": "literal-string"}
@@ -89,7 +86,7 @@
 9992 transform: y => ("address" "array" "character")
 9992 transform: x <= ("address" "array" "character")
 9992 transform: y <= ("address" "array" "character")
-9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {30: "literal"}
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {x: ("address" "array" "character")} <- new {"abc": "literal-string"}
 9993 transform: {y: ("address" "array" "character")} <- new {"abcd": "literal-string"}
 9993 transform: {3: "boolean", "raw": ()} <- equal {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
@@ -107,14 +104,14 @@
 9992 transform: instruction {3: "boolean", "raw": ()} <- equal {x: ()}, {y: ()}
 9992 transform: checking variant (strict) 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9992 transform: --- compute address offsets for run_1001
-9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {30: "literal"}
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: - compute address offsets for {x: ("address" "array" "character")} <- new {"abc": "literal-string"}
 9993 transform: - compute address offsets for {y: ("address" "array" "character")} <- new {"abcd": "literal-string"}
 9993 transform: - compute address offsets for {3: "boolean", "raw": ()} <- equal_2 {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
-9992 transform: new ...
+9992 transform: local-scope ...
 9992 transform: new ...
 9992 transform: new ...
 9992 transform: equal ...
@@ -130,26 +127,34 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {30: "literal"}
-9999 mem: array size is 30
-9999 mem: allocating size 32
+ 103 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9999 mem: array size is 3
+9999 mem: allocating size 5
 9999 mem: new alloc: 1000
 9999 mem: storing 0 in location 1000
 9999 mem: storing 0 in location 1001
 9999 mem: storing 0 in location 1002
 9999 mem: storing 0 in location 1003
 9999 mem: storing 0 in location 1004
-9999 mem: storing 0 in location 1005
-9999 mem: storing 0 in location 1006
-9999 mem: storing 0 in location 1007
-9999 mem: storing 0 in location 1008
-9999 mem: storing 0 in location 1009
-9999 mem: storing 0 in location 1010
-9999 mem: storing 0 in location 1011
-9999 mem: storing 0 in location 1012
-9999 mem: storing 0 in location 1013
-9999 mem: storing 0 in location 1014
-9999 mem: storing 0 in location 1015
+9999 mem: storing 3 in location 1001
+ 103 run: {x: ("address" "array" "character")} <- new {"abc": "literal-string"}
+9999 mem: new string alloc: 1005
+9999 mem: location 1003 is 0
+9999 mem: incrementing refcount of 1005: 0 -> 1
+9999 mem: storing 1005 in location 1003
+ 103 run: {y: ("address" "array" "character")} <- new {"abcd": "literal-string"}
+9999 mem: new string alloc: 1010
+9999 mem: location 1004 is 0
+9999 mem: incrementing refcount of 1010: 0 -> 1
+9999 mem: storing 1010 in location 1004
+ 103 run: {3: "boolean", "raw": ()} <- equal_2 {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
+9999 mem: location 1003 is 1005
+9999 mem: location 1004 is 1010
+9999 trace: incrementing callstack depth to 3
+ 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9999 mem: array size is 11
+9999 mem: allocating size 13
+9999 mem: new alloc: 1016
 9999 mem: storing 0 in location 1016
 9999 mem: storing 0 in location 1017
 9999 mem: storing 0 in location 1018
@@ -163,103 +168,87 @@
 9999 mem: storing 0 in location 1026
 9999 mem: storing 0 in location 1027
 9999 mem: storing 0 in location 1028
-9999 mem: storing 0 in location 1029
-9999 mem: storing 0 in location 1030
-9999 mem: storing 0 in location 1031
-9999 mem: storing 30 in location 1001
- 103 run: {x: ("address" "array" "character")} <- new {"abc": "literal-string"}
-9999 mem: new string alloc: 1032
-9999 mem: location 1003 is 0
-9999 mem: incrementing refcount of 1032: 0 -> 1
-9999 mem: storing 1032 in location 1003
- 103 run: {y: ("address" "array" "character")} <- new {"abcd": "literal-string"}
-9999 mem: new string alloc: 1037
-9999 mem: location 1004 is 0
-9999 mem: incrementing refcount of 1037: 0 -> 1
-9999 mem: storing 1037 in location 1004
- 103 run: {3: "boolean", "raw": ()} <- equal_2 {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
-9999 mem: location 1003 is 1032
-9999 mem: location 1004 is 1037
-9999 trace: incrementing callstack depth to 3
- 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 11
-9999 mem: allocating size 13
-9999 mem: new alloc: 1043
-9999 mem: storing 0 in location 1043
-9999 mem: storing 0 in location 1044
-9999 mem: storing 0 in location 1045
-9999 mem: storing 0 in location 1046
-9999 mem: storing 0 in location 1047
-9999 mem: storing 0 in location 1048
-9999 mem: storing 0 in location 1049
-9999 mem: storing 0 in location 1050
-9999 mem: storing 0 in location 1051
-9999 mem: storing 0 in location 1052
-9999 mem: storing 0 in location 1053
-9999 mem: storing 0 in location 1054
-9999 mem: storing 0 in location 1055
-9999 mem: storing 11 in location 1044
+9999 mem: storing 11 in location 1017
  104 run: {a: ("address" "array" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1046 is 0
-9999 mem: incrementing refcount of 1032: 1 -> 2
-9999 mem: storing 1032 in location 1046
+9999 mem: location 1019 is 0
+9999 mem: incrementing refcount of 1005: 1 -> 2
+9999 mem: storing 1005 in location 1019
  104 run: {b: ("address" "array" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1047 is 0
-9999 mem: incrementing refcount of 1037: 1 -> 2
-9999 mem: storing 1037 in location 1047
+9999 mem: location 1020 is 0
+9999 mem: incrementing refcount of 1010: 1 -> 2
+9999 mem: storing 1010 in location 1020
  104 run: {a-len: "number"} <- length {a: ("address" "array" "character"), "lookup": ()}
-9999 mem: location 1046 is 1032
-9999 mem: skipping refcount at 1032
-9999 mem: storing 3 in location 1048
+9999 mem: location 1019 is 1005
+9999 mem: skipping refcount at 1005
+9999 mem: storing 3 in location 1021
  104 run: {b-len: "number"} <- length {b: ("address" "array" "character"), "lookup": ()}
-9999 mem: location 1047 is 1037
-9999 mem: skipping refcount at 1037
-9999 mem: storing 4 in location 1049
+9999 mem: location 1020 is 1010
+9999 mem: skipping refcount at 1010
+9999 mem: storing 4 in location 1022
  104 run: trace {99: "literal"}, {"text-equal": "literal-string"}, {"comparing lengths": "literal-string"}
   99 text-equal: comparing lengths
  104 run: {length-equal?: "boolean"} <- equal {a-len: "number"}, {b-len: "number"}
-9999 mem: location 1048 is 3
-9999 mem: location 1049 is 4
-9999 mem: storing 0 in location 1050
+9999 mem: location 1021 is 3
+9999 mem: location 1022 is 4
+9999 mem: storing 0 in location 1023
  104 run: jump-if {length-equal?: "boolean"}, {: "offset"}
-9999 mem: location 1050 is 0
+9999 mem: location 1023 is 0
 9998 run: jump-if fell through
  104 run: return {0: "literal"}
 9999 mem: clearing a:address:array:character
-9999 mem: location 1046 is 1032
-9999 mem: skipping refcount at 1032
-9999 mem: decrementing refcount of 1032: 2 -> 1
-9999 mem: storing 0 in location 1046
+9999 mem: location 1019 is 1005
+9999 mem: skipping refcount at 1005
+9999 mem: decrementing refcount of 1005: 2 -> 1
+9999 mem: storing 0 in location 1019
 9999 mem: clearing b:address:array:character
-9999 mem: location 1047 is 1037
-9999 mem: skipping refcount at 1037
-9999 mem: decrementing refcount of 1037: 2 -> 1
-9999 mem: storing 0 in location 1047
+9999 mem: location 1020 is 1010
+9999 mem: skipping refcount at 1010
+9999 mem: decrementing refcount of 1010: 2 -> 1
+9999 mem: storing 0 in location 1020
 9999 mem: clearing a-len:number
-9999 mem: storing 0 in location 1048
+9999 mem: storing 0 in location 1021
 9999 mem: clearing b-len:number
-9999 mem: storing 0 in location 1049
+9999 mem: storing 0 in location 1022
 9999 mem: clearing length-equal?:boolean
-9999 mem: storing 0 in location 1050
+9999 mem: storing 0 in location 1023
 9999 mem: clearing i:number
-9999 mem: storing 0 in location 1051
+9999 mem: storing 0 in location 1024
 9999 mem: clearing done?:boolean
-9999 mem: storing 0 in location 1052
+9999 mem: storing 0 in location 1025
 9999 mem: clearing a2:character
-9999 mem: storing 0 in location 1053
+9999 mem: storing 0 in location 1026
 9999 mem: clearing b2:character
-9999 mem: storing 0 in location 1054
+9999 mem: storing 0 in location 1027
 9999 mem: clearing chars-match?:boolean
-9999 mem: storing 0 in location 1055
+9999 mem: storing 0 in location 1028
 9999 mem: clearing i
-9999 mem: storing 0 in location 1051
-9999 mem: automatically abandoning 1043
-9999 abandon: updating refcounts inside 1043: (array number)
-9999 abandon: saving 1043 in free-list of size 13
+9999 mem: storing 0 in location 1024
+9999 mem: automatically abandoning 1016
+9999 abandon: updating refcounts inside 1016: (array number)
+9999 abandon: saving 1016 in free-list of size 13
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 0
 9999 mem: storing 0 in location 3
  103 run: reply 
+9999 mem: clearing x:address:array:character
+9999 mem: location 1003 is 1005
+9999 mem: skipping refcount at 1005
+9999 mem: decrementing refcount of 1005: 1 -> 0
+9999 mem: automatically abandoning 1005
+9999 abandon: updating refcounts inside 1005: (array character)
+9999 abandon: saving 1005 in free-list of size 5
+9999 mem: storing 0 in location 1003
+9999 mem: clearing y:address:array:character
+9999 mem: location 1004 is 1010
+9999 mem: skipping refcount at 1010
+9999 mem: decrementing refcount of 1010: 1 -> 0
+9999 mem: automatically abandoning 1010
+9999 abandon: updating refcounts inside 1010: (array character)
+9999 abandon: saving 1010 in free-list of size 6
+9999 mem: storing 0 in location 1004
+9999 mem: automatically abandoning 1000
+9999 abandon: updating refcounts inside 1000: (array number)
+9999 abandon: saving 1000 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 2
  102 run: memory-should-contain {"\n    3 <- 0  # abc != abcd\n  ": "literal-string"}
 9999 run: checking location 3

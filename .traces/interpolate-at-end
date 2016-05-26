@@ -1,8 +1,8 @@
 9991 parse: --- defining scenario_interpolate-at-end
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:array:character/raw <- new [hello, _]\n    2:address:array:character/raw <- new [abc]\n    3:address:array:character/raw <- interpolate 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    1:address:array:character/raw <- new [hello, _]\n    2:address:array:character/raw <- new [abc]\n    3:address:array:character/raw <- interpolate 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    x:address:array:character <- new [hello, _]\n    y:address:array:character <- new [abc]\n    z:address:array:character <- interpolate x, y\n    4:array:character/raw <- copy *z\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    x:address:array:character <- new [hello, _]\n    y:address:array:character <- new [abc]\n    z:address:array:character <- interpolate x, y\n    4:array:character/raw <- copy *z\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"\n    4:array:character <- [hello, abc]\n  ": "literal-string"}
@@ -12,7 +12,7 @@
 9991 transform: --- rewrite literal strings in recipe scenario_interpolate-at-end
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_interpolate-at-end
 9991 transform: --- deduce types for recipe scenario_interpolate-at-end
-9993 transform: run {"\n    1:address:array:character/raw <- new [hello, _]\n    2:address:array:character/raw <- new [abc]\n    3:address:array:character/raw <- interpolate 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
+9993 transform: run {"\n    x:address:array:character <- new [hello, _]\n    y:address:array:character <- new [abc]\n    z:address:array:character <- interpolate x, y\n    4:array:character/raw <- copy *z\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    4:array:character <- [hello, abc]\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_interpolate-at-end
 9991 transform: --- deduce types for recipe scenario_interpolate-at-end
@@ -21,7 +21,7 @@
 9991 transform: --- transform names for recipe scenario_interpolate-at-end
 9991 transform: --- resolve ambiguous calls for recipe scenario_interpolate-at-end
 9992 transform: --- compute address offsets for scenario_interpolate-at-end
-9993 transform: - compute address offsets for run {"\n    1:address:array:character/raw <- new [hello, _]\n    2:address:array:character/raw <- new [abc]\n    3:address:array:character/raw <- interpolate 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
+9993 transform: - compute address offsets for run {"\n    x:address:array:character <- new [hello, _]\n    y:address:array:character <- new [abc]\n    z:address:array:character <- interpolate x, y\n    4:array:character/raw <- copy *z\n  ": "literal-string"}
 9993 transform: - compute address offsets for memory-should-contain {"\n    4:array:character <- [hello, abc]\n  ": "literal-string"}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_interpolate-at-end
@@ -41,51 +41,63 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_interpolate-at-end
- 102 run: run {"\n    1:address:array:character/raw <- new [hello, _]\n    2:address:array:character/raw <- new [abc]\n    3:address:array:character/raw <- interpolate 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
+ 102 run: run {"\n    x:address:array:character <- new [hello, _]\n    y:address:array:character <- new [abc]\n    z:address:array:character <- interpolate x, y\n    4:array:character/raw <- copy *z\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"hello, _": "literal-string"}
-9993 parse:   product: {1: ("address" "array" "character"), "raw": ()}
-9992 load: after rewriting: {1: ("address" "array" "character"), "raw": ()} <- new {"hello, _": "literal-string"}
+9993 parse:   product: {x: ("address" "array" "character")}
+9992 load: after rewriting: {x: ("address" "array" "character")} <- new {"hello, _": "literal-string"}
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"abc": "literal-string"}
-9993 parse:   product: {2: ("address" "array" "character"), "raw": ()}
-9992 load: after rewriting: {2: ("address" "array" "character"), "raw": ()} <- new {"abc": "literal-string"}
+9993 parse:   product: {y: ("address" "array" "character")}
+9992 load: after rewriting: {y: ("address" "array" "character")} <- new {"abc": "literal-string"}
 9993 parse: instruction: interpolate
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {1: ("address" "array" "character"), "raw": ()}
-9993 parse:   ingredient: {2: ("address" "array" "character"), "raw": ()}
-9993 parse:   product: {3: ("address" "array" "character"), "raw": ()}
-9992 load: after rewriting: {3: ("address" "array" "character"), "raw": ()} <- interpolate {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
+9993 parse:   ingredient: {x: ()}
+9993 parse:   ingredient: {y: ()}
+9993 parse:   product: {z: ("address" "array" "character")}
+9992 load: after rewriting: {z: ("address" "array" "character")} <- interpolate {x: ()}, {y: ()}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {3: ("address" "array" "character"), "raw": (), "lookup": ()}
+9993 parse:   ingredient: {z: (), "lookup": ()}
 9993 parse:   product: {4: ("array" "character"), "raw": ()}
-9992 load: after rewriting: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "array" "character"), "raw": (), "lookup": ()}
+9992 load: after rewriting: {4: ("array" "character"), "raw": ()} <- copy {z: (), "lookup": ()}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
-9993 transform: {1: ("address" "array" "character"), "raw": ()} <- new {"hello, _": "literal-string"}
-9993 transform: {2: ("address" "array" "character"), "raw": ()} <- new {"abc": "literal-string"}
-9993 transform: {3: ("address" "array" "character"), "raw": ()} <- interpolate {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
-9993 transform: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "array" "character"), "raw": (), "lookup": ()}
+9992 transform: x => ("address" "array" "character")
+9992 transform: y => ("address" "array" "character")
+9992 transform: x <= ("address" "array" "character")
+9992 transform: y <= ("address" "array" "character")
+9992 transform: z => ("address" "array" "character")
+9992 transform: z <= ("address" "array" "character")
+9993 transform: {x: ("address" "array" "character")} <- new {"hello, _": "literal-string"}
+9993 transform: {y: ("address" "array" "character")} <- new {"abc": "literal-string"}
+9993 transform: {z: ("address" "array" "character")} <- interpolate {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
+9993 transform: {4: ("array" "character"), "raw": ()} <- copy {z: ("address" "array" "character"), "lookup": ()}
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
+9992 transform: x => ("address" "array" "character")
+9992 transform: y => ("address" "array" "character")
+9992 transform: z => ("address" "array" "character")
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
+9993 name: assign x 1
+9993 name: assign y 2
+9993 name: assign z 3
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction {3: ("address" "array" "character"), "raw": ()} <- interpolate {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
+9992 transform: instruction {z: ("address" "array" "character")} <- interpolate {x: ()}, {y: ()}
 9992 transform: checking variant (strict) 0: recipe interpolate {template: ("address" "array" "character")} -> {result: ("address" "array" "character")}
 9992 transform: --- compute address offsets for run_1001
-9993 transform: - compute address offsets for {1: ("address" "array" "character"), "raw": ()} <- new {"hello, _": "literal-string"}
-9993 transform: - compute address offsets for {2: ("address" "array" "character"), "raw": ()} <- new {"abc": "literal-string"}
-9993 transform: - compute address offsets for {3: ("address" "array" "character"), "raw": ()} <- interpolate {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
-9993 transform: - compute address offsets for {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "array" "character"), "raw": (), "lookup": ()}
+9993 transform: - compute address offsets for {x: ("address" "array" "character")} <- new {"hello, _": "literal-string"}
+9993 transform: - compute address offsets for {y: ("address" "array" "character")} <- new {"abc": "literal-string"}
+9993 transform: - compute address offsets for {z: ("address" "array" "character")} <- interpolate {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
+9993 transform: - compute address offsets for {4: ("array" "character"), "raw": ()} <- copy {z: ("address" "array" "character"), "lookup": ()}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
@@ -104,17 +116,17 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: {1: ("address" "array" "character"), "raw": ()} <- new {"hello, _": "literal-string"}
+ 103 run: {x: ("address" "array" "character")} <- new {"hello, _": "literal-string"}
 9999 mem: new string alloc: 1000
 9999 mem: location 1 is 0
 9999 mem: incrementing refcount of 1000: 0 -> 1
 9999 mem: storing 1000 in location 1
- 103 run: {2: ("address" "array" "character"), "raw": ()} <- new {"abc": "literal-string"}
+ 103 run: {y: ("address" "array" "character")} <- new {"abc": "literal-string"}
 9999 mem: new string alloc: 1010
 9999 mem: location 2 is 0
 9999 mem: incrementing refcount of 1010: 0 -> 1
 9999 mem: storing 1010 in location 2
- 103 run: {3: ("address" "array" "character"), "raw": ()} <- interpolate {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
+ 103 run: {z: ("address" "array" "character")} <- interpolate {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
 9999 mem: location 1 is 1000
 9999 mem: location 2 is 1010
 9999 trace: incrementing callstack depth to 3
@@ -690,7 +702,7 @@
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1032
 9999 mem: storing 1032 in location 3
- 103 run: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "array" "character"), "raw": (), "lookup": ()}
+ 103 run: {4: ("array" "character"), "raw": ()} <- copy {z: ("address" "array" "character"), "lookup": ()}
 9999 mem: location 3 is 1032
 9999 mem: skipping refcount at 1032
 9999 mem: location 1033 is 10

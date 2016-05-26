@@ -1,19 +1,19 @@
 9991 parse: --- defining scenario_text-append-null-2
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:array:character/raw <- new [hello,]\n    2:address:array:character/raw <- copy 0\n    3:address:array:character/raw <- append 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    1:address:array:character/raw <- new [hello,]\n    2:address:array:character/raw <- copy 0\n    3:address:array:character/raw <- append 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    local-scope\n    x:address:array:character <- new [hello,]\n    y:address:array:character <- copy 0\n    z:address:array:character <- append x, y\n    1:array:character/raw <- copy *z\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    local-scope\n    x:address:array:character <- new [hello,]\n    y:address:array:character <- copy 0\n    z:address:array:character <- append x, y\n    1:array:character/raw <- copy *z\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    4:array:character <- [hello,]\n  ": "literal-string"}
-9992 load: after rewriting: memory-should-contain {"\n    4:array:character <- [hello,]\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    1:array:character <- [hello,]\n  ": "literal-string"}
+9992 load: after rewriting: memory-should-contain {"\n    1:array:character <- [hello,]\n  ": "literal-string"}
 9999 parse: recipe scenario_text-append-null-2 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_text-append-null-2
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_text-append-null-2
 9991 transform: --- deduce types for recipe scenario_text-append-null-2
-9993 transform: run {"\n    1:address:array:character/raw <- new [hello,]\n    2:address:array:character/raw <- copy 0\n    3:address:array:character/raw <- append 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
-9993 transform: memory-should-contain {"\n    4:array:character <- [hello,]\n  ": "literal-string"}
+9993 transform: run {"\n    local-scope\n    x:address:array:character <- new [hello,]\n    y:address:array:character <- copy 0\n    z:address:array:character <- append x, y\n    1:array:character/raw <- copy *z\n  ": "literal-string"}
+9993 transform: memory-should-contain {"\n    1:array:character <- [hello,]\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_text-append-null-2
 9991 transform: --- deduce types for recipe scenario_text-append-null-2
 9991 transform: --- check for invalid types in recipe scenario_text-append-null-2
@@ -21,8 +21,8 @@
 9991 transform: --- transform names for recipe scenario_text-append-null-2
 9991 transform: --- resolve ambiguous calls for recipe scenario_text-append-null-2
 9992 transform: --- compute address offsets for scenario_text-append-null-2
-9993 transform: - compute address offsets for run {"\n    1:address:array:character/raw <- new [hello,]\n    2:address:array:character/raw <- copy 0\n    3:address:array:character/raw <- append 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
-9993 transform: - compute address offsets for memory-should-contain {"\n    4:array:character <- [hello,]\n  ": "literal-string"}
+9993 transform: - compute address offsets for run {"\n    local-scope\n    x:address:array:character <- new [hello,]\n    y:address:array:character <- copy 0\n    z:address:array:character <- append x, y\n    1:array:character/raw <- copy *z\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    1:array:character <- [hello,]\n  ": "literal-string"}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_text-append-null-2
 9991 transform: --- transform braces for recipe scenario_text-append-null-2
@@ -41,45 +41,63 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_text-append-null-2
- 102 run: run {"\n    1:address:array:character/raw <- new [hello,]\n    2:address:array:character/raw <- copy 0\n    3:address:array:character/raw <- append 1:address:array:character/raw, 2:address:array:character/raw\n    4:array:character/raw <- copy *3:address:array:character/raw\n  ": "literal-string"}
+ 102 run: run {"\n    local-scope\n    x:address:array:character <- new [hello,]\n    y:address:array:character <- copy 0\n    z:address:array:character <- append x, y\n    1:array:character/raw <- copy *z\n  ": "literal-string"}
 9991 parse: --- defining run_1001
+9993 parse: instruction: local-scope
+9993 parse:   number of ingredients: 0
+9992 load: after rewriting: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 parse: instruction: new
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"hello,": "literal-string"}
-9993 parse:   product: {1: ("address" "array" "character"), "raw": ()}
-9992 load: after rewriting: {1: ("address" "array" "character"), "raw": ()} <- new {"hello,": "literal-string"}
+9993 parse:   product: {x: ("address" "array" "character")}
+9992 load: after rewriting: {x: ("address" "array" "character")} <- new {"hello,": "literal-string"}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {0: "literal"}
-9993 parse:   product: {2: ("address" "array" "character"), "raw": ()}
-9992 load: after rewriting: {2: ("address" "array" "character"), "raw": ()} <- copy {0: "literal"}
+9993 parse:   product: {y: ("address" "array" "character")}
+9992 load: after rewriting: {y: ("address" "array" "character")} <- copy {0: "literal"}
 9993 parse: instruction: append
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {1: ("address" "array" "character"), "raw": ()}
-9993 parse:   ingredient: {2: ("address" "array" "character"), "raw": ()}
-9993 parse:   product: {3: ("address" "array" "character"), "raw": ()}
-9992 load: after rewriting: {3: ("address" "array" "character"), "raw": ()} <- append {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
+9993 parse:   ingredient: {x: ()}
+9993 parse:   ingredient: {y: ()}
+9993 parse:   product: {z: ("address" "array" "character")}
+9992 load: after rewriting: {z: ("address" "array" "character")} <- append {x: ()}, {y: ()}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {3: ("address" "array" "character"), "raw": (), "lookup": ()}
-9993 parse:   product: {4: ("array" "character"), "raw": ()}
-9992 load: after rewriting: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "array" "character"), "raw": (), "lookup": ()}
+9993 parse:   ingredient: {z: (), "lookup": ()}
+9993 parse:   product: {1: ("array" "character"), "raw": ()}
+9992 load: after rewriting: {1: ("array" "character"), "raw": ()} <- copy {z: (), "lookup": ()}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
-9993 transform: {1: ("address" "array" "character"), "raw": ()} <- new {"hello,": "literal-string"}
-9993 transform: {2: ("address" "array" "character"), "raw": ()} <- copy {0: "literal"}
-9993 transform: {3: ("address" "array" "character"), "raw": ()} <- append {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
-9993 transform: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "array" "character"), "raw": (), "lookup": ()}
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: x => ("address" "array" "character")
+9992 transform: y => ("address" "array" "character")
+9992 transform: x <= ("address" "array" "character")
+9992 transform: y <= ("address" "array" "character")
+9992 transform: z => ("address" "array" "character")
+9992 transform: z <= ("address" "array" "character")
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: {x: ("address" "array" "character")} <- new {"hello,": "literal-string"}
+9993 transform: {y: ("address" "array" "character")} <- copy {0: "literal"}
+9993 transform: {z: ("address" "array" "character")} <- append {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
+9993 transform: {1: ("array" "character"), "raw": ()} <- copy {z: ("address" "array" "character"), "lookup": ()}
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: x => ("address" "array" "character")
+9992 transform: y => ("address" "array" "character")
+9992 transform: z => ("address" "array" "character")
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
+9993 name: assign x 1
+9993 name: assign y 2
+9993 name: assign z 3
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction {3: ("address" "array" "character"), "raw": ()} <- append {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
+9992 transform: instruction {z: ("address" "array" "character")} <- append {x: ()}, {y: ()}
 9992 transform: checking variant (strict) 0: recipe append {buf: ("address" "buffer")} {x: "_elem"} -> {buf: ("address" "buffer")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe append_2 {in: ("address" "buffer")} {c: "character"} -> {in: ("address" "buffer")}
@@ -90,13 +108,15 @@
 9992 transform: checking variant (strict) 4: recipe append_5 {in: ("address" "duplex-list" "character")} {new: ("address" "duplex-list" "character"), "contained-in": "in"} -> {in: ("address" "duplex-list" "character")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: --- compute address offsets for run_1001
-9993 transform: - compute address offsets for {1: ("address" "array" "character"), "raw": ()} <- new {"hello,": "literal-string"}
-9993 transform: - compute address offsets for {2: ("address" "array" "character"), "raw": ()} <- copy {0: "literal"}
-9993 transform: - compute address offsets for {3: ("address" "array" "character"), "raw": ()} <- append_3 {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
-9993 transform: - compute address offsets for {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "array" "character"), "raw": (), "lookup": ()}
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: - compute address offsets for {x: ("address" "array" "character")} <- new {"hello,": "literal-string"}
+9993 transform: - compute address offsets for {y: ("address" "array" "character")} <- copy {0: "literal"}
+9993 transform: - compute address offsets for {z: ("address" "array" "character")} <- append_3 {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
+9993 transform: - compute address offsets for {1: ("array" "character"), "raw": ()} <- copy {z: ("address" "array" "character"), "lookup": ()}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
+9992 transform: local-scope ...
 9992 transform: new ...
 9992 transform: copy ...
 9992 transform: append ...
@@ -107,34 +127,40 @@
 9991 transform: --- type-check 'call' instructions inside recipe run_1001
 9991 transform: --- type-check calls inside recipe run_1001
 9991 transform: --- convert 'new' to 'allocate' for recipe run_1001
+9992 new: size of "location" is 1
 9991 transform: --- check types of reply instructions in recipe run_1001
 9991 transform: --- type-check merge instructions in recipe run_1001
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: {1: ("address" "array" "character"), "raw": ()} <- new {"hello,": "literal-string"}
-9999 mem: new string alloc: 1000
-9999 mem: location 1 is 0
-9999 mem: incrementing refcount of 1000: 0 -> 1
-9999 mem: storing 1000 in location 1
- 103 run: {2: ("address" "array" "character"), "raw": ()} <- copy {0: "literal"}
-9999 mem: location 2 is 0
+ 103 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9999 mem: array size is 4
+9999 mem: allocating size 6
+9999 mem: new alloc: 1000
+9999 mem: storing 0 in location 1000
+9999 mem: storing 0 in location 1001
+9999 mem: storing 0 in location 1002
+9999 mem: storing 0 in location 1003
+9999 mem: storing 0 in location 1004
+9999 mem: storing 0 in location 1005
+9999 mem: storing 4 in location 1001
+ 103 run: {x: ("address" "array" "character")} <- new {"hello,": "literal-string"}
+9999 mem: new string alloc: 1006
+9999 mem: location 1003 is 0
+9999 mem: incrementing refcount of 1006: 0 -> 1
+9999 mem: storing 1006 in location 1003
+ 103 run: {y: ("address" "array" "character")} <- copy {0: "literal"}
+9999 mem: location 1004 is 0
 9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 0 in location 2
- 103 run: {3: ("address" "array" "character"), "raw": ()} <- append_3 {1: ("address" "array" "character"), "raw": ()}, {2: ("address" "array" "character"), "raw": ()}
-9999 mem: location 1 is 1000
-9999 mem: location 2 is 0
+9999 mem: storing 0 in location 1004
+ 103 run: {z: ("address" "array" "character")} <- append_3 {x: ("address" "array" "character")}, {y: ("address" "array" "character")}
+9999 mem: location 1003 is 1006
+9999 mem: location 1004 is 0
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 12
 9999 mem: allocating size 14
-9999 mem: new alloc: 1008
-9999 mem: storing 0 in location 1008
-9999 mem: storing 0 in location 1009
-9999 mem: storing 0 in location 1010
-9999 mem: storing 0 in location 1011
-9999 mem: storing 0 in location 1012
-9999 mem: storing 0 in location 1013
+9999 mem: new alloc: 1014
 9999 mem: storing 0 in location 1014
 9999 mem: storing 0 in location 1015
 9999 mem: storing 0 in location 1016
@@ -143,91 +169,117 @@
 9999 mem: storing 0 in location 1019
 9999 mem: storing 0 in location 1020
 9999 mem: storing 0 in location 1021
-9999 mem: storing 12 in location 1009
+9999 mem: storing 0 in location 1022
+9999 mem: storing 0 in location 1023
+9999 mem: storing 0 in location 1024
+9999 mem: storing 0 in location 1025
+9999 mem: storing 0 in location 1026
+9999 mem: storing 0 in location 1027
+9999 mem: storing 12 in location 1015
  104 run: {a: ("address" "array" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1011 is 0
-9999 mem: incrementing refcount of 1000: 1 -> 2
-9999 mem: storing 1000 in location 1011
+9999 mem: location 1017 is 0
+9999 mem: incrementing refcount of 1006: 1 -> 2
+9999 mem: storing 1006 in location 1017
  104 run: {b: ("address" "array" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1012 is 0
+9999 mem: location 1018 is 0
 9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 0 in location 1012
+9999 mem: storing 0 in location 1018
  104 run: jump-if {a: ("address" "array" "character")}, {: "offset"}
-9999 mem: location 1011 is 1000
+9999 mem: location 1017 is 1006
 9998 run: jumping to instruction 6
  104 run: jump-if {b: ("address" "array" "character")}, {: "offset"}
-9999 mem: location 1012 is 0
+9999 mem: location 1018 is 0
 9998 run: jump-if fell through
  104 run: return {a: ("address" "array" "character")}
-9999 mem: location 1011 is 1000
+9999 mem: location 1017 is 1006
 9999 mem: clearing b:address:array:character
-9999 mem: location 1012 is 0
+9999 mem: location 1018 is 0
 9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 0 in location 1012
+9999 mem: storing 0 in location 1018
 9999 mem: clearing a-len:number
-9999 mem: storing 0 in location 1013
-9999 mem: clearing b-len:number
-9999 mem: storing 0 in location 1014
-9999 mem: clearing result-len:number
-9999 mem: storing 0 in location 1015
-9999 mem: clearing result
-9999 mem: location 1016 is 0
-9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 0 in location 1016
-9999 mem: clearing result-idx:number
-9999 mem: storing 0 in location 1017
-9999 mem: clearing i:number
-9999 mem: storing 0 in location 1018
-9999 mem: clearing a-done?:boolean
 9999 mem: storing 0 in location 1019
-9999 mem: clearing in:character
+9999 mem: clearing b-len:number
 9999 mem: storing 0 in location 1020
-9999 mem: clearing i
-9999 mem: storing 0 in location 1018
-9999 mem: clearing result-idx
-9999 mem: storing 0 in location 1017
-9999 mem: clearing i
-9999 mem: storing 0 in location 1018
-9999 mem: clearing b-done?:boolean
+9999 mem: clearing result-len:number
 9999 mem: storing 0 in location 1021
+9999 mem: clearing result
+9999 mem: location 1022 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1022
+9999 mem: clearing result-idx:number
+9999 mem: storing 0 in location 1023
+9999 mem: clearing i:number
+9999 mem: storing 0 in location 1024
+9999 mem: clearing a-done?:boolean
+9999 mem: storing 0 in location 1025
 9999 mem: clearing in:character
-9999 mem: storing 0 in location 1020
+9999 mem: storing 0 in location 1026
 9999 mem: clearing i
-9999 mem: storing 0 in location 1018
+9999 mem: storing 0 in location 1024
 9999 mem: clearing result-idx
-9999 mem: storing 0 in location 1017
-9999 mem: automatically abandoning 1008
-9999 abandon: updating refcounts inside 1008: (array number)
-9999 abandon: saving 1008 in free-list of size 14
+9999 mem: storing 0 in location 1023
+9999 mem: clearing i
+9999 mem: storing 0 in location 1024
+9999 mem: clearing b-done?:boolean
+9999 mem: storing 0 in location 1027
+9999 mem: clearing in:character
+9999 mem: storing 0 in location 1026
+9999 mem: clearing i
+9999 mem: storing 0 in location 1024
+9999 mem: clearing result-idx
+9999 mem: storing 0 in location 1023
+9999 mem: automatically abandoning 1014
+9999 abandon: updating refcounts inside 1014: (array number)
+9999 abandon: saving 1014 in free-list of size 14
 9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1000
-9999 mem: storing 1000 in location 3
- 103 run: {4: ("array" "character"), "raw": ()} <- copy {3: ("address" "array" "character"), "raw": (), "lookup": ()}
-9999 mem: location 3 is 1000
-9999 mem: skipping refcount at 1000
-9999 mem: location 1001 is 6
-9999 mem: location 1002 is 104
-9999 mem: location 1003 is 101
-9999 mem: location 1004 is 108
-9999 mem: location 1005 is 108
-9999 mem: location 1006 is 111
-9999 mem: location 1007 is 44
-9999 mem: storing 6 in location 4
-9999 mem: storing 104 in location 5
-9999 mem: storing 101 in location 6
-9999 mem: storing 108 in location 7
-9999 mem: storing 108 in location 8
-9999 mem: storing 111 in location 9
-9999 mem: storing 44 in location 10
+9998 run: result 0 is 1006
+9999 mem: storing 1006 in location 1005
+ 103 run: {1: ("array" "character"), "raw": ()} <- copy {z: ("address" "array" "character"), "lookup": ()}
+9999 mem: location 1005 is 1006
+9999 mem: skipping refcount at 1006
+9999 mem: location 1007 is 6
+9999 mem: location 1008 is 104
+9999 mem: location 1009 is 101
+9999 mem: location 1010 is 108
+9999 mem: location 1011 is 108
+9999 mem: location 1012 is 111
+9999 mem: location 1013 is 44
+9999 mem: storing 6 in location 1
+9999 mem: storing 104 in location 2
+9999 mem: storing 101 in location 3
+9999 mem: storing 108 in location 4
+9999 mem: storing 108 in location 5
+9999 mem: storing 111 in location 6
+9999 mem: storing 44 in location 7
  103 run: reply 
+9999 mem: clearing x:address:array:character
+9999 mem: location 1003 is 1006
+9999 mem: skipping refcount at 1006
+9999 mem: decrementing refcount of 1006: 2 -> 1
+9999 mem: storing 0 in location 1003
+9999 mem: clearing y:address:array:character
+9999 mem: location 1004 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1004
+9999 mem: clearing z:address:array:character
+9999 mem: location 1005 is 1006
+9999 mem: skipping refcount at 1006
+9999 mem: decrementing refcount of 1006: 1 -> 0
+9999 mem: automatically abandoning 1006
+9999 abandon: updating refcounts inside 1006: (array character)
+9999 abandon: saving 1006 in free-list of size 8
+9999 mem: storing 0 in location 1005
+9999 mem: automatically abandoning 1000
+9999 abandon: updating refcounts inside 1000: (array number)
+9999 abandon: saving 1000 in free-list of size 6
 9999 trace: reply: decrementing callstack depth from 2
- 102 run: memory-should-contain {"\n    4:array:character <- [hello,]\n  ": "literal-string"}
-9999 run: checking string length at 4
+ 102 run: memory-should-contain {"\n    1:array:character <- [hello,]\n  ": "literal-string"}
+9999 run: checking string length at 1
+9999 run: checking location 2
+9999 run: checking location 3
+9999 run: checking location 4
 9999 run: checking location 5
 9999 run: checking location 6
 9999 run: checking location 7
-9999 run: checking location 8
-9999 run: checking location 9
-9999 run: checking location 10
  102 run: reply 
 9999 trace: reply: decrementing callstack depth from 1

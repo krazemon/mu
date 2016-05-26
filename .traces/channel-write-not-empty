@@ -1,19 +1,19 @@
 9991 parse: --- defining scenario_channel-write-not-empty
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    3:address:channel:number <- get *1:address:source:number, chan:offset\n    2:address:sink:number <- write 2:address:sink:number, 34\n    4:boolean <- channel-empty? 3:address:channel:number\n    5:boolean <- channel-full? 3:address:channel:number\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    3:address:channel:number <- get *1:address:source:number, chan:offset\n    2:address:sink:number <- write 2:address:sink:number, 34\n    4:boolean <- channel-empty? 3:address:channel:number\n    5:boolean <- channel-full? 3:address:channel:number\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    source:address:source:number, sink:address:sink:number <- new-channel 3/capacity\n    chan:address:channel:number <- get *source, chan:offset\n    sink <- write sink, 34\n    10:boolean/raw <- channel-empty? chan\n    11:boolean/raw <- channel-full? chan\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    source:address:source:number, sink:address:sink:number <- new-channel 3/capacity\n    chan:address:channel:number <- get *source, chan:offset\n    sink <- write sink, 34\n    10:boolean/raw <- channel-empty? chan\n    11:boolean/raw <- channel-full? chan\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    4 <- 0  # empty?\n    5 <- 0  # full?\n  ": "literal-string"}
-9992 load: after rewriting: memory-should-contain {"\n    4 <- 0  # empty?\n    5 <- 0  # full?\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    10 <- 0  # empty?\n    11 <- 0  # full?\n  ": "literal-string"}
+9992 load: after rewriting: memory-should-contain {"\n    10 <- 0  # empty?\n    11 <- 0  # full?\n  ": "literal-string"}
 9999 parse: recipe scenario_channel-write-not-empty has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_channel-write-not-empty
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_channel-write-not-empty
 9991 transform: --- deduce types for recipe scenario_channel-write-not-empty
-9993 transform: run {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    3:address:channel:number <- get *1:address:source:number, chan:offset\n    2:address:sink:number <- write 2:address:sink:number, 34\n    4:boolean <- channel-empty? 3:address:channel:number\n    5:boolean <- channel-full? 3:address:channel:number\n  ": "literal-string"}
-9993 transform: memory-should-contain {"\n    4 <- 0  # empty?\n    5 <- 0  # full?\n  ": "literal-string"}
+9993 transform: run {"\n    source:address:source:number, sink:address:sink:number <- new-channel 3/capacity\n    chan:address:channel:number <- get *source, chan:offset\n    sink <- write sink, 34\n    10:boolean/raw <- channel-empty? chan\n    11:boolean/raw <- channel-full? chan\n  ": "literal-string"}
+9993 transform: memory-should-contain {"\n    10 <- 0  # empty?\n    11 <- 0  # full?\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_channel-write-not-empty
 9991 transform: --- deduce types for recipe scenario_channel-write-not-empty
 9991 transform: --- check for invalid types in recipe scenario_channel-write-not-empty
@@ -21,8 +21,8 @@
 9991 transform: --- transform names for recipe scenario_channel-write-not-empty
 9991 transform: --- resolve ambiguous calls for recipe scenario_channel-write-not-empty
 9992 transform: --- compute address offsets for scenario_channel-write-not-empty
-9993 transform: - compute address offsets for run {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    3:address:channel:number <- get *1:address:source:number, chan:offset\n    2:address:sink:number <- write 2:address:sink:number, 34\n    4:boolean <- channel-empty? 3:address:channel:number\n    5:boolean <- channel-full? 3:address:channel:number\n  ": "literal-string"}
-9993 transform: - compute address offsets for memory-should-contain {"\n    4 <- 0  # empty?\n    5 <- 0  # full?\n  ": "literal-string"}
+9993 transform: - compute address offsets for run {"\n    source:address:source:number, sink:address:sink:number <- new-channel 3/capacity\n    chan:address:channel:number <- get *source, chan:offset\n    sink <- write sink, 34\n    10:boolean/raw <- channel-empty? chan\n    11:boolean/raw <- channel-full? chan\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    10 <- 0  # empty?\n    11 <- 0  # full?\n  ": "literal-string"}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_channel-write-not-empty
 9991 transform: --- transform braces for recipe scenario_channel-write-not-empty
@@ -41,48 +41,68 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_channel-write-not-empty
- 102 run: run {"\n    1:address:source:number, 2:address:sink:number <- new-channel 3/capacity\n    3:address:channel:number <- get *1:address:source:number, chan:offset\n    2:address:sink:number <- write 2:address:sink:number, 34\n    4:boolean <- channel-empty? 3:address:channel:number\n    5:boolean <- channel-full? 3:address:channel:number\n  ": "literal-string"}
+ 102 run: run {"\n    source:address:source:number, sink:address:sink:number <- new-channel 3/capacity\n    chan:address:channel:number <- get *source, chan:offset\n    sink <- write sink, 34\n    10:boolean/raw <- channel-empty? chan\n    11:boolean/raw <- channel-full? chan\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: new-channel
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {3: "literal", "capacity": ()}
-9993 parse:   product: {1: ("address" "source" "number")}
-9993 parse:   product: {2: ("address" "sink" "number")}
-9992 load: after rewriting: {1: ("address" "source" "number")}, {2: ("address" "sink" "number")} <- new-channel {3: "literal", "capacity": ()}
+9993 parse:   product: {source: ("address" "source" "number")}
+9993 parse:   product: {sink: ("address" "sink" "number")}
+9992 load: after rewriting: {source: ("address" "source" "number")}, {sink: ("address" "sink" "number")} <- new-channel {3: "literal", "capacity": ()}
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {1: ("address" "source" "number"), "lookup": ()}
+9993 parse:   ingredient: {source: (), "lookup": ()}
 9993 parse:   ingredient: {chan: "offset"}
-9993 parse:   product: {3: ("address" "channel" "number")}
-9992 load: after rewriting: {3: ("address" "channel" "number")} <- get {1: ("address" "source" "number"), "lookup": ()}, {chan: "offset"}
+9993 parse:   product: {chan: ("address" "channel" "number")}
+9992 load: after rewriting: {chan: ("address" "channel" "number")} <- get {source: (), "lookup": ()}, {chan: "offset"}
 9993 parse: instruction: write
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {2: ("address" "sink" "number")}
+9993 parse:   ingredient: {sink: ()}
 9993 parse:   ingredient: {34: "literal"}
-9993 parse:   product: {2: ("address" "sink" "number")}
-9992 load: after rewriting: {2: ("address" "sink" "number")} <- write {2: ("address" "sink" "number")}, {34: "literal"}
+9993 parse:   product: {sink: ()}
+9992 load: after rewriting: {sink: ()} <- write {sink: ()}, {34: "literal"}
 9993 parse: instruction: channel-empty?
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {3: ("address" "channel" "number")}
-9993 parse:   product: {4: "boolean"}
-9992 load: after rewriting: {4: "boolean"} <- channel-empty? {3: ("address" "channel" "number")}
+9993 parse:   ingredient: {chan: ()}
+9993 parse:   product: {10: "boolean", "raw": ()}
+9992 load: after rewriting: {10: "boolean", "raw": ()} <- channel-empty? {chan: ()}
 9993 parse: instruction: channel-full?
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {3: ("address" "channel" "number")}
-9993 parse:   product: {5: "boolean"}
-9992 load: after rewriting: {5: "boolean"} <- channel-full? {3: ("address" "channel" "number")}
+9993 parse:   ingredient: {chan: ()}
+9993 parse:   product: {11: "boolean", "raw": ()}
+9992 load: after rewriting: {11: "boolean", "raw": ()} <- channel-full? {chan: ()}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
+9991 transform: --- deduce types for recipe run_1001
+9992 transform: source => ("address" "source" "number")
+9992 transform: sink => ("address" "sink" "number")
+9992 transform: source <= ("address" "source" "number")
+9992 transform: chan => ("address" "channel" "number")
+9992 transform: sink <= ("address" "sink" "number")
+9992 transform: sink <= ("address" "sink" "number")
+9992 transform: chan <= ("address" "channel" "number")
+9992 transform: chan <= ("address" "channel" "number")
+9993 transform: {source: ("address" "source" "number")}, {sink: ("address" "sink" "number")} <- new-channel {3: "literal", "capacity": ()}
+9993 transform: {chan: ("address" "channel" "number")} <- get {source: ("address" "source" "number"), "lookup": ()}, {chan: "offset"}
+9993 transform: {sink: ("address" "sink" "number")} <- write {sink: ("address" "sink" "number")}, {34: "literal"}
+9993 transform: {10: "boolean", "raw": ()} <- channel-empty? {chan: ("address" "channel" "number")}
+9993 transform: {11: "boolean", "raw": ()} <- channel-full? {chan: ("address" "channel" "number")}
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
+9992 transform: source => ("address" "source" "number")
+9992 transform: sink => ("address" "sink" "number")
+9992 transform: chan => ("address" "channel" "number")
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
+9993 name: assign source 1
+9993 name: assign sink 2
 9993 name: element chan of type source is at offset 0
+9993 name: assign chan 3
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction {1: ("address" "source" "number")}, {2: ("address" "sink" "number")} <- new-channel {3: "literal", "capacity": ()}
+9992 transform: instruction {source: ("address" "source" "number")}, {sink: ("address" "sink" "number")} <- new-channel {3: "literal", "capacity": ()}
 9992 transform: checking variant (strict) 0: recipe new-channel {capacity: "number"} -> {in: ("address" "source" "_elem")} {out: ("address" "sink" "_elem")}
 9993 transform: strict match failed: product 0
 9992 transform: checking variant (strict) 1: recipe new-channel_2 {capacity: "number"} -> {in: ("address" "source" "character")} {out: ("address" "sink" "character")}
@@ -328,56 +348,6 @@
 9993 name: assign out 5
 9993 name: element chan of type sink is at offset 0
 9991 transform: --- resolve ambiguous calls for recipe new-channel_3
-9992 transform: instruction {result: (), "lookup": ()} <- put {result: (), "lookup": ()}, {first-full: "offset"}, {0: "literal"}
-9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9993 transform: concrete-type match failed: ingredient 0
-9992 transform: checking variant (strict except literal-against-boolean) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: instruction {result: (), "lookup": ()} <- put {result: (), "lookup": ()}, {first-free: "offset"}, {0: "literal"}
-9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9993 transform: concrete-type match failed: ingredient 0
-9992 transform: checking variant (strict except literal-against-boolean) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: instruction {result: (), "lookup": ()} <- put {result: (), "lookup": ()}, {data: "offset"}, {data: ()}
-9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9993 transform: concrete-type match failed: ingredient 0
-9992 transform: checking variant (strict except literal-against-boolean) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: instruction {in: (), "lookup": ()} <- put {in: (), "lookup": ()}, {chan: "offset"}, {result: ()}
-9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9993 transform: concrete-type match failed: ingredient 0
-9992 transform: checking variant (strict except literal-against-boolean) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: instruction {out: (), "lookup": ()} <- put {out: (), "lookup": ()}, {chan: "offset"}, {result: ()}
-9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9993 transform: concrete-type match failed: ingredient 0
-9992 transform: checking variant (strict except literal-against-boolean) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
 9992 transform: --- compute address offsets for new-channel_3
 9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: - compute address offsets for {capacity: "number"} <- next-ingredient-without-typechecking 
@@ -434,7 +404,7 @@
 9991 transform: --- check that recipe new-channel_3 sets default-space
 9991 transform: --- checking reply instructions against header for new-channel_3
 9992 transform: new specialization: new-channel_3
-9992 transform: instruction {2: ("address" "sink" "number")} <- write {2: ("address" "sink" "number")}, {34: "literal"}
+9992 transform: instruction {sink: ()} <- write {sink: ()}, {34: "literal"}
 9992 transform: checking variant (strict) 0: recipe write {out: ("address" "sink" "_elem")} {val: "_elem"} -> {out: ("address" "sink" "_elem")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe write_2 {out: ("address" "sink" "character")} {val: "character"} -> {out: ("address" "sink" "character")}
@@ -1110,6 +1080,16 @@
 9991 transform: --- check that recipe channel-full?_3 sets default-space
 9991 transform: --- checking reply instructions against header for channel-full?_3
 9992 transform: new specialization: channel-full?_3
+9992 transform: instruction {circular-buffer: (), "lookup": ()} <- put-index {circular-buffer: (), "lookup": ()}, {free: ()}, {val: ()}
+9992 transform: checking variant (strict) 0: recipe put-index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
+9993 transform: strict match failed: ingredient 0
+9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put-index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
+9993 transform: strict match failed: ingredient 0
+9993 transform: concrete-type match failed: ingredient 0
+9992 transform: checking variant (strict except literal-against-boolean) 0: recipe put-index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
+9993 transform: strict match failed: ingredient 0
+9992 transform: checking variant 0: recipe put-index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
+9993 transform: strict match failed: ingredient 0
 9992 transform: instruction {len: "number"} <- length {circular-buffer: (), "lookup": ()}
 9992 transform: checking variant (strict) 0: recipe length_2 {l: ("address" "list" "_elem")} -> {result: "number"}
 9993 transform: strict match failed: ingredient 0
@@ -1119,16 +1099,6 @@
 9992 transform: checking variant (strict except literal-against-boolean) 0: recipe length_2 {l: ("address" "list" "_elem")} -> {result: "number"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe length_2 {l: ("address" "list" "_elem")} -> {result: "number"}
-9993 transform: strict match failed: ingredient 0
-9992 transform: instruction {chan: (), "lookup": ()} <- put {chan: (), "lookup": ()}, {first-free: "offset"}, {free: ()}
-9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9993 transform: concrete-type match failed: ingredient 0
-9992 transform: checking variant (strict except literal-against-boolean) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: --- compute address offsets for write_3
 9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1189,7 +1159,7 @@
 9991 transform: --- check that recipe write_3 sets default-space
 9991 transform: --- checking reply instructions against header for write_3
 9992 transform: new specialization: write_3
-9992 transform: instruction {4: "boolean"} <- channel-empty? {3: ("address" "channel" "number")}
+9992 transform: instruction {10: "boolean", "raw": ()} <- channel-empty? {chan: ()}
 9992 transform: checking variant (strict) 0: recipe channel-empty? {chan: ("address" "channel" "_elem")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe channel-empty?_2 {chan: ("address" "channel" "character")} -> {result: "boolean"}
@@ -1341,18 +1311,18 @@
 9991 transform: --- check that recipe channel-empty?_3 sets default-space
 9991 transform: --- checking reply instructions against header for channel-empty?_3
 9992 transform: new specialization: channel-empty?_3
-9992 transform: instruction {5: "boolean"} <- channel-full? {3: ("address" "channel" "number")}
+9992 transform: instruction {11: "boolean", "raw": ()} <- channel-full? {chan: ()}
 9992 transform: checking variant (strict) 0: recipe channel-full? {chan: ("address" "channel" "_elem")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe channel-full?_2 {chan: ("address" "channel" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 2: recipe channel-full?_3 {chan: ("address" "channel" "number")} -> {result: "boolean"}
 9992 transform: --- compute address offsets for run_1001
-9993 transform: - compute address offsets for {1: ("address" "source" "number")}, {2: ("address" "sink" "number")} <- new-channel_3 {3: "literal", "capacity": ()}
-9993 transform: - compute address offsets for {3: ("address" "channel" "number")} <- get {1: ("address" "source" "number"), "lookup": ()}, {chan: "offset"}
-9993 transform: - compute address offsets for {2: ("address" "sink" "number")} <- write_3 {2: ("address" "sink" "number")}, {34: "literal"}
-9993 transform: - compute address offsets for {4: "boolean"} <- channel-empty?_3 {3: ("address" "channel" "number")}
-9993 transform: - compute address offsets for {5: "boolean"} <- channel-full?_3 {3: ("address" "channel" "number")}
+9993 transform: - compute address offsets for {source: ("address" "source" "number")}, {sink: ("address" "sink" "number")} <- new-channel_3 {3: "literal", "capacity": ()}
+9993 transform: - compute address offsets for {chan: ("address" "channel" "number")} <- get {source: ("address" "source" "number"), "lookup": ()}, {chan: "offset"}
+9993 transform: - compute address offsets for {sink: ("address" "sink" "number")} <- write_3 {sink: ("address" "sink" "number")}, {34: "literal"}
+9993 transform: - compute address offsets for {10: "boolean", "raw": ()} <- channel-empty?_3 {chan: ("address" "channel" "number")}
+9993 transform: - compute address offsets for {11: "boolean", "raw": ()} <- channel-full?_3 {chan: ("address" "channel" "number")}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
@@ -1372,7 +1342,7 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: {1: ("address" "source" "number")}, {2: ("address" "sink" "number")} <- new-channel_3 {3: "literal", "capacity": ()}
+ 103 run: {source: ("address" "source" "number")}, {sink: ("address" "sink" "number")} <- new-channel_3 {3: "literal", "capacity": ()}
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 6
@@ -1517,7 +1487,7 @@
 9998 run: result 1 is 1021
 9999 mem: storing 1019 in location 1
 9999 mem: storing 1021 in location 2
- 103 run: {3: ("address" "channel" "number")} <- get {1: ("address" "source" "number"), "lookup": ()}, {chan: "offset"}
+ 103 run: {chan: ("address" "channel" "number")} <- get {source: ("address" "source" "number"), "lookup": ()}, {chan: "offset"}
 9999 mem: location 1 is 1019
 9999 mem: skipping refcount at 1019
 9999 mem: location 1020 is 1008
@@ -1529,7 +1499,7 @@
 9999 mem: location 3 is 0
 9999 mem: incrementing refcount of 1008: 2 -> 3
 9999 mem: storing 1008 in location 3
- 103 run: {2: ("address" "sink" "number")} <- write_3 {2: ("address" "sink" "number")}, {34: "literal"}
+ 103 run: {sink: ("address" "sink" "number")} <- write_3 {sink: ("address" "sink" "number")}, {34: "literal"}
 9999 mem: location 2 is 1021
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1806,7 +1776,7 @@
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1021
 9999 mem: storing 1021 in location 2
- 103 run: {4: "boolean"} <- channel-empty?_3 {3: ("address" "channel" "number")}
+ 103 run: {10: "boolean", "raw": ()} <- channel-empty?_3 {chan: ("address" "channel" "number")}
 9999 mem: location 3 is 1008
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1871,8 +1841,8 @@
 9999 abandon: saving 1050 in free-list of size 7
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 0
-9999 mem: storing 0 in location 4
- 103 run: {5: "boolean"} <- channel-full?_3 {3: ("address" "channel" "number")}
+9999 mem: storing 0 in location 10
+ 103 run: {11: "boolean", "raw": ()} <- channel-full?_3 {chan: ("address" "channel" "number")}
 9999 mem: location 3 is 1008
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1997,11 +1967,11 @@
 9999 abandon: saving 1035 in free-list of size 9
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 0
-9999 mem: storing 0 in location 5
+9999 mem: storing 0 in location 11
  103 run: reply 
 9999 trace: reply: decrementing callstack depth from 2
- 102 run: memory-should-contain {"\n    4 <- 0  # empty?\n    5 <- 0  # full?\n  ": "literal-string"}
-9999 run: checking location 4
-9999 run: checking location 5
+ 102 run: memory-should-contain {"\n    10 <- 0  # empty?\n    11 <- 0  # full?\n  ": "literal-string"}
+9999 run: checking location 10
+9999 run: checking location 11
  102 run: reply 
 9999 trace: reply: decrementing callstack depth from 1

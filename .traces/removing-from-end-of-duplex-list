@@ -1,19 +1,19 @@
 9991 parse: --- defining scenario_removing-from-end-of-duplex-list
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    1:address:duplex-list:character <- push 3, 0\n    1:address:duplex-list:character <- push 4, 1:address:duplex-list:character\n    1:address:duplex-list:character <- push 5, 1:address:duplex-list:character\n    # delete last element\n    2:address:duplex-list:character <- next 1:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    1:address:duplex-list:character <- remove 2:address:duplex-list:character, 1:address:duplex-list:character\n    3:boolean <- equal 2:address:duplex-list:character, 0\n    # check structure like before\n    2:address:duplex-list:character <- copy 1:address:duplex-list:character\n    4:character <- first 2:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    5:character <- first 2:address:duplex-list:character\n    6:address:duplex-list:character <- next 2:address:duplex-list:character\n    2:address:duplex-list:character <- prev 2:address:duplex-list:character\n    7:character <- first 2:address:duplex-list:character\n    8:boolean <- equal 1:address:duplex-list:character, 2:address:duplex-list:character\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    1:address:duplex-list:character <- push 3, 0\n    1:address:duplex-list:character <- push 4, 1:address:duplex-list:character\n    1:address:duplex-list:character <- push 5, 1:address:duplex-list:character\n    # delete last element\n    2:address:duplex-list:character <- next 1:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    1:address:duplex-list:character <- remove 2:address:duplex-list:character, 1:address:duplex-list:character\n    3:boolean <- equal 2:address:duplex-list:character, 0\n    # check structure like before\n    2:address:duplex-list:character <- copy 1:address:duplex-list:character\n    4:character <- first 2:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    5:character <- first 2:address:duplex-list:character\n    6:address:duplex-list:character <- next 2:address:duplex-list:character\n    2:address:duplex-list:character <- prev 2:address:duplex-list:character\n    7:character <- first 2:address:duplex-list:character\n    8:boolean <- equal 1:address:duplex-list:character, 2:address:duplex-list:character\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    # delete last element\n    list2:address:duplex-list:character <- next list\n    list2 <- next list2\n    list <- remove list2, list\n    10:boolean/raw <- equal list2, 0\n    # check structure like before\n    list2 <- copy list\n    11:character/raw <- first list2\n    list2 <- next list2\n    12:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    # delete last element\n    list2:address:duplex-list:character <- next list\n    list2 <- next list2\n    list <- remove list2, list\n    10:boolean/raw <- equal list2, 0\n    # check structure like before\n    list2 <- copy list\n    11:character/raw <- first list2\n    list2 <- next list2\n    12:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    3 <- 0  # remove returned non-null\n    4 <- 5  # scanning next, skipping deleted element\n    5 <- 4\n    6 <- 0  # no more elements\n    7 <- 5  # prev of final element\n    8 <- 1  # list back at start\n  ": "literal-string"}
-9992 load: after rewriting: memory-should-contain {"\n    3 <- 0  # remove returned non-null\n    4 <- 5  # scanning next, skipping deleted element\n    5 <- 4\n    6 <- 0  # no more elements\n    7 <- 5  # prev of final element\n    8 <- 1  # list back at start\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    10 <- 0  # remove returned non-null\n    11 <- 5  # scanning next, skipping deleted element\n    12 <- 4\n    20 <- 0  # no more elements\n    30 <- 5  # prev of final element\n    40 <- 1  # list back at start\n  ": "literal-string"}
+9992 load: after rewriting: memory-should-contain {"\n    10 <- 0  # remove returned non-null\n    11 <- 5  # scanning next, skipping deleted element\n    12 <- 4\n    20 <- 0  # no more elements\n    30 <- 5  # prev of final element\n    40 <- 1  # list back at start\n  ": "literal-string"}
 9999 parse: recipe scenario_removing-from-end-of-duplex-list has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_removing-from-end-of-duplex-list
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_removing-from-end-of-duplex-list
 9991 transform: --- deduce types for recipe scenario_removing-from-end-of-duplex-list
-9993 transform: run {"\n    1:address:duplex-list:character <- push 3, 0\n    1:address:duplex-list:character <- push 4, 1:address:duplex-list:character\n    1:address:duplex-list:character <- push 5, 1:address:duplex-list:character\n    # delete last element\n    2:address:duplex-list:character <- next 1:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    1:address:duplex-list:character <- remove 2:address:duplex-list:character, 1:address:duplex-list:character\n    3:boolean <- equal 2:address:duplex-list:character, 0\n    # check structure like before\n    2:address:duplex-list:character <- copy 1:address:duplex-list:character\n    4:character <- first 2:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    5:character <- first 2:address:duplex-list:character\n    6:address:duplex-list:character <- next 2:address:duplex-list:character\n    2:address:duplex-list:character <- prev 2:address:duplex-list:character\n    7:character <- first 2:address:duplex-list:character\n    8:boolean <- equal 1:address:duplex-list:character, 2:address:duplex-list:character\n  ": "literal-string"}
-9993 transform: memory-should-contain {"\n    3 <- 0  # remove returned non-null\n    4 <- 5  # scanning next, skipping deleted element\n    5 <- 4\n    6 <- 0  # no more elements\n    7 <- 5  # prev of final element\n    8 <- 1  # list back at start\n  ": "literal-string"}
+9993 transform: run {"\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    # delete last element\n    list2:address:duplex-list:character <- next list\n    list2 <- next list2\n    list <- remove list2, list\n    10:boolean/raw <- equal list2, 0\n    # check structure like before\n    list2 <- copy list\n    11:character/raw <- first list2\n    list2 <- next list2\n    12:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
+9993 transform: memory-should-contain {"\n    10 <- 0  # remove returned non-null\n    11 <- 5  # scanning next, skipping deleted element\n    12 <- 4\n    20 <- 0  # no more elements\n    30 <- 5  # prev of final element\n    40 <- 1  # list back at start\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_removing-from-end-of-duplex-list
 9991 transform: --- deduce types for recipe scenario_removing-from-end-of-duplex-list
 9991 transform: --- check for invalid types in recipe scenario_removing-from-end-of-duplex-list
@@ -21,8 +21,8 @@
 9991 transform: --- transform names for recipe scenario_removing-from-end-of-duplex-list
 9991 transform: --- resolve ambiguous calls for recipe scenario_removing-from-end-of-duplex-list
 9992 transform: --- compute address offsets for scenario_removing-from-end-of-duplex-list
-9993 transform: - compute address offsets for run {"\n    1:address:duplex-list:character <- push 3, 0\n    1:address:duplex-list:character <- push 4, 1:address:duplex-list:character\n    1:address:duplex-list:character <- push 5, 1:address:duplex-list:character\n    # delete last element\n    2:address:duplex-list:character <- next 1:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    1:address:duplex-list:character <- remove 2:address:duplex-list:character, 1:address:duplex-list:character\n    3:boolean <- equal 2:address:duplex-list:character, 0\n    # check structure like before\n    2:address:duplex-list:character <- copy 1:address:duplex-list:character\n    4:character <- first 2:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    5:character <- first 2:address:duplex-list:character\n    6:address:duplex-list:character <- next 2:address:duplex-list:character\n    2:address:duplex-list:character <- prev 2:address:duplex-list:character\n    7:character <- first 2:address:duplex-list:character\n    8:boolean <- equal 1:address:duplex-list:character, 2:address:duplex-list:character\n  ": "literal-string"}
-9993 transform: - compute address offsets for memory-should-contain {"\n    3 <- 0  # remove returned non-null\n    4 <- 5  # scanning next, skipping deleted element\n    5 <- 4\n    6 <- 0  # no more elements\n    7 <- 5  # prev of final element\n    8 <- 1  # list back at start\n  ": "literal-string"}
+9993 transform: - compute address offsets for run {"\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    # delete last element\n    list2:address:duplex-list:character <- next list\n    list2 <- next list2\n    list <- remove list2, list\n    10:boolean/raw <- equal list2, 0\n    # check structure like before\n    list2 <- copy list\n    11:character/raw <- first list2\n    list2 <- next list2\n    12:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    10 <- 0  # remove returned non-null\n    11 <- 5  # scanning next, skipping deleted element\n    12 <- 4\n    20 <- 0  # no more elements\n    30 <- 5  # prev of final element\n    40 <- 1  # list back at start\n  ": "literal-string"}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_removing-from-end-of-duplex-list
 9991 transform: --- transform braces for recipe scenario_removing-from-end-of-duplex-list
@@ -41,100 +41,145 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_removing-from-end-of-duplex-list
- 102 run: run {"\n    1:address:duplex-list:character <- push 3, 0\n    1:address:duplex-list:character <- push 4, 1:address:duplex-list:character\n    1:address:duplex-list:character <- push 5, 1:address:duplex-list:character\n    # delete last element\n    2:address:duplex-list:character <- next 1:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    1:address:duplex-list:character <- remove 2:address:duplex-list:character, 1:address:duplex-list:character\n    3:boolean <- equal 2:address:duplex-list:character, 0\n    # check structure like before\n    2:address:duplex-list:character <- copy 1:address:duplex-list:character\n    4:character <- first 2:address:duplex-list:character\n    2:address:duplex-list:character <- next 2:address:duplex-list:character\n    5:character <- first 2:address:duplex-list:character\n    6:address:duplex-list:character <- next 2:address:duplex-list:character\n    2:address:duplex-list:character <- prev 2:address:duplex-list:character\n    7:character <- first 2:address:duplex-list:character\n    8:boolean <- equal 1:address:duplex-list:character, 2:address:duplex-list:character\n  ": "literal-string"}
+ 102 run: run {"\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    # delete last element\n    list2:address:duplex-list:character <- next list\n    list2 <- next list2\n    list <- remove list2, list\n    10:boolean/raw <- equal list2, 0\n    # check structure like before\n    list2 <- copy list\n    11:character/raw <- first list2\n    list2 <- next list2\n    12:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: push
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {3: "literal"}
 9993 parse:   ingredient: {0: "literal"}
-9993 parse:   product: {1: ("address" "duplex-list" "character")}
-9992 load: after rewriting: {1: ("address" "duplex-list" "character")} <- push {3: "literal"}, {0: "literal"}
+9993 parse:   product: {list: ("address" "duplex-list" "character")}
+9992 load: after rewriting: {list: ("address" "duplex-list" "character")} <- push {3: "literal"}, {0: "literal"}
 9993 parse: instruction: push
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {4: "literal"}
-9993 parse:   ingredient: {1: ("address" "duplex-list" "character")}
-9993 parse:   product: {1: ("address" "duplex-list" "character")}
-9992 load: after rewriting: {1: ("address" "duplex-list" "character")} <- push {4: "literal"}, {1: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list: ()}
+9993 parse:   product: {list: ()}
+9992 load: after rewriting: {list: ()} <- push {4: "literal"}, {list: ()}
 9993 parse: instruction: push
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {5: "literal"}
-9993 parse:   ingredient: {1: ("address" "duplex-list" "character")}
-9993 parse:   product: {1: ("address" "duplex-list" "character")}
-9992 load: after rewriting: {1: ("address" "duplex-list" "character")} <- push {5: "literal"}, {1: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list: ()}
+9993 parse:   product: {list: ()}
+9992 load: after rewriting: {list: ()} <- push {5: "literal"}, {list: ()}
 9993 parse: instruction: next
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {1: ("address" "duplex-list" "character")}
-9993 parse:   product: {2: ("address" "duplex-list" "character")}
-9992 load: after rewriting: {2: ("address" "duplex-list" "character")} <- next {1: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list: ()}
+9993 parse:   product: {list2: ("address" "duplex-list" "character")}
+9992 load: after rewriting: {list2: ("address" "duplex-list" "character")} <- next {list: ()}
 9993 parse: instruction: next
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {2: ("address" "duplex-list" "character")}
-9993 parse:   product: {2: ("address" "duplex-list" "character")}
-9992 load: after rewriting: {2: ("address" "duplex-list" "character")} <- next {2: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list2: ()}
+9993 parse:   product: {list2: ()}
+9992 load: after rewriting: {list2: ()} <- next {list2: ()}
 9993 parse: instruction: remove
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {2: ("address" "duplex-list" "character")}
-9993 parse:   ingredient: {1: ("address" "duplex-list" "character")}
-9993 parse:   product: {1: ("address" "duplex-list" "character")}
-9992 load: after rewriting: {1: ("address" "duplex-list" "character")} <- remove {2: ("address" "duplex-list" "character")}, {1: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list2: ()}
+9993 parse:   ingredient: {list: ()}
+9993 parse:   product: {list: ()}
+9992 load: after rewriting: {list: ()} <- remove {list2: ()}, {list: ()}
 9993 parse: instruction: equal
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {2: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list2: ()}
 9993 parse:   ingredient: {0: "literal"}
-9993 parse:   product: {3: "boolean"}
-9992 load: after rewriting: {3: "boolean"} <- equal {2: ("address" "duplex-list" "character")}, {0: "literal"}
+9993 parse:   product: {10: "boolean", "raw": ()}
+9992 load: after rewriting: {10: "boolean", "raw": ()} <- equal {list2: ()}, {0: "literal"}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {1: ("address" "duplex-list" "character")}
-9993 parse:   product: {2: ("address" "duplex-list" "character")}
-9992 load: after rewriting: {2: ("address" "duplex-list" "character")} <- copy {1: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list: ()}
+9993 parse:   product: {list2: ()}
+9992 load: after rewriting: {list2: ()} <- copy {list: ()}
 9993 parse: instruction: first
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {2: ("address" "duplex-list" "character")}
-9993 parse:   product: {4: "character"}
-9992 load: after rewriting: {4: "character"} <- first {2: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list2: ()}
+9993 parse:   product: {11: "character", "raw": ()}
+9992 load: after rewriting: {11: "character", "raw": ()} <- first {list2: ()}
 9993 parse: instruction: next
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {2: ("address" "duplex-list" "character")}
-9993 parse:   product: {2: ("address" "duplex-list" "character")}
-9992 load: after rewriting: {2: ("address" "duplex-list" "character")} <- next {2: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list2: ()}
+9993 parse:   product: {list2: ()}
+9992 load: after rewriting: {list2: ()} <- next {list2: ()}
 9993 parse: instruction: first
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {2: ("address" "duplex-list" "character")}
-9993 parse:   product: {5: "character"}
-9992 load: after rewriting: {5: "character"} <- first {2: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list2: ()}
+9993 parse:   product: {12: "character", "raw": ()}
+9992 load: after rewriting: {12: "character", "raw": ()} <- first {list2: ()}
 9993 parse: instruction: next
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {2: ("address" "duplex-list" "character")}
-9993 parse:   product: {6: ("address" "duplex-list" "character")}
-9992 load: after rewriting: {6: ("address" "duplex-list" "character")} <- next {2: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list2: ()}
+9993 parse:   product: {20: ("address" "duplex-list" "character"), "raw": ()}
+9992 load: after rewriting: {20: ("address" "duplex-list" "character"), "raw": ()} <- next {list2: ()}
 9993 parse: instruction: prev
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {2: ("address" "duplex-list" "character")}
-9993 parse:   product: {2: ("address" "duplex-list" "character")}
-9992 load: after rewriting: {2: ("address" "duplex-list" "character")} <- prev {2: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list2: ()}
+9993 parse:   product: {list2: ()}
+9992 load: after rewriting: {list2: ()} <- prev {list2: ()}
 9993 parse: instruction: first
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {2: ("address" "duplex-list" "character")}
-9993 parse:   product: {7: "character"}
-9992 load: after rewriting: {7: "character"} <- first {2: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list2: ()}
+9993 parse:   product: {30: "character", "raw": ()}
+9992 load: after rewriting: {30: "character", "raw": ()} <- first {list2: ()}
 9993 parse: instruction: equal
 9993 parse:   number of ingredients: 2
-9993 parse:   ingredient: {1: ("address" "duplex-list" "character")}
-9993 parse:   ingredient: {2: ("address" "duplex-list" "character")}
-9993 parse:   product: {8: "boolean"}
-9992 load: after rewriting: {8: "boolean"} <- equal {1: ("address" "duplex-list" "character")}, {2: ("address" "duplex-list" "character")}
+9993 parse:   ingredient: {list: ()}
+9993 parse:   ingredient: {list2: ()}
+9993 parse:   product: {40: "boolean", "raw": ()}
+9992 load: after rewriting: {40: "boolean", "raw": ()} <- equal {list: ()}, {list2: ()}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
+9991 transform: --- deduce types for recipe run_1001
+9992 transform: list => ("address" "duplex-list" "character")
+9992 transform: list <= ("address" "duplex-list" "character")
+9992 transform: list <= ("address" "duplex-list" "character")
+9992 transform: list <= ("address" "duplex-list" "character")
+9992 transform: list <= ("address" "duplex-list" "character")
+9992 transform: list <= ("address" "duplex-list" "character")
+9992 transform: list2 => ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list <= ("address" "duplex-list" "character")
+9992 transform: list <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9992 transform: list <= ("address" "duplex-list" "character")
+9992 transform: list2 <= ("address" "duplex-list" "character")
+9993 transform: {list: ("address" "duplex-list" "character")} <- push {3: "literal"}, {0: "literal"}
+9993 transform: {list: ("address" "duplex-list" "character")} <- push {4: "literal"}, {list: ("address" "duplex-list" "character")}
+9993 transform: {list: ("address" "duplex-list" "character")} <- push {5: "literal"}, {list: ("address" "duplex-list" "character")}
+9993 transform: {list2: ("address" "duplex-list" "character")} <- next {list: ("address" "duplex-list" "character")}
+9993 transform: {list2: ("address" "duplex-list" "character")} <- next {list2: ("address" "duplex-list" "character")}
+9993 transform: {list: ("address" "duplex-list" "character")} <- remove {list2: ("address" "duplex-list" "character")}, {list: ("address" "duplex-list" "character")}
+9993 transform: {10: "boolean", "raw": ()} <- equal {list2: ("address" "duplex-list" "character")}, {0: "literal"}
+9993 transform: {list2: ("address" "duplex-list" "character")} <- copy {list: ("address" "duplex-list" "character")}
+9993 transform: {11: "character", "raw": ()} <- first {list2: ("address" "duplex-list" "character")}
+9993 transform: {list2: ("address" "duplex-list" "character")} <- next {list2: ("address" "duplex-list" "character")}
+9993 transform: {12: "character", "raw": ()} <- first {list2: ("address" "duplex-list" "character")}
+9993 transform: {20: ("address" "duplex-list" "character"), "raw": ()} <- next {list2: ("address" "duplex-list" "character")}
+9993 transform: {list2: ("address" "duplex-list" "character")} <- prev {list2: ("address" "duplex-list" "character")}
+9993 transform: {30: "character", "raw": ()} <- first {list2: ("address" "duplex-list" "character")}
+9993 transform: {40: "boolean", "raw": ()} <- equal {list: ("address" "duplex-list" "character")}, {list2: ("address" "duplex-list" "character")}
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
+9992 transform: list => ("address" "duplex-list" "character")
+9992 transform: list2 => ("address" "duplex-list" "character")
 9991 transform: --- check for invalid types in recipe run_1001
 9991 transform: --- collect surrounding spaces for recipe run_1001
 9991 transform: --- transform names for recipe run_1001
+9993 name: assign list 1
+9993 name: assign list2 2
 9991 transform: --- resolve ambiguous calls for recipe run_1001
-9992 transform: instruction {1: ("address" "duplex-list" "character")} <- push {3: "literal"}, {0: "literal"}
+9992 transform: instruction {list: ("address" "duplex-list" "character")} <- push {3: "literal"}, {0: "literal"}
 9992 transform: checking variant (strict) 0: recipe push {x: "_elem"} {in: ("address" "list" "_elem")} -> {result: ("address" "list" "_elem")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe push_2 {x: "_elem"} {in: ("address" "duplex-list" "_elem")} -> {in: ("address" "duplex-list" "_elem")}
@@ -306,16 +351,6 @@
 9993 name: assign result 3
 9993 name: element prev of type duplex-list is at offset 2
 9991 transform: --- resolve ambiguous calls for recipe push_6
-9992 transform: instruction {in: (), "lookup": ()} <- put {in: (), "lookup": ()}, {prev: "offset"}, {result: ()}
-9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9993 transform: concrete-type match failed: ingredient 0
-9992 transform: checking variant (strict except literal-against-boolean) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
 9992 transform: --- compute address offsets for push_6
 9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: - compute address offsets for {x: "character"} <- next-ingredient-without-typechecking 
@@ -357,7 +392,7 @@
 9991 transform: --- check that recipe push_6 sets default-space
 9991 transform: --- checking reply instructions against header for push_6
 9992 transform: new specialization: push_6
-9992 transform: instruction {1: ("address" "duplex-list" "character")} <- push {4: "literal"}, {1: ("address" "duplex-list" "character")}
+9992 transform: instruction {list: ()} <- push {4: "literal"}, {list: ()}
 9992 transform: checking variant (strict) 0: recipe push {x: "_elem"} {in: ("address" "list" "_elem")} -> {result: ("address" "list" "_elem")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe push_2 {x: "_elem"} {in: ("address" "duplex-list" "_elem")} -> {in: ("address" "duplex-list" "_elem")}
@@ -533,16 +568,6 @@
 9993 name: assign result 3
 9993 name: element prev of type duplex-list is at offset 2
 9991 transform: --- resolve ambiguous calls for recipe push_7
-9992 transform: instruction {in: (), "lookup": ()} <- put {in: (), "lookup": ()}, {prev: "offset"}, {result: ()}
-9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9993 transform: concrete-type match failed: ingredient 0
-9992 transform: checking variant (strict except literal-against-boolean) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
 9992 transform: --- compute address offsets for push_7
 9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: - compute address offsets for {x: "character"} <- next-ingredient-without-typechecking 
@@ -584,7 +609,7 @@
 9991 transform: --- check that recipe push_7 sets default-space
 9991 transform: --- checking reply instructions against header for push_7
 9992 transform: new specialization: push_7
-9992 transform: instruction {1: ("address" "duplex-list" "character")} <- push {5: "literal"}, {1: ("address" "duplex-list" "character")}
+9992 transform: instruction {list: ()} <- push {5: "literal"}, {list: ()}
 9992 transform: checking variant (strict) 0: recipe push {x: "_elem"} {in: ("address" "list" "_elem")} -> {result: ("address" "list" "_elem")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe push_2 {x: "_elem"} {in: ("address" "duplex-list" "_elem")} -> {in: ("address" "duplex-list" "_elem")}
@@ -764,16 +789,6 @@
 9993 name: assign result 3
 9993 name: element prev of type duplex-list is at offset 2
 9991 transform: --- resolve ambiguous calls for recipe push_8
-9992 transform: instruction {in: (), "lookup": ()} <- put {in: (), "lookup": ()}, {prev: "offset"}, {result: ()}
-9992 transform: checking variant (strict) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9993 transform: concrete-type match failed: ingredient 0
-9992 transform: checking variant (strict except literal-against-boolean) 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
-9992 transform: checking variant 0: recipe put_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
-9993 transform: strict match failed: ingredient 0
 9992 transform: --- compute address offsets for push_8
 9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: - compute address offsets for {x: "character"} <- next-ingredient-without-typechecking 
@@ -815,19 +830,19 @@
 9991 transform: --- check that recipe push_8 sets default-space
 9991 transform: --- checking reply instructions against header for push_8
 9992 transform: new specialization: push_8
-9992 transform: instruction {2: ("address" "duplex-list" "character")} <- next {1: ("address" "duplex-list" "character")}
+9992 transform: instruction {list2: ("address" "duplex-list" "character")} <- next {list: ()}
 9992 transform: checking variant (strict) 0: recipe next {in: ("address" "duplex-list" "_elem")} -> {result: ("address" "duplex-list" "_elem"), "contained-in": "in"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe next_2 {in: ("address" "duplex-list" "character")} -> {result: ("address" "duplex-list" "character"), "contained-in": "in"}
-9992 transform: instruction {2: ("address" "duplex-list" "character")} <- next {2: ("address" "duplex-list" "character")}
+9992 transform: instruction {list2: ()} <- next {list2: ()}
 9992 transform: checking variant (strict) 0: recipe next {in: ("address" "duplex-list" "_elem")} -> {result: ("address" "duplex-list" "_elem"), "contained-in": "in"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe next_2 {in: ("address" "duplex-list" "character")} -> {result: ("address" "duplex-list" "character"), "contained-in": "in"}
-9992 transform: instruction {1: ("address" "duplex-list" "character")} <- remove {2: ("address" "duplex-list" "character")}, {1: ("address" "duplex-list" "character")}
+9992 transform: instruction {list: ()} <- remove {list2: ()}, {list: ()}
 9992 transform: checking variant (strict) 0: recipe remove {x: ("address" "duplex-list" "_elem"), "contained-in": "in"} {in: ("address" "duplex-list" "_elem")} -> {in: ("address" "duplex-list" "_elem")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe remove_2 {x: ("address" "duplex-list" "character"), "contained-in": "in"} {in: ("address" "duplex-list" "character")} -> {in: ("address" "duplex-list" "character")}
-9992 transform: instruction {3: "boolean"} <- equal {2: ("address" "duplex-list" "character")}, {0: "literal"}
+9992 transform: instruction {10: "boolean", "raw": ()} <- equal {list2: ()}, {0: "literal"}
 9992 transform: checking variant (strict) 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
@@ -836,7 +851,7 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
-9992 transform: instruction {4: "character"} <- first {2: ("address" "duplex-list" "character")}
+9992 transform: instruction {11: "character", "raw": ()} <- first {list2: ()}
 9992 transform: checking variant (strict) 0: recipe first {in: ("address" "list" "_elem")} -> {result: "_elem"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe first_2 {in: ("address" "duplex-list" "_elem")} -> {result: "_elem"}
@@ -978,11 +993,11 @@
 9991 transform: --- check that recipe first_4 sets default-space
 9991 transform: --- checking reply instructions against header for first_4
 9992 transform: new specialization: first_4
-9992 transform: instruction {2: ("address" "duplex-list" "character")} <- next {2: ("address" "duplex-list" "character")}
+9992 transform: instruction {list2: ()} <- next {list2: ()}
 9992 transform: checking variant (strict) 0: recipe next {in: ("address" "duplex-list" "_elem")} -> {result: ("address" "duplex-list" "_elem"), "contained-in": "in"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe next_2 {in: ("address" "duplex-list" "character")} -> {result: ("address" "duplex-list" "character"), "contained-in": "in"}
-9992 transform: instruction {5: "character"} <- first {2: ("address" "duplex-list" "character")}
+9992 transform: instruction {12: "character", "raw": ()} <- first {list2: ()}
 9992 transform: checking variant (strict) 0: recipe first {in: ("address" "list" "_elem")} -> {result: "_elem"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe first_2 {in: ("address" "duplex-list" "_elem")} -> {result: "_elem"}
@@ -990,15 +1005,15 @@
 9992 transform: checking variant (strict) 2: recipe first_3 {in: ("address" "list" "address" "operation")} -> {result: ("address" "operation")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 3: recipe first_4 {in: ("address" "duplex-list" "character")} -> {result: "character"}
-9992 transform: instruction {6: ("address" "duplex-list" "character")} <- next {2: ("address" "duplex-list" "character")}
+9992 transform: instruction {20: ("address" "duplex-list" "character"), "raw": ()} <- next {list2: ()}
 9992 transform: checking variant (strict) 0: recipe next {in: ("address" "duplex-list" "_elem")} -> {result: ("address" "duplex-list" "_elem"), "contained-in": "in"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe next_2 {in: ("address" "duplex-list" "character")} -> {result: ("address" "duplex-list" "character"), "contained-in": "in"}
-9992 transform: instruction {2: ("address" "duplex-list" "character")} <- prev {2: ("address" "duplex-list" "character")}
+9992 transform: instruction {list2: ()} <- prev {list2: ()}
 9992 transform: checking variant (strict) 0: recipe prev {in: ("address" "duplex-list" "_elem")} -> {result: ("address" "duplex-list" "_elem"), "contained-in": "in"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe prev_2 {in: ("address" "duplex-list" "character")} -> {result: ("address" "duplex-list" "character"), "contained-in": "in"}
-9992 transform: instruction {7: "character"} <- first {2: ("address" "duplex-list" "character")}
+9992 transform: instruction {30: "character", "raw": ()} <- first {list2: ()}
 9992 transform: checking variant (strict) 0: recipe first {in: ("address" "list" "_elem")} -> {result: "_elem"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe first_2 {in: ("address" "duplex-list" "_elem")} -> {result: "_elem"}
@@ -1006,7 +1021,7 @@
 9992 transform: checking variant (strict) 2: recipe first_3 {in: ("address" "list" "address" "operation")} -> {result: ("address" "operation")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 3: recipe first_4 {in: ("address" "duplex-list" "character")} -> {result: "character"}
-9992 transform: instruction {8: "boolean"} <- equal {1: ("address" "duplex-list" "character")}, {2: ("address" "duplex-list" "character")}
+9992 transform: instruction {40: "boolean", "raw": ()} <- equal {list: ()}, {list2: ()}
 9992 transform: checking variant (strict) 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
@@ -1016,21 +1031,21 @@
 9992 transform: checking variant 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: --- compute address offsets for run_1001
-9993 transform: - compute address offsets for {1: ("address" "duplex-list" "character")} <- push_6 {3: "literal"}, {0: "literal"}
-9993 transform: - compute address offsets for {1: ("address" "duplex-list" "character")} <- push_7 {4: "literal"}, {1: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {1: ("address" "duplex-list" "character")} <- push_8 {5: "literal"}, {1: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- next_2 {1: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- next_2 {2: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {1: ("address" "duplex-list" "character")} <- remove_2 {2: ("address" "duplex-list" "character")}, {1: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {3: "boolean"} <- equal {2: ("address" "duplex-list" "character")}, {0: "literal"}
-9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- copy {1: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {4: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- next_2 {2: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {5: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {6: ("address" "duplex-list" "character")} <- next_2 {2: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {2: ("address" "duplex-list" "character")} <- prev_2 {2: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {7: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
-9993 transform: - compute address offsets for {8: "boolean"} <- equal {1: ("address" "duplex-list" "character")}, {2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {list: ("address" "duplex-list" "character")} <- push_6 {3: "literal"}, {0: "literal"}
+9993 transform: - compute address offsets for {list: ("address" "duplex-list" "character")} <- push_7 {4: "literal"}, {list: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {list: ("address" "duplex-list" "character")} <- push_8 {5: "literal"}, {list: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {list2: ("address" "duplex-list" "character")} <- next_2 {list: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {list2: ("address" "duplex-list" "character")} <- next_2 {list2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {list: ("address" "duplex-list" "character")} <- remove_2 {list2: ("address" "duplex-list" "character")}, {list: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {10: "boolean", "raw": ()} <- equal {list2: ("address" "duplex-list" "character")}, {0: "literal"}
+9993 transform: - compute address offsets for {list2: ("address" "duplex-list" "character")} <- copy {list: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {11: "character", "raw": ()} <- first_4 {list2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {list2: ("address" "duplex-list" "character")} <- next_2 {list2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {12: "character", "raw": ()} <- first_4 {list2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {20: ("address" "duplex-list" "character"), "raw": ()} <- next_2 {list2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {list2: ("address" "duplex-list" "character")} <- prev_2 {list2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {30: "character", "raw": ()} <- first_4 {list2: ("address" "duplex-list" "character")}
+9993 transform: - compute address offsets for {40: "boolean", "raw": ()} <- equal {list: ("address" "duplex-list" "character")}, {list2: ("address" "duplex-list" "character")}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
@@ -1060,7 +1075,7 @@
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: {1: ("address" "duplex-list" "character")} <- push_6 {3: "literal"}, {0: "literal"}
+ 103 run: {list: ("address" "duplex-list" "character")} <- push_6 {3: "literal"}, {0: "literal"}
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 4
@@ -1118,7 +1133,7 @@
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1006
 9999 mem: storing 1006 in location 1
- 103 run: {1: ("address" "duplex-list" "character")} <- push_7 {4: "literal"}, {1: ("address" "duplex-list" "character")}
+ 103 run: {list: ("address" "duplex-list" "character")} <- push_7 {4: "literal"}, {list: ("address" "duplex-list" "character")}
 9999 mem: location 1 is 1006
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1185,7 +1200,7 @@
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1010
 9999 mem: storing 1010 in location 1
- 103 run: {1: ("address" "duplex-list" "character")} <- push_8 {5: "literal"}, {1: ("address" "duplex-list" "character")}
+ 103 run: {list: ("address" "duplex-list" "character")} <- push_8 {5: "literal"}, {list: ("address" "duplex-list" "character")}
 9999 mem: location 1 is 1010
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1252,7 +1267,7 @@
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1014
 9999 mem: storing 1014 in location 1
- 103 run: {2: ("address" "duplex-list" "character")} <- next_2 {1: ("address" "duplex-list" "character")}
+ 103 run: {list2: ("address" "duplex-list" "character")} <- next_2 {list: ("address" "duplex-list" "character")}
 9999 mem: location 1 is 1014
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1299,7 +1314,7 @@
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1010
 9999 mem: storing 1010 in location 2
- 103 run: {2: ("address" "duplex-list" "character")} <- next_2 {2: ("address" "duplex-list" "character")}
+ 103 run: {list2: ("address" "duplex-list" "character")} <- next_2 {list2: ("address" "duplex-list" "character")}
 9999 mem: location 2 is 1010
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1341,7 +1356,7 @@
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1006
 9999 mem: storing 1006 in location 2
- 103 run: {1: ("address" "duplex-list" "character")} <- remove_2 {2: ("address" "duplex-list" "character")}, {1: ("address" "duplex-list" "character")}
+ 103 run: {list: ("address" "duplex-list" "character")} <- remove_2 {list2: ("address" "duplex-list" "character")}, {list: ("address" "duplex-list" "character")}
 9999 mem: location 2 is 1006
 9999 mem: location 1 is 1014
 9999 trace: incrementing callstack depth to 3
@@ -1463,17 +1478,17 @@
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1014
 9999 mem: storing 1014 in location 1
- 103 run: {3: "boolean"} <- equal {2: ("address" "duplex-list" "character")}, {0: "literal"}
+ 103 run: {10: "boolean", "raw": ()} <- equal {list2: ("address" "duplex-list" "character")}, {0: "literal"}
 9999 mem: location 2 is 1006
-9999 mem: storing 0 in location 3
- 103 run: {2: ("address" "duplex-list" "character")} <- copy {1: ("address" "duplex-list" "character")}
+9999 mem: storing 0 in location 10
+ 103 run: {list2: ("address" "duplex-list" "character")} <- copy {list: ("address" "duplex-list" "character")}
 9999 mem: location 1 is 1014
 9999 mem: location 2 is 1006
 9999 mem: skipping refcount at 1006
 9999 mem: decrementing refcount of 1006: 2 -> 1
 9999 mem: incrementing refcount of 1014: 3 -> 4
 9999 mem: storing 1014 in location 2
- 103 run: {4: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
+ 103 run: {11: "character", "raw": ()} <- first_4 {list2: ("address" "duplex-list" "character")}
 9999 mem: location 2 is 1014
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1512,8 +1527,8 @@
 9999 abandon: saving 1018 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 5
-9999 mem: storing 5 in location 4
- 103 run: {2: ("address" "duplex-list" "character")} <- next_2 {2: ("address" "duplex-list" "character")}
+9999 mem: storing 5 in location 11
+ 103 run: {list2: ("address" "duplex-list" "character")} <- next_2 {list2: ("address" "duplex-list" "character")}
 9999 mem: location 2 is 1014
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1555,7 +1570,7 @@
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1010
 9999 mem: storing 1010 in location 2
- 103 run: {5: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
+ 103 run: {12: "character", "raw": ()} <- first_4 {list2: ("address" "duplex-list" "character")}
 9999 mem: location 2 is 1010
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1594,8 +1609,8 @@
 9999 abandon: saving 1018 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 4
-9999 mem: storing 4 in location 5
- 103 run: {6: ("address" "duplex-list" "character")} <- next_2 {2: ("address" "duplex-list" "character")}
+9999 mem: storing 4 in location 12
+ 103 run: {20: ("address" "duplex-list" "character"), "raw": ()} <- next_2 {list2: ("address" "duplex-list" "character")}
 9999 mem: location 2 is 1010
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1636,8 +1651,8 @@
 9999 abandon: saving 1018 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 0
-9999 mem: storing 0 in location 6
- 103 run: {2: ("address" "duplex-list" "character")} <- prev_2 {2: ("address" "duplex-list" "character")}
+9999 mem: storing 0 in location 20
+ 103 run: {list2: ("address" "duplex-list" "character")} <- prev_2 {list2: ("address" "duplex-list" "character")}
 9999 mem: location 2 is 1010
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1679,7 +1694,7 @@
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1014
 9999 mem: storing 1014 in location 2
- 103 run: {7: "character"} <- first_4 {2: ("address" "duplex-list" "character")}
+ 103 run: {30: "character", "raw": ()} <- first_4 {list2: ("address" "duplex-list" "character")}
 9999 mem: location 2 is 1014
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1718,19 +1733,19 @@
 9999 abandon: saving 1018 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 5
-9999 mem: storing 5 in location 7
- 103 run: {8: "boolean"} <- equal {1: ("address" "duplex-list" "character")}, {2: ("address" "duplex-list" "character")}
+9999 mem: storing 5 in location 30
+ 103 run: {40: "boolean", "raw": ()} <- equal {list: ("address" "duplex-list" "character")}, {list2: ("address" "duplex-list" "character")}
 9999 mem: location 1 is 1014
 9999 mem: location 2 is 1014
-9999 mem: storing 1 in location 8
+9999 mem: storing 1 in location 40
  103 run: reply 
 9999 trace: reply: decrementing callstack depth from 2
- 102 run: memory-should-contain {"\n    3 <- 0  # remove returned non-null\n    4 <- 5  # scanning next, skipping deleted element\n    5 <- 4\n    6 <- 0  # no more elements\n    7 <- 5  # prev of final element\n    8 <- 1  # list back at start\n  ": "literal-string"}
-9999 run: checking location 3
-9999 run: checking location 4
-9999 run: checking location 5
-9999 run: checking location 6
-9999 run: checking location 7
-9999 run: checking location 8
+ 102 run: memory-should-contain {"\n    10 <- 0  # remove returned non-null\n    11 <- 5  # scanning next, skipping deleted element\n    12 <- 4\n    20 <- 0  # no more elements\n    30 <- 5  # prev of final element\n    40 <- 1  # list back at start\n  ": "literal-string"}
+9999 run: checking location 10
+9999 run: checking location 11
+9999 run: checking location 12
+9999 run: checking location 20
+9999 run: checking location 30
+9999 run: checking location 40
  102 run: reply 
 9999 trace: reply: decrementing callstack depth from 1

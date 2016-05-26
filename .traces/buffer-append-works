@@ -1,19 +1,19 @@
 9991 parse: --- defining scenario_buffer-append-works
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    local-scope\n    x:address:buffer <- new-buffer 3\n    s1:address:array:character <- get *x, data:offset\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 99/c\n    x <- append x, c\n    s2:address:array:character <- get *x, data:offset\n    1:boolean/raw <- equal s1, s2\n    2:array:character/raw <- copy *s2\n    +buffer-filled\n    c:character <- copy 100/d\n    x <- append x, c\n    s3:address:array:character <- get *x, data:offset\n    10:boolean/raw <- equal s1, s3\n    11:number/raw <- get *x, length:offset\n    12:array:character/raw <- copy *s3\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    local-scope\n    x:address:buffer <- new-buffer 3\n    s1:address:array:character <- get *x, data:offset\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 99/c\n    x <- append x, c\n    s2:address:array:character <- get *x, data:offset\n    1:boolean/raw <- equal s1, s2\n    2:array:character/raw <- copy *s2\n    +buffer-filled\n    c:character <- copy 100/d\n    x <- append x, c\n    s3:address:array:character <- get *x, data:offset\n    10:boolean/raw <- equal s1, s3\n    11:number/raw <- get *x, length:offset\n    12:array:character/raw <- copy *s3\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    local-scope\n    x:address:buffer <- new-buffer 3\n    s1:address:array:character <- get *x, data:offset\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 99/c\n    x <- append x, c\n    s2:address:array:character <- get *x, data:offset\n    10:boolean/raw <- equal s1, s2\n    11:array:character/raw <- copy *s2\n    +buffer-filled\n    c:character <- copy 100/d\n    x <- append x, c\n    s3:address:array:character <- get *x, data:offset\n    20:boolean/raw <- equal s1, s3\n    21:number/raw <- get *x, length:offset\n    30:array:character/raw <- copy *s3\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    local-scope\n    x:address:buffer <- new-buffer 3\n    s1:address:array:character <- get *x, data:offset\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 99/c\n    x <- append x, c\n    s2:address:array:character <- get *x, data:offset\n    10:boolean/raw <- equal s1, s2\n    11:array:character/raw <- copy *s2\n    +buffer-filled\n    c:character <- copy 100/d\n    x <- append x, c\n    s3:address:array:character <- get *x, data:offset\n    20:boolean/raw <- equal s1, s3\n    21:number/raw <- get *x, length:offset\n    30:array:character/raw <- copy *s3\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    # before +buffer-filled\n    1 <- 1   # no change in data pointer\n    2 <- 3   # size of data\n    3 <- 97  # data\n    4 <- 98\n    5 <- 99\n    # in the end\n    10 <- 0   # data pointer has grown\n    11 <- 4   # final length\n    12 <- 6   # but data's capacity has doubled\n    13 <- 97  # data\n    14 <- 98\n    15 <- 99\n    16 <- 100\n    17 <- 0\n    18 <- 0\n  ": "literal-string"}
-9992 load: after rewriting: memory-should-contain {"\n    # before +buffer-filled\n    1 <- 1   # no change in data pointer\n    2 <- 3   # size of data\n    3 <- 97  # data\n    4 <- 98\n    5 <- 99\n    # in the end\n    10 <- 0   # data pointer has grown\n    11 <- 4   # final length\n    12 <- 6   # but data's capacity has doubled\n    13 <- 97  # data\n    14 <- 98\n    15 <- 99\n    16 <- 100\n    17 <- 0\n    18 <- 0\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    # before +buffer-filled\n    10 <- 1   # no change in data pointer\n    11 <- 3   # size of data\n    12 <- 97  # data\n    13 <- 98\n    14 <- 99\n    # in the end\n    20 <- 0   # data pointer has grown\n    21 <- 4   # final length\n    30 <- 6   # but data's capacity has doubled\n    31 <- 97  # data\n    32 <- 98\n    33 <- 99\n    34 <- 100\n    35 <- 0\n    36 <- 0\n  ": "literal-string"}
+9992 load: after rewriting: memory-should-contain {"\n    # before +buffer-filled\n    10 <- 1   # no change in data pointer\n    11 <- 3   # size of data\n    12 <- 97  # data\n    13 <- 98\n    14 <- 99\n    # in the end\n    20 <- 0   # data pointer has grown\n    21 <- 4   # final length\n    30 <- 6   # but data's capacity has doubled\n    31 <- 97  # data\n    32 <- 98\n    33 <- 99\n    34 <- 100\n    35 <- 0\n    36 <- 0\n  ": "literal-string"}
 9999 parse: recipe scenario_buffer-append-works has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe scenario_buffer-append-works
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_buffer-append-works
 9991 transform: --- deduce types for recipe scenario_buffer-append-works
-9993 transform: run {"\n    local-scope\n    x:address:buffer <- new-buffer 3\n    s1:address:array:character <- get *x, data:offset\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 99/c\n    x <- append x, c\n    s2:address:array:character <- get *x, data:offset\n    1:boolean/raw <- equal s1, s2\n    2:array:character/raw <- copy *s2\n    +buffer-filled\n    c:character <- copy 100/d\n    x <- append x, c\n    s3:address:array:character <- get *x, data:offset\n    10:boolean/raw <- equal s1, s3\n    11:number/raw <- get *x, length:offset\n    12:array:character/raw <- copy *s3\n  ": "literal-string"}
-9993 transform: memory-should-contain {"\n    # before +buffer-filled\n    1 <- 1   # no change in data pointer\n    2 <- 3   # size of data\n    3 <- 97  # data\n    4 <- 98\n    5 <- 99\n    # in the end\n    10 <- 0   # data pointer has grown\n    11 <- 4   # final length\n    12 <- 6   # but data's capacity has doubled\n    13 <- 97  # data\n    14 <- 98\n    15 <- 99\n    16 <- 100\n    17 <- 0\n    18 <- 0\n  ": "literal-string"}
+9993 transform: run {"\n    local-scope\n    x:address:buffer <- new-buffer 3\n    s1:address:array:character <- get *x, data:offset\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 99/c\n    x <- append x, c\n    s2:address:array:character <- get *x, data:offset\n    10:boolean/raw <- equal s1, s2\n    11:array:character/raw <- copy *s2\n    +buffer-filled\n    c:character <- copy 100/d\n    x <- append x, c\n    s3:address:array:character <- get *x, data:offset\n    20:boolean/raw <- equal s1, s3\n    21:number/raw <- get *x, length:offset\n    30:array:character/raw <- copy *s3\n  ": "literal-string"}
+9993 transform: memory-should-contain {"\n    # before +buffer-filled\n    10 <- 1   # no change in data pointer\n    11 <- 3   # size of data\n    12 <- 97  # data\n    13 <- 98\n    14 <- 99\n    # in the end\n    20 <- 0   # data pointer has grown\n    21 <- 4   # final length\n    30 <- 6   # but data's capacity has doubled\n    31 <- 97  # data\n    32 <- 98\n    33 <- 99\n    34 <- 100\n    35 <- 0\n    36 <- 0\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_buffer-append-works
 9991 transform: --- deduce types for recipe scenario_buffer-append-works
 9991 transform: --- check for invalid types in recipe scenario_buffer-append-works
@@ -21,8 +21,8 @@
 9991 transform: --- transform names for recipe scenario_buffer-append-works
 9991 transform: --- resolve ambiguous calls for recipe scenario_buffer-append-works
 9992 transform: --- compute address offsets for scenario_buffer-append-works
-9993 transform: - compute address offsets for run {"\n    local-scope\n    x:address:buffer <- new-buffer 3\n    s1:address:array:character <- get *x, data:offset\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 99/c\n    x <- append x, c\n    s2:address:array:character <- get *x, data:offset\n    1:boolean/raw <- equal s1, s2\n    2:array:character/raw <- copy *s2\n    +buffer-filled\n    c:character <- copy 100/d\n    x <- append x, c\n    s3:address:array:character <- get *x, data:offset\n    10:boolean/raw <- equal s1, s3\n    11:number/raw <- get *x, length:offset\n    12:array:character/raw <- copy *s3\n  ": "literal-string"}
-9993 transform: - compute address offsets for memory-should-contain {"\n    # before +buffer-filled\n    1 <- 1   # no change in data pointer\n    2 <- 3   # size of data\n    3 <- 97  # data\n    4 <- 98\n    5 <- 99\n    # in the end\n    10 <- 0   # data pointer has grown\n    11 <- 4   # final length\n    12 <- 6   # but data's capacity has doubled\n    13 <- 97  # data\n    14 <- 98\n    15 <- 99\n    16 <- 100\n    17 <- 0\n    18 <- 0\n  ": "literal-string"}
+9993 transform: - compute address offsets for run {"\n    local-scope\n    x:address:buffer <- new-buffer 3\n    s1:address:array:character <- get *x, data:offset\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 99/c\n    x <- append x, c\n    s2:address:array:character <- get *x, data:offset\n    10:boolean/raw <- equal s1, s2\n    11:array:character/raw <- copy *s2\n    +buffer-filled\n    c:character <- copy 100/d\n    x <- append x, c\n    s3:address:array:character <- get *x, data:offset\n    20:boolean/raw <- equal s1, s3\n    21:number/raw <- get *x, length:offset\n    30:array:character/raw <- copy *s3\n  ": "literal-string"}
+9993 transform: - compute address offsets for memory-should-contain {"\n    # before +buffer-filled\n    10 <- 1   # no change in data pointer\n    11 <- 3   # size of data\n    12 <- 97  # data\n    13 <- 98\n    14 <- 99\n    # in the end\n    20 <- 0   # data pointer has grown\n    21 <- 4   # final length\n    30 <- 6   # but data's capacity has doubled\n    31 <- 97  # data\n    32 <- 98\n    33 <- 99\n    34 <- 100\n    35 <- 0\n    36 <- 0\n  ": "literal-string"}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_buffer-append-works
 9991 transform: --- transform braces for recipe scenario_buffer-append-works
@@ -41,7 +41,7 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_buffer-append-works
- 102 run: run {"\n    local-scope\n    x:address:buffer <- new-buffer 3\n    s1:address:array:character <- get *x, data:offset\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 99/c\n    x <- append x, c\n    s2:address:array:character <- get *x, data:offset\n    1:boolean/raw <- equal s1, s2\n    2:array:character/raw <- copy *s2\n    +buffer-filled\n    c:character <- copy 100/d\n    x <- append x, c\n    s3:address:array:character <- get *x, data:offset\n    10:boolean/raw <- equal s1, s3\n    11:number/raw <- get *x, length:offset\n    12:array:character/raw <- copy *s3\n  ": "literal-string"}
+ 102 run: run {"\n    local-scope\n    x:address:buffer <- new-buffer 3\n    s1:address:array:character <- get *x, data:offset\n    c:character <- copy 97/a\n    x <- append x, c\n    c:character <- copy 98/b\n    x <- append x, c\n    c:character <- copy 99/c\n    x <- append x, c\n    s2:address:array:character <- get *x, data:offset\n    10:boolean/raw <- equal s1, s2\n    11:array:character/raw <- copy *s2\n    +buffer-filled\n    c:character <- copy 100/d\n    x <- append x, c\n    s3:address:array:character <- get *x, data:offset\n    20:boolean/raw <- equal s1, s3\n    21:number/raw <- get *x, length:offset\n    30:array:character/raw <- copy *s3\n  ": "literal-string"}
 9991 parse: --- defining run_1001
 9993 parse: instruction: local-scope
 9993 parse:   number of ingredients: 0
@@ -100,13 +100,13 @@
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {s1: ()}
 9993 parse:   ingredient: {s2: ()}
-9993 parse:   product: {1: "boolean", "raw": ()}
-9992 load: after rewriting: {1: "boolean", "raw": ()} <- equal {s1: ()}, {s2: ()}
+9993 parse:   product: {10: "boolean", "raw": ()}
+9992 load: after rewriting: {10: "boolean", "raw": ()} <- equal {s1: ()}, {s2: ()}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {s2: (), "lookup": ()}
-9993 parse:   product: {2: ("array" "character"), "raw": ()}
-9992 load: after rewriting: {2: ("array" "character"), "raw": ()} <- copy {s2: (), "lookup": ()}
+9993 parse:   product: {11: ("array" "character"), "raw": ()}
+9992 load: after rewriting: {11: ("array" "character"), "raw": ()} <- copy {s2: (), "lookup": ()}
 9993 parse: label: +buffer-filled
 9992 load: after rewriting: +buffer-filled
 9993 parse: instruction: copy
@@ -130,19 +130,19 @@
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {s1: ()}
 9993 parse:   ingredient: {s3: ()}
-9993 parse:   product: {10: "boolean", "raw": ()}
-9992 load: after rewriting: {10: "boolean", "raw": ()} <- equal {s1: ()}, {s3: ()}
+9993 parse:   product: {20: "boolean", "raw": ()}
+9992 load: after rewriting: {20: "boolean", "raw": ()} <- equal {s1: ()}, {s3: ()}
 9993 parse: instruction: get
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {x: (), "lookup": ()}
 9993 parse:   ingredient: {length: "offset"}
-9993 parse:   product: {11: "number", "raw": ()}
-9992 load: after rewriting: {11: "number", "raw": ()} <- get {x: (), "lookup": ()}, {length: "offset"}
+9993 parse:   product: {21: "number", "raw": ()}
+9992 load: after rewriting: {21: "number", "raw": ()} <- get {x: (), "lookup": ()}, {length: "offset"}
 9993 parse: instruction: copy
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {s3: (), "lookup": ()}
-9993 parse:   product: {12: ("array" "character"), "raw": ()}
-9992 load: after rewriting: {12: ("array" "character"), "raw": ()} <- copy {s3: (), "lookup": ()}
+9993 parse:   product: {30: ("array" "character"), "raw": ()}
+9992 load: after rewriting: {30: ("array" "character"), "raw": ()} <- copy {s3: (), "lookup": ()}
 9999 parse: recipe run_1001 has a header
 9990 transform: === transform_all()
 9991 transform: --- rewrite literal strings in recipe run_1001
@@ -186,15 +186,15 @@
 9993 transform: {c: "character"} <- copy {99: "literal", "c": ()}
 9993 transform: {x: ("address" "buffer")} <- append {x: ("address" "buffer")}, {c: "character"}
 9993 transform: {s2: ("address" "array" "character")} <- get {x: ("address" "buffer"), "lookup": ()}, {data: "offset"}
-9993 transform: {1: "boolean", "raw": ()} <- equal {s1: ("address" "array" "character")}, {s2: ("address" "array" "character")}
-9993 transform: {2: ("array" "character"), "raw": ()} <- copy {s2: ("address" "array" "character"), "lookup": ()}
+9993 transform: {10: "boolean", "raw": ()} <- equal {s1: ("address" "array" "character")}, {s2: ("address" "array" "character")}
+9993 transform: {11: ("array" "character"), "raw": ()} <- copy {s2: ("address" "array" "character"), "lookup": ()}
 9993 transform: +buffer-filled
 9993 transform: {c: "character"} <- copy {100: "literal", "d": ()}
 9993 transform: {x: ("address" "buffer")} <- append {x: ("address" "buffer")}, {c: "character"}
 9993 transform: {s3: ("address" "array" "character")} <- get {x: ("address" "buffer"), "lookup": ()}, {data: "offset"}
-9993 transform: {10: "boolean", "raw": ()} <- equal {s1: ("address" "array" "character")}, {s3: ("address" "array" "character")}
-9993 transform: {11: "number", "raw": ()} <- get {x: ("address" "buffer"), "lookup": ()}, {length: "offset"}
-9993 transform: {12: ("array" "character"), "raw": ()} <- copy {s3: ("address" "array" "character"), "lookup": ()}
+9993 transform: {20: "boolean", "raw": ()} <- equal {s1: ("address" "array" "character")}, {s3: ("address" "array" "character")}
+9993 transform: {21: "number", "raw": ()} <- get {x: ("address" "buffer"), "lookup": ()}, {length: "offset"}
+9993 transform: {30: ("array" "character"), "raw": ()} <- copy {s3: ("address" "array" "character"), "lookup": ()}
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
 9992 transform: default-space => ("address" "array" "location")
@@ -248,7 +248,7 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 4: recipe append_5 {in: ("address" "duplex-list" "character")} {new: ("address" "duplex-list" "character"), "contained-in": "in"} -> {in: ("address" "duplex-list" "character")}
 9993 transform: strict match failed: ingredient 0
-9992 transform: instruction {1: "boolean", "raw": ()} <- equal {s1: ()}, {s2: ()}
+9992 transform: instruction {10: "boolean", "raw": ()} <- equal {s1: ()}, {s2: ()}
 9992 transform: checking variant (strict) 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9992 transform: instruction {x: ()} <- append {x: ()}, {c: ()}
 9992 transform: checking variant (strict) 0: recipe append {buf: ("address" "buffer")} {x: "_elem"} -> {buf: ("address" "buffer")}
@@ -260,7 +260,7 @@
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 4: recipe append_5 {in: ("address" "duplex-list" "character")} {new: ("address" "duplex-list" "character"), "contained-in": "in"} -> {in: ("address" "duplex-list" "character")}
 9993 transform: strict match failed: ingredient 0
-9992 transform: instruction {10: "boolean", "raw": ()} <- equal {s1: ()}, {s3: ()}
+9992 transform: instruction {20: "boolean", "raw": ()} <- equal {s1: ()}, {s3: ()}
 9992 transform: checking variant (strict) 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9992 transform: --- compute address offsets for run_1001
 9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -273,15 +273,15 @@
 9993 transform: - compute address offsets for {c: "character"} <- copy {99: "literal", "c": ()}
 9993 transform: - compute address offsets for {x: ("address" "buffer")} <- append_2 {x: ("address" "buffer")}, {c: "character"}
 9993 transform: - compute address offsets for {s2: ("address" "array" "character")} <- get {x: ("address" "buffer"), "lookup": ()}, {data: "offset"}
-9993 transform: - compute address offsets for {1: "boolean", "raw": ()} <- equal_2 {s1: ("address" "array" "character")}, {s2: ("address" "array" "character")}
-9993 transform: - compute address offsets for {2: ("array" "character"), "raw": ()} <- copy {s2: ("address" "array" "character"), "lookup": ()}
+9993 transform: - compute address offsets for {10: "boolean", "raw": ()} <- equal_2 {s1: ("address" "array" "character")}, {s2: ("address" "array" "character")}
+9993 transform: - compute address offsets for {11: ("array" "character"), "raw": ()} <- copy {s2: ("address" "array" "character"), "lookup": ()}
 9993 transform: - compute address offsets for +buffer-filled
 9993 transform: - compute address offsets for {c: "character"} <- copy {100: "literal", "d": ()}
 9993 transform: - compute address offsets for {x: ("address" "buffer")} <- append_2 {x: ("address" "buffer")}, {c: "character"}
 9993 transform: - compute address offsets for {s3: ("address" "array" "character")} <- get {x: ("address" "buffer"), "lookup": ()}, {data: "offset"}
-9993 transform: - compute address offsets for {10: "boolean", "raw": ()} <- equal_2 {s1: ("address" "array" "character")}, {s3: ("address" "array" "character")}
-9993 transform: - compute address offsets for {11: "number", "raw": ()} <- get {x: ("address" "buffer"), "lookup": ()}, {length: "offset"}
-9993 transform: - compute address offsets for {12: ("array" "character"), "raw": ()} <- copy {s3: ("address" "array" "character"), "lookup": ()}
+9993 transform: - compute address offsets for {20: "boolean", "raw": ()} <- equal_2 {s1: ("address" "array" "character")}, {s3: ("address" "array" "character")}
+9993 transform: - compute address offsets for {21: "number", "raw": ()} <- get {x: ("address" "buffer"), "lookup": ()}, {length: "offset"}
+9993 transform: - compute address offsets for {30: ("array" "character"), "raw": ()} <- copy {s3: ("address" "array" "character"), "lookup": ()}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
@@ -935,7 +935,7 @@
 9999 mem: location 1006 is 0
 9999 mem: incrementing refcount of 1017: 2 -> 3
 9999 mem: storing 1017 in location 1006
- 103 run: {1: "boolean", "raw": ()} <- equal_2 {s1: ("address" "array" "character")}, {s2: ("address" "array" "character")}
+ 103 run: {10: "boolean", "raw": ()} <- equal_2 {s1: ("address" "array" "character")}, {s2: ("address" "array" "character")}
 9999 mem: location 1004 is 1017
 9999 mem: location 1006 is 1017
 9999 trace: incrementing callstack depth to 3
@@ -1138,18 +1138,18 @@
 9999 abandon: saving 1040 in free-list of size 13
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 1
-9999 mem: storing 1 in location 1
- 103 run: {2: ("array" "character"), "raw": ()} <- copy {s2: ("address" "array" "character"), "lookup": ()}
+9999 mem: storing 1 in location 10
+ 103 run: {11: ("array" "character"), "raw": ()} <- copy {s2: ("address" "array" "character"), "lookup": ()}
 9999 mem: location 1006 is 1017
 9999 mem: skipping refcount at 1017
 9999 mem: location 1018 is 3
 9999 mem: location 1019 is 97
 9999 mem: location 1020 is 98
 9999 mem: location 1021 is 99
-9999 mem: storing 3 in location 2
-9999 mem: storing 97 in location 3
-9999 mem: storing 98 in location 4
-9999 mem: storing 99 in location 5
+9999 mem: storing 3 in location 11
+9999 mem: storing 97 in location 12
+9999 mem: storing 98 in location 13
+9999 mem: storing 99 in location 14
  103 run: {c: "character"} <- copy {100: "literal", "d": ()}
 9999 mem: storing 100 in location 1005
  103 run: {x: ("address" "buffer")} <- append_2 {x: ("address" "buffer")}, {c: "character"}
@@ -1515,7 +1515,7 @@
 9999 mem: location 1007 is 0
 9999 mem: incrementing refcount of 1032: 1 -> 2
 9999 mem: storing 1032 in location 1007
- 103 run: {10: "boolean", "raw": ()} <- equal_2 {s1: ("address" "array" "character")}, {s3: ("address" "array" "character")}
+ 103 run: {20: "boolean", "raw": ()} <- equal_2 {s1: ("address" "array" "character")}, {s3: ("address" "array" "character")}
 9999 mem: location 1004 is 1017
 9999 mem: location 1007 is 1032
 9999 trace: incrementing callstack depth to 3
@@ -1583,8 +1583,8 @@
 9999 abandon: saving 1040 in free-list of size 13
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 0
-9999 mem: storing 0 in location 10
- 103 run: {11: "number", "raw": ()} <- get {x: ("address" "buffer"), "lookup": ()}, {length: "offset"}
+9999 mem: storing 0 in location 20
+ 103 run: {21: "number", "raw": ()} <- get {x: ("address" "buffer"), "lookup": ()}, {length: "offset"}
 9999 mem: location 1003 is 1014
 9999 mem: skipping refcount at 1014
 9999 mem: location 1015 is 4
@@ -1594,8 +1594,8 @@
 9998 run: address to copy is 1015
 9998 run: its type is "number"
 9999 mem: location 1015 is 4
-9999 mem: storing 4 in location 11
- 103 run: {12: ("array" "character"), "raw": ()} <- copy {s3: ("address" "array" "character"), "lookup": ()}
+9999 mem: storing 4 in location 21
+ 103 run: {30: ("array" "character"), "raw": ()} <- copy {s3: ("address" "array" "character"), "lookup": ()}
 9999 mem: location 1007 is 1032
 9999 mem: skipping refcount at 1032
 9999 mem: location 1033 is 6
@@ -1605,13 +1605,13 @@
 9999 mem: location 1037 is 100
 9999 mem: location 1038 is 0
 9999 mem: location 1039 is 0
-9999 mem: storing 6 in location 12
-9999 mem: storing 97 in location 13
-9999 mem: storing 98 in location 14
-9999 mem: storing 99 in location 15
-9999 mem: storing 100 in location 16
-9999 mem: storing 0 in location 17
-9999 mem: storing 0 in location 18
+9999 mem: storing 6 in location 30
+9999 mem: storing 97 in location 31
+9999 mem: storing 98 in location 32
+9999 mem: storing 99 in location 33
+9999 mem: storing 100 in location 34
+9999 mem: storing 0 in location 35
+9999 mem: storing 0 in location 36
  103 run: reply 
 9999 mem: clearing x:address:buffer
 9999 mem: location 1003 is 1014
@@ -1664,20 +1664,20 @@
 9999 abandon: updating refcounts inside 1000: (array number)
 9999 abandon: saving 1000 in free-list of size 8
 9999 trace: reply: decrementing callstack depth from 2
- 102 run: memory-should-contain {"\n    # before +buffer-filled\n    1 <- 1   # no change in data pointer\n    2 <- 3   # size of data\n    3 <- 97  # data\n    4 <- 98\n    5 <- 99\n    # in the end\n    10 <- 0   # data pointer has grown\n    11 <- 4   # final length\n    12 <- 6   # but data's capacity has doubled\n    13 <- 97  # data\n    14 <- 98\n    15 <- 99\n    16 <- 100\n    17 <- 0\n    18 <- 0\n  ": "literal-string"}
-9999 run: checking location 1
-9999 run: checking location 2
-9999 run: checking location 3
-9999 run: checking location 4
-9999 run: checking location 5
+ 102 run: memory-should-contain {"\n    # before +buffer-filled\n    10 <- 1   # no change in data pointer\n    11 <- 3   # size of data\n    12 <- 97  # data\n    13 <- 98\n    14 <- 99\n    # in the end\n    20 <- 0   # data pointer has grown\n    21 <- 4   # final length\n    30 <- 6   # but data's capacity has doubled\n    31 <- 97  # data\n    32 <- 98\n    33 <- 99\n    34 <- 100\n    35 <- 0\n    36 <- 0\n  ": "literal-string"}
 9999 run: checking location 10
 9999 run: checking location 11
 9999 run: checking location 12
 9999 run: checking location 13
 9999 run: checking location 14
-9999 run: checking location 15
-9999 run: checking location 16
-9999 run: checking location 17
-9999 run: checking location 18
+9999 run: checking location 20
+9999 run: checking location 21
+9999 run: checking location 30
+9999 run: checking location 31
+9999 run: checking location 32
+9999 run: checking location 33
+9999 run: checking location 34
+9999 run: checking location 35
+9999 run: checking location 36
  102 run: reply 
 9999 trace: reply: decrementing callstack depth from 1

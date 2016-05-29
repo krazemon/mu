@@ -1,4 +1,7 @@
-9991 parse: --- defining scenario_scrolling-down-on-recipe-side
+9991 parse: --- defining scenario_scrolling-down-past-bottom-of-recipe-editor
+9993 parse: instruction: local-scope
+9993 parse:   number of ingredients: 0
+9992 load: after rewriting: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 parse: instruction: trace-until
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {100: "literal", "app": ()}
@@ -8,110 +11,129 @@
 9993 parse:   ingredient: {100: "literal", "width": ()}
 9993 parse:   ingredient: {10: "literal", "height": ()}
 9992 load: after rewriting: {screen: ("address" "screen"), "raw": ()} <- new-fake-screen {100: "literal", "width": ()}, {10: "literal", "height": ()}
-9993 parse: instruction: new
-9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {" \n": "literal-string"}
-9993 parse:   product: {1: ("address" "array" "character")}
-9992 load: after rewriting: {1: ("address" "array" "character")} <- new {" \n": "literal-string"}
-9993 parse: instruction: new
-9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"add 2, 2": "literal-string"}
-9993 parse:   product: {2: ("address" "array" "character")}
-9992 load: after rewriting: {2: ("address" "array" "character")} <- new {"add 2, 2": "literal-string"}
 9993 parse: instruction: new-programming-environment
 9993 parse:   number of ingredients: 3
 9993 parse:   ingredient: {screen: ("address" "screen")}
-9993 parse:   ingredient: {1: ("address" "array" "character")}
-9993 parse:   ingredient: {2: ("address" "array" "character")}
-9993 parse:   product: {3: ("address" "programming-environment-data")}
-9992 load: after rewriting: {3: ("address" "programming-environment-data")} <- new-programming-environment {screen: ("address" "screen")}, {1: ("address" "array" "character")}, {2: ("address" "array" "character")}
+9993 parse:   ingredient: {"": "literal-string"}
+9993 parse:   ingredient: {"": "literal-string"}
+9993 parse:   product: {env: ("address" "programming-environment-data")}
+9992 load: after rewriting: {env: ("address" "programming-environment-data")} <- new-programming-environment {screen: ("address" "screen")}, {"": "literal-string"}, {"": "literal-string"}
 9993 parse: instruction: render-all
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {screen: ()}
-9993 parse:   ingredient: {3: ("address" "programming-environment-data")}
-9992 load: after rewriting: render-all {screen: ()}, {3: ("address" "programming-environment-data")}
+9993 parse:   ingredient: {env: ()}
+9992 load: after rewriting: render-all {screen: ()}, {env: ()}
 9993 parse: instruction: assume-console
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    press F4\n  ": "literal-string"}
-9992 load: after rewriting: assume-console {"\n    press F4\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    press enter\n    press down-arrow\n  ": "literal-string"}
+9992 load: after rewriting: assume-console {"\n    press enter\n    press down-arrow\n  ": "literal-string"}
 9993 parse: instruction: event-loop
 9993 parse:   number of ingredients: 3
-9993 parse:   ingredient: {screen: ("address" "screen")}
+9993 parse:   ingredient: {screen: ()}
 9993 parse:   ingredient: {console: ("address" "console")}
-9993 parse:   ingredient: {3: ("address" "programming-environment-data")}
-9992 load: after rewriting: event-loop {screen: ("address" "screen")}, {console: ("address" "console")}, {3: ("address" "programming-environment-data")}
-9993 parse: instruction: assume-console
-9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    press page-down\n  ": "literal-string"}
-9992 load: after rewriting: assume-console {"\n    press page-down\n  ": "literal-string"}
-9993 parse: instruction: run
-9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    event-loop screen:address:screen, console:address:console, 3:address:programming-environment-data\n    4:character/cursor <- copy 9251/␣\n    print screen:address:screen, 4:character/cursor\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    event-loop screen:address:screen, console:address:console, 3:address:programming-environment-data\n    4:character/cursor <- copy 9251/␣\n    print screen:address:screen, 4:character/cursor\n  ": "literal-string"}
+9993 parse:   ingredient: {env: ()}
+9992 load: after rewriting: event-loop {screen: ()}, {console: ("address" "console")}, {env: ()}
 9993 parse: instruction: screen-should-contain
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    .                                                                                 run (F4)           .\n    .␣                                                 ┊                                                 .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊0   edit          copy            delete         .\n    .                                                  ┊add 2, 2                                         .\n  ": "literal-string"}
-9992 load: after rewriting: screen-should-contain {"\n    .                                                                                 run (F4)           .\n    .␣                                                 ┊                                                 .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊0   edit          copy            delete         .\n    .                                                  ┊add 2, 2                                         .\n  ": "literal-string"}
-9999 parse: recipe scenario_scrolling-down-on-recipe-side has a header
+9993 parse:   ingredient: {"\n    .                                                                                 run (F4)           .\n    .                                                  ┊                                                 .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊                                                 .\n    .                                                  ┊                                                 .\n  ": "literal-string"}
+9992 load: after rewriting: screen-should-contain {"\n    .                                                                                 run (F4)           .\n    .                                                  ┊                                                 .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊                                                 .\n    .                                                  ┊                                                 .\n  ": "literal-string"}
+9999 parse: recipe scenario_scrolling-down-past-bottom-of-recipe-editor has a header
 9990 transform: === transform_all()
-9991 transform: --- rewrite literal strings in recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- rewrite 'stash' instructions in recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- fill in reply ingredients from header for recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- deduce types for recipe scenario_scrolling-down-on-recipe-side
+9991 transform: --- rewrite literal strings in recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- rewrite 'stash' instructions in recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- deduce types for recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9992 transform: default-space => ("address" "array" "location")
 9992 transform: screen => ("address" "screen")
+9992 transform: new-programming-environment_3_1 => ("address" "array" "character")
+9992 transform: new-programming-environment_3_2 => ("address" "array" "character")
+9992 transform: env => ("address" "programming-environment-data")
+9992 transform: screen <= ("address" "screen")
+9992 transform: env <= ("address" "programming-environment-data")
 9992 transform: screen <= ("address" "screen")
 9992 transform: console => ("address" "console")
-9991 transform: --- check for invalid types in recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- collect surrounding spaces for recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- transform names for recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- resolve ambiguous calls for recipe scenario_scrolling-down-on-recipe-side
+9992 transform: env <= ("address" "programming-environment-data")
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9993 transform: trace-until {100: "literal", "app": ()}
+9993 transform: {screen: ("address" "screen"), "raw": ()} <- new-fake-screen {100: "literal", "width": ()}, {10: "literal", "height": ()}
+9993 transform: {new-programming-environment_3_1: ("address" "array" "character")} <- new {"": "literal-string"}
+9993 transform: {new-programming-environment_3_2: ("address" "array" "character")} <- new {"": "literal-string"}
+9993 transform: {env: ("address" "programming-environment-data")} <- new-programming-environment {screen: ("address" "screen")}, {new-programming-environment_3_1: ("address" "array" "character")}, {new-programming-environment_3_2: ("address" "array" "character")}
+9993 transform: render-all {screen: ("address" "screen")}, {env: ("address" "programming-environment-data")}
+9993 transform: assume-console {"\n    press enter\n    press down-arrow\n  ": "literal-string"}
+9993 transform: event-loop {screen: ("address" "screen")}, {console: ("address" "console")}, {env: ("address" "programming-environment-data")}
+9993 transform: screen-should-contain {"\n    .                                                                                 run (F4)           .\n    .                                                  ┊                                                 .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊                                                 .\n    .                                                  ┊                                                 .\n  ": "literal-string"}
+9991 transform: --- fill in reply ingredients from header for recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- deduce types for recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9992 transform: default-space => ("address" "array" "location")
+9992 transform: screen => ("address" "screen")
+9992 transform: new-programming-environment_3_1 => ("address" "array" "character")
+9992 transform: new-programming-environment_3_2 => ("address" "array" "character")
+9992 transform: env => ("address" "programming-environment-data")
+9992 transform: console => ("address" "console")
+9991 transform: --- check for invalid types in recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- collect surrounding spaces for recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- transform names for recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9993 name: assign new-programming-environment_3_1 1
+9993 name: assign new-programming-environment_3_2 2
+9993 name: assign env 3
+9991 transform: --- resolve ambiguous calls for recipe scenario_scrolling-down-past-bottom-of-recipe-editor
 9992 transform: instruction {screen: ("address" "screen"), "raw": ()} <- new-fake-screen {100: "literal", "width": ()}, {10: "literal", "height": ()}
 9992 transform: checking variant (strict) 0: recipe new-fake-screen {w: "number"} {h: "number"} -> {result: ("address" "screen")}
-9992 transform: instruction {3: ("address" "programming-environment-data")} <- new-programming-environment {screen: ("address" "screen")}, {1: ("address" "array" "character")}, {2: ("address" "array" "character")}
+9992 transform: instruction {env: ("address" "programming-environment-data")} <- new-programming-environment {screen: ("address" "screen")}, {"": "literal-string"}, {"": "literal-string"}
 9992 transform: checking variant (strict) 0: recipe new-programming-environment {screen: ("address" "screen")} {initial-recipe-contents: ("address" "array" "character")} {initial-sandbox-contents: ("address" "array" "character")} -> {result: ("address" "programming-environment-data")} {screen: ("address" "screen")}
-9992 transform: instruction render-all {screen: ()}, {3: ("address" "programming-environment-data")}
+9992 transform: instruction render-all {screen: ()}, {env: ()}
 9992 transform: checking variant (strict) 0: recipe render-all {screen: ("address" "screen")} {env: ("address" "programming-environment-data")} -> {screen: ("address" "screen")} {env: ("address" "programming-environment-data")}
-9992 transform: instruction event-loop {screen: ("address" "screen")}, {console: ("address" "console")}, {3: ("address" "programming-environment-data")}
+9992 transform: instruction event-loop {screen: ()}, {console: ("address" "console")}, {env: ()}
 9992 transform: checking variant (strict) 0: recipe event-loop {screen: ("address" "screen")} {console: ("address" "console")} {env: ("address" "programming-environment-data")} -> {screen: ("address" "screen")} {console: ("address" "console")} {env: ("address" "programming-environment-data")}
-9992 transform: --- compute address offsets for scenario_scrolling-down-on-recipe-side
+9992 transform: --- compute address offsets for scenario_scrolling-down-past-bottom-of-recipe-editor
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: - compute address offsets for trace-until {100: "literal", "app": ()}
 9993 transform: - compute address offsets for {screen: ("address" "screen"), "raw": ()} <- new-fake-screen {100: "literal", "width": ()}, {10: "literal", "height": ()}
-9993 transform: - compute address offsets for {1: ("address" "array" "character")} <- new {" \n": "literal-string"}
-9993 transform: - compute address offsets for {2: ("address" "array" "character")} <- new {"add 2, 2": "literal-string"}
-9993 transform: - compute address offsets for {3: ("address" "programming-environment-data")} <- new-programming-environment {screen: ("address" "screen"), "raw": ()}, {1: ("address" "array" "character")}, {2: ("address" "array" "character")}
-9993 transform: - compute address offsets for render-all {screen: ("address" "screen"), "raw": ()}, {3: ("address" "programming-environment-data")}
-9993 transform: - compute address offsets for assume-console {"\n    press F4\n  ": "literal-string"}
-9993 transform: - compute address offsets for event-loop {screen: ("address" "screen"), "raw": ()}, {console: ("address" "console"), "raw": ()}, {3: ("address" "programming-environment-data")}
-9993 transform: - compute address offsets for assume-console {"\n    press page-down\n  ": "literal-string"}
-9993 transform: - compute address offsets for run {"\n    event-loop screen:address:screen, console:address:console, 3:address:programming-environment-data\n    4:character/cursor <- copy 9251/␣\n    print screen:address:screen, 4:character/cursor\n  ": "literal-string"}
-9993 transform: - compute address offsets for screen-should-contain {"\n    .                                                                                 run (F4)           .\n    .␣                                                 ┊                                                 .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊0   edit          copy            delete         .\n    .                                                  ┊add 2, 2                                         .\n  ": "literal-string"}
+9993 transform: - compute address offsets for {new-programming-environment_3_1: ("address" "array" "character")} <- new {"": "literal-string"}
+9993 transform: - compute address offsets for {new-programming-environment_3_2: ("address" "array" "character")} <- new {"": "literal-string"}
+9993 transform: - compute address offsets for {env: ("address" "programming-environment-data")} <- new-programming-environment {screen: ("address" "screen"), "raw": ()}, {new-programming-environment_3_1: ("address" "array" "character")}, {new-programming-environment_3_2: ("address" "array" "character")}
+9993 transform: - compute address offsets for render-all {screen: ("address" "screen"), "raw": ()}, {env: ("address" "programming-environment-data")}
+9993 transform: - compute address offsets for assume-console {"\n    press enter\n    press down-arrow\n  ": "literal-string"}
+9993 transform: - compute address offsets for event-loop {screen: ("address" "screen"), "raw": ()}, {console: ("address" "console"), "raw": ()}, {env: ("address" "programming-environment-data")}
+9993 transform: - compute address offsets for screen-should-contain {"\n    .                                                                                 run (F4)           .\n    .                                                  ┊                                                 .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊                                                 .\n    .                                                  ┊                                                 .\n  ": "literal-string"}
 9993 transform: - compute address offsets for reply 
-9991 transform: --- compute instruction operations for recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- transform braces for recipe scenario_scrolling-down-on-recipe-side
+9991 transform: --- compute instruction operations for recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- transform braces for recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9992 transform: local-scope ...
 9992 transform: trace-until ...
 9992 transform: assume-screen ...
-9992 transform: new ...
-9992 transform: new ...
+9992 transform:  ...
+9992 transform:  ...
 9992 transform: new-programming-environment ...
 9992 transform: render-all ...
 9992 transform: assume-console ...
 9992 transform: event-loop ...
-9992 transform: assume-console ...
-9992 transform: run ...
 9992 transform: screen-should-contain ...
 9992 transform:  ...
-9991 transform: --- check mutability of ingredients in recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- perform checks for recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- type-check 'call' instructions inside recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- type-check calls inside recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- convert 'new' to 'allocate' for recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- check types of reply instructions in recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- type-check merge instructions in recipe scenario_scrolling-down-on-recipe-side
-9991 transform: --- checking reply instructions against header for scenario_scrolling-down-on-recipe-side
+9991 transform: --- check mutability of ingredients in recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- perform checks for recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- type-check 'call' instructions inside recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- type-check calls inside recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- convert 'new' to 'allocate' for recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9992 new: size of "location" is 1
+9991 transform: --- check types of reply instructions in recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- type-check merge instructions in recipe scenario_scrolling-down-past-bottom-of-recipe-editor
+9991 transform: --- checking reply instructions against header for scenario_scrolling-down-past-bottom-of-recipe-editor
 9991 transform: --- parsing any uninitialized reagents as integers
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
-9990 schedule: scenario_scrolling-down-on-recipe-side
+9990 schedule: scenario_scrolling-down-past-bottom-of-recipe-editor
+ 102 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9999 mem: array size is 4
+9999 mem: allocating size 6
+9999 mem: new alloc: 1000
+9999 mem: storing 0 in location 1000
+9999 mem: storing 0 in location 1001
+9999 mem: storing 0 in location 1002
+9999 mem: storing 0 in location 1003
+9999 mem: storing 0 in location 1004
+9999 mem: storing 0 in location 1005
+9999 mem: storing 4 in location 1001
  102 run: trace-until {100: "literal", "app": ()}
   90 print-character: 32
   90 print-character: 32
@@ -233,64 +255,6 @@
   90 print-character: 9482
   90 print-character: 9482
   90 print-character: 9482
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 97
-  90 print-character: 100
-  90 print-character: 100
-  90 print-character: 32
-  90 print-character: 50
-  90 print-character: 44
-  90 print-character: 32
-  90 print-character: 50
   10 app: render all
   11 app: render top menu
   90 print-character: 32
@@ -465,56 +429,6 @@
   90 print-character: 32
   90 print-character: 32
   90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
   90 print-character: 9480
   90 print-character: 9480
   90 print-character: 9480
@@ -565,6 +479,56 @@
   90 print-character: 9480
   90 print-character: 9480
   90 print-character: 9480
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
   90 print-character: 32
   90 print-character: 32
   90 print-character: 32
@@ -866,14 +830,14 @@
   90 print-character: 32
   90 print-character: 32
   11 app: render sandbox side
-  90 print-character: 97
-  90 print-character: 100
-  90 print-character: 100
   90 print-character: 32
-  90 print-character: 50
-  90 print-character: 44
   90 print-character: 32
-  90 print-character: 50
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
+  90 print-character: 32
   90 print-character: 32
   90 print-character: 32
   90 print-character: 32
@@ -1701,146 +1665,7 @@
   90 print-character: 32
   11 app: render status
   10 app: next-event
-  90 print-character: 114
-  90 print-character: 117
-  90 print-character: 110
-  90 print-character: 110
-  90 print-character: 105
-  90 print-character: 110
-  90 print-character: 103
-  90 print-character: 46
-  90 print-character: 46
-  90 print-character: 46
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  10 app: render all
-  11 app: render top menu
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 114
-  90 print-character: 117
-  90 print-character: 110
-  90 print-character: 32
-  90 print-character: 40
-  90 print-character: 70
-  90 print-character: 52
-  90 print-character: 41
-  90 print-character: 32
-  11 app: render divider
-  90 print-character: 9482
-  90 print-character: 9482
-  90 print-character: 9482
-  90 print-character: 9482
-  90 print-character: 9482
-  90 print-character: 9482
-  90 print-character: 9482
-  90 print-character: 9482
-  90 print-character: 9482
+  10 app: handle-keyboard-event: special character
   11 app: render recipes
   90 print-character: 32
   90 print-character: 32
@@ -2292,906 +2117,4 @@
   90 print-character: 32
   90 print-character: 32
   90 print-character: 32
-  11 app: render sandbox side
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 48
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 101
-  90 print-character: 100
-  90 print-character: 105
-  90 print-character: 116
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 99
-  90 print-character: 111
-  90 print-character: 112
-  90 print-character: 121
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 100
-  90 print-character: 101
-  90 print-character: 108
-  90 print-character: 101
-  90 print-character: 116
-  90 print-character: 101
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 97
-  90 print-character: 100
-  90 print-character: 100
-  90 print-character: 32
-  90 print-character: 50
-  90 print-character: 44
-  90 print-character: 32
-  90 print-character: 50
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 52
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 9473
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  11 app: render status
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
-  90 print-character: 32
   10 app: next-event
-  90 print-character: 9251

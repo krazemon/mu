@@ -1,8 +1,8 @@
 9991 parse: --- defining scenario_removing-from-start-of-duplex-list
 9993 parse: instruction: run
 9993 parse:   number of ingredients: 1
-9993 parse:   ingredient: {"\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    list <- remove list, list\n    # check structure like before\n    list2:address:duplex-list:character <- copy list\n    10:character/raw <- first list2\n    list2 <- next list2\n    11:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
-9992 load: after rewriting: run {"\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    list <- remove list, list\n    # check structure like before\n    list2:address:duplex-list:character <- copy list\n    10:character/raw <- first list2\n    list2 <- next list2\n    11:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
+9993 parse:   ingredient: {"\n    local-scope\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    list <- remove list, list\n    # check structure like before\n    list2:address:duplex-list:character <- copy list\n    10:character/raw <- first list2\n    list2 <- next list2\n    11:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
+9992 load: after rewriting: run {"\n    local-scope\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    list <- remove list, list\n    # check structure like before\n    list2:address:duplex-list:character <- copy list\n    10:character/raw <- first list2\n    list2 <- next list2\n    11:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
 9993 parse: instruction: memory-should-contain
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"\n    10 <- 4  # scanning next, skipping deleted element\n    11 <- 3\n    20 <- 0  # no more elements\n    30 <- 4  # prev of final element\n    40 <- 1  # list back at start\n  ": "literal-string"}
@@ -12,7 +12,7 @@
 9991 transform: --- rewrite literal strings in recipe scenario_removing-from-start-of-duplex-list
 9991 transform: --- rewrite 'stash' instructions in recipe scenario_removing-from-start-of-duplex-list
 9991 transform: --- deduce types for recipe scenario_removing-from-start-of-duplex-list
-9993 transform: run {"\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    list <- remove list, list\n    # check structure like before\n    list2:address:duplex-list:character <- copy list\n    10:character/raw <- first list2\n    list2 <- next list2\n    11:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
+9993 transform: run {"\n    local-scope\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    list <- remove list, list\n    # check structure like before\n    list2:address:duplex-list:character <- copy list\n    10:character/raw <- first list2\n    list2 <- next list2\n    11:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
 9993 transform: memory-should-contain {"\n    10 <- 4  # scanning next, skipping deleted element\n    11 <- 3\n    20 <- 0  # no more elements\n    30 <- 4  # prev of final element\n    40 <- 1  # list back at start\n  ": "literal-string"}
 9991 transform: --- fill in reply ingredients from header for recipe scenario_removing-from-start-of-duplex-list
 9991 transform: --- deduce types for recipe scenario_removing-from-start-of-duplex-list
@@ -21,7 +21,7 @@
 9991 transform: --- transform names for recipe scenario_removing-from-start-of-duplex-list
 9991 transform: --- resolve ambiguous calls for recipe scenario_removing-from-start-of-duplex-list
 9992 transform: --- compute address offsets for scenario_removing-from-start-of-duplex-list
-9993 transform: - compute address offsets for run {"\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    list <- remove list, list\n    # check structure like before\n    list2:address:duplex-list:character <- copy list\n    10:character/raw <- first list2\n    list2 <- next list2\n    11:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
+9993 transform: - compute address offsets for run {"\n    local-scope\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    list <- remove list, list\n    # check structure like before\n    list2:address:duplex-list:character <- copy list\n    10:character/raw <- first list2\n    list2 <- next list2\n    11:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
 9993 transform: - compute address offsets for memory-should-contain {"\n    10 <- 4  # scanning next, skipping deleted element\n    11 <- 3\n    20 <- 0  # no more elements\n    30 <- 4  # prev of final element\n    40 <- 1  # list back at start\n  ": "literal-string"}
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe scenario_removing-from-start-of-duplex-list
@@ -41,8 +41,11 @@
 9999 trace: new routine; incrementing callstack depth to 1
 9999 new: routine allocated memory from 1000 to 101000
 9990 schedule: scenario_removing-from-start-of-duplex-list
- 102 run: run {"\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    list <- remove list, list\n    # check structure like before\n    list2:address:duplex-list:character <- copy list\n    10:character/raw <- first list2\n    list2 <- next list2\n    11:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
+ 102 run: run {"\n    local-scope\n    list:address:duplex-list:character <- push 3, 0\n    list <- push 4, list\n    list <- push 5, list\n    list <- remove list, list\n    # check structure like before\n    list2:address:duplex-list:character <- copy list\n    10:character/raw <- first list2\n    list2 <- next list2\n    11:character/raw <- first list2\n    20:address:duplex-list:character/raw <- next list2\n    list2 <- prev list2\n    30:character/raw <- first list2\n    40:boolean/raw <- equal list, list2\n  ": "literal-string"}
 9991 parse: --- defining run_1001
+9993 parse: instruction: local-scope
+9993 parse:   number of ingredients: 0
+9992 load: after rewriting: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 parse: instruction: push
 9993 parse:   number of ingredients: 2
 9993 parse:   ingredient: {3: "literal"}
@@ -113,6 +116,7 @@
 9991 transform: --- rewrite literal strings in recipe run_1001
 9991 transform: --- rewrite 'stash' instructions in recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
+9992 transform: default-space => ("address" "array" "location")
 9992 transform: list => ("address" "duplex-list" "character")
 9992 transform: list <= ("address" "duplex-list" "character")
 9992 transform: list <= ("address" "duplex-list" "character")
@@ -133,6 +137,7 @@
 9992 transform: list2 <= ("address" "duplex-list" "character")
 9992 transform: list <= ("address" "duplex-list" "character")
 9992 transform: list2 <= ("address" "duplex-list" "character")
+9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: {list: ("address" "duplex-list" "character")} <- push {3: "literal"}, {0: "literal"}
 9993 transform: {list: ("address" "duplex-list" "character")} <- push {4: "literal"}, {list: ("address" "duplex-list" "character")}
 9993 transform: {list: ("address" "duplex-list" "character")} <- push {5: "literal"}, {list: ("address" "duplex-list" "character")}
@@ -147,6 +152,7 @@
 9993 transform: {40: "boolean", "raw": ()} <- equal {list: ("address" "duplex-list" "character")}, {list2: ("address" "duplex-list" "character")}
 9991 transform: --- fill in reply ingredients from header for recipe run_1001
 9991 transform: --- deduce types for recipe run_1001
+9992 transform: default-space => ("address" "array" "location")
 9992 transform: list => ("address" "duplex-list" "character")
 9992 transform: list2 => ("address" "duplex-list" "character")
 9991 transform: --- check for invalid types in recipe run_1001
@@ -990,6 +996,7 @@
 9992 transform: checking variant 0: recipe equal_2 {a: ("address" "array" "character")} {b: ("address" "array" "character")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: --- compute address offsets for run_1001
+9993 transform: - compute address offsets for {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9993 transform: - compute address offsets for {list: ("address" "duplex-list" "character")} <- push_6 {3: "literal"}, {0: "literal"}
 9993 transform: - compute address offsets for {list: ("address" "duplex-list" "character")} <- push_7 {4: "literal"}, {list: ("address" "duplex-list" "character")}
 9993 transform: - compute address offsets for {list: ("address" "duplex-list" "character")} <- push_8 {5: "literal"}, {list: ("address" "duplex-list" "character")}
@@ -1005,6 +1012,7 @@
 9993 transform: - compute address offsets for reply 
 9991 transform: --- compute instruction operations for recipe run_1001
 9991 transform: --- transform braces for recipe run_1001
+9992 transform: local-scope ...
 9992 transform: push ...
 9992 transform: push ...
 9992 transform: push ...
@@ -1023,586 +1031,630 @@
 9991 transform: --- type-check 'call' instructions inside recipe run_1001
 9991 transform: --- type-check calls inside recipe run_1001
 9991 transform: --- convert 'new' to 'allocate' for recipe run_1001
+9992 new: size of "location" is 1
 9991 transform: --- check types of reply instructions in recipe run_1001
 9991 transform: --- type-check merge instructions in recipe run_1001
 9991 transform: --- checking reply instructions against header for run_1001
 9991 transform: --- parsing any uninitialized reagents as integers
 9998 trace: run: incrementing callstack depth to 2
- 103 run: {list: ("address" "duplex-list" "character")} <- push_6 {3: "literal"}, {0: "literal"}
-9999 trace: incrementing callstack depth to 3
- 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 4
-9999 mem: allocating size 6
+ 103 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9999 mem: array size is 3
+9999 mem: allocating size 5
 9999 mem: new alloc: 1000
 9999 mem: storing 0 in location 1000
 9999 mem: storing 0 in location 1001
 9999 mem: storing 0 in location 1002
 9999 mem: storing 0 in location 1003
 9999 mem: storing 0 in location 1004
+9999 mem: storing 3 in location 1001
+ 103 run: {list: ("address" "duplex-list" "character")} <- push_6 {3: "literal"}, {0: "literal"}
+9999 trace: incrementing callstack depth to 3
+ 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9999 mem: array size is 4
+9999 mem: allocating size 6
+9999 mem: new alloc: 1005
 9999 mem: storing 0 in location 1005
-9999 mem: storing 4 in location 1001
- 104 run: {x: "character"} <- next-ingredient-without-typechecking 
-9999 mem: storing 3 in location 1003
- 104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1004 is 0
-9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 0 in location 1004
- 104 run: {result: ("address" "duplex-list" "character")} <- new {(duplex-list character): "type"}
-9999 mem: allocating size 4
-9999 mem: new alloc: 1006
 9999 mem: storing 0 in location 1006
 9999 mem: storing 0 in location 1007
 9999 mem: storing 0 in location 1008
 9999 mem: storing 0 in location 1009
-9999 mem: location 1005 is 0
-9999 mem: incrementing refcount of 1006: 0 -> 1
-9999 mem: storing 1006 in location 1005
- 104 run: {result: ("address" "duplex-list" "character"), "lookup": ()} <- merge {x: "character"}, {in: ("address" "duplex-list" "character")}, {0: "literal"}
-9999 mem: location 1003 is 3
-9999 mem: location 1004 is 0
-9999 mem: location 1005 is 1006
-9999 mem: skipping refcount at 1006
-9999 mem: location 1005 is 1006
-9999 mem: skipping refcount at 1006
-9999 mem: copying address to itself; refcount unchanged
-9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 3 in location 1007
-9999 mem: storing 0 in location 1008
-9999 mem: storing 0 in location 1009
- 104 run: jump-unless {in: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1004 is 0
-9998 run: jumping to instruction 8
- 104 run: return {result: ("address" "duplex-list" "character"), "same-as-ingredient": "1"}
-9999 mem: location 1005 is 1006
-9999 mem: clearing x:_elem
-9999 mem: storing 0 in location 1003
-9999 mem: clearing in:address:duplex-list:_elem
-9999 mem: location 1004 is 0
-9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 0 in location 1004
-9999 mem: automatically abandoning 1000
-9999 abandon: updating refcounts inside 1000: (array number)
-9999 abandon: saving 1000 in free-list of size 6
-9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1006
-9999 mem: storing 1006 in location 1
- 103 run: {list: ("address" "duplex-list" "character")} <- push_7 {4: "literal"}, {list: ("address" "duplex-list" "character")}
-9999 mem: location 1 is 1006
-9999 trace: incrementing callstack depth to 3
- 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 4
-9999 mem: allocating size 6
-9999 abandon: picking up space from free-list of size 6
-9999 mem: new alloc from free list: 1000
+9999 mem: storing 0 in location 1010
+9999 mem: storing 4 in location 1006
  104 run: {x: "character"} <- next-ingredient-without-typechecking 
-9999 mem: storing 4 in location 1003
+9999 mem: storing 3 in location 1008
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1004 is 0
-9999 mem: incrementing refcount of 1006: 1 -> 2
-9999 mem: storing 1006 in location 1004
+9999 mem: location 1009 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1009
  104 run: {result: ("address" "duplex-list" "character")} <- new {(duplex-list character): "type"}
 9999 mem: allocating size 4
-9999 mem: new alloc: 1010
-9999 mem: storing 0 in location 1010
+9999 mem: new alloc: 1011
 9999 mem: storing 0 in location 1011
 9999 mem: storing 0 in location 1012
 9999 mem: storing 0 in location 1013
-9999 mem: location 1005 is 0
-9999 mem: incrementing refcount of 1010: 0 -> 1
-9999 mem: storing 1010 in location 1005
+9999 mem: storing 0 in location 1014
+9999 mem: location 1010 is 0
+9999 mem: incrementing refcount of 1011: 0 -> 1
+9999 mem: storing 1011 in location 1010
  104 run: {result: ("address" "duplex-list" "character"), "lookup": ()} <- merge {x: "character"}, {in: ("address" "duplex-list" "character")}, {0: "literal"}
-9999 mem: location 1003 is 4
-9999 mem: location 1004 is 1006
-9999 mem: location 1005 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: location 1005 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: incrementing refcount of 1006: 2 -> 3
+9999 mem: location 1008 is 3
+9999 mem: location 1009 is 0
+9999 mem: location 1010 is 1011
+9999 mem: skipping refcount at 1011
+9999 mem: location 1010 is 1011
+9999 mem: skipping refcount at 1011
 9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 4 in location 1011
-9999 mem: storing 1006 in location 1012
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 3 in location 1012
 9999 mem: storing 0 in location 1013
+9999 mem: storing 0 in location 1014
  104 run: jump-unless {in: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1004 is 1006
-9998 run: jump-unless fell through
- 104 run: {in: ("address" "duplex-list" "character"), "lookup": ()} <- put {in: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {result: ("address" "duplex-list" "character")}
-9999 mem: location 1004 is 1006
-9999 mem: skipping refcount at 1006
-9999 mem: location 1007 is 3
-9999 mem: location 1008 is 0
 9999 mem: location 1009 is 0
-9999 mem: location 1005 is 1010
-9999 mem: location 1004 is 1006
-9999 mem: skipping refcount at 1006
-9998 run: address to copy to is 1009
-9999 mem: location 1009 is 0
-9999 mem: incrementing refcount of 1010: 1 -> 2
-9999 mem: storing 1010 in location 1009
+9998 run: jumping to instruction 8
  104 run: return {result: ("address" "duplex-list" "character"), "same-as-ingredient": "1"}
-9999 mem: location 1005 is 1010
+9999 mem: location 1010 is 1011
 9999 mem: clearing x:_elem
-9999 mem: storing 0 in location 1003
+9999 mem: storing 0 in location 1008
 9999 mem: clearing in:address:duplex-list:_elem
-9999 mem: location 1004 is 1006
-9999 mem: skipping refcount at 1006
-9999 mem: decrementing refcount of 1006: 3 -> 2
-9999 mem: storing 0 in location 1004
-9999 mem: automatically abandoning 1000
-9999 abandon: updating refcounts inside 1000: (array number)
-9999 abandon: saving 1000 in free-list of size 6
+9999 mem: location 1009 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1009
+9999 mem: automatically abandoning 1005
+9999 abandon: updating refcounts inside 1005: (array number)
+9999 abandon: saving 1005 in free-list of size 6
 9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1010
-9999 mem: storing 1010 in location 1
- 103 run: {list: ("address" "duplex-list" "character")} <- push_8 {5: "literal"}, {list: ("address" "duplex-list" "character")}
-9999 mem: location 1 is 1010
+9998 run: result 0 is 1011
+9999 mem: storing 1011 in location 1003
+ 103 run: {list: ("address" "duplex-list" "character")} <- push_7 {4: "literal"}, {list: ("address" "duplex-list" "character")}
+9999 mem: location 1003 is 1011
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 4
 9999 mem: allocating size 6
 9999 abandon: picking up space from free-list of size 6
-9999 mem: new alloc from free list: 1000
+9999 mem: new alloc from free list: 1005
  104 run: {x: "character"} <- next-ingredient-without-typechecking 
-9999 mem: storing 5 in location 1003
+9999 mem: storing 4 in location 1008
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1004 is 0
-9999 mem: incrementing refcount of 1010: 2 -> 3
-9999 mem: storing 1010 in location 1004
+9999 mem: location 1009 is 0
+9999 mem: incrementing refcount of 1011: 1 -> 2
+9999 mem: storing 1011 in location 1009
  104 run: {result: ("address" "duplex-list" "character")} <- new {(duplex-list character): "type"}
 9999 mem: allocating size 4
-9999 mem: new alloc: 1014
-9999 mem: storing 0 in location 1014
+9999 mem: new alloc: 1015
 9999 mem: storing 0 in location 1015
 9999 mem: storing 0 in location 1016
 9999 mem: storing 0 in location 1017
-9999 mem: location 1005 is 0
-9999 mem: incrementing refcount of 1014: 0 -> 1
-9999 mem: storing 1014 in location 1005
+9999 mem: storing 0 in location 1018
+9999 mem: location 1010 is 0
+9999 mem: incrementing refcount of 1015: 0 -> 1
+9999 mem: storing 1015 in location 1010
  104 run: {result: ("address" "duplex-list" "character"), "lookup": ()} <- merge {x: "character"}, {in: ("address" "duplex-list" "character")}, {0: "literal"}
-9999 mem: location 1003 is 5
-9999 mem: location 1004 is 1010
-9999 mem: location 1005 is 1014
-9999 mem: skipping refcount at 1014
-9999 mem: location 1005 is 1014
-9999 mem: skipping refcount at 1014
-9999 mem: incrementing refcount of 1010: 3 -> 4
+9999 mem: location 1008 is 4
+9999 mem: location 1009 is 1011
+9999 mem: location 1010 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: location 1010 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: incrementing refcount of 1011: 2 -> 3
 9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 5 in location 1015
-9999 mem: storing 1010 in location 1016
-9999 mem: storing 0 in location 1017
+9999 mem: storing 4 in location 1016
+9999 mem: storing 1011 in location 1017
+9999 mem: storing 0 in location 1018
  104 run: jump-unless {in: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1004 is 1010
+9999 mem: location 1009 is 1011
 9998 run: jump-unless fell through
  104 run: {in: ("address" "duplex-list" "character"), "lookup": ()} <- put {in: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {result: ("address" "duplex-list" "character")}
-9999 mem: location 1004 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: location 1011 is 4
-9999 mem: location 1012 is 1006
+9999 mem: location 1009 is 1011
+9999 mem: skipping refcount at 1011
+9999 mem: location 1012 is 3
 9999 mem: location 1013 is 0
-9999 mem: location 1005 is 1014
-9999 mem: location 1004 is 1010
-9999 mem: skipping refcount at 1010
-9998 run: address to copy to is 1013
-9999 mem: location 1013 is 0
-9999 mem: incrementing refcount of 1014: 1 -> 2
-9999 mem: storing 1014 in location 1013
+9999 mem: location 1014 is 0
+9999 mem: location 1010 is 1015
+9999 mem: location 1009 is 1011
+9999 mem: skipping refcount at 1011
+9998 run: address to copy to is 1014
+9999 mem: location 1014 is 0
+9999 mem: incrementing refcount of 1015: 1 -> 2
+9999 mem: storing 1015 in location 1014
  104 run: return {result: ("address" "duplex-list" "character"), "same-as-ingredient": "1"}
-9999 mem: location 1005 is 1014
+9999 mem: location 1010 is 1015
 9999 mem: clearing x:_elem
-9999 mem: storing 0 in location 1003
+9999 mem: storing 0 in location 1008
 9999 mem: clearing in:address:duplex-list:_elem
-9999 mem: location 1004 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: decrementing refcount of 1010: 4 -> 3
-9999 mem: storing 0 in location 1004
-9999 mem: automatically abandoning 1000
-9999 abandon: updating refcounts inside 1000: (array number)
-9999 abandon: saving 1000 in free-list of size 6
+9999 mem: location 1009 is 1011
+9999 mem: skipping refcount at 1011
+9999 mem: decrementing refcount of 1011: 3 -> 2
+9999 mem: storing 0 in location 1009
+9999 mem: automatically abandoning 1005
+9999 abandon: updating refcounts inside 1005: (array number)
+9999 abandon: saving 1005 in free-list of size 6
 9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1014
-9999 mem: storing 1014 in location 1
- 103 run: {list: ("address" "duplex-list" "character")} <- remove_2 {list: ("address" "duplex-list" "character")}, {list: ("address" "duplex-list" "character")}
-9999 mem: location 1 is 1014
-9999 mem: location 1 is 1014
+9998 run: result 0 is 1015
+9999 mem: storing 1015 in location 1003
+ 103 run: {list: ("address" "duplex-list" "character")} <- push_8 {5: "literal"}, {list: ("address" "duplex-list" "character")}
+9999 mem: location 1003 is 1015
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 5
-9999 mem: allocating size 7
-9999 mem: new alloc: 1018
-9999 mem: storing 0 in location 1018
+9999 mem: array size is 4
+9999 mem: allocating size 6
+9999 abandon: picking up space from free-list of size 6
+9999 mem: new alloc from free list: 1005
+ 104 run: {x: "character"} <- next-ingredient-without-typechecking 
+9999 mem: storing 5 in location 1008
+ 104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
+9999 mem: location 1009 is 0
+9999 mem: incrementing refcount of 1015: 2 -> 3
+9999 mem: storing 1015 in location 1009
+ 104 run: {result: ("address" "duplex-list" "character")} <- new {(duplex-list character): "type"}
+9999 mem: allocating size 4
+9999 mem: new alloc: 1019
 9999 mem: storing 0 in location 1019
 9999 mem: storing 0 in location 1020
 9999 mem: storing 0 in location 1021
 9999 mem: storing 0 in location 1022
-9999 mem: storing 0 in location 1023
-9999 mem: storing 0 in location 1024
-9999 mem: storing 5 in location 1019
- 104 run: {x: ("address" "duplex-list" "character"), "contained-in": "in"} <- next-ingredient-without-typechecking 
-9999 mem: location 1021 is 0
-9999 mem: incrementing refcount of 1014: 2 -> 3
-9999 mem: storing 1014 in location 1021
- 104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1022 is 0
-9999 mem: incrementing refcount of 1014: 3 -> 4
-9999 mem: storing 1014 in location 1022
- 104 run: jump-if {x: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1021 is 1014
-9998 run: jumping to instruction 6
- 104 run: {next-node: ("address" "duplex-list" "character")} <- get {x: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}
-9999 mem: location 1021 is 1014
-9999 mem: skipping refcount at 1014
-9999 mem: location 1015 is 5
-9999 mem: location 1016 is 1010
-9999 mem: location 1017 is 0
-9999 mem: location 1021 is 1014
-9999 mem: skipping refcount at 1014
-9998 run: address to copy is 1016
-9998 run: its type is ("address" "duplex-list" "character")
-9999 mem: location 1016 is 1010
-9999 mem: location 1023 is 0
-9999 mem: incrementing refcount of 1010: 3 -> 4
-9999 mem: storing 1010 in location 1023
- 104 run: {prev-node: ("address" "duplex-list" "character")} <- get {x: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}
-9999 mem: location 1021 is 1014
-9999 mem: skipping refcount at 1014
-9999 mem: location 1015 is 5
-9999 mem: location 1016 is 1010
-9999 mem: location 1017 is 0
-9999 mem: location 1021 is 1014
-9999 mem: skipping refcount at 1014
-9998 run: address to copy is 1017
-9998 run: its type is ("address" "duplex-list" "character")
-9999 mem: location 1017 is 0
-9999 mem: location 1024 is 0
+9999 mem: location 1010 is 0
+9999 mem: incrementing refcount of 1019: 0 -> 1
+9999 mem: storing 1019 in location 1010
+ 104 run: {result: ("address" "duplex-list" "character"), "lookup": ()} <- merge {x: "character"}, {in: ("address" "duplex-list" "character")}, {0: "literal"}
+9999 mem: location 1008 is 5
+9999 mem: location 1009 is 1015
+9999 mem: location 1010 is 1019
+9999 mem: skipping refcount at 1019
+9999 mem: location 1010 is 1019
+9999 mem: skipping refcount at 1019
+9999 mem: incrementing refcount of 1015: 3 -> 4
 9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 0 in location 1024
- 104 run: {x: ("address" "duplex-list" "character"), "lookup": ()} <- put {x: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}, {0: "literal"}
-9999 mem: location 1021 is 1014
-9999 mem: skipping refcount at 1014
-9999 mem: location 1015 is 5
-9999 mem: location 1016 is 1010
-9999 mem: location 1017 is 0
-9999 mem: location 1021 is 1014
-9999 mem: skipping refcount at 1014
-9998 run: address to copy to is 1016
-9999 mem: location 1016 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: decrementing refcount of 1010: 4 -> 3
-9999 mem: storing 0 in location 1016
- 104 run: {x: ("address" "duplex-list" "character"), "lookup": ()} <- put {x: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {0: "literal"}
-9999 mem: location 1021 is 1014
-9999 mem: skipping refcount at 1014
-9999 mem: location 1015 is 5
-9999 mem: location 1016 is 0
-9999 mem: location 1017 is 0
-9999 mem: location 1021 is 1014
-9999 mem: skipping refcount at 1014
-9998 run: address to copy to is 1017
-9999 mem: location 1017 is 0
-9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 0 in location 1017
- 104 run: jump-unless {next-node: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1023 is 1010
-9998 run: jump-unless fell through
- 104 run: {next-node: ("address" "duplex-list" "character"), "lookup": ()} <- put {next-node: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {prev-node: ("address" "duplex-list" "character")}
-9999 mem: location 1023 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: location 1011 is 4
-9999 mem: location 1012 is 1006
-9999 mem: location 1013 is 1014
-9999 mem: location 1024 is 0
-9999 mem: location 1023 is 1010
-9999 mem: skipping refcount at 1010
-9998 run: address to copy to is 1013
-9999 mem: location 1013 is 1014
-9999 mem: skipping refcount at 1014
-9999 mem: decrementing refcount of 1014: 4 -> 3
-9999 mem: storing 0 in location 1013
- 104 run: jump-unless {prev-node: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1024 is 0
-9998 run: jumping to instruction 19
- 104 run: return {next-node: ("address" "duplex-list" "character"), "same-as-ingredient": "1"}
-9999 mem: location 1023 is 1010
-9999 mem: clearing x:address:duplex-list:_elem/contained-in:in
-9999 mem: location 1021 is 1014
-9999 mem: skipping refcount at 1014
-9999 mem: decrementing refcount of 1014: 3 -> 2
-9999 mem: storing 0 in location 1021
-9999 mem: clearing in:address:duplex-list:_elem
-9999 mem: location 1022 is 1014
-9999 mem: skipping refcount at 1014
-9999 mem: decrementing refcount of 1014: 2 -> 1
+9999 mem: storing 5 in location 1020
+9999 mem: storing 1015 in location 1021
 9999 mem: storing 0 in location 1022
-9999 mem: clearing prev-node:address:duplex-list:_elem
-9999 mem: location 1024 is 0
-9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 0 in location 1024
-9999 mem: automatically abandoning 1018
-9999 abandon: updating refcounts inside 1018: (array number)
-9999 abandon: saving 1018 in free-list of size 7
+ 104 run: jump-unless {in: ("address" "duplex-list" "character")}, {: "offset"}
+9999 mem: location 1009 is 1015
+9998 run: jump-unless fell through
+ 104 run: {in: ("address" "duplex-list" "character"), "lookup": ()} <- put {in: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {result: ("address" "duplex-list" "character")}
+9999 mem: location 1009 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: location 1016 is 4
+9999 mem: location 1017 is 1011
+9999 mem: location 1018 is 0
+9999 mem: location 1010 is 1019
+9999 mem: location 1009 is 1015
+9999 mem: skipping refcount at 1015
+9998 run: address to copy to is 1018
+9999 mem: location 1018 is 0
+9999 mem: incrementing refcount of 1019: 1 -> 2
+9999 mem: storing 1019 in location 1018
+ 104 run: return {result: ("address" "duplex-list" "character"), "same-as-ingredient": "1"}
+9999 mem: location 1010 is 1019
+9999 mem: clearing x:_elem
+9999 mem: storing 0 in location 1008
+9999 mem: clearing in:address:duplex-list:_elem
+9999 mem: location 1009 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: decrementing refcount of 1015: 4 -> 3
+9999 mem: storing 0 in location 1009
+9999 mem: automatically abandoning 1005
+9999 abandon: updating refcounts inside 1005: (array number)
+9999 abandon: saving 1005 in free-list of size 6
 9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1010
-9999 mem: storing 1010 in location 1
- 103 run: {list2: ("address" "duplex-list" "character")} <- copy {list: ("address" "duplex-list" "character")}
-9999 mem: location 1 is 1010
-9999 mem: location 2 is 0
-9999 mem: incrementing refcount of 1010: 3 -> 4
-9999 mem: storing 1010 in location 2
- 103 run: {10: "character", "raw": ()} <- first_4 {list2: ("address" "duplex-list" "character")}
-9999 mem: location 2 is 1010
+9998 run: result 0 is 1019
+9999 mem: storing 1019 in location 1003
+ 103 run: {list: ("address" "duplex-list" "character")} <- remove_2 {list: ("address" "duplex-list" "character")}, {list: ("address" "duplex-list" "character")}
+9999 mem: location 1003 is 1019
+9999 mem: location 1003 is 1019
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 3
-9999 mem: allocating size 5
-9999 mem: new alloc: 1025
+9999 mem: array size is 5
+9999 mem: allocating size 7
+9999 mem: new alloc: 1023
+9999 mem: storing 0 in location 1023
+9999 mem: storing 0 in location 1024
 9999 mem: storing 0 in location 1025
 9999 mem: storing 0 in location 1026
 9999 mem: storing 0 in location 1027
 9999 mem: storing 0 in location 1028
 9999 mem: storing 0 in location 1029
-9999 mem: storing 3 in location 1026
+9999 mem: storing 5 in location 1024
+ 104 run: {x: ("address" "duplex-list" "character"), "contained-in": "in"} <- next-ingredient-without-typechecking 
+9999 mem: location 1026 is 0
+9999 mem: incrementing refcount of 1019: 2 -> 3
+9999 mem: storing 1019 in location 1026
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
+9999 mem: location 1027 is 0
+9999 mem: incrementing refcount of 1019: 3 -> 4
+9999 mem: storing 1019 in location 1027
+ 104 run: jump-if {x: ("address" "duplex-list" "character")}, {: "offset"}
+9999 mem: location 1026 is 1019
+9998 run: jumping to instruction 6
+ 104 run: {next-node: ("address" "duplex-list" "character")} <- get {x: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}
+9999 mem: location 1026 is 1019
+9999 mem: skipping refcount at 1019
+9999 mem: location 1020 is 5
+9999 mem: location 1021 is 1015
+9999 mem: location 1022 is 0
+9999 mem: location 1026 is 1019
+9999 mem: skipping refcount at 1019
+9998 run: address to copy is 1021
+9998 run: its type is ("address" "duplex-list" "character")
+9999 mem: location 1021 is 1015
 9999 mem: location 1028 is 0
-9999 mem: incrementing refcount of 1010: 4 -> 5
-9999 mem: storing 1010 in location 1028
+9999 mem: incrementing refcount of 1015: 3 -> 4
+9999 mem: storing 1015 in location 1028
+ 104 run: {prev-node: ("address" "duplex-list" "character")} <- get {x: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}
+9999 mem: location 1026 is 1019
+9999 mem: skipping refcount at 1019
+9999 mem: location 1020 is 5
+9999 mem: location 1021 is 1015
+9999 mem: location 1022 is 0
+9999 mem: location 1026 is 1019
+9999 mem: skipping refcount at 1019
+9998 run: address to copy is 1022
+9998 run: its type is ("address" "duplex-list" "character")
+9999 mem: location 1022 is 0
+9999 mem: location 1029 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1029
+ 104 run: {x: ("address" "duplex-list" "character"), "lookup": ()} <- put {x: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}, {0: "literal"}
+9999 mem: location 1026 is 1019
+9999 mem: skipping refcount at 1019
+9999 mem: location 1020 is 5
+9999 mem: location 1021 is 1015
+9999 mem: location 1022 is 0
+9999 mem: location 1026 is 1019
+9999 mem: skipping refcount at 1019
+9998 run: address to copy to is 1021
+9999 mem: location 1021 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: decrementing refcount of 1015: 4 -> 3
+9999 mem: storing 0 in location 1021
+ 104 run: {x: ("address" "duplex-list" "character"), "lookup": ()} <- put {x: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {0: "literal"}
+9999 mem: location 1026 is 1019
+9999 mem: skipping refcount at 1019
+9999 mem: location 1020 is 5
+9999 mem: location 1021 is 0
+9999 mem: location 1022 is 0
+9999 mem: location 1026 is 1019
+9999 mem: skipping refcount at 1019
+9998 run: address to copy to is 1022
+9999 mem: location 1022 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1022
+ 104 run: jump-unless {next-node: ("address" "duplex-list" "character")}, {: "offset"}
+9999 mem: location 1028 is 1015
+9998 run: jump-unless fell through
+ 104 run: {next-node: ("address" "duplex-list" "character"), "lookup": ()} <- put {next-node: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}, {prev-node: ("address" "duplex-list" "character")}
+9999 mem: location 1028 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: location 1016 is 4
+9999 mem: location 1017 is 1011
+9999 mem: location 1018 is 1019
+9999 mem: location 1029 is 0
+9999 mem: location 1028 is 1015
+9999 mem: skipping refcount at 1015
+9998 run: address to copy to is 1018
+9999 mem: location 1018 is 1019
+9999 mem: skipping refcount at 1019
+9999 mem: decrementing refcount of 1019: 4 -> 3
+9999 mem: storing 0 in location 1018
+ 104 run: jump-unless {prev-node: ("address" "duplex-list" "character")}, {: "offset"}
+9999 mem: location 1029 is 0
+9998 run: jumping to instruction 19
+ 104 run: return {next-node: ("address" "duplex-list" "character"), "same-as-ingredient": "1"}
+9999 mem: location 1028 is 1015
+9999 mem: clearing x:address:duplex-list:_elem/contained-in:in
+9999 mem: location 1026 is 1019
+9999 mem: skipping refcount at 1019
+9999 mem: decrementing refcount of 1019: 3 -> 2
+9999 mem: storing 0 in location 1026
+9999 mem: clearing in:address:duplex-list:_elem
+9999 mem: location 1027 is 1019
+9999 mem: skipping refcount at 1019
+9999 mem: decrementing refcount of 1019: 2 -> 1
+9999 mem: storing 0 in location 1027
+9999 mem: clearing prev-node:address:duplex-list:_elem
+9999 mem: location 1029 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1029
+9999 mem: automatically abandoning 1023
+9999 abandon: updating refcounts inside 1023: (array number)
+9999 abandon: saving 1023 in free-list of size 7
+9999 trace: reply: decrementing callstack depth from 3
+9998 run: result 0 is 1015
+9999 mem: storing 1015 in location 1003
+ 103 run: {list2: ("address" "duplex-list" "character")} <- copy {list: ("address" "duplex-list" "character")}
+9999 mem: location 1003 is 1015
+9999 mem: location 1004 is 0
+9999 mem: incrementing refcount of 1015: 3 -> 4
+9999 mem: storing 1015 in location 1004
+ 103 run: {10: "character", "raw": ()} <- first_4 {list2: ("address" "duplex-list" "character")}
+9999 mem: location 1004 is 1015
+9999 trace: incrementing callstack depth to 3
+ 104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
+9999 mem: array size is 3
+9999 mem: allocating size 5
+9999 mem: new alloc: 1030
+9999 mem: storing 0 in location 1030
+9999 mem: storing 0 in location 1031
+9999 mem: storing 0 in location 1032
+9999 mem: storing 0 in location 1033
+9999 mem: storing 0 in location 1034
+9999 mem: storing 3 in location 1031
+ 104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
+9999 mem: location 1033 is 0
+9999 mem: incrementing refcount of 1015: 4 -> 5
+9999 mem: storing 1015 in location 1033
  104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1028 is 1010
+9999 mem: location 1033 is 1015
 9998 run: jumping to instruction 5
  104 run: {result: "character"} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {value: "offset"}
-9999 mem: location 1028 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: location 1011 is 4
-9999 mem: location 1012 is 1006
-9999 mem: location 1013 is 0
-9999 mem: location 1028 is 1010
-9999 mem: skipping refcount at 1010
-9998 run: address to copy is 1011
+9999 mem: location 1033 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: location 1016 is 4
+9999 mem: location 1017 is 1011
+9999 mem: location 1018 is 0
+9999 mem: location 1033 is 1015
+9999 mem: skipping refcount at 1015
+9998 run: address to copy is 1016
 9998 run: its type is "character"
-9999 mem: location 1011 is 4
-9999 mem: storing 4 in location 1029
+9999 mem: location 1016 is 4
+9999 mem: storing 4 in location 1034
  104 run: reply {result: "character"}
-9999 mem: location 1029 is 4
+9999 mem: location 1034 is 4
 9999 mem: clearing in:address:duplex-list:_elem
-9999 mem: location 1028 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: decrementing refcount of 1010: 5 -> 4
-9999 mem: storing 0 in location 1028
-9999 mem: automatically abandoning 1025
-9999 abandon: updating refcounts inside 1025: (array number)
-9999 abandon: saving 1025 in free-list of size 5
+9999 mem: location 1033 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: decrementing refcount of 1015: 5 -> 4
+9999 mem: storing 0 in location 1033
+9999 mem: automatically abandoning 1030
+9999 abandon: updating refcounts inside 1030: (array number)
+9999 abandon: saving 1030 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 4
 9999 mem: storing 4 in location 10
  103 run: {list2: ("address" "duplex-list" "character")} <- next_2 {list2: ("address" "duplex-list" "character")}
-9999 mem: location 2 is 1010
+9999 mem: location 1004 is 1015
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 3
 9999 mem: allocating size 5
 9999 abandon: picking up space from free-list of size 5
-9999 mem: new alloc from free list: 1025
+9999 mem: new alloc from free list: 1030
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1028 is 0
-9999 mem: incrementing refcount of 1010: 4 -> 5
-9999 mem: storing 1010 in location 1028
+9999 mem: location 1033 is 0
+9999 mem: incrementing refcount of 1015: 4 -> 5
+9999 mem: storing 1015 in location 1033
  104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1028 is 1010
+9999 mem: location 1033 is 1015
 9998 run: jumping to instruction 5
  104 run: {result: ("address" "duplex-list" "character")} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}
-9999 mem: location 1028 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: location 1011 is 4
-9999 mem: location 1012 is 1006
-9999 mem: location 1013 is 0
-9999 mem: location 1028 is 1010
-9999 mem: skipping refcount at 1010
-9998 run: address to copy is 1012
+9999 mem: location 1033 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: location 1016 is 4
+9999 mem: location 1017 is 1011
+9999 mem: location 1018 is 0
+9999 mem: location 1033 is 1015
+9999 mem: skipping refcount at 1015
+9998 run: address to copy is 1017
 9998 run: its type is ("address" "duplex-list" "character")
-9999 mem: location 1012 is 1006
-9999 mem: location 1029 is 0
-9999 mem: incrementing refcount of 1006: 2 -> 3
-9999 mem: storing 1006 in location 1029
+9999 mem: location 1017 is 1011
+9999 mem: location 1034 is 0
+9999 mem: incrementing refcount of 1011: 2 -> 3
+9999 mem: storing 1011 in location 1034
  104 run: reply {result: ("address" "duplex-list" "character"), "contained-in": "in"}
-9999 mem: location 1029 is 1006
+9999 mem: location 1034 is 1011
 9999 mem: clearing in:address:duplex-list:_elem
-9999 mem: location 1028 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: decrementing refcount of 1010: 5 -> 4
-9999 mem: storing 0 in location 1028
-9999 mem: automatically abandoning 1025
-9999 abandon: updating refcounts inside 1025: (array number)
-9999 abandon: saving 1025 in free-list of size 5
+9999 mem: location 1033 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: decrementing refcount of 1015: 5 -> 4
+9999 mem: storing 0 in location 1033
+9999 mem: automatically abandoning 1030
+9999 abandon: updating refcounts inside 1030: (array number)
+9999 abandon: saving 1030 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1006
-9999 mem: storing 1006 in location 2
+9998 run: result 0 is 1011
+9999 mem: storing 1011 in location 1004
  103 run: {11: "character", "raw": ()} <- first_4 {list2: ("address" "duplex-list" "character")}
-9999 mem: location 2 is 1006
+9999 mem: location 1004 is 1011
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 3
 9999 mem: allocating size 5
 9999 abandon: picking up space from free-list of size 5
-9999 mem: new alloc from free list: 1025
+9999 mem: new alloc from free list: 1030
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1028 is 0
-9999 mem: incrementing refcount of 1006: 3 -> 4
-9999 mem: storing 1006 in location 1028
+9999 mem: location 1033 is 0
+9999 mem: incrementing refcount of 1011: 3 -> 4
+9999 mem: storing 1011 in location 1033
  104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1028 is 1006
+9999 mem: location 1033 is 1011
 9998 run: jumping to instruction 5
  104 run: {result: "character"} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {value: "offset"}
-9999 mem: location 1028 is 1006
-9999 mem: skipping refcount at 1006
-9999 mem: location 1007 is 3
-9999 mem: location 1008 is 0
-9999 mem: location 1009 is 1010
-9999 mem: location 1028 is 1006
-9999 mem: skipping refcount at 1006
-9998 run: address to copy is 1007
+9999 mem: location 1033 is 1011
+9999 mem: skipping refcount at 1011
+9999 mem: location 1012 is 3
+9999 mem: location 1013 is 0
+9999 mem: location 1014 is 1015
+9999 mem: location 1033 is 1011
+9999 mem: skipping refcount at 1011
+9998 run: address to copy is 1012
 9998 run: its type is "character"
-9999 mem: location 1007 is 3
-9999 mem: storing 3 in location 1029
+9999 mem: location 1012 is 3
+9999 mem: storing 3 in location 1034
  104 run: reply {result: "character"}
-9999 mem: location 1029 is 3
+9999 mem: location 1034 is 3
 9999 mem: clearing in:address:duplex-list:_elem
-9999 mem: location 1028 is 1006
-9999 mem: skipping refcount at 1006
-9999 mem: decrementing refcount of 1006: 4 -> 3
-9999 mem: storing 0 in location 1028
-9999 mem: automatically abandoning 1025
-9999 abandon: updating refcounts inside 1025: (array number)
-9999 abandon: saving 1025 in free-list of size 5
+9999 mem: location 1033 is 1011
+9999 mem: skipping refcount at 1011
+9999 mem: decrementing refcount of 1011: 4 -> 3
+9999 mem: storing 0 in location 1033
+9999 mem: automatically abandoning 1030
+9999 abandon: updating refcounts inside 1030: (array number)
+9999 abandon: saving 1030 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 3
 9999 mem: storing 3 in location 11
  103 run: {20: ("address" "duplex-list" "character"), "raw": ()} <- next_2 {list2: ("address" "duplex-list" "character")}
-9999 mem: location 2 is 1006
+9999 mem: location 1004 is 1011
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 3
 9999 mem: allocating size 5
 9999 abandon: picking up space from free-list of size 5
-9999 mem: new alloc from free list: 1025
+9999 mem: new alloc from free list: 1030
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1028 is 0
-9999 mem: incrementing refcount of 1006: 3 -> 4
-9999 mem: storing 1006 in location 1028
+9999 mem: location 1033 is 0
+9999 mem: incrementing refcount of 1011: 3 -> 4
+9999 mem: storing 1011 in location 1033
  104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1028 is 1006
+9999 mem: location 1033 is 1011
 9998 run: jumping to instruction 5
  104 run: {result: ("address" "duplex-list" "character")} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {next: "offset"}
-9999 mem: location 1028 is 1006
-9999 mem: skipping refcount at 1006
-9999 mem: location 1007 is 3
-9999 mem: location 1008 is 0
-9999 mem: location 1009 is 1010
-9999 mem: location 1028 is 1006
-9999 mem: skipping refcount at 1006
-9998 run: address to copy is 1008
+9999 mem: location 1033 is 1011
+9999 mem: skipping refcount at 1011
+9999 mem: location 1012 is 3
+9999 mem: location 1013 is 0
+9999 mem: location 1014 is 1015
+9999 mem: location 1033 is 1011
+9999 mem: skipping refcount at 1011
+9998 run: address to copy is 1013
 9998 run: its type is ("address" "duplex-list" "character")
-9999 mem: location 1008 is 0
-9999 mem: location 1029 is 0
+9999 mem: location 1013 is 0
+9999 mem: location 1034 is 0
 9999 mem: copying address to itself; refcount unchanged
-9999 mem: storing 0 in location 1029
+9999 mem: storing 0 in location 1034
  104 run: reply {result: ("address" "duplex-list" "character"), "contained-in": "in"}
-9999 mem: location 1029 is 0
+9999 mem: location 1034 is 0
 9999 mem: clearing in:address:duplex-list:_elem
-9999 mem: location 1028 is 1006
-9999 mem: skipping refcount at 1006
-9999 mem: decrementing refcount of 1006: 4 -> 3
-9999 mem: storing 0 in location 1028
-9999 mem: automatically abandoning 1025
-9999 abandon: updating refcounts inside 1025: (array number)
-9999 abandon: saving 1025 in free-list of size 5
+9999 mem: location 1033 is 1011
+9999 mem: skipping refcount at 1011
+9999 mem: decrementing refcount of 1011: 4 -> 3
+9999 mem: storing 0 in location 1033
+9999 mem: automatically abandoning 1030
+9999 abandon: updating refcounts inside 1030: (array number)
+9999 abandon: saving 1030 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 0
 9999 mem: storing 0 in location 20
  103 run: {list2: ("address" "duplex-list" "character")} <- prev_2 {list2: ("address" "duplex-list" "character")}
-9999 mem: location 2 is 1006
+9999 mem: location 1004 is 1011
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 3
 9999 mem: allocating size 5
 9999 abandon: picking up space from free-list of size 5
-9999 mem: new alloc from free list: 1025
+9999 mem: new alloc from free list: 1030
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1028 is 0
-9999 mem: incrementing refcount of 1006: 3 -> 4
-9999 mem: storing 1006 in location 1028
+9999 mem: location 1033 is 0
+9999 mem: incrementing refcount of 1011: 3 -> 4
+9999 mem: storing 1011 in location 1033
  104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1028 is 1006
+9999 mem: location 1033 is 1011
 9998 run: jumping to instruction 5
  104 run: {result: ("address" "duplex-list" "character")} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {prev: "offset"}
-9999 mem: location 1028 is 1006
-9999 mem: skipping refcount at 1006
-9999 mem: location 1007 is 3
-9999 mem: location 1008 is 0
-9999 mem: location 1009 is 1010
-9999 mem: location 1028 is 1006
-9999 mem: skipping refcount at 1006
-9998 run: address to copy is 1009
+9999 mem: location 1033 is 1011
+9999 mem: skipping refcount at 1011
+9999 mem: location 1012 is 3
+9999 mem: location 1013 is 0
+9999 mem: location 1014 is 1015
+9999 mem: location 1033 is 1011
+9999 mem: skipping refcount at 1011
+9998 run: address to copy is 1014
 9998 run: its type is ("address" "duplex-list" "character")
-9999 mem: location 1009 is 1010
-9999 mem: location 1029 is 0
-9999 mem: incrementing refcount of 1010: 4 -> 5
-9999 mem: storing 1010 in location 1029
+9999 mem: location 1014 is 1015
+9999 mem: location 1034 is 0
+9999 mem: incrementing refcount of 1015: 4 -> 5
+9999 mem: storing 1015 in location 1034
  104 run: return {result: ("address" "duplex-list" "character")}
-9999 mem: location 1029 is 1010
+9999 mem: location 1034 is 1015
 9999 mem: clearing in:address:duplex-list:_elem
-9999 mem: location 1028 is 1006
-9999 mem: skipping refcount at 1006
-9999 mem: decrementing refcount of 1006: 4 -> 3
-9999 mem: storing 0 in location 1028
-9999 mem: automatically abandoning 1025
-9999 abandon: updating refcounts inside 1025: (array number)
-9999 abandon: saving 1025 in free-list of size 5
+9999 mem: location 1033 is 1011
+9999 mem: skipping refcount at 1011
+9999 mem: decrementing refcount of 1011: 4 -> 3
+9999 mem: storing 0 in location 1033
+9999 mem: automatically abandoning 1030
+9999 abandon: updating refcounts inside 1030: (array number)
+9999 abandon: saving 1030 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 3
-9998 run: result 0 is 1010
-9999 mem: storing 1010 in location 2
+9998 run: result 0 is 1015
+9999 mem: storing 1015 in location 1004
  103 run: {30: "character", "raw": ()} <- first_4 {list2: ("address" "duplex-list" "character")}
-9999 mem: location 2 is 1010
+9999 mem: location 1004 is 1015
 9999 trace: incrementing callstack depth to 3
  104 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 3
 9999 mem: allocating size 5
 9999 abandon: picking up space from free-list of size 5
-9999 mem: new alloc from free list: 1025
+9999 mem: new alloc from free list: 1030
  104 run: {in: ("address" "duplex-list" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1028 is 0
-9999 mem: incrementing refcount of 1010: 5 -> 6
-9999 mem: storing 1010 in location 1028
+9999 mem: location 1033 is 0
+9999 mem: incrementing refcount of 1015: 5 -> 6
+9999 mem: storing 1015 in location 1033
  104 run: jump-if {in: ("address" "duplex-list" "character")}, {: "offset"}
-9999 mem: location 1028 is 1010
+9999 mem: location 1033 is 1015
 9998 run: jumping to instruction 5
  104 run: {result: "character"} <- get {in: ("address" "duplex-list" "character"), "lookup": ()}, {value: "offset"}
-9999 mem: location 1028 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: location 1011 is 4
-9999 mem: location 1012 is 1006
-9999 mem: location 1013 is 0
-9999 mem: location 1028 is 1010
-9999 mem: skipping refcount at 1010
-9998 run: address to copy is 1011
+9999 mem: location 1033 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: location 1016 is 4
+9999 mem: location 1017 is 1011
+9999 mem: location 1018 is 0
+9999 mem: location 1033 is 1015
+9999 mem: skipping refcount at 1015
+9998 run: address to copy is 1016
 9998 run: its type is "character"
-9999 mem: location 1011 is 4
-9999 mem: storing 4 in location 1029
+9999 mem: location 1016 is 4
+9999 mem: storing 4 in location 1034
  104 run: reply {result: "character"}
-9999 mem: location 1029 is 4
+9999 mem: location 1034 is 4
 9999 mem: clearing in:address:duplex-list:_elem
-9999 mem: location 1028 is 1010
-9999 mem: skipping refcount at 1010
-9999 mem: decrementing refcount of 1010: 6 -> 5
-9999 mem: storing 0 in location 1028
-9999 mem: automatically abandoning 1025
-9999 abandon: updating refcounts inside 1025: (array number)
-9999 abandon: saving 1025 in free-list of size 5
+9999 mem: location 1033 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: decrementing refcount of 1015: 6 -> 5
+9999 mem: storing 0 in location 1033
+9999 mem: automatically abandoning 1030
+9999 abandon: updating refcounts inside 1030: (array number)
+9999 abandon: saving 1030 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 3
 9998 run: result 0 is 4
 9999 mem: storing 4 in location 30
  103 run: {40: "boolean", "raw": ()} <- equal {list: ("address" "duplex-list" "character")}, {list2: ("address" "duplex-list" "character")}
-9999 mem: location 1 is 1010
-9999 mem: location 2 is 1010
+9999 mem: location 1003 is 1015
+9999 mem: location 1004 is 1015
 9999 mem: storing 1 in location 40
  103 run: reply 
+9999 mem: clearing list:address:duplex-list:character
+9999 mem: location 1003 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: decrementing refcount of 1015: 5 -> 4
+9999 mem: storing 0 in location 1003
+9999 mem: clearing list
+9999 mem: location 1003 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1003
+9999 mem: clearing list
+9999 mem: location 1003 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1003
+9999 mem: clearing list
+9999 mem: location 1003 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1003
+9999 mem: clearing list2:address:duplex-list:character
+9999 mem: location 1004 is 1015
+9999 mem: skipping refcount at 1015
+9999 mem: decrementing refcount of 1015: 4 -> 3
+9999 mem: storing 0 in location 1004
+9999 mem: clearing list2
+9999 mem: location 1004 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1004
+9999 mem: clearing list2
+9999 mem: location 1004 is 0
+9999 mem: copying address to itself; refcount unchanged
+9999 mem: storing 0 in location 1004
+9999 mem: automatically abandoning 1000
+9999 abandon: updating refcounts inside 1000: (array number)
+9999 abandon: saving 1000 in free-list of size 5
 9999 trace: reply: decrementing callstack depth from 2
  102 run: memory-should-contain {"\n    10 <- 4  # scanning next, skipping deleted element\n    11 <- 3\n    20 <- 0  # no more elements\n    30 <- 4  # prev of final element\n    40 <- 1  # list back at start\n  ": "literal-string"}
 9999 run: checking location 10

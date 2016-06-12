@@ -26,10 +26,11 @@
 9993 parse:   product: {3: ("address" "programming-environment-data")}
 9992 load: after rewriting: {3: ("address" "programming-environment-data")} <- new-programming-environment {screen: ("address" "screen")}, {1: ("address" "array" "character")}, {2: ("address" "array" "character")}
 9993 parse: instruction: render-all
-9993 parse:   number of ingredients: 2
+9993 parse:   number of ingredients: 3
 9993 parse:   ingredient: {screen: ()}
 9993 parse:   ingredient: {3: ("address" "programming-environment-data")}
-9992 load: after rewriting: render-all {screen: ()}, {3: ("address" "programming-environment-data")}
+9993 parse:   ingredient: {render: ()}
+9992 load: after rewriting: render-all {screen: ()}, {3: ("address" "programming-environment-data")}, {render: ()}
 9993 parse: instruction: assume-console
 9993 parse:   number of ingredients: 1
 9993 parse:   ingredient: {"\n    press ctrl-n\n    type [add 2, 2]\n    press F4\n    type [add 1, 1]\n    press F4\n    press page-down\n    press page-down\n  ": "literal-string"}
@@ -73,8 +74,14 @@
 9992 transform: checking variant (strict) 0: recipe new-fake-screen {w: "number"} {h: "number"} -> {result: ("address" "screen")}
 9992 transform: instruction {3: ("address" "programming-environment-data")} <- new-programming-environment {screen: ("address" "screen")}, {1: ("address" "array" "character")}, {2: ("address" "array" "character")}
 9992 transform: checking variant (strict) 0: recipe new-programming-environment {screen: ("address" "screen")} {initial-recipe-contents: ("address" "array" "character")} {initial-sandbox-contents: ("address" "array" "character")} -> {result: ("address" "programming-environment-data")} {screen: ("address" "screen")}
-9992 transform: instruction render-all {screen: ()}, {3: ("address" "programming-environment-data")}
-9992 transform: checking variant (strict) 0: recipe render-all {screen: ("address" "screen")} {env: ("address" "programming-environment-data")} -> {screen: ("address" "screen")} {env: ("address" "programming-environment-data")}
+9992 transform: instruction render-all {screen: ()}, {3: ("address" "programming-environment-data")}, {render: ()}
+9992 transform: checking variant (strict) 0: recipe render-all {screen: ("address" "screen")} {env: ("address" "programming-environment-data")} {render-editor: ("recipe" ("address" "screen") ("address" "editor-data") "->" "number" "number" ("address" "screen") ("address" "editor-data"))} -> {screen: ("address" "screen")} {env: ("address" "programming-environment-data")}
+9993 transform: strict match failed: ingredient 2
+9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe render-all {screen: ("address" "screen")} {env: ("address" "programming-environment-data")} {render-editor: ("recipe" ("address" "screen") ("address" "editor-data") "->" "number" "number" ("address" "screen") ("address" "editor-data"))} -> {screen: ("address" "screen")} {env: ("address" "programming-environment-data")}
+9993 transform: match failed: ingredient 2
+9992 transform: checking variant (strict except literal-against-boolean) 0: recipe render-all {screen: ("address" "screen")} {env: ("address" "programming-environment-data")} {render-editor: ("recipe" ("address" "screen") ("address" "editor-data") "->" "number" "number" ("address" "screen") ("address" "editor-data"))} -> {screen: ("address" "screen")} {env: ("address" "programming-environment-data")}
+9993 transform: match failed: ingredient 2
+9992 transform: checking variant 0: recipe render-all {screen: ("address" "screen")} {env: ("address" "programming-environment-data")} {render-editor: ("recipe" ("address" "screen") ("address" "editor-data") "->" "number" "number" ("address" "screen") ("address" "editor-data"))} -> {screen: ("address" "screen")} {env: ("address" "programming-environment-data")}
 9992 transform: instruction event-loop {screen: ("address" "screen")}, {console: ("address" "console")}, {3: ("address" "programming-environment-data")}
 9992 transform: checking variant (strict) 0: recipe event-loop {screen: ("address" "screen")} {console: ("address" "console")} {env: ("address" "programming-environment-data")} -> {screen: ("address" "screen")} {console: ("address" "console")} {env: ("address" "programming-environment-data")}
 9992 transform: --- compute address offsets for scenario_editing-sandbox-after-scrolling-resets-scroll
@@ -83,7 +90,7 @@
 9993 transform: - compute address offsets for {1: ("address" "array" "character")} <- new {"": "literal-string"}
 9993 transform: - compute address offsets for {2: ("address" "array" "character")} <- new {"": "literal-string"}
 9993 transform: - compute address offsets for {3: ("address" "programming-environment-data")} <- new-programming-environment {screen: ("address" "screen"), "raw": ()}, {1: ("address" "array" "character")}, {2: ("address" "array" "character")}
-9993 transform: - compute address offsets for render-all {screen: ("address" "screen"), "raw": ()}, {3: ("address" "programming-environment-data")}
+9993 transform: - compute address offsets for render-all {screen: ("address" "screen"), "raw": ()}, {3: ("address" "programming-environment-data")}, {render: "recipe-literal"}
 9993 transform: - compute address offsets for assume-console {"\n    press ctrl-n\n    type [add 2, 2]\n    press F4\n    type [add 1, 1]\n    press F4\n    press page-down\n    press page-down\n  ": "literal-string"}
 9993 transform: - compute address offsets for event-loop {screen: ("address" "screen"), "raw": ()}, {console: ("address" "console"), "raw": ()}, {3: ("address" "programming-environment-data")}
 9993 transform: - compute address offsets for screen-should-contain {"\n    .                                                                                 run (F4)           .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┊1   edit          copy            delete         .\n    .                                                  ┊add 2, 2                                         .\n    .                                                  ┊4                                                .\n    .                                                  ┊━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━.\n    .                                                  ┊                                                 .\n  ": "literal-string"}

@@ -1463,12 +1463,17 @@
 9994 transform:     checking {first-free: "offset"}: "offset"
 9994 transform:     checking {free: "number"}: "number"
 9993 transform: type of 'free' is "number"
-9993 transform:   instruction: {circular-buffer: (), "lookup": ()} <- put-index {circular-buffer: (), "lookup": ()}, {free: ()}, {val: ()}
+9993 transform:   instruction: {val-copy: "_elem"} <- deep-copy {val: ()}
+9994 transform:     checking {val: ()}: ()
+9994 transform:     deducing type to "_elem"
+9994 transform:     checking {val-copy: "_elem"}: "_elem"
+9993 transform: type of 'val-copy' is "_elem"
+9993 transform:   instruction: {circular-buffer: (), "lookup": ()} <- put-index {circular-buffer: (), "lookup": ()}, {free: ()}, {val-copy: ()}
 9994 transform:     checking {circular-buffer: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "array" "_elem")
 9994 transform:     checking {free: ()}: ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {val: ()}: ()
+9994 transform:     checking {val-copy: ()}: ()
 9994 transform:     deducing type to "_elem"
 9994 transform:     checking {circular-buffer: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "array" "_elem")
@@ -1561,11 +1566,16 @@
 9993 transform: _elem => "character"
 9993 transform: replacing in ingredient first-free:offset
 9993 transform: replacing in ingredient free:number
-9993 transform: replacing in instruction '{circular-buffer: ("address" "array" "_elem"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "_elem"), "lookup": ()}, {free: "number"}, {val: "_elem"}'
+9993 transform: replacing in instruction '{val-copy: "_elem"} <- deep-copy {val: "_elem"}'
+9993 transform: replacing in ingredient val
+9993 transform: _elem => "character"
+9993 transform: replacing in ingredient val-copy:_elem
+9993 transform: _elem => "character"
+9993 transform: replacing in instruction '{circular-buffer: ("address" "array" "_elem"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "_elem"), "lookup": ()}, {free: "number"}, {val-copy: "_elem"}'
 9993 transform: replacing in ingredient *circular-buffer
 9993 transform: _elem => "character"
 9993 transform: replacing in ingredient free
-9993 transform: replacing in ingredient val
+9993 transform: replacing in ingredient val-copy
 9993 transform: _elem => "character"
 9993 transform: replacing in ingredient *circular-buffer
 9993 transform: _elem => "character"
@@ -1607,6 +1617,7 @@
 9992 transform: full-address => "location"
 9992 transform: circular-buffer => ("address" "array" "character")
 9992 transform: free => "number"
+9992 transform: val-copy => "character"
 9992 transform: len => "number"
 9992 transform: at-end? => "boolean"
 9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -1622,7 +1633,8 @@
 9993 transform: }
 9993 transform: {circular-buffer: ("address" "array" "character")} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {data: "offset"}
 9993 transform: {free: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
-9993 transform: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+9993 transform: {val-copy: "character"} <- deep-copy {val: "character"}
+9993 transform: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val-copy: "character"}
 9993 transform: {free: "number"} <- add {free: "number"}, {1: "literal"}
 9993 transform: {
 9993 transform: {len: "number"} <- length {circular-buffer: ("address" "array" "character"), "lookup": ()}
@@ -1642,6 +1654,7 @@
 9992 transform: full-address => "location"
 9992 transform: circular-buffer => ("address" "array" "character")
 9992 transform: free => "number"
+9992 transform: val-copy => "character"
 9992 transform: len => "number"
 9992 transform: at-end? => "boolean"
 9991 transform: --- deduce types from header for write_3
@@ -1669,7 +1682,9 @@
 9993 transform:   product: {circular-buffer: ("address" "array" "character")}
 9992 transform: instruction: {free: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
 9993 transform:   product: {free: "number"}
-9992 transform: instruction: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+9992 transform: instruction: {val-copy: "character"} <- deep-copy {val: "character"}
+9993 transform:   product: {val-copy: "character"}
+9992 transform: instruction: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val-copy: "character"}
 9993 transform:   product: {circular-buffer: ("address" "array" "character"), "lookup": ()}
 9992 transform: instruction: {free: "number"} <- add {free: "number"}, {1: "literal"}
 9993 transform:   product: {free: "number"}
@@ -1699,15 +1714,16 @@
 9993 name: assign circular-buffer 6
 9993 name: element first-free of type channel is at offset 1
 9993 name: assign free 7
-9993 name: assign len 8
-9993 name: assign at-end? 9
+9993 name: assign val-copy 8
+9993 name: assign len 9
+9993 name: assign at-end? 10
 9993 name: element first-free of type channel is at offset 1
 9991 transform: --- resolve ambiguous calls for recipe write_3
 9992 transform: instruction {full: "boolean"} <- channel-full? {chan: ()}
 9992 transform: checking variant (strict) 0: recipe channel-full? {chan: ("address" "channel" "_elem")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe channel-full?_2 {chan: ("address" "channel" "character")} -> {result: "boolean"}
-9992 transform: instruction {circular-buffer: (), "lookup": ()} <- put-index {circular-buffer: (), "lookup": ()}, {free: ()}, {val: ()}
+9992 transform: instruction {circular-buffer: (), "lookup": ()} <- put-index {circular-buffer: (), "lookup": ()}, {free: ()}, {val-copy: ()}
 9992 transform: checking variant (strict) 0: recipe put-index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put-index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
@@ -1741,7 +1757,8 @@
 9993 transform: - compute address offsets for }
 9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character")} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {data: "offset"}
 9993 transform: - compute address offsets for {free: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
-9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+9993 transform: - compute address offsets for {val-copy: "character"} <- deep-copy {val: "character"}
+9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val-copy: "character"}
 9993 transform: - compute address offsets for {free: "number"} <- add {free: "number"}, {1: "literal"}
 9993 transform: - compute address offsets for {
 9993 transform: - compute address offsets for {len: "number"} <- length {circular-buffer: ("address" "array" "character"), "lookup": ()}
@@ -1755,8 +1772,8 @@
 9991 transform: --- transform braces for recipe write_3
 9993 transform: write_3: push (open, 5)
 9993 transform: push (close, 10)
-9993 transform: write_3: push (open, 15)
-9993 transform: push (close, 20)
+9993 transform: write_3: push (open, 16)
+9993 transform: push (close, 21)
 9992 transform: local-scope ...
 9992 transform:  ...
 9992 transform:  ...
@@ -1767,6 +1784,7 @@
 9992 transform: wait-for-location ...
 9992 transform: get ...
 9992 transform: get ...
+9992 transform: deep-copy ...
 9992 transform: put-index ...
 9992 transform: add ...
 9992 transform: length ...
@@ -1856,12 +1874,17 @@
 9994 transform:     checking {first-free: "offset"}: "offset"
 9994 transform:     checking {free: "number"}: "number"
 9993 transform: type of 'free' is "number"
-9993 transform:   instruction: {circular-buffer: (), "lookup": ()} <- put-index {circular-buffer: (), "lookup": ()}, {free: ()}, {val: ()}
+9993 transform:   instruction: {val-copy: "_elem"} <- deep-copy {val: ()}
+9994 transform:     checking {val: ()}: ()
+9994 transform:     deducing type to "_elem"
+9994 transform:     checking {val-copy: "_elem"}: "_elem"
+9993 transform: type of 'val-copy' is "_elem"
+9993 transform:   instruction: {circular-buffer: (), "lookup": ()} <- put-index {circular-buffer: (), "lookup": ()}, {free: ()}, {val-copy: ()}
 9994 transform:     checking {circular-buffer: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "array" "_elem")
 9994 transform:     checking {free: ()}: ()
 9994 transform:     deducing type to "number"
-9994 transform:     checking {val: ()}: ()
+9994 transform:     checking {val-copy: ()}: ()
 9994 transform:     deducing type to "_elem"
 9994 transform:     checking {circular-buffer: (), "lookup": ()}: ()
 9994 transform:     deducing type to ("address" "array" "_elem")
@@ -1954,11 +1977,16 @@
 9993 transform: _elem => "character"
 9993 transform: replacing in ingredient first-free:offset
 9993 transform: replacing in ingredient free:number
-9993 transform: replacing in instruction '{circular-buffer: ("address" "array" "_elem"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "_elem"), "lookup": ()}, {free: "number"}, {val: "_elem"}'
+9993 transform: replacing in instruction '{val-copy: "_elem"} <- deep-copy {val: "_elem"}'
+9993 transform: replacing in ingredient val
+9993 transform: _elem => "character"
+9993 transform: replacing in ingredient val-copy:_elem
+9993 transform: _elem => "character"
+9993 transform: replacing in instruction '{circular-buffer: ("address" "array" "_elem"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "_elem"), "lookup": ()}, {free: "number"}, {val-copy: "_elem"}'
 9993 transform: replacing in ingredient *circular-buffer
 9993 transform: _elem => "character"
 9993 transform: replacing in ingredient free
-9993 transform: replacing in ingredient val
+9993 transform: replacing in ingredient val-copy
 9993 transform: _elem => "character"
 9993 transform: replacing in ingredient *circular-buffer
 9993 transform: _elem => "character"
@@ -2000,6 +2028,7 @@
 9992 transform: full-address => "location"
 9992 transform: circular-buffer => ("address" "array" "character")
 9992 transform: free => "number"
+9992 transform: val-copy => "character"
 9992 transform: len => "number"
 9992 transform: at-end? => "boolean"
 9993 transform: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
@@ -2015,7 +2044,8 @@
 9993 transform: }
 9993 transform: {circular-buffer: ("address" "array" "character")} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {data: "offset"}
 9993 transform: {free: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
-9993 transform: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+9993 transform: {val-copy: "character"} <- deep-copy {val: "character"}
+9993 transform: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val-copy: "character"}
 9993 transform: {free: "number"} <- add {free: "number"}, {1: "literal"}
 9993 transform: {
 9993 transform: {len: "number"} <- length {circular-buffer: ("address" "array" "character"), "lookup": ()}
@@ -2035,6 +2065,7 @@
 9992 transform: full-address => "location"
 9992 transform: circular-buffer => ("address" "array" "character")
 9992 transform: free => "number"
+9992 transform: val-copy => "character"
 9992 transform: len => "number"
 9992 transform: at-end? => "boolean"
 9991 transform: --- deduce types from header for write_4
@@ -2062,7 +2093,9 @@
 9993 transform:   product: {circular-buffer: ("address" "array" "character")}
 9992 transform: instruction: {free: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
 9993 transform:   product: {free: "number"}
-9992 transform: instruction: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+9992 transform: instruction: {val-copy: "character"} <- deep-copy {val: "character"}
+9993 transform:   product: {val-copy: "character"}
+9992 transform: instruction: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val-copy: "character"}
 9993 transform:   product: {circular-buffer: ("address" "array" "character"), "lookup": ()}
 9992 transform: instruction: {free: "number"} <- add {free: "number"}, {1: "literal"}
 9993 transform:   product: {free: "number"}
@@ -2092,15 +2125,16 @@
 9993 name: assign circular-buffer 6
 9993 name: element first-free of type channel is at offset 1
 9993 name: assign free 7
-9993 name: assign len 8
-9993 name: assign at-end? 9
+9993 name: assign val-copy 8
+9993 name: assign len 9
+9993 name: assign at-end? 10
 9993 name: element first-free of type channel is at offset 1
 9991 transform: --- resolve ambiguous calls for recipe write_4
 9992 transform: instruction {full: "boolean"} <- channel-full? {chan: ()}
 9992 transform: checking variant (strict) 0: recipe channel-full? {chan: ("address" "channel" "_elem")} -> {result: "boolean"}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict) 1: recipe channel-full?_2 {chan: ("address" "channel" "character")} -> {result: "boolean"}
-9992 transform: instruction {circular-buffer: (), "lookup": ()} <- put-index {circular-buffer: (), "lookup": ()}, {free: ()}, {val: ()}
+9992 transform: instruction {circular-buffer: (), "lookup": ()} <- put-index {circular-buffer: (), "lookup": ()}, {free: ()}, {val-copy: ()}
 9992 transform: checking variant (strict) 0: recipe put-index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
 9993 transform: strict match failed: ingredient 0
 9992 transform: checking variant (strict except literal-zero-against-address) 0: recipe put-index_2 {table: ("address" "table" "_key" "_value")} {key: "_key"} {value: "_value"} -> {table: ("address" "table" "_key" "_value")}
@@ -2134,7 +2168,8 @@
 9993 transform: - compute address offsets for }
 9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character")} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {data: "offset"}
 9993 transform: - compute address offsets for {free: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
-9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+9993 transform: - compute address offsets for {val-copy: "character"} <- deep-copy {val: "character"}
+9993 transform: - compute address offsets for {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val-copy: "character"}
 9993 transform: - compute address offsets for {free: "number"} <- add {free: "number"}, {1: "literal"}
 9993 transform: - compute address offsets for {
 9993 transform: - compute address offsets for {len: "number"} <- length {circular-buffer: ("address" "array" "character"), "lookup": ()}
@@ -2148,8 +2183,8 @@
 9991 transform: --- transform braces for recipe write_4
 9993 transform: write_4: push (open, 5)
 9993 transform: push (close, 10)
-9993 transform: write_4: push (open, 15)
-9993 transform: push (close, 20)
+9993 transform: write_4: push (open, 16)
+9993 transform: push (close, 21)
 9992 transform: local-scope ...
 9992 transform:  ...
 9992 transform:  ...
@@ -2160,6 +2195,7 @@
 9992 transform: wait-for-location ...
 9992 transform: get ...
 9992 transform: get ...
+9992 transform: deep-copy ...
 9992 transform: put-index ...
 9992 transform: add ...
 9992 transform: length ...
@@ -2590,8 +2626,8 @@
 9999 mem: location 1004 is 1126
 9999 trace: incrementing callstack depth to 6
  107 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 10
-9999 mem: allocating size 12
+9999 mem: array size is 11
+9999 mem: allocating size 13
 9999 mem: new alloc: 1128
 9999 mem: storing 0 in location 1128
 9999 mem: storing 0 in location 1129
@@ -2605,7 +2641,8 @@
 9999 mem: storing 0 in location 1137
 9999 mem: storing 0 in location 1138
 9999 mem: storing 0 in location 1139
-9999 mem: storing 10 in location 1129
+9999 mem: storing 0 in location 1140
+9999 mem: storing 11 in location 1129
  107 run: {out: ("address" "sink" "character")} <- next-ingredient-without-typechecking 
 9999 mem: location 1131 is 0
 9999 mem: incrementing refcount of 1126: 1 -> 2
@@ -2630,8 +2667,7 @@
  108 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 7
 9999 mem: allocating size 9
-9999 mem: new alloc: 1140
-9999 mem: storing 0 in location 1140
+9999 mem: new alloc: 1141
 9999 mem: storing 0 in location 1141
 9999 mem: storing 0 in location 1142
 9999 mem: storing 0 in location 1143
@@ -2640,128 +2676,129 @@
 9999 mem: storing 0 in location 1146
 9999 mem: storing 0 in location 1147
 9999 mem: storing 0 in location 1148
-9999 mem: storing 7 in location 1141
+9999 mem: storing 0 in location 1149
+9999 mem: storing 7 in location 1142
  108 run: {chan: ("address" "channel" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1143 is 0
+9999 mem: location 1144 is 0
 9999 mem: incrementing refcount of 1114: 4 -> 5
-9999 mem: storing 1114 in location 1143
+9999 mem: storing 1114 in location 1144
  108 run: {tmp: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 mem: skipping refcount at 1114
 9999 mem: location 1115 is 0
 9999 mem: location 1116 is 0
 9999 mem: location 1117 is 1119
 9999 mem: location 1118 is 0
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 mem: skipping refcount at 1114
 9998 run: address to copy is 1116
 9998 run: its type is "number"
 9999 mem: location 1116 is 0
-9999 mem: storing 0 in location 1144
+9999 mem: storing 0 in location 1145
  108 run: {tmp: "number"} <- add {tmp: "number"}, {1: "literal"}
-9999 mem: location 1144 is 0
-9999 mem: storing 1 in location 1144
+9999 mem: location 1145 is 0
+9999 mem: storing 1 in location 1145
  108 run: {len: "number"} <- capacity_2 {chan: ("address" "channel" "character")}
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 trace: incrementing callstack depth to 8
  109 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 4
 9999 mem: allocating size 6
-9999 mem: new alloc: 1149
-9999 mem: storing 0 in location 1149
+9999 mem: new alloc: 1150
 9999 mem: storing 0 in location 1150
 9999 mem: storing 0 in location 1151
 9999 mem: storing 0 in location 1152
 9999 mem: storing 0 in location 1153
 9999 mem: storing 0 in location 1154
-9999 mem: storing 4 in location 1150
+9999 mem: storing 0 in location 1155
+9999 mem: storing 4 in location 1151
  109 run: {chan: ("address" "channel" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1152 is 0
+9999 mem: location 1153 is 0
 9999 mem: incrementing refcount of 1114: 5 -> 6
-9999 mem: storing 1114 in location 1152
+9999 mem: storing 1114 in location 1153
  109 run: {q: ("address" "array" "character")} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1152 is 1114
+9999 mem: location 1153 is 1114
 9999 mem: skipping refcount at 1114
 9999 mem: location 1115 is 0
 9999 mem: location 1116 is 0
 9999 mem: location 1117 is 1119
 9999 mem: location 1118 is 0
-9999 mem: location 1152 is 1114
+9999 mem: location 1153 is 1114
 9999 mem: skipping refcount at 1114
 9998 run: address to copy is 1117
 9998 run: its type is ("address" "array" "character")
 9999 mem: location 1117 is 1119
-9999 mem: location 1153 is 0
+9999 mem: location 1154 is 0
 9999 mem: incrementing refcount of 1119: 1 -> 2
-9999 mem: storing 1119 in location 1153
+9999 mem: storing 1119 in location 1154
  109 run: {result: "number"} <- length {q: ("address" "array" "character"), "lookup": ()}
-9999 mem: location 1153 is 1119
+9999 mem: location 1154 is 1119
 9999 mem: skipping refcount at 1119
-9999 mem: storing 3 in location 1154
+9999 mem: storing 3 in location 1155
  109 run: reply {result: "number"}
-9999 mem: location 1154 is 3
+9999 mem: location 1155 is 3
 9999 mem: clearing chan:address:channel:_elem
-9999 mem: location 1152 is 1114
+9999 mem: location 1153 is 1114
 9999 mem: skipping refcount at 1114
 9999 mem: decrementing refcount of 1114: 6 -> 5
-9999 mem: storing 0 in location 1152
+9999 mem: storing 0 in location 1153
 9999 mem: clearing q:address:array:_elem
-9999 mem: location 1153 is 1119
+9999 mem: location 1154 is 1119
 9999 mem: skipping refcount at 1119
 9999 mem: decrementing refcount of 1119: 2 -> 1
-9999 mem: storing 0 in location 1153
-9999 mem: automatically abandoning 1149
-9999 abandon: updating refcounts inside 1149: (array number)
-9999 abandon: saving 1149 in free-list of size 6
+9999 mem: storing 0 in location 1154
+9999 mem: automatically abandoning 1150
+9999 abandon: updating refcounts inside 1150: (array number)
+9999 abandon: saving 1150 in free-list of size 6
 9999 trace: reply: decrementing callstack depth from 8
 9998 run: result 0 is 3
-9999 mem: storing 3 in location 1145
+9999 mem: storing 3 in location 1146
  108 run: {at-end?: "boolean"} <- greater-or-equal {tmp: "number"}, {len: "number"}
-9999 mem: location 1144 is 1
-9999 mem: location 1145 is 3
-9999 mem: storing 0 in location 1146
+9999 mem: location 1145 is 1
+9999 mem: location 1146 is 3
+9999 mem: storing 0 in location 1147
  108 run: jump-unless {at-end?: "boolean"}, {: "offset"}
-9999 mem: location 1146 is 0
+9999 mem: location 1147 is 0
 9998 run: jumping to instruction 9
  108 run: {full: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-full: "offset"}
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 mem: skipping refcount at 1114
 9999 mem: location 1115 is 0
 9999 mem: location 1116 is 0
 9999 mem: location 1117 is 1119
 9999 mem: location 1118 is 0
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 mem: skipping refcount at 1114
 9998 run: address to copy is 1115
 9998 run: its type is "number"
 9999 mem: location 1115 is 0
-9999 mem: storing 0 in location 1147
- 108 run: {result: "boolean"} <- equal {full: "number"}, {tmp: "number"}
-9999 mem: location 1147 is 0
-9999 mem: location 1144 is 1
 9999 mem: storing 0 in location 1148
- 108 run: reply {result: "boolean"}
+ 108 run: {result: "boolean"} <- equal {full: "number"}, {tmp: "number"}
 9999 mem: location 1148 is 0
+9999 mem: location 1145 is 1
+9999 mem: storing 0 in location 1149
+ 108 run: reply {result: "boolean"}
+9999 mem: location 1149 is 0
 9999 mem: clearing chan:address:channel:_elem
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 mem: skipping refcount at 1114
 9999 mem: decrementing refcount of 1114: 5 -> 4
-9999 mem: storing 0 in location 1143
+9999 mem: storing 0 in location 1144
 9999 mem: clearing tmp:number
-9999 mem: storing 0 in location 1144
-9999 mem: clearing tmp
-9999 mem: storing 0 in location 1144
-9999 mem: clearing len:number
 9999 mem: storing 0 in location 1145
-9999 mem: clearing at-end?:boolean
-9999 mem: storing 0 in location 1146
 9999 mem: clearing tmp
-9999 mem: storing 0 in location 1144
-9999 mem: clearing full:number
+9999 mem: storing 0 in location 1145
+9999 mem: clearing len:number
+9999 mem: storing 0 in location 1146
+9999 mem: clearing at-end?:boolean
 9999 mem: storing 0 in location 1147
-9999 mem: automatically abandoning 1140
-9999 abandon: updating refcounts inside 1140: (array number)
-9999 abandon: saving 1140 in free-list of size 9
+9999 mem: clearing tmp
+9999 mem: storing 0 in location 1145
+9999 mem: clearing full:number
+9999 mem: storing 0 in location 1148
+9999 mem: automatically abandoning 1141
+9999 abandon: updating refcounts inside 1141: (array number)
+9999 abandon: saving 1141 in free-list of size 9
 9999 trace: reply: decrementing callstack depth from 7
 9998 run: result 0 is 0
 9999 mem: storing 0 in location 1134
@@ -2796,12 +2833,25 @@
 9998 run: its type is "number"
 9999 mem: location 1116 is 0
 9999 mem: storing 0 in location 1137
- 107 run: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+ 107 run: {val-copy: "character"} <- deep-copy {val: "character"}
+9999 mem: location 1132 is 97
+9991 run: deep-copy: allocating space for temporary
+9999 mem: allocating size 2
+9999 mem: new alloc: 1156
+9999 mem: storing 0 in location 1156
+9999 mem: storing 0 in location 1157
+9999 mem: location 1132 is 97
+9991 run: deep-copy: reclaiming temporary
+9999 mem: location 1156 is 0
+9999 abandon: updating refcounts inside 1156: number
+9999 abandon: saving 1156 in free-list of size 2
+9999 mem: storing 97 in location 1138
+ 107 run: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val-copy: "character"}
 9999 mem: location 1136 is 1119
 9999 mem: skipping refcount at 1119
 9999 mem: location 1137 is 0
 9998 run: address to copy to is 1121
-9999 mem: location 1132 is 97
+9999 mem: location 1138 is 97
 9999 mem: storing 97 in location 1121
  107 run: {free: "number"} <- add {free: "number"}, {1: "literal"}
 9999 mem: location 1137 is 0
@@ -2809,14 +2859,14 @@
  107 run: {len: "number"} <- length {circular-buffer: ("address" "array" "character"), "lookup": ()}
 9999 mem: location 1136 is 1119
 9999 mem: skipping refcount at 1119
-9999 mem: storing 3 in location 1138
+9999 mem: storing 3 in location 1139
  107 run: {at-end?: "boolean"} <- greater-or-equal {free: "number"}, {len: "number"}
 9999 mem: location 1137 is 1
-9999 mem: location 1138 is 3
-9999 mem: storing 0 in location 1139
+9999 mem: location 1139 is 3
+9999 mem: storing 0 in location 1140
  107 run: jump-unless {at-end?: "boolean"}, {: "offset"}
-9999 mem: location 1139 is 0
-9998 run: jumping to instruction 20
+9999 mem: location 1140 is 0
+9998 run: jumping to instruction 21
  107 run: {chan: ("address" "channel" "character"), "lookup": ()} <- put {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}, {free: "number"}
 9999 mem: location 1133 is 1114
 9999 mem: skipping refcount at 1114
@@ -2849,17 +2899,19 @@
 9999 mem: storing 0 in location 1136
 9999 mem: clearing free:number
 9999 mem: storing 0 in location 1137
+9999 mem: clearing val-copy:_elem
+9999 mem: storing 0 in location 1138
 9999 mem: clearing free
 9999 mem: storing 0 in location 1137
 9999 mem: clearing len:number
-9999 mem: storing 0 in location 1138
-9999 mem: clearing at-end?:boolean
 9999 mem: storing 0 in location 1139
+9999 mem: clearing at-end?:boolean
+9999 mem: storing 0 in location 1140
 9999 mem: clearing free
 9999 mem: storing 0 in location 1137
 9999 mem: automatically abandoning 1128
 9999 abandon: updating refcounts inside 1128: (array number)
-9999 abandon: saving 1128 in free-list of size 12
+9999 abandon: saving 1128 in free-list of size 13
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1126
 9999 mem: storing 1126 in location 1004
@@ -2867,11 +2919,11 @@
 9999 mem: location 1004 is 1126
 9999 trace: incrementing callstack depth to 6
  107 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
-9999 mem: array size is 10
-9999 mem: allocating size 12
-9999 abandon: picking up space from free-list of size 12
+9999 mem: array size is 11
+9999 mem: allocating size 13
+9999 abandon: picking up space from free-list of size 13
 9999 mem: new alloc from free list: 1128
-9999 mem: storing 10 in location 1129
+9999 mem: storing 11 in location 1129
  107 run: {out: ("address" "sink" "character")} <- next-ingredient-without-typechecking 
 9999 mem: location 1131 is 0
 9999 mem: incrementing refcount of 1126: 2 -> 3
@@ -2897,124 +2949,124 @@
 9999 mem: array size is 7
 9999 mem: allocating size 9
 9999 abandon: picking up space from free-list of size 9
-9999 mem: new alloc from free list: 1140
-9999 mem: storing 7 in location 1141
+9999 mem: new alloc from free list: 1141
+9999 mem: storing 7 in location 1142
  108 run: {chan: ("address" "channel" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1143 is 0
+9999 mem: location 1144 is 0
 9999 mem: incrementing refcount of 1114: 4 -> 5
-9999 mem: storing 1114 in location 1143
+9999 mem: storing 1114 in location 1144
  108 run: {tmp: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 mem: skipping refcount at 1114
 9999 mem: location 1115 is 0
 9999 mem: location 1116 is 1
 9999 mem: location 1117 is 1119
 9999 mem: location 1118 is 0
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 mem: skipping refcount at 1114
 9998 run: address to copy is 1116
 9998 run: its type is "number"
 9999 mem: location 1116 is 1
-9999 mem: storing 1 in location 1144
+9999 mem: storing 1 in location 1145
  108 run: {tmp: "number"} <- add {tmp: "number"}, {1: "literal"}
-9999 mem: location 1144 is 1
-9999 mem: storing 2 in location 1144
+9999 mem: location 1145 is 1
+9999 mem: storing 2 in location 1145
  108 run: {len: "number"} <- capacity_2 {chan: ("address" "channel" "character")}
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 trace: incrementing callstack depth to 8
  109 run: {default-space: ("address" "array" "location")} <- new {location: "type"}, {number-of-locals: "literal"}
 9999 mem: array size is 4
 9999 mem: allocating size 6
 9999 abandon: picking up space from free-list of size 6
-9999 mem: new alloc from free list: 1149
-9999 mem: storing 4 in location 1150
+9999 mem: new alloc from free list: 1150
+9999 mem: storing 4 in location 1151
  109 run: {chan: ("address" "channel" "character")} <- next-ingredient-without-typechecking 
-9999 mem: location 1152 is 0
+9999 mem: location 1153 is 0
 9999 mem: incrementing refcount of 1114: 5 -> 6
-9999 mem: storing 1114 in location 1152
+9999 mem: storing 1114 in location 1153
  109 run: {q: ("address" "array" "character")} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {data: "offset"}
-9999 mem: location 1152 is 1114
+9999 mem: location 1153 is 1114
 9999 mem: skipping refcount at 1114
 9999 mem: location 1115 is 0
 9999 mem: location 1116 is 1
 9999 mem: location 1117 is 1119
 9999 mem: location 1118 is 0
-9999 mem: location 1152 is 1114
+9999 mem: location 1153 is 1114
 9999 mem: skipping refcount at 1114
 9998 run: address to copy is 1117
 9998 run: its type is ("address" "array" "character")
 9999 mem: location 1117 is 1119
-9999 mem: location 1153 is 0
+9999 mem: location 1154 is 0
 9999 mem: incrementing refcount of 1119: 1 -> 2
-9999 mem: storing 1119 in location 1153
+9999 mem: storing 1119 in location 1154
  109 run: {result: "number"} <- length {q: ("address" "array" "character"), "lookup": ()}
-9999 mem: location 1153 is 1119
+9999 mem: location 1154 is 1119
 9999 mem: skipping refcount at 1119
-9999 mem: storing 3 in location 1154
+9999 mem: storing 3 in location 1155
  109 run: reply {result: "number"}
-9999 mem: location 1154 is 3
+9999 mem: location 1155 is 3
 9999 mem: clearing chan:address:channel:_elem
-9999 mem: location 1152 is 1114
+9999 mem: location 1153 is 1114
 9999 mem: skipping refcount at 1114
 9999 mem: decrementing refcount of 1114: 6 -> 5
-9999 mem: storing 0 in location 1152
+9999 mem: storing 0 in location 1153
 9999 mem: clearing q:address:array:_elem
-9999 mem: location 1153 is 1119
+9999 mem: location 1154 is 1119
 9999 mem: skipping refcount at 1119
 9999 mem: decrementing refcount of 1119: 2 -> 1
-9999 mem: storing 0 in location 1153
-9999 mem: automatically abandoning 1149
-9999 abandon: updating refcounts inside 1149: (array number)
-9999 abandon: saving 1149 in free-list of size 6
+9999 mem: storing 0 in location 1154
+9999 mem: automatically abandoning 1150
+9999 abandon: updating refcounts inside 1150: (array number)
+9999 abandon: saving 1150 in free-list of size 6
 9999 trace: reply: decrementing callstack depth from 8
 9998 run: result 0 is 3
-9999 mem: storing 3 in location 1145
+9999 mem: storing 3 in location 1146
  108 run: {at-end?: "boolean"} <- greater-or-equal {tmp: "number"}, {len: "number"}
-9999 mem: location 1144 is 2
-9999 mem: location 1145 is 3
-9999 mem: storing 0 in location 1146
+9999 mem: location 1145 is 2
+9999 mem: location 1146 is 3
+9999 mem: storing 0 in location 1147
  108 run: jump-unless {at-end?: "boolean"}, {: "offset"}
-9999 mem: location 1146 is 0
+9999 mem: location 1147 is 0
 9998 run: jumping to instruction 9
  108 run: {full: "number"} <- get {chan: ("address" "channel" "character"), "lookup": ()}, {first-full: "offset"}
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 mem: skipping refcount at 1114
 9999 mem: location 1115 is 0
 9999 mem: location 1116 is 1
 9999 mem: location 1117 is 1119
 9999 mem: location 1118 is 0
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 mem: skipping refcount at 1114
 9998 run: address to copy is 1115
 9998 run: its type is "number"
 9999 mem: location 1115 is 0
-9999 mem: storing 0 in location 1147
- 108 run: {result: "boolean"} <- equal {full: "number"}, {tmp: "number"}
-9999 mem: location 1147 is 0
-9999 mem: location 1144 is 2
 9999 mem: storing 0 in location 1148
- 108 run: reply {result: "boolean"}
+ 108 run: {result: "boolean"} <- equal {full: "number"}, {tmp: "number"}
 9999 mem: location 1148 is 0
+9999 mem: location 1145 is 2
+9999 mem: storing 0 in location 1149
+ 108 run: reply {result: "boolean"}
+9999 mem: location 1149 is 0
 9999 mem: clearing chan:address:channel:_elem
-9999 mem: location 1143 is 1114
+9999 mem: location 1144 is 1114
 9999 mem: skipping refcount at 1114
 9999 mem: decrementing refcount of 1114: 5 -> 4
-9999 mem: storing 0 in location 1143
+9999 mem: storing 0 in location 1144
 9999 mem: clearing tmp:number
-9999 mem: storing 0 in location 1144
-9999 mem: clearing tmp
-9999 mem: storing 0 in location 1144
-9999 mem: clearing len:number
 9999 mem: storing 0 in location 1145
-9999 mem: clearing at-end?:boolean
-9999 mem: storing 0 in location 1146
 9999 mem: clearing tmp
-9999 mem: storing 0 in location 1144
-9999 mem: clearing full:number
+9999 mem: storing 0 in location 1145
+9999 mem: clearing len:number
+9999 mem: storing 0 in location 1146
+9999 mem: clearing at-end?:boolean
 9999 mem: storing 0 in location 1147
-9999 mem: automatically abandoning 1140
-9999 abandon: updating refcounts inside 1140: (array number)
-9999 abandon: saving 1140 in free-list of size 9
+9999 mem: clearing tmp
+9999 mem: storing 0 in location 1145
+9999 mem: clearing full:number
+9999 mem: storing 0 in location 1148
+9999 mem: automatically abandoning 1141
+9999 abandon: updating refcounts inside 1141: (array number)
+9999 abandon: saving 1141 in free-list of size 9
 9999 trace: reply: decrementing callstack depth from 7
 9998 run: result 0 is 0
 9999 mem: storing 0 in location 1134
@@ -3049,12 +3101,24 @@
 9998 run: its type is "number"
 9999 mem: location 1116 is 1
 9999 mem: storing 1 in location 1137
- 107 run: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val: "character"}
+ 107 run: {val-copy: "character"} <- deep-copy {val: "character"}
+9999 mem: location 1132 is 97
+9991 run: deep-copy: allocating space for temporary
+9999 mem: allocating size 2
+9999 abandon: picking up space from free-list of size 2
+9999 mem: new alloc from free list: 1156
+9999 mem: location 1132 is 97
+9991 run: deep-copy: reclaiming temporary
+9999 mem: location 1156 is 0
+9999 abandon: updating refcounts inside 1156: number
+9999 abandon: saving 1156 in free-list of size 2
+9999 mem: storing 97 in location 1138
+ 107 run: {circular-buffer: ("address" "array" "character"), "lookup": ()} <- put-index {circular-buffer: ("address" "array" "character"), "lookup": ()}, {free: "number"}, {val-copy: "character"}
 9999 mem: location 1136 is 1119
 9999 mem: skipping refcount at 1119
 9999 mem: location 1137 is 1
 9998 run: address to copy to is 1122
-9999 mem: location 1132 is 97
+9999 mem: location 1138 is 97
 9999 mem: storing 97 in location 1122
  107 run: {free: "number"} <- add {free: "number"}, {1: "literal"}
 9999 mem: location 1137 is 1
@@ -3062,14 +3126,14 @@
  107 run: {len: "number"} <- length {circular-buffer: ("address" "array" "character"), "lookup": ()}
 9999 mem: location 1136 is 1119
 9999 mem: skipping refcount at 1119
-9999 mem: storing 3 in location 1138
+9999 mem: storing 3 in location 1139
  107 run: {at-end?: "boolean"} <- greater-or-equal {free: "number"}, {len: "number"}
 9999 mem: location 1137 is 2
-9999 mem: location 1138 is 3
-9999 mem: storing 0 in location 1139
+9999 mem: location 1139 is 3
+9999 mem: storing 0 in location 1140
  107 run: jump-unless {at-end?: "boolean"}, {: "offset"}
-9999 mem: location 1139 is 0
-9998 run: jumping to instruction 20
+9999 mem: location 1140 is 0
+9998 run: jumping to instruction 21
  107 run: {chan: ("address" "channel" "character"), "lookup": ()} <- put {chan: ("address" "channel" "character"), "lookup": ()}, {first-free: "offset"}, {free: "number"}
 9999 mem: location 1133 is 1114
 9999 mem: skipping refcount at 1114
@@ -3102,17 +3166,19 @@
 9999 mem: storing 0 in location 1136
 9999 mem: clearing free:number
 9999 mem: storing 0 in location 1137
+9999 mem: clearing val-copy:_elem
+9999 mem: storing 0 in location 1138
 9999 mem: clearing free
 9999 mem: storing 0 in location 1137
 9999 mem: clearing len:number
-9999 mem: storing 0 in location 1138
-9999 mem: clearing at-end?:boolean
 9999 mem: storing 0 in location 1139
+9999 mem: clearing at-end?:boolean
+9999 mem: storing 0 in location 1140
 9999 mem: clearing free
 9999 mem: storing 0 in location 1137
 9999 mem: automatically abandoning 1128
 9999 abandon: updating refcounts inside 1128: (array number)
-9999 abandon: saving 1128 in free-list of size 12
+9999 abandon: saving 1128 in free-list of size 13
 9999 trace: reply: decrementing callstack depth from 6
 9998 run: result 0 is 1126
 9999 mem: storing 1126 in location 1004
